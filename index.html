@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BACKPACK RUSHR — Dérushage tool for video editors</title>
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<meta name="description" data-fr="L'outil de dérushage pour vidéastes et monteurs : organisez, prévisualisez et triez vos rushes avant le montage." data-en="The dérushage tool for videographers and editors: organize, preview and sort your rushes before editing." content="L'outil de dérushage pour vidéastes et monteurs." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12); --accent:#FF6A00; --accent2:#FF8A3D;
+    --text:#FFFFFF; --muted:#9A9A9E; --muted2:#6E6E73;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+  .accent{color:var(--accent)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px;font-size:15px}
+  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .brand-logo{height:26px;width:auto;display:block}
+  .hero-logo{height:64px;width:auto;display:block;margin:0 auto 26px}
+  .foot-logo{height:22px;width:auto;display:block}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:#150A03}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;font-weight:600;font-size:14px;padding:10px 18px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:#150A03}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+
+  /* HERO */
+  header{padding:80px 0 60px;position:relative}
+  .hero-glow{position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:760px;height:420px;background:radial-gradient(closest-side,rgba(255,106,0,.18),transparent);filter:blur(20px);z-index:0;pointer-events:none}
+  .hero{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:48px;text-align:center;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--muted);margin-bottom:22px}
+  .pill .d{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  h1{font-size:clamp(34px,6vw,58px);line-height:1.05;font-weight:800;letter-spacing:-1px}
+  .sub{color:var(--muted);font-size:clamp(15px,2.2vw,19px);max-width:640px;margin:20px auto 0}
+  .cta{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .cta .btn{padding:13px 24px;font-size:15px}
+  .mark{height:34px;width:auto}
+
+  /* APP MOCK */
+  .mock{margin:54px auto 0;max-width:980px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0E0E11;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .mock-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#121215;border-bottom:1px solid var(--line)}
+  .mock-bar i{width:11px;height:11px;border-radius:50%;background:#2a2a2e;display:block}
+  .mock-body{display:flex;min-height:330px}
+  .m-side{width:150px;background:#0B0B0D;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:6px}
+  .m-logo{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;font-weight:700}
+  .m-logo .d{width:9px;height:9px;border-radius:2px;background:var(--accent)}
+  .m-nav{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);padding:8px 9px;border-radius:8px}
+  .m-nav.on{background:var(--accent);color:#150A03;font-weight:600}
+  .m-main{flex:1;padding:18px}
+  .m-h{font-size:16px;font-weight:700}
+  .m-hs{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:14px}
+  .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .m-card{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:6px}
+  .m-card.sel{border-color:var(--accent)}
+  .m-thumb{height:46px;border-radius:6px;background:linear-gradient(135deg,#23232a,#15151a)}
+  .m-tag{display:inline-block;margin-top:6px;font-size:8px;font-weight:700;color:#06351F;background:#43B581;border-radius:4px;padding:2px 6px}
+  .m-tag.b{background:#6FB4FF;color:#06294E}
+  .m-tag.p{background:#B79AFF;color:#241247}
+
+  /* SECTION */
+  section{padding:72px 0}
+  .eyebrow{color:var(--accent);font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;text-align:center}
+  .h2{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-.5px;text-align:center;margin-top:10px}
+  .lead{color:var(--muted);text-align:center;max-width:620px;margin:14px auto 0;font-size:16px}
+
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
+  .feat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .feat .ic{width:42px;height:42px;border-radius:11px;background:rgba(255,106,0,.12);border:1px solid rgba(255,106,0,.28);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .feat .ic svg{width:21px;height:21px;stroke:var(--accent2);fill:none;stroke-width:1.8}
+  .feat h3{font-size:17px;font-weight:700;margin-bottom:7px}
+  .feat p{color:var(--muted);font-size:14px}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:46px}
+  .step{position:relative;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+  .step .n{font-size:13px;font-weight:700;color:#150A03;background:var(--accent);width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .step h4{font-size:15px;font-weight:700;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:13.5px}
+
+  /* MODULE */
+  .module{background:linear-gradient(135deg,#16100A,#121215);border:1px solid rgba(255,106,0,.25);border-radius:20px;padding:42px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center}
+  .module .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent2);background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.4);border-radius:6px;padding:4px 10px;margin-bottom:16px}
+  .module h3{font-size:26px;font-weight:800;letter-spacing:-.5px}
+  .module p{color:var(--muted);margin-top:12px;font-size:15px}
+  .module ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .module li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#D6D6D8}
+  .module li .c{color:var(--accent2);font-weight:800}
+  .module-card{background:#0E0E11;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .module-card .price{font-size:13px;color:var(--muted)}
+  .module-card .ext{font-family:ui-monospace,monospace;font-size:24px;font-weight:700;color:var(--accent2);margin:6px 0 4px}
+
+  /* BETA */
+  .beta{text-align:center}
+  .beta-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px}
+  .beta-form{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+  .beta-form input{flex:1;min-width:200px;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit}
+  .beta-form input:focus{outline:none;border-color:var(--accent)}
+  .beta-note{font-size:12.5px;color:var(--muted2);margin-top:14px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
+  .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  @media(max-width:860px){
+    .features,.steps{grid-template-columns:1fr 1fr}
+    .module{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .m-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    .features,.steps{grid-template-columns:1fr}
+    .m-side{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="#"><img class="brand-logo" src="assets/logo.png" alt="BACKPACK RUSHR" /></a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
+        <a href="#how" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</a>
+        <a href="#module" data-fr="Modules" data-en="Modules">Modules</a>
+      </div>
+      <div class="lang">
+        <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
+        <button id="len" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="hero-glow"></div>
+  <div class="wrap hero">
+    <div>
+      <img class="hero-logo" src="assets/logo.png" alt="BACKPACK RUSHR" />
+      <span class="pill"><span class="d"></span><span data-fr="Recherche préliminaire · V1 Beta" data-en="Research preview · V1 Beta">Recherche préliminaire · V1 Beta</span></span>
+      <h1 data-fr="Triez vos rushes.<br>Montez plus vite." data-en="Sort your rushes.<br>Edit faster.">Triez vos rushes.<br>Montez plus vite.</h1>
+      <p class="sub" data-fr="BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs. Structurez votre projet, importez, prévisualisez et taguez vos prises — le tout avant d'ouvrir votre logiciel de montage." data-en="BACKPACK RUSHR is the dérushage tool for videographers, editors and creators. Build your project structure, import, preview and tag your takes — all before you open your editing software.">BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs.</p>
+      <div class="cta">
+        <a href="#beta" class="btn btn-primary" data-fr="S'inscrire à la beta" data-en="Sign up for the beta">S'inscrire à la beta</a>
+        <a href="#features" class="btn btn-ghost" data-fr="Découvrir les fonctionnalités" data-en="Explore the features">Découvrir les fonctionnalités</a>
+      </div>
+    </div>
+
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><i></i><i></i><i></i></div>
+      <div class="mock-body">
+        <div class="m-side">
+          <div class="m-logo"><span class="d"></span> RUSHR</div>
+          <div class="m-nav on">▦ Dashboard</div>
+          <div class="m-nav">▣ Rush Manager</div>
+          <div style="flex:1"></div>
+          <div class="m-nav">⚙ Settings</div>
+        </div>
+        <div class="m-main">
+          <div class="m-h">Rush Manager</div>
+          <div class="m-hs" data-fr="Importez, prévisualisez et triez rapidement." data-en="Import, preview and sort quickly.">Importez, prévisualisez et triez rapidement.</div>
+          <div class="m-grid">
+            <div class="m-card sel"><div class="m-thumb"></div><span class="m-tag">Interview</span></div>
+            <div class="m-card"><div class="m-thumb"></div><span class="m-tag b">B-Roll</span></div>
+            <div class="m-card"><div class="m-thumb"></div><span class="m-tag p">Drone</span></div>
+            <div class="m-card"><div class="m-thumb"></div><span class="m-tag b">B-Roll</span></div>
+            <div class="m-card"><div class="m-thumb"></div><span class="m-tag">Interview</span></div>
+            <div class="m-card"><div class="m-thumb"></div><span class="m-tag p">Drone</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</div>
+    <div class="h2" data-fr="Tout pour dérusher vite et bien" data-en="Everything to sort rushes fast">Tout pour dérusher vite et bien</div>
+    <p class="lead" data-fr="Pensé pour le flux réel des monteurs : moins de clics, plus de tri." data-en="Built around how editors actually work: fewer clicks, more sorting.">Pensé pour le flux réel des monteurs.</p>
+
+    <div class="features">
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"/></svg></div>
+        <h3 data-fr="Rushes organisés par dossier" data-en="Rushes grouped by folder">Rushes organisés par dossier</h3>
+        <p data-fr="Importez plusieurs dossiers de prises : ils restent regroupés et lisibles, jamais mélangés." data-en="Import several source folders: they stay grouped and readable, never mixed together.">Importez plusieurs dossiers : ils restent regroupés.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+        <h3 data-fr="Tag éclair au clavier" data-en="Lightning-fast tagging">Tag éclair au clavier</h3>
+        <p data-fr="Touches 1–9 pour taguer, sélection multiple et tag en lot, même entre plusieurs dossiers." data-en="Keys 1–9 to tag, multi-select and batch-tag, even across multiple folders.">Touches 1–9, multi-sélection et tag en lot.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg></div>
+        <h3 data-fr="Lecteur intégré" data-en="Built-in preview">Lecteur intégré</h3>
+        <p data-fr="Prévisualisez chaque prise, scrubbez la timeline et naviguez entre les clips sans quitter l'app." data-en="Preview every take, scrub the timeline and jump between clips without leaving the app.">Prévisualisez et scrubbez sans quitter l'app.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div>
+        <h3 data-fr="Structures par preset" data-en="Structure presets">Structures par preset</h3>
+        <p data-fr="Créez une arborescence de projet propre en un clic, à partir de presets réutilisables et éditables." data-en="Build a clean project folder tree in one click, from reusable, editable presets.">Arborescence de projet propre en un clic.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></div>
+        <h3 data-fr="Mémoire par projet" data-en="Per-project memory">Mémoire par projet</h3>
+        <p data-fr="Mal tagué ? Changez le tag et le fichier est déplacé vers la bonne destination — sans doublon." data-en="Wrong tag? Change it and the file moves to the right destination — no duplicates.">Re-taguez : le fichier est déplacé, sans doublon.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7V5a2 2 0 012-2h2M20 7V5a2 2 0 00-2-2h-2M4 17v2a2 2 0 002 2h2M20 17v2a2 2 0 01-2 2h-2"/></svg></div>
+        <h3 data-fr="Module Rename Tool" data-en="Rename Tool module">Module Rename Tool</h3>
+        <p data-fr="Renommez vos fichiers en masse via un module installable, avec sa propre extension proprietaire." data-en="Batch-rename your files with an installable add-on module, with its own proprietary extension.">Renommage en masse via un module installable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background:#0E0E11">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Le flux" data-en="The workflow">Le flux</div>
+    <div class="h2" data-fr="Du chaos au montage, en 4 étapes" data-en="From chaos to timeline, in 4 steps">Du chaos au montage, en 4 étapes</div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h4 data-fr="Créez la structure" data-en="Create the structure">Créez la structure</h4><p data-fr="Choisissez un preset, ajustez l'arborescence, lancez la création du projet." data-en="Pick a preset, tweak the tree, create the project.">Choisissez un preset et créez le projet.</p></div>
+      <div class="step"><div class="n">2</div><h4 data-fr="Importez les rushes" data-en="Import the rushes">Importez les rushes</h4><p data-fr="Glissez vos dossiers de prises : vignettes et métadonnées générées automatiquement." data-en="Drop your source folders: thumbnails and metadata are generated automatically.">Glissez vos dossiers : vignettes auto.</p></div>
+      <div class="step"><div class="n">3</div><h4 data-fr="Triez & taguez" data-en="Sort & tag">Triez & taguez</h4><p data-fr="Prévisualisez, taguez au clavier, rejetez les mauvaises prises en un instant." data-en="Preview, tag from the keyboard, reject bad takes in an instant.">Prévisualisez et taguez au clavier.</p></div>
+      <div class="step"><div class="n">4</div><h4 data-fr="Préparez le montage" data-en="Prepare for editing">Préparez le montage</h4><p data-fr="« Prepare » range chaque prise dans le bon dossier, prêt pour votre logiciel de montage." data-en="“Prepare” files each take into the right folder, ready for your editing software.">« Prepare » range tout au bon endroit.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="module">
+  <div class="wrap">
+    <div class="module">
+      <div>
+        <span class="badge" data-fr="MODULE INSTALLABLE" data-en="INSTALLABLE MODULE">MODULE INSTALLABLE</span>
+        <h3 data-fr="Rename Tool" data-en="Rename Tool">Rename Tool</h3>
+        <p data-fr="Un module premium pour renommer proprement les fichiers d'un projet, avec règles de nommage et numérotation. Installé via un fichier .bprx et activé par licence." data-en="A premium add-on to cleanly rename a project's files, with naming rules and numbering. Installed via a .bprx file and unlocked by license.">Un module premium pour renommer proprement les fichiers d'un projet.</p>
+        <ul>
+          <li><span class="c">✓</span> <span data-fr="Renommage en masse avec aperçu avant/après" data-en="Batch rename with before/after preview">Renommage en masse avec aperçu</span></li>
+          <li><span class="c">✓</span> <span data-fr="Extension proprietaire .bprx" data-en="Proprietary .bprx extension">Extension proprietaire .bprx</span></li>
+          <li><span class="c">✓</span> <span data-fr="Activation par licence, vérifiée en ligne" data-en="License activation, verified online">Activation par licence</span></li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="ext">.bprx</div>
+        <div class="price" data-fr="Module additionnel · disponible au lancement" data-en="Add-on module · available at launch">Module additionnel · disponible au lancement</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="beta" class="beta" style="background:#0E0E11">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Programme beta" data-en="Beta program">Programme beta</div>
+    <div class="h2" data-fr="Devenez bêta-testeur" data-en="Become a beta tester">Devenez bêta-testeur</div>
+    <p class="lead" data-fr="BACKPACK RUSHR est en recherche préliminaire. Laissez votre email pour recevoir l'accès et aider à façonner l'outil." data-en="BACKPACK RUSHR is in research preview. Drop your email to get access and help shape the tool.">Laissez votre email pour recevoir l'accès.</p>
+
+    <div class="beta-card">
+      <form id="betaForm" class="beta-form" onsubmit="return joinBeta(event)">
+        <input id="email" name="email" type="email" required placeholder="you@example.com" data-fr-ph="votre@email.com" data-en-ph="you@example.com" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" />
+        <button type="submit" class="btn btn-primary" data-fr="Demander l'accès" data-en="Request access">Demander l'accès</button>
+      </form>
+      <p id="betaStatus" class="beta-note" data-fr="Un seul clic : votre email est envoyé directement à l'équipe, sans ouvrir votre messagerie." data-en="One click: your email goes straight to the team, no mail app required.">Un seul clic, sans ouvrir votre messagerie.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <img class="foot-logo" src="assets/logo.png" alt="BACKPACK RUSHR" />
+    <div data-fr="© 2026 BACKPACK LAB · RUSHR — Outil de dérushage. Tous droits réservés." data-en="© 2026 BACKPACK LAB · RUSHR — Dérushage tool. All rights reserved.">© 2026 BACKPACK LAB · RUSHR</div>
+    <a href="mailto:bpack.lab@gmail.com">bpack.lab@gmail.com</a>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){
+      var v = el.getAttribute('data-'+lang);
+      if(v!==null) el.innerHTML = v;
+    });
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){
+      var v = el.getAttribute('data-'+lang+'-ph');
+      if(v!==null) el.setAttribute('placeholder', v);
+    });
+    var meta = document.querySelector('meta[name="description"]');
+    if(meta){ var m = meta.getAttribute('data-'+lang); if(m) meta.setAttribute('content', m); }
+    document.getElementById('lfr').classList.toggle('on', lang==='fr');
+    document.getElementById('len').classList.toggle('on', lang==='en');
+    try{ localStorage.setItem('rushr_lang', lang); }catch(e){}
+  }
+
+  // ▼▼▼ REMPLACE par l'ID de ton formulaire Formspree (https://formspree.io) ▼▼▼
+  var FORMSPREE_ENDPOINT = "https://formspree.io/f/xlgkwqnk";
+
+  var BETA_MSG = {
+    sending:{fr:"Envoi…", en:"Sending…"},
+    ok:{fr:"Merci ! Votre demande a bien été envoyée. 🎉", en:"Thanks! Your request has been sent. 🎉"},
+    err:{fr:"Oups, l'envoi a échoué. Réessayez ou écrivez à bpack.lab@gmail.com.", en:"Oops, sending failed. Please retry or email bpack.lab@gmail.com."}
+  };
+
+  function joinBeta(e){
+    if(e) e.preventDefault();
+    var lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
+    var input = document.getElementById('email');
+    var status = document.getElementById('betaStatus');
+    var email = (input.value || '').trim();
+    if(!email) return false;
+
+    // Fallback if the Formspree endpoint hasn't been configured yet.
+    if(FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID') !== -1){
+      window.location.href = 'mailto:bpack.lab@gmail.com?subject='
+        + encodeURIComponent('Beta access — BACKPACK RUSHR')
+        + '&body=' + encodeURIComponent('Email: ' + email);
+      return false;
+    }
+
+    status.removeAttribute('data-fr');
+    status.removeAttribute('data-en');
+    status.textContent = BETA_MSG.sending[lang];
+
+    fetch(FORMSPREE_ENDPOINT, {
+      method:'POST',
+      headers:{'Accept':'application/json'},
+      body:new FormData(document.getElementById('betaForm'))
+    }).then(function(r){
+      if(r.ok){ status.textContent = BETA_MSG.ok[lang]; input.value=''; }
+      else { status.textContent = BETA_MSG.err[lang]; }
+    }).catch(function(){ status.textContent = BETA_MSG.err[lang]; });
+
+    return false;
+  }
+
+  (function init(){
+    var saved = null;
+    try{ saved = localStorage.getItem('rushr_lang'); }catch(e){}
+    var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
+    setLang(lang);
+  })();
+</script>
+</body>
+</html>
