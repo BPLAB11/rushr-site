@@ -149,13 +149,32 @@ ml('account', '2426476');
 
   @media(max-width:860px){
     .features,.steps{grid-template-columns:1fr 1fr}
-    .module{grid-template-columns:1fr}
+    .module{grid-template-columns:1fr;padding:32px}
     .nav-links{display:none}
     .m-grid{grid-template-columns:repeat(2,1fr)}
+    header{padding:60px 0 48px}
+    section{padding:56px 0}
+    .hero{gap:34px}
   }
-  @media(max-width:560px){
+  @media(max-width:600px){
+    .wrap{padding:0 18px}
+    header{padding:42px 0 34px}
+    section{padding:46px 0}
     .features,.steps{grid-template-columns:1fr}
     .m-side{display:none}
+    .hero-logo{height:auto;width:min(62%,260px)}
+    .cta{flex-direction:column;gap:10px}
+    .cta .btn{width:100%;justify-content:center}
+    .nav-right .btn-primary{display:none}
+    .beta-card{padding:22px}
+    .module{padding:22px;border-radius:16px}
+    .mock{margin-top:34px}
+    .step,.feat{padding:20px}
+  }
+  @media(max-width:380px){
+    .m-grid{gap:7px}
+    .m-card{padding:5px}
+    .brand-logo{height:22px}
   }
 </style>
 </head>
