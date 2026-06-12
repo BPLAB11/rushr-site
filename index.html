@@ -9,6 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<!-- MailerLite Universal -->
+<script>
+(function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+.push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+ml('account', '2426476');
+</script>
+<!-- End MailerLite Universal -->
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -114,6 +123,25 @@
   .beta-form input{flex:1;min-width:200px;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit}
   .beta-form input:focus{outline:none;border-color:var(--accent)}
   .beta-note{font-size:12.5px;color:var(--muted2);margin-top:14px}
+
+  /* MailerLite embedded form -> match dark/orange theme */
+  .beta-card .ml-form-embedContainer,
+  .beta-card .ml-form-embedWrapper,
+  .beta-card .ml-form-embedBody{background:transparent !important;border:none !important;box-shadow:none !important;max-width:none !important;width:100% !important;padding:0 !important}
+  .beta-card .ml-form-embedContent{display:none !important}
+  .beta-card .ml-form-formContent{padding:0 !important}
+  .beta-card .ml-form-fieldRow{margin:0 0 12px !important}
+  .beta-card .ml-form-fieldRow input,
+  .beta-card .ml-form-embedBody input[type=email],
+  .beta-card .ml-form-embedBody input[type=text]{background:#0E0E11 !important;border:1px solid rgba(255,255,255,.14) !important;border-radius:10px !important;color:#fff !important;height:50px !important;padding:0 16px !important;font-size:15px !important;font-family:inherit !important;box-shadow:none !important}
+  .beta-card .ml-form-fieldRow input::placeholder{color:#6E6E73 !important}
+  .beta-card .ml-form-embedSubmit{margin-top:4px !important}
+  .beta-card .ml-form-embedSubmit button,
+  .beta-card .ml-form-embedSubmit button.primary{background:#FF6A00 !important;color:#150A03 !important;border:none !important;border-radius:10px !important;height:50px !important;font-weight:600 !important;font-size:15px !important;font-family:inherit !important;box-shadow:none !important}
+  .beta-card .ml-form-embedSubmit button:hover{background:#FF8A3D !important}
+  .beta-card .ml-form-successBody{padding:0 !important}
+  .beta-card .ml-form-successContent h4{color:#fff !important}
+  .beta-card .ml-form-successContent p{color:#9A9A9E !important}
 
   /* FOOTER */
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
@@ -274,12 +302,8 @@
     <p class="lead" data-fr="BACKPACK RUSHR est en recherche préliminaire. Laissez votre email pour recevoir l'accès et aider à façonner l'outil." data-en="BACKPACK RUSHR is in research preview. Drop your email to get access and help shape the tool.">Laissez votre email pour recevoir l'accès.</p>
 
     <div class="beta-card">
-      <form id="betaForm" class="beta-form" onsubmit="return joinBeta(event)">
-        <input id="email" name="email" type="email" required placeholder="you@example.com" data-fr-ph="votre@email.com" data-en-ph="you@example.com" />
-        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" />
-        <button type="submit" class="btn btn-primary" data-fr="Demander l'accès" data-en="Request access">Demander l'accès</button>
-      </form>
-      <p id="betaStatus" class="beta-note" data-fr="Un seul clic : votre email est envoyé directement à l'équipe, sans ouvrir votre messagerie." data-en="One click: your email goes straight to the team, no mail app required.">Un seul clic, sans ouvrir votre messagerie.</p>
+      <!-- MailerLite embedded Beta Form -->
+      <div class="ml-embedded" data-form="ix1zaq"></div>
     </div>
   </div>
 </section>
@@ -310,46 +334,8 @@
     try{ localStorage.setItem('rushr_lang', lang); }catch(e){}
   }
 
-  // ▼▼▼ REMPLACE par l'ID de ton formulaire Formspree (https://formspree.io) ▼▼▼
-  var FORMSPREE_ENDPOINT = "https://formspree.io/f/xlgkwqnk";
-
-  var BETA_MSG = {
-    sending:{fr:"Envoi…", en:"Sending…"},
-    ok:{fr:"Merci ! Votre demande a bien été envoyée. 🎉", en:"Thanks! Your request has been sent. 🎉"},
-    err:{fr:"Oups, l'envoi a échoué. Réessayez ou écrivez à bpack.lab@gmail.com.", en:"Oops, sending failed. Please retry or email bpack.lab@gmail.com."}
-  };
-
-  function joinBeta(e){
-    if(e) e.preventDefault();
-    var lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
-    var input = document.getElementById('email');
-    var status = document.getElementById('betaStatus');
-    var email = (input.value || '').trim();
-    if(!email) return false;
-
-    // Fallback if the Formspree endpoint hasn't been configured yet.
-    if(FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID') !== -1){
-      window.location.href = 'mailto:bpack.lab@gmail.com?subject='
-        + encodeURIComponent('Beta access — BACKPACK RUSHR')
-        + '&body=' + encodeURIComponent('Email: ' + email);
-      return false;
-    }
-
-    status.removeAttribute('data-fr');
-    status.removeAttribute('data-en');
-    status.textContent = BETA_MSG.sending[lang];
-
-    fetch(FORMSPREE_ENDPOINT, {
-      method:'POST',
-      headers:{'Accept':'application/json'},
-      body:new FormData(document.getElementById('betaForm'))
-    }).then(function(r){
-      if(r.ok){ status.textContent = BETA_MSG.ok[lang]; input.value=''; }
-      else { status.textContent = BETA_MSG.err[lang]; }
-    }).catch(function(){ status.textContent = BETA_MSG.err[lang]; });
-
-    return false;
-  }
+  // Beta sign-ups are handled by the MailerLite embedded form (see the
+  // ml-embedded div + the MailerLite Universal script in the page head).
 
   (function init(){
     var saved = null;
