@@ -101,6 +101,8 @@
     .side-nav button{flex-direction:column;gap:3px;padding:8px 2px;min-width:0;width:100%;justify-content:center;align-items:center;text-align:center}
     .side-nav button span{font-size:8px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
     .stats{grid-template-columns:1fr 1fr}
+    .nav-right{gap:8px}
+    #whoami{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px}
   }
   @media(max-width:600px){
     .wrap{padding:0 18px}
@@ -116,6 +118,9 @@
     .toolbar{flex-wrap:wrap}
     .toolbar .in{min-width:0;width:100%}
     .row-actions{justify-content:flex-start}
+    #whoami{display:none}
+    .nav-right a{font-size:12px}
+    .logout-btn{padding:5px 10px;font-size:11.5px}
   }
 </style>
 </head>
