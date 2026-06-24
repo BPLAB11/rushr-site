@@ -228,9 +228,9 @@
     .nav-links{display:none}
     .dash{grid-template-columns:1fr;gap:16px}
     .side{position:static;flex-direction:column;gap:12px;min-width:0;width:100%}
-    .side-nav{flex-direction:row;overflow-x:auto;gap:4px;padding:6px;width:100%;-ms-overflow-style:none;scrollbar-width:none}
-    .side-nav::-webkit-scrollbar{display:none}
-    .side-nav button{flex-direction:column;gap:5px;font-size:11px;padding:9px 10px;min-width:0;flex-shrink:0;text-align:center;align-items:center;white-space:nowrap}
+    .side-nav{display:grid;grid-template-columns:repeat(5,1fr);overflow:visible;gap:2px;padding:6px}
+    .side-nav button{flex-direction:column;gap:4px;padding:10px 4px;min-width:0;width:100%;justify-content:center}
+    .side-nav button span{display:none}
     .side .logout-btn{display:none}
     .ov-grid{grid-template-columns:1fr}
     .side-profile{display:flex;flex-direction:row;align-items:center;gap:14px;text-align:left;padding:16px 18px}
