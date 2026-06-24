@@ -227,9 +227,9 @@
   @media(max-width:860px){
     .nav-links{display:none}
     .dash{grid-template-columns:1fr;gap:16px}
-    .side{position:static;flex-direction:column;gap:12px}
-    .side-nav{flex-direction:row;overflow-x:auto;gap:4px;padding:6px}
-    .side-nav button{flex-direction:column;gap:6px;font-size:11px;padding:9px 8px;min-width:78px;text-align:center;align-items:center;white-space:nowrap}
+    .side{position:static;flex-direction:column;gap:12px;min-width:0;width:100%}
+    .side-nav{flex-direction:row;overflow-x:auto;gap:4px;padding:6px;width:100%}
+    .side-nav button{flex-direction:column;gap:6px;font-size:11px;padding:9px 8px;min-width:72px;text-align:center;align-items:center;white-space:nowrap}
     .side .logout-btn{display:none}
     .ov-grid{grid-template-columns:1fr}
     .side-profile{display:flex;flex-direction:row;align-items:center;gap:14px;text-align:left;padding:16px 18px}
@@ -243,7 +243,10 @@
   @media(max-width:600px){
     .wrap{padding:0 18px}
     .auth-card{padding:30px 22px}
-    .card{padding:20px}
+    .card{padding:20px;min-width:0;overflow:hidden}
+    .lic{min-width:0;overflow:hidden}
+    .lic-meta{flex-direction:column;gap:4px}
+    .key-row{overflow:hidden}
     .foot-in{flex-direction:column;align-items:flex-start}
   }
 </style>
