@@ -232,6 +232,13 @@
     .side-nav button{flex-direction:column;gap:6px;font-size:11px;padding:9px 8px;min-width:78px;text-align:center;align-items:center;white-space:nowrap}
     .side .logout-btn{display:none}
     .ov-grid{grid-template-columns:1fr}
+    .side-profile{display:flex;flex-direction:row;align-items:center;gap:14px;text-align:left;padding:16px 18px}
+    .pb-avatar{margin:0;width:52px;height:52px;flex-shrink:0}
+    .pb-avatar .ph{width:52px;height:52px;font-size:19px}
+    .pb-avatar img{width:52px;height:52px}
+    .pb-info{flex:1;min-width:0}
+    .pb-name{justify-content:flex-start;font-size:15px}
+    .pb-email{margin-top:3px}
   }
   @media(max-width:600px){
     .wrap{padding:0 18px}
@@ -352,8 +359,10 @@
             </button>
             <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(event)" />
           </div>
-          <div class="pb-name" id="pbName">—</div>
-          <div class="pb-email" id="pbEmail"></div>
+          <div class="pb-info">
+            <div class="pb-name" id="pbName">—</div>
+            <div class="pb-email" id="pbEmail"></div>
+          </div>
         </div>
         <nav class="side-nav">
           <button class="on" data-panel="overview" onclick="switchPanel('overview')"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span data-fr="Vue d'ensemble" data-en="Overview">Vue d'ensemble</span></button>
