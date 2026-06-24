@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Software — BACKPACK LAB</title>
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<meta name="description" data-fr="Les logiciels de Backpack Lab pour vidéastes et monteurs : Rushr (dérushage) et d'autres outils à venir. Windows & macOS." data-en="Backpack Lab software for videographers and editors: Rushr (dérushage) and more tools coming. Windows & macOS." content="Les logiciels de Backpack Lab pour vidéastes et monteurs." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12); --accent:#35DC8E; --accent2:#5FE8A8;
+    --text:#FFFFFF; --muted:#9A9A9E; --muted2:#6E6E73; --on-accent:#04150C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:80px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  ::-webkit-scrollbar{width:10px;background:var(--surface)}
+  ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:5px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;max-width:100%;position:relative}
+  img{max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+  .accent{color:var(--accent)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
+  .brand .dot{width:12px;height:12px;border-radius:3px;background:var(--accent);display:block}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .nav-links a.on{color:var(--text)}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;font-weight:600;font-size:14px;padding:10px 18px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent);position:relative;overflow:hidden}
+  .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .5s ease}
+  .btn-primary:hover::before{left:100%}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .nav-right .btn{padding:5px 16px;font-size:13px}
+
+  /* HERO */
+  header{padding:80px 0 24px;position:relative;text-align:center}
+  .hero-glow{position:absolute;top:-120px;left:0;right:0;margin:0 auto;width:760px;max-width:100%;height:420px;background:radial-gradient(closest-side,rgba(53,220,142,.16),transparent);filter:blur(20px);z-index:0;pointer-events:none;animation:glowBreathing 4s ease-in-out infinite}
+  @keyframes glowBreathing{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+  .hero-in{position:relative;z-index:1}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--muted);margin-bottom:22px}
+  .pill .d{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.05;font-weight:800;letter-spacing:-1.2px;background:linear-gradient(135deg,#fff 0%,var(--accent2) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .sub{color:var(--muted);font-size:clamp(15px,2.2vw,19px);max-width:640px;margin:20px auto 0}
+
+  section{padding:48px 0 72px}
+
+  /* FEATURED SOFTWARE (Rushr) */
+  .featured{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;background:linear-gradient(135deg,#16100A,#121215);border:1px solid rgba(53,220,142,.25);border-radius:20px;padding:42px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
+  .featured:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(53,220,142,.12);border-color:rgba(53,220,142,.4)}
+  .featured.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
+  .featured.tilt-3d:hover{box-shadow:0 30px 60px rgba(53,220,142,.2)}
+  .featured .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent2);background:rgba(53,220,142,.14);border:1px solid rgba(53,220,142,.4);border-radius:6px;padding:4px 10px;margin-bottom:16px;transform:translateZ(10px)}
+  .featured h2{font-size:30px;font-weight:800;letter-spacing:-.5px}
+  .featured p{color:var(--muted);margin-top:12px;font-size:15px}
+  .featured ul{list-style:none;margin:18px 0 24px;display:flex;flex-direction:column;gap:10px}
+  .featured li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#D6D6D8}
+  .featured li .c{color:var(--accent2);font-weight:800}
+  .featured .os{display:inline-flex;gap:8px;margin-left:6px}
+  .featured .os span{font-size:11px;color:var(--muted);border:1px solid var(--line2);border-radius:6px;padding:2px 8px}
+
+  /* Rushr keeps its own orange identity on this green page */
+  .featured.rushr{border-color:rgba(255,106,0,.3)}
+  .featured.rushr .tag{color:#FF8A3D;background:rgba(255,106,0,.14);border-color:rgba(255,106,0,.4)}
+  .featured.rushr li .c{color:#FF8A3D}
+  .featured.rushr .btn-primary{background:#FF6A00;color:#150A03}
+  .featured.rushr .btn-primary:hover{background:#FF8A3D}
+  .featured.rushr .m-logo .d{background:#FF6A00}
+  .featured.rushr .m-nav.on{background:#FF6A00;color:#150A03}
+  .featured.rushr .m-card.sel{border-color:#FF6A00}
+
+  /* App mock (reused from Rushr) */
+  .mock{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0E0E11;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .mock-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#121215;border-bottom:1px solid var(--line)}
+  .mock-bar i{width:11px;height:11px;border-radius:50%;background:#2a2a2e;display:block}
+  .mock-body{display:flex;min-height:280px}
+  .m-side{width:130px;background:#0B0B0D;border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:6px}
+  .m-logo{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;font-weight:700}
+  .m-logo .d{width:9px;height:9px;border-radius:2px;background:var(--accent)}
+  .m-nav{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);padding:8px 9px;border-radius:8px}
+  .m-nav.on{background:var(--accent);color:var(--on-accent);font-weight:600}
+  .m-main{flex:1;padding:18px}
+  .m-h{font-size:15px;font-weight:700}
+  .m-hs{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:14px}
+  .m-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+  .m-card{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:6px}
+  .m-card.sel{border-color:var(--accent)}
+  .m-thumb{height:42px;border-radius:6px;background:linear-gradient(135deg,#23232a,#15151a)}
+  .m-tag{display:inline-block;margin-top:6px;font-size:8px;font-weight:700;color:#06351F;background:#43B581;border-radius:4px;padding:2px 6px}
+  .m-tag.b{background:#6FB4FF;color:#06294E}
+
+  /* OTHER SOFTWARE */
+  .soon-head{margin-top:64px}
+  .eyebrow{color:var(--accent);font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;text-align:center}
+  .h2c{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.5px;text-align:center;margin-top:10px}
+  .lead{color:var(--muted);text-align:center;max-width:600px;margin:14px auto 0;font-size:16px}
+  .soft-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:40px}
+  .soft{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
+  .soft:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(53,220,142,.12);border-color:rgba(53,220,142,.35)}
+  .soft.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
+  .soft.tilt-3d:hover{box-shadow:0 30px 60px rgba(53,220,142,.2)}
+  .soft .tag{align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:6px;padding:4px 9px;margin-bottom:16px;color:var(--muted);background:var(--surface2);border:1px solid var(--line2);transform:translateZ(10px)}
+  .soft h3{font-size:19px;font-weight:800;margin-bottom:7px}
+  .soft p{color:var(--muted);font-size:14px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
+  .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .foot-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px}
+  .foot-brand .dot{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+
+  @media(max-width:860px){
+    .featured{grid-template-columns:1fr;padding:32px}
+    .nav-links{display:none}
+    header{padding:60px 0 16px}
+  }
+  @media(max-width:600px){
+    .wrap{padding:0 18px}
+    .soft-grid{grid-template-columns:1fr}
+    .featured{padding:24px}
+    .m-side{display:none}
+    .nav-right .btn-primary{display:none}
+  }
+  /* Scroll reveal animations */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal.delay-1{transition-delay:.1s}
+  .reveal.delay-2{transition-delay:.2s}
+  .reveal.delay-3{transition-delay:.3s}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="software.html" class="on" data-fr="Software" data-en="Software">Software</a>
+        <a href="rushr.html" data-fr="Rushr" data-en="Rushr">Rushr</a>
+        <a href="account.html" data-fr="Mon espace" data-en="Account">Mon espace</a>
+        <a href="index.html#contact" data-fr="Contact" data-en="Contact">Contact</a>
+      </div>
+      <div class="lang">
+        <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
+        <button id="len" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="rushr.html" class="btn btn-primary" data-fr="Découvrir Rushr" data-en="Discover Rushr">Découvrir Rushr</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="hero-glow"></div>
+  <div class="wrap hero-in">
+    <span class="pill"><span class="d"></span><span data-fr="Logiciels Backpack Lab" data-en="Backpack Lab software">Logiciels Backpack Lab</span></span>
+    <h1 data-fr="Nos logiciels" data-en="Our software">Nos logiciels</h1>
+    <p class="sub" data-fr="Des outils desktop pour vidéastes et monteurs, compatibles Windows et macOS. Rushr est le premier — et ce n'est que le début." data-en="Desktop tools for videographers and editors, for Windows and macOS. Rushr is the first — and it's just the beginning.">Des outils desktop pour vidéastes et monteurs, Windows & macOS.</p>
+  </div>
+</header>
+
+<section class="reveal">
+  <div class="wrap">
+
+    <!-- FEATURED: RUSHR -->
+    <div class="featured rushr tilt-3d">
+      <div>
+        <span class="tag" data-fr="DISPONIBLE EN BETA" data-en="AVAILABLE IN BETA">DISPONIBLE EN BETA</span>
+        <h2>Backpack Rushr</h2>
+        <p data-fr="L'outil de dérushage pour vidéastes et monteurs. Structurez votre projet, importez, prévisualisez et taguez vos prises — avant même d'ouvrir votre logiciel de montage." data-en="The dérushage tool for videographers and editors. Build your project structure, import, preview and tag your takes — before you even open your editing software.">L'outil de dérushage : triez vos rushes avant le montage.</p>
+        <ul>
+          <li><span class="c">✓</span> <span data-fr="Rushes organisés par dossier, tag clavier éclair" data-en="Rushes grouped by folder, lightning keyboard tagging">Rushes organisés par dossier, tag clavier éclair</span></li>
+          <li><span class="c">✓</span> <span data-fr="Lecteur intégré et structures par preset" data-en="Built-in preview and structure presets">Lecteur intégré et structures par preset</span></li>
+          <li><span class="c">✓</span> <span data-fr="Module Rename Tool installable (.bprx)" data-en="Installable Rename Tool module (.bprx)">Module Rename Tool installable (.bprx)</span></li>
+        </ul>
+        <a href="rushr.html" class="btn btn-primary" data-fr="Voir la page Rushr" data-en="View the Rushr page">Voir la page Rushr</a>
+        <span class="os"><span>Windows</span><span>macOS</span></span>
+      </div>
+      <a href="rushr.html" class="mock" aria-hidden="true">
+        <div class="mock-bar"><i></i><i></i><i></i></div>
+        <div class="mock-body">
+          <div class="m-side">
+            <div class="m-logo"><span class="d"></span> RUSHR</div>
+            <div class="m-nav on">▦ Dashboard</div>
+            <div class="m-nav">▣ Rush Manager</div>
+            <div style="flex:1"></div>
+            <div class="m-nav">⚙ Settings</div>
+          </div>
+          <div class="m-main">
+            <div class="m-h">Rush Manager</div>
+            <div class="m-hs" data-fr="Importez, prévisualisez et triez." data-en="Import, preview and sort.">Importez, prévisualisez et triez.</div>
+            <div class="m-grid">
+              <div class="m-card sel"><div class="m-thumb"></div><span class="m-tag">Interview</span></div>
+              <div class="m-card"><div class="m-thumb"></div><span class="m-tag b">B-Roll</span></div>
+              <div class="m-card"><div class="m-thumb"></div><span class="m-tag b">B-Roll</span></div>
+              <div class="m-card"><div class="m-thumb"></div><span class="m-tag">Interview</span></div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- OTHER SOFTWARE -->
+    <div class="soon-head">
+      <div class="eyebrow" data-fr="La suite" data-en="What's next">La suite</div>
+      <div class="h2c" data-fr="D'autres logiciels arrivent" data-en="More software is coming">D'autres logiciels arrivent</div>
+      <p class="lead" data-fr="Backpack Lab développe en continu de nouveaux outils pour les créateurs. Voici un aperçu de ce qui se prépare." data-en="Backpack Lab keeps building new tools for creators. Here's a glimpse of what's in the works.">Backpack Lab développe en continu de nouveaux outils.</p>
+      <div class="soft-grid">
+        <div class="soft tilt-3d">
+          <span class="tag" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
+          <h3 data-fr="Nouveau projet" data-en="New project">Nouveau projet</h3>
+          <p data-fr="Un nouveau logiciel pour fluidifier le travail des monteurs est en préparation. Détails à venir." data-en="A new tool to streamline editors' work is in the works. Details coming soon.">Un nouveau logiciel pour fluidifier le travail des monteurs.</p>
+        </div>
+        <div class="soft tilt-3d">
+          <span class="tag" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
+          <h3 data-fr="Et plus encore" data-en="And more">Et plus encore</h3>
+          <p data-fr="La gamme d'outils Backpack Lab continue de s'étoffer. Restez informé des prochaines sorties." data-en="The Backpack Lab toolkit keeps growing. Stay tuned for upcoming releases.">La gamme Backpack Lab continue de s'étoffer.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="foot-brand"><span class="dot"></span>BACKPACK&nbsp;LAB</div>
+    <div data-fr="© 2026 BACKPACK LAB · Éditeur de logiciels. Tous droits réservés." data-en="© 2026 BACKPACK LAB · Software publisher. All rights reserved.">© 2026 BACKPACK LAB</div>
+    <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){
+      var v = el.getAttribute('data-'+lang);
+      if(v!==null) el.innerHTML = v;
+    });
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){
+      var v = el.getAttribute('data-'+lang+'-ph');
+      if(v!==null) el.setAttribute('placeholder', v);
+    });
+    var meta = document.querySelector('meta[name="description"]');
+    if(meta){ var m = meta.getAttribute('data-'+lang); if(m) meta.setAttribute('content', m); }
+    document.getElementById('lfr').classList.toggle('on', lang==='fr');
+    document.getElementById('len').classList.toggle('on', lang==='en');
+    try{ localStorage.setItem('bpl_lang', lang); }catch(e){}
+  }
+  (function init(){
+    var saved = null;
+    try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
+    setLang(lang);
+  })();
+
+  // Scroll reveal observer
+  (function(){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    },{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+  })();
+
+  // 3D Tilt effect on cards
+  (function(){
+    var cards = document.querySelectorAll('.tilt-3d');
+    cards.forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var centerX = rect.width / 2;
+        var centerY = rect.height / 2;
+        var rotateX = ((y - centerY) / centerY) * -5;
+        var rotateY = ((x - centerX) / centerX) * 5;
+        card.style.setProperty('--rx', rotateX + 'deg');
+        card.style.setProperty('--ry', rotateY + 'deg');
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

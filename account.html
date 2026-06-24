@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mon espace — BACKPACK LAB</title>
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<meta name="description" data-fr="Votre espace Backpack Lab : licences, téléchargements et compte." data-en="Your Backpack Lab account: licenses, downloads and profile." content="Votre espace Backpack Lab : licences, téléchargements et compte." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12); --accent:#35DC8E; --accent2:#5FE8A8;
+    --text:#FFFFFF; --muted:#9A9A9E; --muted2:#6E6E73; --on-accent:#04150C;
+    --rushr:#FF6A00; --rushr2:#FF8A3D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:80px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  ::-webkit-scrollbar{width:10px;background:var(--surface)}
+  ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:5px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;max-width:100%;position:relative;min-height:100vh;display:flex;flex-direction:column}
+  img{max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;width:100%}
+  .accent{color:var(--accent)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
+  .brand .dot{width:12px;height:12px;border-radius:3px;background:var(--accent);display:block}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .nav-links a.on{color:var(--text)}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;font-weight:600;font-size:14px;padding:10px 18px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent);position:relative;overflow:hidden}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn-rushr{background:var(--rushr);color:#150A03}
+  .btn-rushr:hover{background:var(--rushr2)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+
+  .logout-btn{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+  .logout-btn:hover{border-color:#FF6B6B;color:#FF6B6B}
+
+  .acct{position:relative}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--surface2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:.15s;overflow:hidden}
+  .avatar:hover{border-color:var(--accent)}
+  .avatar svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.7}
+  .avatar:hover svg{stroke:var(--accent2)}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:none}
+  .acct-menu{position:absolute;top:46px;right:0;min-width:210px;background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-6px);transition:.15s;z-index:60}
+  .acct-menu.open{opacity:1;visibility:visible;transform:translateY(0)}
+  .acct-menu .acct-email{font-size:12px;color:var(--muted2);padding:8px 10px 10px;border-bottom:1px solid var(--line);margin-bottom:6px;word-break:break-all}
+  .acct-menu a,.acct-menu button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);font-size:13.5px;font-weight:500;padding:9px 10px;border-radius:8px;cursor:pointer;font-family:inherit}
+  .acct-menu a:hover,.acct-menu button:hover{background:var(--surface2);color:var(--accent2)}
+  .acct-menu button.danger:hover{color:#FF6B6B}
+
+  .edit-ic{background:transparent;border:0;cursor:pointer;padding:6px;border-radius:8px;display:inline-flex;transition:.15s}
+  .edit-ic svg{width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:1.8}
+  .edit-ic:hover{background:var(--surface2)}
+  .edit-ic:hover svg{stroke:var(--accent2)}
+
+  main{flex:1;width:100%}
+
+  /* AUTH VIEW */
+  .auth-wrap{display:flex;align-items:center;justify-content:center;padding:72px 0 96px;position:relative}
+  .auth-glow{position:absolute;top:-40px;left:0;right:0;margin:0 auto;width:620px;max-width:100%;height:360px;background:radial-gradient(closest-side,rgba(53,220,142,.16),transparent);filter:blur(20px);z-index:0;pointer-events:none}
+  .auth-card{position:relative;z-index:1;width:100%;max-width:430px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:38px 34px}
+  .auth-head{text-align:center;margin-bottom:24px}
+  .auth-head .mark{width:46px;height:46px;border-radius:12px;background:rgba(53,220,142,.12);border:1px solid rgba(53,220,142,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+  .auth-head .mark span{width:14px;height:14px;border-radius:4px;background:var(--accent);display:block}
+  .auth-head h1{font-size:24px;font-weight:800;letter-spacing:-.4px}
+  .auth-head p{color:var(--muted);font-size:14px;margin-top:6px}
+  .tabs{display:flex;background:var(--surface2);border:1px solid var(--line2);border-radius:12px;padding:4px;margin-bottom:22px}
+  .tabs button{flex:1;background:transparent;border:0;color:var(--muted);font-size:13.5px;font-weight:600;padding:9px;border-radius:9px;cursor:pointer;font-family:inherit;transition:.15s}
+  .tabs button.on{background:var(--accent);color:var(--on-accent)}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .field input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:12px 14px;font-size:15px;font-family:inherit}
+  .field input:focus{outline:none;border-color:var(--accent)}
+  .auth-card .btn-primary{width:100%;padding:13px;margin-top:6px}
+  .auth-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12.5px;color:var(--muted2)}
+  .auth-meta a{color:var(--accent2)}
+  .signup-only{display:none}
+  .auth-error{display:none;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.4);color:#FF9B9B;font-size:13px;border-radius:10px;padding:10px 12px;margin-bottom:14px}
+  .auth-error.show{display:block}
+  .auth-error.ok{background:rgba(53,220,142,.1);border-color:rgba(53,220,142,.4);color:var(--accent2)}
+  .demo-hint{text-align:center;color:var(--muted2);font-size:12px;margin-top:20px}
+
+  /* DASHBOARD (sidebar) */
+  #app-view{display:none;padding-top:30px}
+  .dash{display:grid;grid-template-columns:248px 1fr;gap:26px;margin-bottom:56px}
+  .side{position:sticky;top:88px;align-self:start;display:flex;flex-direction:column;gap:16px}
+  .side-profile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 18px;text-align:center}
+  .pb-avatar{position:relative;width:72px;height:72px;flex-shrink:0;margin:0 auto 12px}
+  .pb-avatar .ph{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1f2a25,#141417);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--accent2)}
+  .pb-avatar img{width:72px;height:72px;border-radius:50%;object-fit:cover;display:none;border:1px solid var(--line2)}
+  .pb-cam{position:absolute;right:-2px;bottom:-2px;width:27px;height:27px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:.15s}
+  .pb-cam:hover{background:var(--accent2)}
+  .pb-cam svg{width:13px;height:13px;stroke:var(--on-accent);fill:none;stroke-width:2}
+  .pb-name{font-size:16px;font-weight:800;letter-spacing:-.2px;display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap}
+  .pb-email{color:var(--muted);font-size:12.5px;margin-top:2px;word-break:break-all}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:6px;padding:3px 8px}
+  .badge.active{color:var(--on-accent);background:var(--accent)}
+  .badge.beta{color:#150A03;background:var(--rushr)}
+  .side-nav{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px;display:flex;flex-direction:column;gap:2px}
+  .side-nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:transparent;border:0;color:var(--muted);font-size:13.5px;font-weight:600;padding:11px 12px;border-radius:10px;cursor:pointer;font-family:inherit;transition:.15s}
+  .side-nav button:hover{background:var(--surface2);color:var(--text)}
+  .side-nav button.on{background:rgba(53,220,142,.12);color:var(--accent2)}
+  .side-nav button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+  .side .logout-btn{width:100%}
+
+  .content{min-width:0}
+  .panel{display:none}
+  .panel.on{display:block;animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .panel-h{font-size:23px;font-weight:800;letter-spacing:-.4px;margin-bottom:3px}
+  .panel-sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+  .card + .card{margin-top:16px}
+  .card h2{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+  .card .desc{color:var(--muted2);font-size:13px;margin:-6px 0 16px}
+  .card-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;background:transparent;border:0;cursor:pointer;font-family:inherit;padding:0;text-align:left}
+  .card-head h2{margin:0}
+  .chev{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2;transition:transform .2s ease;flex-shrink:0}
+  .card.collapsed .chev{transform:rotate(-90deg)}
+  .card-body{margin-top:16px}
+  .card.collapsed .card-body{display:none}
+
+  .ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+  .ov{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .ov .lbl{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+  .ov .val{font-size:19px;font-weight:800;margin-top:6px}
+  .ov .val.ok{color:var(--accent2)}
+  .quick{display:flex;gap:10px;flex-wrap:wrap}
+
+  .lic{border:1px solid var(--line2);border-radius:14px;padding:18px;background:var(--surface2)}
+  .lic + .lic{margin-top:14px}
+  .lic.rushr{border-color:rgba(255,106,0,.32)}
+  .lic-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+  .lic-name{font-size:16px;font-weight:800;display:flex;align-items:center;gap:9px}
+  .lic-name .d{width:9px;height:9px;border-radius:2px;background:var(--rushr);display:block}
+  .key-row{display:flex;align-items:center;gap:8px;background:#0E0E11;border:1px dashed var(--line2);border-radius:10px;padding:11px 14px}
+  .key-row code{flex:1;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;letter-spacing:1px;color:#D6D6D8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .key-row button{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;flex-shrink:0}
+  .key-row button:hover{border-color:var(--accent);color:var(--accent2)}
+  .lic-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:12.5px;color:var(--muted)}
+  .lic-meta b{color:var(--text);font-weight:600}
+
+  .claim{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
+  .claim input{flex:1;min-width:200px;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:11px 14px;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1px}
+  .claim input:focus{outline:none;border-color:var(--accent)}
+  .msg{font-size:12.5px;margin-top:10px;min-height:16px}
+  .msg.err{color:#FF9B9B}.msg.ok{color:var(--accent2)}
+  .loading{color:var(--muted);font-size:13.5px;padding:4px 0}
+
+  .dl,.dev{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .dl:last-child,.dev:last-child{border-bottom:0;padding-bottom:0}
+  .dl:first-child,.dev:first-child{padding-top:0}
+  .dl-ic,.dev-ic{width:42px;height:42px;border-radius:11px;background:var(--surface2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .dl-ic svg,.dev-ic svg{width:21px;height:21px;stroke:var(--accent2);fill:none;stroke-width:1.7}
+  .dl-info,.dev-info{flex:1;min-width:0}
+  .dl-info h3,.dev-info h3{font-size:14px;font-weight:700}
+  .dl-info p,.dev-info p{font-size:12px;color:var(--muted2)}
+  .dev-info .here{color:var(--accent2)}
+  .dl .btn{padding:8px 14px;font-size:13px;flex-shrink:0}
+  .btn-mini{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;flex-shrink:0}
+  .btn-mini:hover{border-color:#FF6B6B;color:#FF6B6B}
+  .seat-note{margin-top:14px;font-size:12.5px;color:var(--muted)}
+  .seat-note b{color:var(--text)}
+
+  .empty{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--muted)}
+  .empty svg{width:18px;height:18px;stroke:var(--muted2);fill:none;stroke-width:1.7;flex-shrink:0}
+  .empty span{font-size:13.5px}
+
+  .prow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .prow:last-child{border-bottom:0;padding-bottom:0}
+  .prow:first-child{padding-top:0}
+  .prow .k{font-size:13px;color:var(--muted)}
+  .prow .k.danger{color:#FF6B6B}
+  .prow .v{font-size:13.5px;font-weight:600;margin-top:2px;word-break:break-all}
+  .prow a.edit{font-size:12.5px;color:var(--accent2);font-weight:600;cursor:pointer}
+  .prow a.edit.danger{color:#FF6B6B}
+
+  .pref{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .pref:last-of-type{border-bottom:0;padding-bottom:0}
+  .pref:first-of-type{padding-top:0}
+  .pref-t{flex:1;min-width:0}
+  .pref-h{display:block;font-size:13.5px;font-weight:600}
+  .pref-s{display:block;font-size:11.5px;color:var(--muted2)}
+  .switch{position:relative;width:40px;height:23px;flex-shrink:0}
+  .switch input{opacity:0;width:0;height:0;position:absolute}
+  .switch .track{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--line2);border-radius:999px;transition:.2s}
+  .switch .track::before{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:15px;height:15px;border-radius:50%;background:var(--muted);transition:.2s}
+  .switch input:checked + .track{background:rgba(53,220,142,.25);border-color:var(--accent)}
+  .switch input:checked + .track::before{background:var(--accent);left:20px}
+
+  .support-list{display:flex;flex-direction:column;gap:12px}
+  .sup{display:flex;align-items:center;gap:13px;padding:13px;border:1px solid var(--line2);border-radius:12px;background:var(--surface2);transition:.15s}
+  .sup:hover{border-color:var(--accent)}
+  .sup .ic{width:36px;height:36px;border-radius:9px;background:rgba(53,220,142,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .sup .ic svg{width:18px;height:18px;stroke:var(--accent2);fill:none;stroke-width:1.7}
+  .sup .t{flex:1;min-width:0}
+  .sup .t h3{font-size:13.5px;font-weight:700}
+  .sup .t p{font-size:11.5px;color:var(--muted2)}
+  .sup .arr{color:var(--muted);font-weight:700}
+
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:13px}
+  .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .foot-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px}
+  .foot-brand .dot{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .foot-legal{display:flex;gap:18px;flex-wrap:wrap}
+  .foot-legal a{color:var(--muted);font-size:12.5px}
+  .foot-legal a:hover{color:var(--accent2);text-decoration:underline}
+  .foot-meta{color:var(--muted2);font-size:12.5px}
+
+  @media(max-width:860px){
+    .nav-links{display:none}
+    .dash{grid-template-columns:1fr;gap:16px}
+    .side{position:static;flex-direction:column;gap:12px}
+    .side-nav{flex-direction:row;overflow-x:auto;gap:4px;padding:6px}
+    .side-nav button{flex-direction:column;gap:6px;font-size:11px;padding:9px 8px;min-width:78px;text-align:center;align-items:center;white-space:nowrap}
+    .side .logout-btn{display:none}
+    .ov-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    .wrap{padding:0 18px}
+    .auth-card{padding:30px 22px}
+    .card{padding:20px}
+    .foot-in{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="software.html" data-fr="Software" data-en="Software">Software</a>
+        <a href="rushr.html" data-fr="Rushr" data-en="Rushr">Rushr</a>
+        <a href="account.html" class="on" data-fr="Mon espace" data-en="Account">Mon espace</a>
+      </div>
+      <div class="lang">
+        <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
+        <button id="len" onclick="setLang('en')">EN</button>
+      </div>
+      <div id="navAccount" class="acct" style="display:none">
+        <button class="avatar" onclick="toggleMenu(event)" aria-label="Compte">
+          <img id="navAvatarImg" alt="" />
+          <svg id="navAvatarSvg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </button>
+        <div id="acctMenu" class="acct-menu">
+          <div class="acct-email" id="menuEmail"></div>
+          <a href="#" onclick="switchPanel('account');document.getElementById('acctMenu').classList.remove('open');return false" data-fr="Mon profil" data-en="My profile">Mon profil</a>
+          <a id="adminLink" href="admin.html" style="display:none" data-fr="Espace admin" data-en="Admin area">Espace admin</a>
+          <button class="danger" onclick="logout()" data-fr="Déconnexion" data-en="Log out">Déconnexion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- AUTH VIEW -->
+  <section id="auth-view">
+    <div class="wrap auth-wrap">
+      <div class="auth-glow"></div>
+      <div class="auth-card">
+        <div class="auth-head">
+          <div class="mark"><span></span></div>
+          <h1 id="authTitle" data-fr="Bienvenue" data-en="Welcome">Bienvenue</h1>
+          <p id="authSub" data-fr="Connectez-vous pour accéder à vos licences et téléchargements." data-en="Sign in to access your licenses and downloads.">Connectez-vous pour accéder à vos licences et téléchargements.</p>
+        </div>
+        <div class="tabs">
+          <button id="tabLogin" class="on" onclick="setMode('login')" data-fr="Connexion" data-en="Sign in">Connexion</button>
+          <button id="tabSignup" onclick="setMode('signup')" data-fr="Créer un compte" data-en="Sign up">Créer un compte</button>
+        </div>
+        <div id="authError" class="auth-error"></div>
+        <form onsubmit="return doAuth(event)">
+          <div class="field signup-only">
+            <label data-fr="Nom" data-en="Name">Nom</label>
+            <input id="suName" type="text" data-fr-ph="Votre nom" data-en-ph="Your name" placeholder="Votre nom" />
+          </div>
+          <div class="field">
+            <label data-fr="Email" data-en="Email">Email</label>
+            <input id="auEmail" type="email" required data-fr-ph="vous@email.com" data-en-ph="you@email.com" placeholder="vous@email.com" />
+          </div>
+          <div class="field">
+            <label data-fr="Mot de passe" data-en="Password">Mot de passe</label>
+            <input id="auPass" type="password" required minlength="6" placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="submitBtn" data-fr="Se connecter" data-en="Sign in">Se connecter</button>
+          <div class="auth-meta">
+            <a href="#" onclick="resetPassword();return false" data-fr="Mot de passe oublié ?" data-en="Forgot password?">Mot de passe oublié ?</a>
+            <span data-fr="Chiffré & sécurisé" data-en="Encrypted & secure">Chiffré & sécurisé</span>
+          </div>
+        </form>
+        <p class="demo-hint" data-fr="Connexion réelle sécurisée par Supabase." data-en="Real authentication secured by Supabase.">Connexion réelle sécurisée par Supabase.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD VIEW -->
+  <section id="app-view">
+    <div class="wrap dash">
+      <aside class="side">
+        <div class="side-profile">
+          <div class="pb-avatar">
+            <div class="ph" id="pbInitials">·</div>
+            <img id="pbAvatarImg" alt="Photo de profil" />
+            <button class="pb-cam" onclick="document.getElementById('avatarInput').click()" aria-label="Changer la photo">
+              <svg viewBox="0 0 24 24"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>
+            </button>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(event)" />
+          </div>
+          <div class="pb-name" id="pbName">—</div>
+          <div class="pb-email" id="pbEmail"></div>
+        </div>
+        <nav class="side-nav">
+          <button class="on" data-panel="overview" onclick="switchPanel('overview')"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span data-fr="Vue d'ensemble" data-en="Overview">Vue d'ensemble</span></button>
+          <button data-panel="licenses" onclick="switchPanel('licenses')"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M16 16l2-2"/></svg><span data-fr="Licences" data-en="Licenses">Licences</span></button>
+          <button data-panel="devices" onclick="switchPanel('devices')"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM2 20h20"/></svg><span data-fr="Appareils" data-en="Devices">Appareils</span></button>
+          <button data-panel="downloads" onclick="switchPanel('downloads')"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 11l4 4 4-4M5 19h14"/></svg><span data-fr="Téléchargements" data-en="Downloads">Téléchargements</span></button>
+          <button data-panel="orders" onclick="switchPanel('orders')"><svg viewBox="0 0 24 24"><path d="M6 2l1.5 3h9L18 2M3 5h18l-1.5 13H4.5L3 5z"/></svg><span data-fr="Commandes" data-en="Orders">Commandes</span></button>
+          <button data-panel="account" onclick="switchPanel('account')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span data-fr="Compte" data-en="Account">Compte</span></button>
+          <button data-panel="support" onclick="switchPanel('support')"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H7l-3 3z"/></svg><span data-fr="Beta & support" data-en="Beta & support">Beta & support</span></button>
+        </nav>
+        <button class="logout-btn" onclick="logout()" data-fr="Déconnexion" data-en="Sign out">Déconnexion</button>
+      </aside>
+
+      <div class="content">
+        <!-- OVERVIEW -->
+        <section class="panel on" id="panel-overview">
+          <div class="panel-h" id="ovHello">—</div>
+          <div class="panel-sub" data-fr="Un aperçu rapide de votre compte." data-en="A quick overview of your account.">Un aperçu rapide de votre compte.</div>
+          <div class="ov-grid">
+            <div class="ov"><div class="lbl" data-fr="Licence" data-en="License">Licence</div><div class="val" id="ovLicense">—</div></div>
+            <div class="ov"><div class="lbl" data-fr="Appareils" data-en="Devices">Appareils</div><div class="val" id="ovSeats">—</div></div>
+            <div class="ov"><div class="lbl" data-fr="Version" data-en="Version">Version</div><div class="val" id="ovVersion">—</div></div>
+          </div>
+          <div class="card">
+            <h2 data-fr="Téléchargement rapide" data-en="Quick download">Téléchargement rapide</h2>
+            <div class="desc" data-fr="Récupérez la dernière version de Rushr." data-en="Grab the latest Rushr build.">Récupérez la dernière version de Rushr.</div>
+            <div class="quick" id="ovDownloads"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
+          </div>
+        </section>
+
+        <!-- LICENSES -->
+        <section class="panel" id="panel-licenses">
+          <div class="panel-h" data-fr="Licences" data-en="Licenses">Licences</div>
+          <div class="panel-sub" data-fr="Vos clés de licence Backpack Lab." data-en="Your Backpack Lab license keys.">Vos clés de licence Backpack Lab.</div>
+          <div class="card collapsed" id="claimCard">
+            <button class="card-head" onclick="toggleCard(this)" aria-expanded="false">
+              <h2 data-fr="Ajouter une licence" data-en="Add a license">Ajouter une licence</h2>
+              <svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="card-body">
+              <div class="desc" data-fr="Entrez une clé de licence pour la rattacher à votre compte." data-en="Enter a license key to link it to your account.">Entrez une clé de licence pour la rattacher à votre compte.</div>
+              <div class="claim">
+                <input id="claimKey" type="text" data-fr-ph="XXXX-XXXX-XXXX-XXXX-XXXX" data-en-ph="XXXX-XXXX-XXXX-XXXX-XXXX" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" />
+                <button class="btn btn-primary" onclick="claimLicense()" data-fr="Réclamer" data-en="Claim">Réclamer</button>
+              </div>
+              <div class="msg" id="claimMsg"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div id="licensesBox"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
+          </div>
+        </section>
+
+        <!-- DEVICES -->
+        <section class="panel" id="panel-devices">
+          <div class="panel-h" data-fr="Appareils" data-en="Devices">Appareils</div>
+          <div class="panel-sub" data-fr="Machines où votre licence Rushr est activée." data-en="Machines where your Rushr license is active.">Machines où votre licence Rushr est activée.</div>
+          <div class="card">
+            <div id="devicesBox"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
+          </div>
+        </section>
+
+        <!-- DOWNLOADS -->
+        <section class="panel" id="panel-downloads">
+          <div class="panel-h" data-fr="Téléchargements" data-en="Downloads">Téléchargements</div>
+          <div class="panel-sub" data-fr="Dernières versions disponibles pour votre licence." data-en="Latest builds available for your license.">Dernières versions disponibles pour votre licence.</div>
+          <div class="card">
+            <div id="downloadsBox"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
+          </div>
+        </section>
+
+        <!-- ORDERS -->
+        <section class="panel" id="panel-orders">
+          <div class="panel-h" data-fr="Commandes" data-en="Orders">Commandes</div>
+          <div class="panel-sub" data-fr="Historique de vos achats et factures." data-en="Your purchase history and invoices.">Historique de vos achats et factures.</div>
+          <div class="card">
+            <div class="empty">
+              <svg viewBox="0 0 24 24"><path d="M6 2l1.5 3h9L18 2M3 5h18l-1.5 13H4.5L3 5zM9 11h6"/></svg>
+              <span data-fr="Aucune commande pour le moment." data-en="No orders yet.">Aucune commande pour le moment.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ACCOUNT -->
+        <section class="panel" id="panel-account">
+          <div class="panel-h" data-fr="Compte" data-en="Account">Compte</div>
+          <div class="panel-sub" data-fr="Vos informations et préférences." data-en="Your details and preferences.">Vos informations et préférences.</div>
+          <div class="card">
+            <h2 data-fr="Informations" data-en="Details">Informations</h2>
+            <div class="prow">
+              <div><div class="k" data-fr="Nom" data-en="Name">Nom</div><div class="v" id="acctName">—</div></div>
+              <button class="edit-ic" onclick="editName()" aria-label="Modifier"><svg viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></svg></button>
+            </div>
+            <div class="prow">
+              <div><div class="k" data-fr="Email" data-en="Email">Email</div><div class="v" id="acctEmail">—</div></div>
+              <button class="edit-ic" onclick="editEmail()" aria-label="Modifier"><svg viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></svg></button>
+            </div>
+            <div class="prow">
+              <div><div class="k" data-fr="Mot de passe" data-en="Password">Mot de passe</div><div class="v">••••••••</div></div>
+              <button class="edit-ic" onclick="editPassword()" aria-label="Changer"><svg viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></svg></button>
+            </div>
+            <div class="prow">
+              <div><div class="k" data-fr="Langue" data-en="Language">Langue</div><div class="v" id="profLang">Français</div></div>
+              <button class="edit-ic" onclick="setLang(document.documentElement.lang==='fr'?'en':'fr')" aria-label="Modifier"><svg viewBox="0 0 24 24"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M13.5 6.5l3 3"/></svg></button>
+            </div>
+            <div class="prow">
+              <div><div class="k danger" data-fr="Supprimer le compte" data-en="Delete account">Supprimer le compte</div></div>
+              <a class="edit danger" onclick="deleteAccount()" data-fr="Supprimer" data-en="Delete">Supprimer</a>
+            </div>
+          </div>
+          <div class="card">
+            <h2 data-fr="Préférences d'emails" data-en="Email preferences">Préférences d'emails</h2>
+            <label class="pref">
+              <span class="pref-t"><span class="pref-h" data-fr="Annonces de version" data-en="Release announcements">Annonces de version</span><span class="pref-s" data-fr="Nouvelles versions et correctifs" data-en="New releases and fixes">Nouvelles versions et correctifs</span></span>
+              <span class="switch"><input id="prefReleases" type="checkbox" onchange="savePref('email_pref_releases',this)" /><span class="track"></span></span>
+            </label>
+            <label class="pref">
+              <span class="pref-t"><span class="pref-h" data-fr="Conseils & astuces" data-en="Tips & tricks">Conseils & astuces</span><span class="pref-s" data-fr="Pour tirer le meilleur de Rushr" data-en="Get the most out of Rushr">Pour tirer le meilleur de Rushr</span></span>
+              <span class="switch"><input id="prefTips" type="checkbox" onchange="savePref('email_pref_tips',this)" /><span class="track"></span></span>
+            </label>
+            <label class="pref">
+              <span class="pref-t"><span class="pref-h" data-fr="Offres & nouveaux produits" data-en="Offers & new products">Offres & nouveaux produits</span><span class="pref-s" data-fr="Lancements et promotions Backpack Lab" data-en="Backpack Lab launches and promos">Lancements et promotions Backpack Lab</span></span>
+              <span class="switch"><input id="prefOffers" type="checkbox" onchange="savePref('email_pref_offers',this)" /><span class="track"></span></span>
+            </label>
+          </div>
+        </section>
+
+        <!-- SUPPORT -->
+        <section class="panel" id="panel-support">
+          <div class="panel-h" data-fr="Beta & support" data-en="Beta & support">Beta & support</div>
+          <div class="panel-sub" data-fr="Votre accès beta et l'aide." data-en="Your beta access and help.">Votre accès beta et l'aide.</div>
+          <div class="card">
+            <div class="support-list">
+              <a class="sup" href="https://discord.gg/hyrP2f9g" target="_blank" rel="noopener">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 8a13 13 0 0110 0M5 18a14 14 0 0014 0M8 14c.7.6 1.4.9 2 .9s1.3-.3 2-.9M9 11.5h.01M15 11.5h.01"/></svg></div>
+                <div class="t"><h3 data-fr="Communauté Discord" data-en="Discord community">Communauté Discord</h3><p data-fr="Annonces, support et retours" data-en="Announcements, support and feedback">Annonces, support et retours</p></div>
+                <span class="arr">→</span>
+              </a>
+              <a class="sup" href="mailto:contact@thebackpacklab.com">
+                <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg></div>
+                <div class="t"><h3 data-fr="Contacter le support" data-en="Contact support">Contacter le support</h3><p>contact@thebackpacklab.com</p></div>
+                <span class="arr">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="foot-brand"><span class="dot"></span>BACKPACK&nbsp;LAB</div>
+    <div class="foot-legal">
+      <a href="#" onclick="return false" data-fr="Confidentialité" data-en="Privacy policy">Confidentialité</a>
+      <a href="#" onclick="return false" data-fr="Conditions d'utilisation" data-en="Terms of service">Conditions d'utilisation</a>
+      <a href="#" onclick="return false" data-fr="Remboursement" data-en="Refund policy">Remboursement</a>
+    </div>
+    <div class="foot-meta" data-fr="© 2026 BACKPACK LAB · France" data-en="© 2026 BACKPACK LAB · France">© 2026 BACKPACK LAB · France</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL = "https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  var currentUser = null, currentProfile = null;
+  var lastLicenses = [], lastActs = [], lastVersions = [];
+  function FR(){ return (document.documentElement.lang||'fr')==='fr'; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function fmtDate(iso){ if(!iso) return '—'; try{ return new Date(iso).toLocaleDateString(FR()?'fr-FR':'en-US',{year:'numeric',month:'short',day:'numeric'}); }catch(e){ return iso; } }
+
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){ var v=el.getAttribute('data-'+lang); if(v!==null) el.innerHTML=v; });
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){ var v=el.getAttribute('data-'+lang+'-ph'); if(v!==null) el.setAttribute('placeholder',v); });
+    var meta=document.querySelector('meta[name="description"]'); if(meta){ var m=meta.getAttribute('data-'+lang); if(m) meta.setAttribute('content',m); }
+    document.getElementById('lfr').classList.toggle('on', lang==='fr');
+    document.getElementById('len').classList.toggle('on', lang==='en');
+    var pl=document.getElementById('profLang'); if(pl) pl.textContent=(lang==='fr'?'Français':'English');
+    try{ localStorage.setItem('bpl_lang', lang); }catch(e){}
+    if(currentUser){ renderAllDynamic(); SB.from('profiles').update({language:lang}).eq('id',currentUser.id); }
+  }
+
+  function setMode(mode){
+    var isSignup=mode==='signup';
+    document.getElementById('tabLogin').classList.toggle('on', !isSignup);
+    document.getElementById('tabSignup').classList.toggle('on', isSignup);
+    document.querySelectorAll('.signup-only').forEach(function(el){ el.style.display=isSignup?'block':'none'; });
+    document.getElementById('authError').classList.remove('show');
+    var lang=document.documentElement.lang||'fr';
+    var btn=document.getElementById('submitBtn');
+    btn.setAttribute('data-fr', isSignup?'Créer mon compte':'Se connecter');
+    btn.setAttribute('data-en', isSignup?'Create my account':'Sign in');
+    btn.innerHTML=btn.getAttribute('data-'+lang);
+    var t=document.getElementById('authTitle');
+    t.setAttribute('data-fr', isSignup?'Créer un compte':'Bienvenue');
+    t.setAttribute('data-en', isSignup?'Create an account':'Welcome');
+    t.innerHTML=t.getAttribute('data-'+lang);
+  }
+
+  function showAuthError(msg, ok){
+    var e=document.getElementById('authError');
+    e.textContent=msg; e.classList.add('show'); e.classList.toggle('ok', !!ok);
+  }
+
+  async function doAuth(ev){
+    ev.preventDefault();
+    var isSignup=document.getElementById('tabSignup').classList.contains('on');
+    var email=document.getElementById('auEmail').value.trim();
+    var pass=document.getElementById('auPass').value;
+    var btn=document.getElementById('submitBtn'); btn.disabled=true;
+    document.getElementById('authError').classList.remove('show');
+    try{
+      if(isSignup){
+        var name=document.getElementById('suName').value.trim();
+        var r=await SB.auth.signUp({email:email,password:pass,options:{data:{full_name:name}}});
+        if(r.error) throw r.error;
+        if(!r.data.session){ showAuthError(FR()?'Compte créé. Vérifiez votre email pour confirmer, puis connectez-vous.':'Account created. Check your email to confirm, then sign in.', true); }
+      } else {
+        var r2=await SB.auth.signInWithPassword({email:email,password:pass});
+        if(r2.error) throw r2.error;
+      }
+    }catch(err){
+      var m=(err&&err.message)||'';
+      if(/Invalid login/i.test(m)) showAuthError(FR()?'Email ou mot de passe incorrect.':'Wrong email or password.');
+      else if(/already registered|already exists/i.test(m)) showAuthError(FR()?'Un compte existe déjà avec cet email.':'An account already exists for this email.');
+      else if(/Email not confirmed/i.test(m)) showAuthError(FR()?'Email non confirmé — vérifiez votre boîte mail.':'Email not confirmed — check your inbox.');
+      else showAuthError(m||(FR()?'Une erreur est survenue.':'Something went wrong.'));
+    }finally{ btn.disabled=false; }
+    return false;
+  }
+
+  async function resetPassword(){
+    var email=document.getElementById('auEmail').value.trim();
+    if(!email){ showAuthError(FR()?'Entrez votre email d\'abord.':'Enter your email first.'); return; }
+    var r=await SB.auth.resetPasswordForEmail(email);
+    if(r.error) showAuthError(r.error.message);
+    else showAuthError(FR()?'Email de réinitialisation envoyé.':'Reset email sent.', true);
+  }
+
+  async function logout(){ await SB.auth.signOut(); var m=document.getElementById('acctMenu'); if(m) m.classList.remove('open'); }
+
+  function applySession(session){
+    currentUser = session ? session.user : null;
+    var logged = !!currentUser;
+    document.getElementById('auth-view').style.display = logged?'none':'block';
+    document.getElementById('app-view').style.display = logged?'block':'none';
+    document.getElementById('navAccount').style.display = logged?'block':'none';
+    if(logged){
+      document.getElementById('menuEmail').textContent = currentUser.email;
+      switchPanel('overview');
+      loadAll();
+    } else {
+      currentProfile=null; lastLicenses=[]; lastActs=[]; lastVersions=[];
+      applyAvatar(null);
+    }
+  }
+
+  async function loadAll(){
+    // profile
+    var p = await SB.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    currentProfile = p.data || {};
+    if(currentProfile.language && currentProfile.language!==document.documentElement.lang){ /* keep db lang */ }
+    renderProfile();
+    SB.rpc('is_admin').then(function(r){ var al=document.getElementById('adminLink'); if(al) al.style.display=(r.data===true)?'block':'none'; });
+    // licenses
+    var lic = await SB.from('licenses').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
+    lastLicenses = lic.data || [];
+    // activations
+    lastActs = [];
+    if(lastLicenses.length){
+      var ids = lastLicenses.map(function(l){return l.id;});
+      var a = await SB.from('activations').select('*').in('license_id', ids).order('activated_at',{ascending:false});
+      lastActs = a.data || [];
+    }
+    // versions
+    var v = await SB.from('app_versions').select('*').order('created_at',{ascending:false});
+    lastVersions = v.data || [];
+    renderAllDynamic();
+  }
+
+  function renderProfile(){
+    var name = (currentProfile && currentProfile.full_name) ? currentProfile.full_name : (currentUser.email||'').split('@')[0];
+    var initial = (name||'·').trim().charAt(0).toUpperCase() || '·';
+    document.getElementById('pbName').innerHTML = esc(name) + ' <span class="badge beta">Beta</span>';
+    document.getElementById('pbEmail').textContent = currentUser.email;
+    document.getElementById('pbInitials').textContent = initial;
+    document.getElementById('acctName').textContent = name;
+    document.getElementById('acctEmail').textContent = currentUser.email;
+    applyAvatar(currentProfile && currentProfile.avatar_url ? currentProfile.avatar_url : null);
+    if(currentProfile){
+      document.getElementById('prefReleases').checked = currentProfile.email_pref_releases!==false;
+      document.getElementById('prefTips').checked = currentProfile.email_pref_tips!==false;
+      document.getElementById('prefOffers').checked = currentProfile.email_pref_offers===true;
+    }
+  }
+
+  function renderAllDynamic(){
+    renderOverview(); renderLicenses(); renderDevices(); renderDownloads();
+  }
+
+  function renderOverview(){
+    document.getElementById('ovHello').innerHTML = (FR()?'Bonjour, ':'Hello, ') + '<span class="accent">' + esc((currentProfile&&currentProfile.full_name)||(currentUser.email||'').split('@')[0]) + '</span> 👋';
+    document.getElementById('ovLicense').textContent = lastLicenses.length ? (FR()?'Active':'Active') : '—';
+    document.getElementById('ovLicense').className = 'val' + (lastLicenses.length?' ok':'');
+    var maxSeats = lastLicenses.reduce(function(s,l){return s+(l.max_devices||0);},0);
+    document.getElementById('ovSeats').textContent = lastLicenses.length ? (lastActs.length + ' / ' + maxSeats) : '—';
+    document.getElementById('ovVersion').textContent = lastVersions.length ? lastVersions[0].latest_version : '—';
+    var q=document.getElementById('ovDownloads');
+    if(!lastVersions.length){ q.innerHTML='<span class="loading">'+(FR()?'Aucune version publiée.':'No release yet.')+'</span>'; return; }
+    q.innerHTML = lastVersions.map(function(v){
+      var label=(v.platform==='windows'?'Windows':v.platform==='mac'||v.platform==='macos'?'macOS':esc(v.platform));
+      if(v.download_url) return '<a href="'+esc(v.download_url)+'" class="btn btn-rushr">'+label+'</a>';
+      return '<button class="btn btn-rushr" disabled>'+label+' · '+(FR()?'bientôt':'soon')+'</button>';
+    }).join('') + '<button class="btn btn-ghost" onclick="switchPanel(\'downloads\')">'+(FR()?'Tout voir':'See all')+'</button>';
+  }
+
+  function licCard(l){
+    var masked='••••-••••-••••-••••-••••';
+    return '<div class="lic rushr">'+
+      '<div class="lic-top"><div class="lic-name"><span class="d"></span> Backpack Rushr</div><span class="badge beta">'+esc(l.plan||'BETA')+'</span></div>'+
+      '<div class="key-row"><code data-key="'+esc(l.license_key)+'">'+masked+'</code>'+
+        '<button onclick="revealKey(this)" data-act="reveal">'+(FR()?'Révéler':'Reveal')+'</button>'+
+        '<button onclick="copyKey(this)">'+(FR()?'Copier':'Copy')+'</button></div>'+
+      '<div class="lic-meta"><span>'+(FR()?'Statut : ':'Status: ')+'<b>'+esc(l.status||'ACTIVE')+'</b></span>'+
+        '<span>'+(FR()?'Postes : ':'Seats: ')+'<b>'+esc(l.max_devices)+'</b></span>'+
+        '<span>'+(FR()?'Ajoutée le : ':'Added: ')+'<b>'+fmtDate(l.created_at)+'</b></span></div>'+
+      '</div>';
+  }
+  function renderLicenses(){
+    var box=document.getElementById('licensesBox');
+    if(!lastLicenses.length){
+      box.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9"/></svg><span>'+(FR()?'Aucune licence rattachée. Réclamez-en une ci-dessous.':'No license linked yet. Claim one below.')+'</span></div>';
+      return;
+    }
+    box.innerHTML = lastLicenses.map(licCard).join('');
+  }
+
+  function renderDevices(){
+    var box=document.getElementById('devicesBox');
+    if(!lastLicenses.length){ box.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM2 20h20"/></svg><span>'+(FR()?'Réclamez une licence pour voir vos appareils.':'Claim a license to see your devices.')+'</span></div>'; return; }
+    if(!lastActs.length){ box.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM2 20h20"/></svg><span>'+(FR()?'Aucun appareil activé.':'No active device.')+'</span></div>'; return; }
+    var maxSeats=lastLicenses.reduce(function(s,l){return s+(l.max_devices||0);},0);
+    var rows=lastActs.map(function(a){
+      var title=esc(a.machine_name||a.machine_id||'—');
+      var sub=(a.app_version?('v'+esc(a.app_version)+' · '):'')+(FR()?'vu le ':'seen ')+fmtDate(a.last_check_at||a.activated_at);
+      return '<div class="dev"><div class="dev-ic"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM2 20h20M9 20l.5-4h5l.5 4"/></svg></div>'+
+        '<div class="dev-info"><h3>'+title+'</h3><p>'+sub+'</p></div>'+
+        '<button class="btn-mini" onclick="deactivateDevice(\''+a.id+'\')">'+(FR()?'Désactiver':'Deactivate')+'</button></div>';
+    }).join('');
+    box.innerHTML = rows + '<div class="seat-note"><b>'+lastActs.length+'</b> / '+maxSeats+' '+(FR()?'postes utilisés':'seats used')+'</div>';
+  }
+
+  function renderDownloads(){
+    var box=document.getElementById('downloadsBox');
+    if(!lastVersions.length){ box.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 11l4 4 4-4M5 19h14"/></svg><span>'+(FR()?'Aucune version disponible pour le moment.':'No build available yet.')+'</span></div>'; return; }
+    box.innerHTML = lastVersions.map(function(v){
+      var label=(v.platform==='windows'?'Backpack Rushr — Windows':v.platform==='mac'||v.platform==='macos'?'Backpack Rushr — macOS':'Backpack Rushr — '+esc(v.platform));
+      var sub='v'+esc(v.latest_version)+' · '+fmtDate(v.created_at);
+      var btn=v.download_url?('<a href="'+esc(v.download_url)+'" class="btn btn-rushr">'+(FR()?'Télécharger':'Download')+'</a>'):('<button class="btn btn-ghost" disabled>'+(FR()?'Bientôt':'Soon')+'</button>');
+      return '<div class="dl"><div class="dl-ic"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 11l4 4 4-4M5 19h14"/></svg></div><div class="dl-info"><h3>'+label+'</h3><p>'+sub+'</p></div>'+btn+'</div>';
+    }).join('');
+  }
+
+  async function claimLicense(){
+    var inp=document.getElementById('claimKey'); var key=inp.value.trim();
+    var msg=document.getElementById('claimMsg'); msg.className='msg';
+    if(!key){ return; }
+    msg.textContent=FR()?'Vérification…':'Checking…';
+    var r=await SB.rpc('claim_license',{p_key:key});
+    if(r.error){
+      var m=r.error.message||'';
+      msg.className='msg err';
+      if(/NOT_FOUND/.test(m)) msg.textContent=FR()?'Clé introuvable.':'Key not found.';
+      else if(/ALREADY_CLAIMED/.test(m)) msg.textContent=FR()?'Cette clé est déjà rattachée à un autre compte.':'This key is already linked to another account.';
+      else msg.textContent=m;
+      return;
+    }
+    inp.value=''; msg.className='msg ok'; msg.textContent=FR()?'Licence ajoutée ✓':'License added ✓';
+    var cc=document.getElementById('claimCard'); if(cc){ cc.classList.add('collapsed'); var h=cc.querySelector('.card-head'); if(h) h.setAttribute('aria-expanded','false'); }
+    loadAll();
+  }
+
+  async function deactivateDevice(id){
+    var r=await SB.rpc('deactivate_activation',{p_activation_id:id});
+    if(!r.error) loadAll();
+  }
+
+  function toggleCard(btn){
+    var c=btn.closest('.card');
+    var col=c.classList.toggle('collapsed');
+    btn.setAttribute('aria-expanded', col?'false':'true');
+  }
+
+  function switchPanel(name){
+    document.querySelectorAll('#app-view .panel').forEach(function(p){ p.classList.toggle('on', p.id==='panel-'+name); });
+    document.querySelectorAll('.side-nav button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-panel')===name); });
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function toggleMenu(e){ e.stopPropagation(); document.getElementById('acctMenu').classList.toggle('open'); }
+  document.addEventListener('click', function(){ var m=document.getElementById('acctMenu'); if(m) m.classList.remove('open'); });
+
+  function revealKey(btn){
+    var code=btn.parentElement.querySelector('code');
+    var shown=code.getAttribute('data-shown')==='1';
+    if(shown){ code.textContent='••••-••••-••••-••••-••••'; code.setAttribute('data-shown','0'); btn.textContent=FR()?'Révéler':'Reveal'; }
+    else { code.textContent=code.getAttribute('data-key'); code.setAttribute('data-shown','1'); btn.textContent=FR()?'Masquer':'Hide'; }
+  }
+  function copyKey(btn){
+    var txt=btn.parentElement.querySelector('code').getAttribute('data-key');
+    var old=btn.textContent;
+    function done(){ btn.textContent=FR()?'Copié ✓':'Copied ✓'; setTimeout(function(){ btn.textContent=old; },1400); }
+    if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(done).catch(done); } else done();
+  }
+
+  function applyAvatar(url){
+    var pb=document.getElementById('pbAvatarImg'), init=document.getElementById('pbInitials');
+    var navImg=document.getElementById('navAvatarImg'), navSvg=document.getElementById('navAvatarSvg');
+    if(url){ pb.src=url; pb.style.display='block'; init.style.display='none'; navImg.src=url; navImg.style.display='block'; navSvg.style.display='none'; }
+    else { pb.style.display='none'; init.style.display='flex'; navImg.style.display='none'; navSvg.style.display='block'; }
+  }
+  async function uploadAvatar(e){
+    var file=e.target.files&&e.target.files[0]; if(!file||!currentUser) return;
+    var ext=(file.name.split('.').pop()||'png').toLowerCase();
+    var path=currentUser.id+'/avatar.'+ext;
+    var up=await SB.storage.from('avatars').upload(path,file,{upsert:true,contentType:file.type});
+    if(up.error){ alert((FR()?'Échec de l\'upload : ':'Upload failed: ')+up.error.message); return; }
+    var pub=SB.storage.from('avatars').getPublicUrl(path);
+    var url=pub.data.publicUrl+'?t='+Date.now();
+    await SB.from('profiles').update({avatar_url:url}).eq('id',currentUser.id);
+    if(currentProfile) currentProfile.avatar_url=url;
+    applyAvatar(url);
+  }
+
+  async function savePref(field,el){
+    var v={}; v[field]=el.checked;
+    if(currentProfile) currentProfile[field]=el.checked;
+    await SB.from('profiles').update(v).eq('id',currentUser.id);
+  }
+
+  async function editName(){
+    var cur=(currentProfile&&currentProfile.full_name)||'';
+    var v=prompt(FR()?'Votre nom':'Your name', cur);
+    if(v===null) return;
+    var name=v.trim()||null;
+    await SB.from('profiles').update({full_name:name}).eq('id',currentUser.id);
+    if(currentProfile) currentProfile.full_name=name;
+    renderProfile(); renderOverview();
+  }
+  async function editEmail(){
+    var v=prompt(FR()?'Nouvel email':'New email', currentUser.email);
+    if(v===null) return;
+    var r=await SB.auth.updateUser({email:v.trim()});
+    if(r.error) alert(r.error.message);
+    else alert(FR()?'Un email de confirmation a été envoyé à la nouvelle adresse.':'A confirmation email was sent to the new address.');
+  }
+  async function editPassword(){
+    var v=prompt(FR()?'Nouveau mot de passe (min. 6 caractères)':'New password (min. 6 chars)','');
+    if(v===null) return;
+    if(v.length<6){ alert(FR()?'Trop court.':'Too short.'); return; }
+    var r=await SB.auth.updateUser({password:v});
+    if(r.error) alert(r.error.message);
+    else alert(FR()?'Mot de passe mis à jour ✓':'Password updated ✓');
+  }
+  function deleteAccount(){
+    alert(FR()?'Pour supprimer votre compte et vos données, écrivez à contact@thebackpacklab.com. (La suppression définitive sera automatisée prochainement.)':'To delete your account and data, email contact@thebackpacklab.com. (Automated deletion is coming soon.)');
+  }
+
+  (function init(){
+    var saved=null; try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang=saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en');
+    setLang(lang);
+    SB.auth.getSession().then(function(res){ applySession(res.data.session); });
+    SB.auth.onAuthStateChange(function(_e, session){ applySession(session); });
+  })();
+</script>
+</body>
+</html>

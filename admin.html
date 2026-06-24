@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — BACKPACK LAB</title>
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<meta name="robots" content="noindex" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12); --accent:#35DC8E; --accent2:#5FE8A8;
+    --text:#FFFFFF; --muted:#9A9A9E; --muted2:#6E6E73; --on-accent:#04150C;
+    --rushr:#FF6A00; --warn:#FFB454; --danger:#FF6B6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 24px;width:100%}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:15px}
+  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .brand .tag{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--rushr);border:1px solid rgba(255,106,0,.4);border-radius:5px;padding:1px 6px;margin-left:4px}
+  .nav-right{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted)}
+  .nav-right a:hover{color:var(--text)}
+  .logout-btn{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+  .logout-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+  main{flex:1;width:100%;padding:28px 0 64px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+
+  /* gates */
+  .gate{max-width:440px;margin:80px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px;text-align:center}
+  .gate h1{font-size:22px;font-weight:800;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:20px}
+
+  .admin-wrap{display:grid;grid-template-columns:210px 1fr;gap:24px}
+  .side-nav{position:sticky;top:84px;align-self:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:2px}
+  .side-nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:0;color:var(--muted);font-size:13.5px;font-weight:600;padding:10px 12px;border-radius:9px;cursor:pointer;font-family:inherit;transition:.15s}
+  .side-nav button:hover{background:var(--surface2);color:var(--text)}
+  .side-nav button.on{background:rgba(53,220,142,.12);color:var(--accent2)}
+  .side-nav button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+
+  .panel{display:none}
+  .panel.on{display:block}
+  .panel-h{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:3px}
+  .panel-sub{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card + .card{margin-top:16px}
+  .card h2{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .stat .lbl{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+  .stat .val{font-size:26px;font-weight:800;margin-top:4px}
+
+  .form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+  .fg{display:flex;flex-direction:column;gap:5px}
+  .fg label{font-size:11.5px;color:var(--muted);font-weight:600}
+  .in{background:#0E0E11;border:1px solid var(--line2);border-radius:9px;color:var(--text);padding:9px 12px;font-size:13.5px;font-family:inherit}
+  .in:focus{outline:none;border-color:var(--accent)}
+  select.in{cursor:pointer}
+  textarea.in{min-height:60px;resize:vertical;width:100%}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .toolbar .in{min-width:220px}
+
+  .tbl-wrap{overflow-x:auto}
+  .tbl{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+  .tbl th{text-align:left;color:var(--muted2);font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;padding:0 12px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  .tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#D6D6D8}
+  .tbl .muted{color:var(--muted2)}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:5px;padding:3px 7px;display:inline-block}
+  .b-active{color:var(--on-accent);background:var(--accent)}
+  .b-revoked{color:#3a0d0d;background:var(--danger)}
+  .b-other{color:var(--muted);background:var(--surface2);border:1px solid var(--line2)}
+  .b-admin{color:#150A03;background:var(--rushr)}
+  .row-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .mini{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:7px;padding:5px 9px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+  .mini:hover{border-color:var(--accent);color:var(--accent2)}
+  .mini.danger:hover{border-color:var(--danger);color:var(--danger)}
+  .loading{color:var(--muted);font-size:13px;padding:8px 0}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:100;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{border-color:rgba(53,220,142,.5);color:var(--accent2)}
+  .toast.err{border-color:rgba(255,107,107,.5);color:var(--danger)}
+
+  @media(max-width:820px){
+    .admin-wrap{grid-template-columns:1fr}
+    .side-nav{position:static;flex-direction:row;overflow-x:auto}
+    .side-nav button{flex-direction:column;gap:5px;font-size:11px;min-width:80px;text-align:center;align-items:center}
+    .stats{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
+    <div class="nav-right">
+      <a href="account.html">Mon espace</a>
+      <span id="whoami"></span>
+      <button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+
+    <!-- LOADING -->
+    <div id="gate-loading" class="gate"><p class="loading">Chargement…</p></div>
+
+    <!-- NOT LOGGED IN -->
+    <div id="gate-anon" class="gate" style="display:none">
+      <h1>Connexion requise</h1>
+      <p>Cet espace est réservé à l'équipe. Connectez-vous d'abord.</p>
+      <a class="btn btn-primary" href="account.html">Aller à la connexion</a>
+    </div>
+
+    <!-- NOT ADMIN -->
+    <div id="gate-denied" class="gate" style="display:none">
+      <h1>Accès refusé</h1>
+      <p>Votre compte n'a pas les droits administrateur. Contactez un admin du projet.</p>
+      <a class="btn btn-ghost" href="account.html">Retour à mon espace</a>
+    </div>
+
+    <!-- ADMIN APP -->
+    <div id="admin-app" class="admin-wrap" style="display:none">
+      <nav class="side-nav">
+        <button class="on" data-panel="stats" onclick="adminPanel('stats')"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16v-5M13 16V8M18 16v-8"/></svg><span>Statistiques</span></button>
+        <button data-panel="licenses" onclick="adminPanel('licenses')"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M16 16l2-2"/></svg><span>Licences</span></button>
+        <button data-panel="versions" onclick="adminPanel('versions')"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 11l4 4 4-4M5 19h14"/></svg><span>Versions</span></button>
+        <button data-panel="users" onclick="adminPanel('users')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5M16 11h5"/></svg><span>Utilisateurs</span></button>
+        <button data-panel="admins" onclick="adminPanel('admins')"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg><span>Admins</span></button>
+      </nav>
+
+      <div class="content">
+
+        <!-- STATS -->
+        <section class="panel on" id="ap-stats">
+          <div class="panel-h">Statistiques</div>
+          <div class="panel-sub">Vue d'ensemble du projet en temps réel.</div>
+          <div class="stats" id="statsBox"><span class="loading">Chargement…</span></div>
+        </section>
+
+        <!-- LICENSES -->
+        <section class="panel" id="ap-licenses">
+          <div class="panel-h">Licences</div>
+          <div class="panel-sub">Créez, attribuez et révoquez les licences.</div>
+          <div class="card">
+            <h2>Créer une licence</h2>
+            <div class="form-row">
+              <div class="fg"><label>Plan</label><input id="newPlan" class="in" value="BETA" style="width:120px" /></div>
+              <div class="fg"><label>Postes max</label><input id="newSeats" class="in" type="number" min="0" value="1" style="width:100px" /></div>
+              <div class="fg"><label>Clé (vide = auto)</label><input id="newKey" class="in" placeholder="auto" style="width:200px" /></div>
+              <button class="btn btn-primary" onclick="createLicense()">Créer</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="toolbar">
+              <input id="licSearch" class="in" placeholder="Rechercher clé ou email…" onkeydown="if(event.key==='Enter')loadLicenses()" />
+              <button class="btn btn-ghost" onclick="loadLicenses()">Rechercher</button>
+            </div>
+            <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Clé</th><th>Plan</th><th>Statut</th><th>Propriétaire</th><th>Appareils</th><th>Créée</th><th></th></tr></thead><tbody id="licRows"><tr><td colspan="7" class="loading">Chargement…</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- VERSIONS -->
+        <section class="panel" id="ap-versions">
+          <div class="panel-h">Versions</div>
+          <div class="panel-sub">Publiez une nouvelle version et son changelog.</div>
+          <div class="card">
+            <h2>Publier une version</h2>
+            <div class="form-row" style="margin-bottom:10px">
+              <div class="fg"><label>Plateforme</label><select id="vPlatform" class="in"><option value="windows">Windows</option><option value="mac">macOS</option></select></div>
+              <div class="fg"><label>Version</label><input id="vVersion" class="in" placeholder="1.0.1-beta" style="width:140px" /></div>
+              <div class="fg" style="flex:1;min-width:220px"><label>URL de téléchargement</label><input id="vUrl" class="in" placeholder="https://…" style="width:100%" /></div>
+            </div>
+            <div class="fg" style="margin-bottom:10px"><label>Changelog</label><textarea id="vChangelog" class="in" placeholder="Nouveautés de cette version…"></textarea></div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:14px"><input id="vMandatory" type="checkbox" /> Mise à jour obligatoire</label>
+            <button class="btn btn-primary" onclick="publishVersion()">Publier</button>
+          </div>
+          <div class="card">
+            <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Plateforme</th><th>Version</th><th>URL</th><th>Oblig.</th><th>Publiée</th><th></th></tr></thead><tbody id="verRows"><tr><td colspan="6" class="loading">Chargement…</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- USERS -->
+        <section class="panel" id="ap-users">
+          <div class="panel-h">Utilisateurs</div>
+          <div class="panel-sub">Comptes inscrits et leurs licences.</div>
+          <div class="card">
+            <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Email</th><th>Nom</th><th>Licences</th><th>Inscrit</th><th>Rôle</th><th></th></tr></thead><tbody id="userRows"><tr><td colspan="6" class="loading">Chargement…</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- ADMINS -->
+        <section class="panel" id="ap-admins">
+          <div class="panel-h">Administrateurs</div>
+          <div class="panel-sub">Qui peut accéder à cet espace.</div>
+          <div class="card">
+            <h2>Ajouter un admin</h2>
+            <div class="form-row">
+              <div class="fg" style="flex:1;min-width:240px"><label>Email d'un compte existant</label><input id="adminEmail" class="in" placeholder="collegue@email.com" style="width:100%" /></div>
+              <button class="btn btn-primary" onclick="addAdmin()">Ajouter</button>
+            </div>
+            <p style="color:var(--muted2);font-size:12px;margin-top:10px">La personne doit déjà avoir créé un compte sur « Mon espace ».</p>
+          </div>
+          <div class="card">
+            <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Email</th><th>Admin depuis</th><th></th></tr></thead><tbody id="adminRows"><tr><td colspan="3" class="loading">Chargement…</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var ME=null;
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
+  function show(id){['gate-loading','gate-anon','gate-denied','admin-app'].forEach(function(x){document.getElementById(x).style.display=(x===id)?(x==='admin-app'?'grid':'block'):'none';});}
+  function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+(type||'');setTimeout(function(){t.className='toast '+(type||'');},2200);}
+  async function rpc(name,args){var r=await SB.rpc(name,args||{});if(r.error)throw r.error;return r.data;}
+
+  async function init(){
+    var s=await SB.auth.getSession();
+    var session=s.data.session;
+    if(!session){ show('gate-anon'); return; }
+    ME=session.user;
+    var admin=false;
+    try{ admin=await rpc('is_admin'); }catch(e){ admin=false; }
+    if(!admin){ show('gate-denied'); document.getElementById('logoutBtn').style.display='inline-flex'; document.getElementById('whoami').textContent=ME.email; return; }
+    document.getElementById('logoutBtn').style.display='inline-flex';
+    document.getElementById('whoami').textContent=ME.email;
+    show('admin-app');
+    loadStats(); loadLicenses(); loadVersions(); loadUsers(); loadAdmins();
+  }
+  async function logout(){ await SB.auth.signOut(); location.href='account.html'; }
+
+  function adminPanel(name){
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('on',p.id==='ap-'+name);});
+    document.querySelectorAll('.side-nav button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-panel')===name);});
+  }
+
+  // STATS
+  async function loadStats(){
+    try{
+      var d=(await rpc('admin_stats'))[0];
+      var items=[['Licences',d.licenses_total],['Réclamées',d.licenses_claimed],['Actives',d.licenses_active],['Utilisateurs',d.users_total],['Admins',d.admins_total],['Activations',d.activations_total],['Inscrits (7j)',d.signups_7d]];
+      document.getElementById('statsBox').innerHTML=items.map(function(it){return '<div class="stat"><div class="lbl">'+it[0]+'</div><div class="val">'+it[1]+'</div></div>';}).join('');
+    }catch(e){ document.getElementById('statsBox').innerHTML='<span class="loading">Erreur : '+esc(e.message)+'</span>'; }
+  }
+
+  // LICENSES
+  async function loadLicenses(){
+    var q=document.getElementById('licSearch').value.trim()||null;
+    var body=document.getElementById('licRows');
+    body.innerHTML='<tr><td colspan="7" class="loading">Chargement…</td></tr>';
+    try{
+      var rows=await rpc('admin_list_licenses',{p_search:q});
+      if(!rows.length){ body.innerHTML='<tr><td colspan="7" class="muted">Aucune licence.</td></tr>'; return; }
+      body.innerHTML=rows.map(function(l){
+        var st=(l.status==='ACTIVE')?'<span class="badge b-active">Active</span>':(l.status==='REVOKED'?'<span class="badge b-revoked">Révoquée</span>':'<span class="badge b-other">'+esc(l.status)+'</span>');
+        var toggle=(l.status==='ACTIVE')?'<button class="mini danger" onclick="setStatus(\''+l.id+'\',\'REVOKED\')">Révoquer</button>':'<button class="mini" onclick="setStatus(\''+l.id+'\',\'ACTIVE\')">Activer</button>';
+        return '<tr><td><code>'+esc(l.license_key)+'</code></td><td>'+esc(l.plan)+'</td><td>'+st+'</td><td>'+(l.owner_email?esc(l.owner_email):'<span class="muted">—</span>')+'</td><td>'+l.device_count+' / '+l.max_devices+'</td><td class="muted">'+fmt(l.created_at)+'</td><td><div class="row-actions">'+toggle+'<button class="mini danger" onclick="delLicense(\''+l.id+'\')">Suppr.</button></div></td></tr>';
+      }).join('');
+    }catch(e){ body.innerHTML='<tr><td colspan="7" class="muted">Erreur : '+esc(e.message)+'</td></tr>'; }
+  }
+  async function createLicense(){
+    var plan=document.getElementById('newPlan').value.trim()||'BETA';
+    var seats=parseInt(document.getElementById('newSeats').value,10); if(isNaN(seats))seats=1;
+    var key=document.getElementById('newKey').value.trim()||null;
+    try{ var l=await rpc('admin_create_license',{p_plan:plan,p_max_devices:seats,p_key:key}); document.getElementById('newKey').value=''; toast('Licence créée : '+l.license_key,'ok'); loadLicenses(); loadStats(); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
+  async function setStatus(id,status){ try{ await rpc('admin_set_license_status',{p_id:id,p_status:status}); toast('Statut mis à jour','ok'); loadLicenses(); loadStats(); }catch(e){ toast('Erreur : '+e.message,'err'); } }
+  async function delLicense(id){ if(!confirm('Supprimer définitivement cette licence et ses activations ?'))return; try{ await rpc('admin_delete_license',{p_id:id}); toast('Licence supprimée','ok'); loadLicenses(); loadStats(); }catch(e){ toast('Erreur : '+e.message,'err'); } }
+
+  // VERSIONS
+  async function loadVersions(){
+    var body=document.getElementById('verRows');
+    try{
+      var r=await SB.from('app_versions').select('*').order('created_at',{ascending:false});
+      if(r.error)throw r.error;
+      var rows=r.data||[];
+      if(!rows.length){ body.innerHTML='<tr><td colspan="6" class="muted">Aucune version.</td></tr>'; return; }
+      body.innerHTML=rows.map(function(v){
+        var plat=v.platform==='windows'?'Windows':(v.platform==='mac'||v.platform==='macos'?'macOS':esc(v.platform));
+        var url=v.download_url?'<a href="'+esc(v.download_url)+'" target="_blank" class="mini">Ouvrir</a>':'<span class="muted">—</span>';
+        return '<tr><td>'+plat+'</td><td><code>'+esc(v.latest_version)+'</code></td><td>'+url+'</td><td>'+(v.mandatory?'<span class="badge b-revoked">Oui</span>':'<span class="muted">Non</span>')+'</td><td class="muted">'+fmt(v.created_at)+'</td><td><div class="row-actions"><button class="mini danger" onclick="delVersion(\''+v.id+'\')">Suppr.</button></div></td></tr>';
+      }).join('');
+    }catch(e){ body.innerHTML='<tr><td colspan="6" class="muted">Erreur : '+esc(e.message)+'</td></tr>'; }
+  }
+  async function publishVersion(){
+    var platform=document.getElementById('vPlatform').value;
+    var version=document.getElementById('vVersion').value.trim();
+    if(!version){ toast('Version requise','err'); return; }
+    var url=document.getElementById('vUrl').value.trim()||null;
+    var changelog=document.getElementById('vChangelog').value.trim()||null;
+    var mandatory=document.getElementById('vMandatory').checked;
+    try{ await rpc('admin_upsert_version',{p_platform:platform,p_version:version,p_url:url,p_changelog:changelog,p_mandatory:mandatory}); document.getElementById('vVersion').value='';document.getElementById('vUrl').value='';document.getElementById('vChangelog').value='';document.getElementById('vMandatory').checked=false; toast('Version publiée','ok'); loadVersions(); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
+  async function delVersion(id){ if(!confirm('Supprimer cette version ?'))return; try{ await rpc('admin_delete_version',{p_id:id}); toast('Version supprimée','ok'); loadVersions(); }catch(e){ toast('Erreur : '+e.message,'err'); } }
+
+  // USERS
+  async function loadUsers(){
+    var body=document.getElementById('userRows');
+    try{
+      var rows=await rpc('admin_list_users');
+      if(!rows.length){ body.innerHTML='<tr><td colspan="6" class="muted">Aucun utilisateur.</td></tr>'; return; }
+      body.innerHTML=rows.map(function(u){
+        var role=u.is_admin?'<span class="badge b-admin">Admin</span>':'<span class="muted">Membre</span>';
+        var act=u.is_admin?'':'<button class="mini" onclick="promote(\''+esc(u.email)+'\')">Promouvoir admin</button>';
+        return '<tr><td>'+esc(u.email)+'</td><td>'+(u.full_name?esc(u.full_name):'<span class="muted">—</span>')+'</td><td>'+u.license_count+'</td><td class="muted">'+fmt(u.created_at)+'</td><td>'+role+'</td><td><div class="row-actions">'+act+'</div></td></tr>';
+      }).join('');
+    }catch(e){ body.innerHTML='<tr><td colspan="6" class="muted">Erreur : '+esc(e.message)+'</td></tr>'; }
+  }
+  async function promote(email){ if(!confirm('Donner les droits admin à '+email+' ?'))return; try{ await rpc('admin_add_admin',{p_email:email}); toast('Admin ajouté','ok'); loadUsers(); loadAdmins(); loadStats(); }catch(e){ toast('Erreur : '+e.message,'err'); } }
+
+  // ADMINS
+  async function loadAdmins(){
+    var body=document.getElementById('adminRows');
+    try{
+      var rows=await rpc('admin_list_admins');
+      body.innerHTML=rows.map(function(a){
+        var rm=(ME&&a.user_id===ME.id)?'<span class="muted">vous</span>':'<button class="mini danger" onclick="removeAdmin(\''+a.user_id+'\',\''+esc(a.email)+'\')">Retirer</button>';
+        return '<tr><td>'+esc(a.email)+'</td><td class="muted">'+fmt(a.created_at)+'</td><td><div class="row-actions">'+rm+'</div></td></tr>';
+      }).join('');
+    }catch(e){ body.innerHTML='<tr><td colspan="3" class="muted">Erreur : '+esc(e.message)+'</td></tr>'; }
+  }
+  async function addAdmin(){
+    var email=document.getElementById('adminEmail').value.trim();
+    if(!email){ return; }
+    try{ await rpc('admin_add_admin',{p_email:email}); document.getElementById('adminEmail').value=''; toast('Admin ajouté','ok'); loadAdmins(); loadUsers(); loadStats(); }
+    catch(e){ toast(e.message==='USER_NOT_FOUND'?'Aucun compte avec cet email.':'Erreur : '+e.message,'err'); }
+  }
+  async function removeAdmin(id,email){ if(!confirm('Retirer les droits admin de '+email+' ?'))return; try{ await rpc('admin_remove_admin',{p_user_id:id}); toast('Admin retiré','ok'); loadAdmins(); loadUsers(); loadStats(); }catch(e){ toast(e.message==='CANNOT_REMOVE_SELF'?'Vous ne pouvez pas vous retirer vous-même.':'Erreur : '+e.message,'err'); } }
+
+  SB.auth.onAuthStateChange(function(_e,session){ if(!session) show('gate-anon'); });
+  init();
+</script>
+</body>
+</html>
