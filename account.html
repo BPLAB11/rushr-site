@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -390,6 +391,19 @@
             <div class="ov"><div class="lbl" data-fr="Appareils" data-en="Devices">Appareils</div><div class="val" id="ovSeats">—</div></div>
             <div class="ov"><div class="lbl" data-fr="Version" data-en="Version">Version</div><div class="val" id="ovVersion">—</div></div>
           </div>
+          <div class="card" id="usageCard" style="display:none">
+            <h2 data-fr="Postes activés" data-en="Active seats">Postes activés</h2>
+            <div style="display:flex;align-items:center;gap:22px;margin-top:14px">
+              <div style="position:relative;width:100px;height:100px;flex-shrink:0">
+                <canvas id="usageChart"></canvas>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none">
+                  <span id="usageNum" style="font-size:24px;font-weight:800;line-height:1;color:var(--accent2)"></span>
+                  <span style="font-size:10px;color:var(--muted);margin-top:3px" data-fr="utilisés" data-en="used">utilisés</span>
+                </div>
+              </div>
+              <div id="usageLegend" style="flex:1;display:flex;flex-direction:column;gap:10px"></div>
+            </div>
+          </div>
           <div class="card">
             <h2 data-fr="Téléchargement rapide" data-en="Quick download">Téléchargement rapide</h2>
             <div class="desc" data-fr="Récupérez la dernière version de Rushr." data-en="Grab the latest Rushr build.">Récupérez la dernière version de Rushr.</div>
@@ -524,6 +538,9 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   var SUPABASE_URL = "https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY = "sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -531,6 +548,49 @@
 
   var currentUser = null, currentProfile = null;
   var lastLicenses = [], lastActs = [], lastVersions = [];
+  var usageChartInst = null;
+
+  function toast(msg, ok) {
+    Toastify({
+      text: msg, duration: 3500, gravity: 'bottom', position: 'right',
+      style: {
+        background: 'rgba(14,14,17,.97)',
+        border: '1px solid ' + (ok !== false ? 'rgba(53,220,142,.38)' : 'rgba(255,107,107,.38)'),
+        color: ok !== false ? '#5FE8A8' : '#FF9B9B',
+        borderRadius: '12px', fontSize: '13.5px', fontWeight: '600',
+        fontFamily: "'Inter', system-ui, sans-serif",
+        boxShadow: '0 8px 32px rgba(0,0,0,.55)', padding: '12px 18px'
+      }
+    }).showToast();
+  }
+
+  function renderUsageChart() {
+    var used = lastActs.length;
+    var total = lastLicenses.reduce(function(s,l){return s+(l.max_devices||0);},0);
+    var card = document.getElementById('usageCard');
+    if(!total){ if(card) card.style.display='none'; return; }
+    card.style.display='block';
+    var free = Math.max(0, total - used);
+    var ctx = document.getElementById('usageChart').getContext('2d');
+    if(usageChartInst) usageChartInst.destroy();
+    usageChartInst = new Chart(ctx, {
+      type: 'doughnut',
+      data: { datasets: [{ data: [used||.001, free||.001],
+        backgroundColor: ['#35DC8E','rgba(255,255,255,.07)'],
+        borderColor: ['#35DC8E','rgba(255,255,255,.1)'],
+        borderWidth: 1, hoverOffset: 3 }] },
+      options: { cutout:'70%',
+        plugins:{ legend:{display:false}, tooltip:{enabled:false} },
+        animation:{ duration:900 } }
+    });
+    document.getElementById('usageNum').textContent = used;
+    document.getElementById('usageLegend').innerHTML =
+      '<div style="display:flex;align-items:center;gap:9px"><span style="width:10px;height:10px;border-radius:3px;background:#35DC8E;flex-shrink:0"></span><span style="font-size:13px;color:var(--text);font-weight:600">'
+        +used+' '+(FR()?'activé'+(used!==1?'s':''):'active')+'</span></div>'+
+      '<div style="display:flex;align-items:center;gap:9px"><span style="width:10px;height:10px;border-radius:3px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);flex-shrink:0"></span><span style="font-size:13px;color:var(--muted)">'
+        +free+' '+(FR()?'disponible'+(free!==1?'s':''):'available')+'</span></div>'+
+      '<div style="font-size:11.5px;color:var(--muted2);margin-top:2px">'+(FR()?'sur ':'of ')+total+' '+(FR()?'poste'+(total!==1?'s':''):'seat'+(total!==1?'s':''))+'</div>';
+  }
   function FR(){ return (document.documentElement.lang||'fr')==='fr'; }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function fmtDate(iso){ if(!iso) return '—'; try{ return new Date(iso).toLocaleDateString(FR()?'fr-FR':'en-US',{year:'numeric',month:'short',day:'numeric'}); }catch(e){ return iso; } }
@@ -686,7 +746,7 @@
   }
 
   function renderAllDynamic(){
-    renderOverview(); renderLicenses(); renderDevices(); renderDownloads();
+    renderOverview(); renderLicenses(); renderDevices(); renderDownloads(); renderUsageChart();
   }
 
   function renderOverview(){
@@ -768,12 +828,16 @@
     }
     inp.value=''; msg.className='msg ok'; msg.textContent=FR()?'Licence ajoutée ✓':'License added ✓';
     var cc=document.getElementById('claimCard'); if(cc){ cc.classList.add('collapsed'); var h=cc.querySelector('.card-head'); if(h) h.setAttribute('aria-expanded','false'); }
+    toast(FR()?'🎉 Licence ajoutée avec succès !':'🎉 License added successfully!', true);
+    confetti({ particleCount:120, spread:75, origin:{y:.65}, colors:['#35DC8E','#5FE8A8','#ffffff'] });
     loadAll();
   }
 
   async function deactivateDevice(id){
     var r=await SB.rpc('deactivate_activation',{p_activation_id:id});
-    if(!r.error) loadAll();
+    if(r.error){ toast(r.error.message, false); return; }
+    toast(FR()?'Appareil désactivé ✓':'Device deactivated ✓', true);
+    loadAll();
   }
 
   function toggleCard(btn){
@@ -814,12 +878,13 @@
     var ext=(file.name.split('.').pop()||'png').toLowerCase();
     var path=currentUser.id+'/avatar.'+ext;
     var up=await SB.storage.from('avatars').upload(path,file,{upsert:true,contentType:file.type});
-    if(up.error){ alert((FR()?'Échec de l\'upload : ':'Upload failed: ')+up.error.message); return; }
+    if(up.error){ toast((FR()?'Échec de l\'upload : ':'Upload failed: ')+up.error.message, false); return; }
     var pub=SB.storage.from('avatars').getPublicUrl(path);
     var url=pub.data.publicUrl+'?t='+Date.now();
     await SB.from('profiles').update({avatar_url:url}).eq('id',currentUser.id);
     if(currentProfile) currentProfile.avatar_url=url;
     applyAvatar(url);
+    toast(FR()?'Photo de profil mise à jour ✓':'Profile photo updated ✓', true);
   }
 
   async function savePref(field,el){
@@ -836,21 +901,22 @@
     await SB.from('profiles').update({full_name:name}).eq('id',currentUser.id);
     if(currentProfile) currentProfile.full_name=name;
     renderProfile(); renderOverview();
+    toast(FR()?'Nom mis à jour ✓':'Name updated ✓', true);
   }
   async function editEmail(){
     var v=prompt(FR()?'Nouvel email':'New email', currentUser.email);
     if(v===null) return;
     var r=await SB.auth.updateUser({email:v.trim()});
-    if(r.error) alert(r.error.message);
-    else alert(FR()?'Un email de confirmation a été envoyé à la nouvelle adresse.':'A confirmation email was sent to the new address.');
+    if(r.error) toast(r.error.message, false);
+    else toast(FR()?'Email de confirmation envoyé ✓':'Confirmation email sent ✓', true);
   }
   async function editPassword(){
     var v=prompt(FR()?'Nouveau mot de passe (min. 6 caractères)':'New password (min. 6 chars)','');
     if(v===null) return;
-    if(v.length<6){ alert(FR()?'Trop court.':'Too short.'); return; }
+    if(v.length<6){ toast(FR()?'Trop court (min. 6 caractères).':'Too short (min. 6 chars).', false); return; }
     var r=await SB.auth.updateUser({password:v});
-    if(r.error) alert(r.error.message);
-    else alert(FR()?'Mot de passe mis à jour ✓':'Password updated ✓');
+    if(r.error) toast(r.error.message, false);
+    else toast(FR()?'Mot de passe mis à jour ✓':'Password updated ✓', true);
   }
   function deleteAccount(){
     alert(FR()?'Pour supprimer votre compte et vos données, écrivez à contact@thebackpacklab.com. (La suppression définitive sera automatisée prochainement.)':'To delete your account and data, email contact@thebackpacklab.com. (Automated deletion is coming soon.)');
