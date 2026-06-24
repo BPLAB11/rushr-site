@@ -104,10 +104,18 @@
   }
   @media(max-width:600px){
     .wrap{padding:0 18px}
+    .panel-h{font-size:19px}
     .stats{grid-template-columns:1fr}
+    .card{padding:16px;min-width:0;overflow:hidden}
+    .form-row{flex-direction:column;gap:10px}
+    .form-row .fg{width:100%}
+    .form-row .fg .in{width:100%!important;min-width:0!important}
+    .form-row>.btn,.form-row>button.btn{width:100%;justify-content:center}
+    .fg{min-width:0!important}
     .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .toolbar{flex-wrap:wrap}
     .toolbar .in{min-width:0;width:100%}
+    .row-actions{justify-content:flex-start}
   }
 </style>
 </head>
