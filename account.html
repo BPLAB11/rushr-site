@@ -313,6 +313,32 @@
     </div>
   </section>
 
+  <!-- RECOVERY VIEW -->
+  <section id="recovery-view" style="display:none">
+    <div class="wrap auth-wrap">
+      <div class="auth-glow"></div>
+      <div class="auth-card">
+        <div class="auth-head">
+          <div class="mark"><span></span></div>
+          <h1 data-fr="Nouveau mot de passe" data-en="New password">Nouveau mot de passe</h1>
+          <p data-fr="Choisissez un nouveau mot de passe pour votre compte." data-en="Choose a new password for your account.">Choisissez un nouveau mot de passe pour votre compte.</p>
+        </div>
+        <div id="rcError" class="auth-error"></div>
+        <form onsubmit="return doRecovery(event)">
+          <div class="field">
+            <label data-fr="Nouveau mot de passe" data-en="New password">Nouveau mot de passe</label>
+            <input id="rcPass" type="password" required minlength="6" placeholder="••••••••" />
+          </div>
+          <div class="field">
+            <label data-fr="Confirmer le mot de passe" data-en="Confirm password">Confirmer le mot de passe</label>
+            <input id="rcPass2" type="password" required minlength="6" placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn btn-primary" data-fr="Mettre à jour" data-en="Update">Mettre à jour</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- DASHBOARD VIEW -->
   <section id="app-view">
     <div class="wrap dash">
@@ -575,7 +601,31 @@
 
   async function logout(){ await SB.auth.signOut(); var m=document.getElementById('acctMenu'); if(m) m.classList.remove('open'); }
 
+  var recoveryMode=false;
+  function showRecovery(){
+    recoveryMode=true;
+    document.getElementById('auth-view').style.display='none';
+    document.getElementById('app-view').style.display='none';
+    document.getElementById('recovery-view').style.display='block';
+    document.getElementById('navAccount').style.display='none';
+  }
+  async function doRecovery(ev){
+    ev.preventDefault();
+    var p1=document.getElementById('rcPass').value, p2=document.getElementById('rcPass2').value;
+    var err=document.getElementById('rcError'); err.classList.remove('show','ok');
+    if(p1.length<6){ err.textContent=FR()?'Au moins 6 caractères.':'At least 6 characters.'; err.classList.add('show'); return false; }
+    if(p1!==p2){ err.textContent=FR()?'Les mots de passe ne correspondent pas.':'Passwords do not match.'; err.classList.add('show'); return false; }
+    var r=await SB.auth.updateUser({password:p1});
+    if(r.error){ err.textContent=r.error.message; err.classList.add('show'); return false; }
+    recoveryMode=false;
+    var s=await SB.auth.getSession();
+    applySession(s.data.session);
+    return false;
+  }
+
   function applySession(session){
+    if(recoveryMode) return;
+    var rv=document.getElementById('recovery-view'); if(rv) rv.style.display='none';
     currentUser = session ? session.user : null;
     var logged = !!currentUser;
     document.getElementById('auth-view').style.display = logged?'none':'block';
@@ -805,8 +855,11 @@
     var saved=null; try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
     var lang=saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en');
     setLang(lang);
-    SB.auth.getSession().then(function(res){ applySession(res.data.session); });
-    SB.auth.onAuthStateChange(function(_e, session){ applySession(session); });
+    SB.auth.onAuthStateChange(function(event, session){
+      if(event==='PASSWORD_RECOVERY'){ showRecovery(); return; }
+      applySession(session);
+    });
+    SB.auth.getSession().then(function(res){ if(!recoveryMode) applySession(res.data.session); });
   })();
 </script>
 </body>
