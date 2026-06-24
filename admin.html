@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="assets/mark.png" />
 <meta name="robots" content="noindex" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -91,16 +92,12 @@
   .mini:hover{border-color:var(--accent);color:var(--accent2)}
   .mini.danger:hover{border-color:var(--danger);color:var(--danger)}
   .loading{color:var(--muted);font-size:13px;padding:8px 0}
-  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:100;box-shadow:0 18px 50px rgba(0,0,0,.5)}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .toast.ok{border-color:rgba(53,220,142,.5);color:var(--accent2)}
-  .toast.err{border-color:rgba(255,107,107,.5);color:var(--danger)}
 
   @media(max-width:820px){
     .admin-wrap{grid-template-columns:1fr}
-    .side-nav{position:static;flex-direction:row;overflow-x:auto;min-width:0;width:100%;-ms-overflow-style:none;scrollbar-width:none}
-    .side-nav::-webkit-scrollbar{display:none}
-    .side-nav button{flex-direction:column;gap:5px;font-size:11px;min-width:0;flex-shrink:0;padding:9px 12px;text-align:center;align-items:center}
+    .side-nav{position:static;display:grid;grid-template-columns:repeat(5,1fr);overflow:visible;gap:2px;padding:6px;min-width:0;width:100%}
+    .side-nav button{flex-direction:column;gap:4px;padding:10px 4px;min-width:0;width:100%;justify-content:center}
+    .side-nav button span{display:none}
     .stats{grid-template-columns:1fr 1fr}
   }
   @media(max-width:600px){
@@ -237,9 +234,10 @@
   </div>
 </main>
 
-<div id="toast" class="toast"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -249,7 +247,19 @@
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
   function show(id){['gate-loading','gate-anon','gate-denied','admin-app'].forEach(function(x){document.getElementById(x).style.display=(x===id)?(x==='admin-app'?'grid':'block'):'none';});}
-  function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+(type||'');setTimeout(function(){t.className='toast '+(type||'');},2200);}
+  function toast(msg,type){
+    Toastify({
+      text:msg, duration:3500, gravity:'bottom', position:'right',
+      style:{
+        background:'rgba(14,14,17,.97)',
+        border:'1px solid '+(type==='ok'?'rgba(53,220,142,.38)':'rgba(255,107,107,.38)'),
+        color:type==='ok'?'#5FE8A8':'#FF9B9B',
+        borderRadius:'12px',fontSize:'13.5px',fontWeight:'600',
+        fontFamily:"'Inter',system-ui,sans-serif",
+        boxShadow:'0 8px 32px rgba(0,0,0,.55)',padding:'12px 18px'
+      }
+    }).showToast();
+  }
   async function rpc(name,args){var r=await SB.rpc(name,args||{});if(r.error)throw r.error;return r.data;}
 
   async function init(){
