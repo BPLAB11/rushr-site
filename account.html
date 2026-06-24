@@ -373,9 +373,7 @@
         <nav class="side-nav">
           <button class="on" data-panel="overview" onclick="switchPanel('overview')"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span data-fr="Vue d'ensemble" data-en="Overview">Vue d'ensemble</span></button>
           <button data-panel="licenses" onclick="switchPanel('licenses')"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9M16 16l2-2"/></svg><span data-fr="Licences" data-en="Licenses">Licences</span></button>
-          <button data-panel="devices" onclick="switchPanel('devices')"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM2 20h20"/></svg><span data-fr="Appareils" data-en="Devices">Appareils</span></button>
           <button data-panel="downloads" onclick="switchPanel('downloads')"><svg viewBox="0 0 24 24"><path d="M12 4v10M8 11l4 4 4-4M5 19h14"/></svg><span data-fr="Téléchargements" data-en="Downloads">Téléchargements</span></button>
-          <button data-panel="orders" onclick="switchPanel('orders')"><svg viewBox="0 0 24 24"><path d="M6 2l1.5 3h9L18 2M3 5h18l-1.5 13H4.5L3 5z"/></svg><span data-fr="Commandes" data-en="Orders">Commandes</span></button>
           <button data-panel="account" onclick="switchPanel('account')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span data-fr="Compte" data-en="Account">Compte</span></button>
           <button data-panel="support" onclick="switchPanel('support')"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H7l-3 3z"/></svg><span data-fr="Beta & support" data-en="Beta & support">Beta & support</span></button>
         </nav>
@@ -420,13 +418,9 @@
           <div class="card">
             <div id="licensesBox"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
           </div>
-        </section>
-
-        <!-- DEVICES -->
-        <section class="panel" id="panel-devices">
-          <div class="panel-h" data-fr="Appareils" data-en="Devices">Appareils</div>
-          <div class="panel-sub" data-fr="Machines où votre licence Rushr est activée." data-en="Machines where your Rushr license is active.">Machines où votre licence Rushr est activée.</div>
           <div class="card">
+            <h2 data-fr="Appareils" data-en="Devices">Appareils</h2>
+            <div class="desc" data-fr="Machines où votre licence Rushr est activée." data-en="Machines where your Rushr license is active.">Machines où votre licence Rushr est activée.</div>
             <div id="devicesBox"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
           </div>
         </section>
@@ -438,13 +432,9 @@
           <div class="card">
             <div id="downloadsBox"><span class="loading" data-fr="Chargement…" data-en="Loading…">Chargement…</span></div>
           </div>
-        </section>
-
-        <!-- ORDERS -->
-        <section class="panel" id="panel-orders">
-          <div class="panel-h" data-fr="Commandes" data-en="Orders">Commandes</div>
-          <div class="panel-sub" data-fr="Historique de vos achats et factures." data-en="Your purchase history and invoices.">Historique de vos achats et factures.</div>
           <div class="card">
+            <h2 data-fr="Commandes" data-en="Orders">Commandes</h2>
+            <div class="desc" data-fr="Historique de vos achats et factures." data-en="Your purchase history and invoices.">Historique de vos achats et factures.</div>
             <div class="empty">
               <svg viewBox="0 0 24 24"><path d="M6 2l1.5 3h9L18 2M3 5h18l-1.5 13H4.5L3 5zM9 11h6"/></svg>
               <span data-fr="Aucune commande pour le moment." data-en="No orders yet.">Aucune commande pour le moment.</span>
