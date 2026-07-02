@@ -1,0 +1,60 @@
+<!-- BACKPACK LAB — Email de RÉINITIALISATION DE MOT DE PASSE
+     À coller dans : Supabase → Authentication → Email Templates → "Reset Password" → onglet Source (HTML)
+     Objet suggéré : Réinitialiser votre mot de passe Backpack Lab / Reset your Backpack Lab password
+     Variable Supabase utilisée : {{ .ConfirmationURL }} -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0B0B0B;margin:0;padding:32px 0;font-family:Inter,Arial,Helvetica,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="width:480px;max-width:92%;background:#141417;border:1px solid rgba(255,255,255,0.08);border-radius:18px;">
+        <tr>
+          <td style="padding:34px 36px 8px 36px;" align="center">
+            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+              <td style="width:34px;height:34px;background:#35DC8E;border-radius:9px;" align="center" valign="middle">
+                <span style="display:inline-block;width:13px;height:13px;background:#04150C;border-radius:3px;"></span>
+              </td>
+              <td style="padding-left:10px;color:#ffffff;font-size:15px;font-weight:800;letter-spacing:1px;">BACKPACK&nbsp;LAB</td>
+            </tr></table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:18px 36px 0 36px;" align="center">
+            <div style="color:#ffffff;font-size:22px;font-weight:800;letter-spacing:-0.3px;">Réinitialiser le mot de passe</div>
+            <div style="color:#9A9A9E;font-size:14px;line-height:1.6;margin-top:10px;">
+              Vous avez demandé à réinitialiser votre mot de passe. Cliquez ci-dessous pour en choisir un nouveau. Ce lien expire dans 1 heure.
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:24px 36px 6px 36px;" align="center">
+            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+              <td align="center" bgcolor="#35DC8E" style="border-radius:10px;">
+                <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:13px 26px;color:#04150C;font-size:15px;font-weight:700;text-decoration:none;border-radius:10px;">Choisir un nouveau mot de passe</a>
+              </td>
+            </tr></table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:6px 36px 0 36px;" align="center">
+            <div style="color:#6E6E73;font-size:12px;line-height:1.6;">Le bouton ne fonctionne pas ? Copiez ce lien :<br>
+              <a href="{{ .ConfirmationURL }}" style="color:#5FE8A8;word-break:break-all;">{{ .ConfirmationURL }}</a>
+            </div>
+          </td>
+        </tr>
+        <tr><td style="padding:18px 36px;"><hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0;"></td></tr>
+        <tr>
+          <td style="padding:0 36px 0 36px;" align="center">
+            <div style="color:#ffffff;font-size:16px;font-weight:800;">Reset your password</div>
+            <div style="color:#9A9A9E;font-size:13px;line-height:1.6;margin-top:8px;">
+              You requested a password reset. Click the button above to choose a new one — the link expires in 1 hour. If you didn't request this, you can safely ignore this email.
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:22px 36px 30px 36px;" align="center">
+            <div style="color:#6E6E73;font-size:11px;">© 2026 BACKPACK LAB · thebackpacklab.com</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
