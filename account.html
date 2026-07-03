@@ -372,6 +372,7 @@
         <section class="panel on" id="panel-overview">
           <div class="panel-h" id="ovHello">—</div>
           <div class="panel-sub" data-fr="Un aperçu rapide de votre compte." data-en="A quick overview of your account.">Un aperçu rapide de votre compte.</div>
+          <div id="ovFreeLicense"></div>
           <div class="ov-grid">
             <div class="ov"><div class="lbl" data-fr="Licence" data-en="License">Licence</div><div class="val" id="ovLicense">—</div></div>
             <div class="ov"><div class="lbl" data-fr="Appareils" data-en="Devices">Appareils</div><div class="val" id="ovSeats">—</div></div>
@@ -698,6 +699,24 @@
       if(v.download_url) return '<a href="'+esc(v.download_url)+'" class="btn btn-rushr">'+label+'</a>';
       return '<button class="btn btn-rushr" disabled>'+label+' · '+(FR()?'bientôt':'soon')+'</button>';
     }).join('') + '<button class="btn btn-ghost" onclick="switchPanel(\'downloads\')">'+(FR()?'Tout voir':'See all')+'</button>';
+
+    var fl=document.getElementById('ovFreeLicense');
+    if(fl){
+      if(!lastLicenses.length){
+        fl.innerHTML='<div class="card" style="border-color:rgba(53,220,142,.4);margin-bottom:16px">'
+          +'<h2>'+(FR()?'Licence Rushr — Beta':'Rushr license — Beta')+'</h2>'
+          +'<div class="desc" style="margin:-2px 0 14px">'+(FR()?'Récupérez votre licence beta pour activer Rushr sur votre machine.':'Get your beta license to activate Rushr on your machine.')+'</div>'
+          +'<button class="btn btn-primary" onclick="claimFreeLicense(this)">'+(FR()?'🎒 Obtenir ma licence':'🎒 Get my license')+'</button></div>';
+      } else { fl.innerHTML=''; }
+    }
+  }
+
+  async function claimFreeLicense(btn){
+    if(btn){ btn.disabled=true; btn.textContent=FR()?'Attribution…':'Assigning…'; }
+    var r=await SB.rpc('claim_free_license');
+    if(r.error){ alert(r.error.message||'Error'); if(btn){ btn.disabled=false; } return; }
+    switchPanel('licenses');
+    loadAll();
   }
 
   function licCard(l){
@@ -715,7 +734,8 @@
   function renderLicenses(){
     var box=document.getElementById('licensesBox');
     if(!lastLicenses.length){
-      box.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9"/></svg><span>'+(FR()?'Aucune licence rattachée. Réclamez-en une ci-dessous.':'No license linked yet. Claim one below.')+'</span></div>';
+      box.innerHTML='<div class="empty" style="margin-bottom:14px"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="4"/><path d="M11 11l9 9"/></svg><span>'+(FR()?'Aucune licence rattachée.':'No license linked yet.')+'</span></div>'
+        +'<button class="btn btn-primary" onclick="claimFreeLicense(this)">'+(FR()?'🎒 Obtenir ma licence Rushr':'🎒 Get my Rushr license')+'</button>';
       return;
     }
     box.innerHTML = lastLicenses.map(licCard).join('');
