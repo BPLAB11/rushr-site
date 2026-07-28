@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presets & Packs — BACKPACK LAB</title>
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<meta name="description" data-fr="Presets et packs Backpack Lab pour vidéastes : LUTs, presets de montage, overlays & SFX, packs de sons. Gratuits et premium." data-en="Backpack Lab presets and packs for video creators: LUTs, editing presets, overlays & SFX, sound packs. Free and premium." content="Presets et packs Backpack Lab : LUTs, presets, overlays, sons." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12); --accent:#35DC8E; --accent2:#5FE8A8;
+    --text:#FFFFFF; --muted:#9A9A9E; --muted2:#6E6E73; --on-accent:#04150C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;overflow-x:hidden;scroll-padding-top:80px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  ::-webkit-scrollbar{width:10px;background:var(--surface)}
+  ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:5px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;max-width:100%;position:relative}
+  img{max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+  .accent{color:var(--accent)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
+  .brand .dot{width:12px;height:12px;border-radius:3px;background:var(--accent);display:block}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .nav-links a.on{color:var(--text)}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;font-weight:600;font-size:14px;padding:10px 18px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent);position:relative;overflow:hidden}
+  .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .5s ease}
+  .btn-primary:hover::before{left:100%}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+
+  /* HERO */
+  header{padding:80px 0 8px;position:relative;text-align:center}
+  .hero-glow{position:absolute;top:-120px;left:0;right:0;margin:0 auto;width:760px;max-width:100%;height:420px;background:radial-gradient(closest-side,rgba(53,220,142,.16),transparent);filter:blur(20px);z-index:0;pointer-events:none;animation:glowBreathing 4s ease-in-out infinite}
+  @keyframes glowBreathing{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+  .hero-in{position:relative;z-index:1}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--muted);margin-bottom:22px}
+  .pill .d{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.05;font-weight:800;letter-spacing:-1.2px;background:linear-gradient(135deg,#fff 0%,var(--accent2) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .sub{color:var(--muted);font-size:clamp(15px,2.2vw,19px);max-width:660px;margin:20px auto 0}
+
+  section{padding:40px 0 64px}
+
+  /* FILTERS */
+  .filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0 36px}
+  .filters button{background:var(--surface);border:1px solid var(--line2);color:var(--muted);font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:inherit;transition:.15s}
+  .filters button:hover{color:var(--text);border-color:var(--accent)}
+  .filters button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+  /* PACK GRID */
+  .packs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .pack{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
+  .pack:hover{border-color:rgba(53,220,142,.4);transform:translateY(-6px);box-shadow:0 20px 40px rgba(53,220,142,.12)}
+  .pack.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
+  .pack.tilt-3d:hover{box-shadow:0 30px 60px rgba(53,220,142,.2)}
+  .pack-thumb{position:relative;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center}
+  .pack-thumb.c-lut{background:linear-gradient(135deg,#1d2a24,#101713)}
+  .pack-thumb.c-edit{background:linear-gradient(135deg,#231d2a,#141017)}
+  .pack-thumb.c-sfx{background:linear-gradient(135deg,#2a241d,#171310)}
+  .pack-thumb.c-sound{background:linear-gradient(135deg,#1d242a,#101417)}
+  .pack-thumb svg{width:44px;height:44px;stroke:var(--accent2);fill:none;stroke-width:1.6;opacity:.85;transform:translateZ(10px)}
+  .pack-thumb .cat{position:absolute;top:12px;left:12px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#cfd2d0;background:rgba(0,0,0,.45);border:1px solid var(--line2);border-radius:6px;padding:3px 9px;transform:translateZ(10px)}
+  .pack-thumb .price{position:absolute;top:12px;right:12px;font-size:11px;font-weight:800;letter-spacing:.3px;border-radius:6px;padding:3px 10px;transform:translateZ(10px)}
+  .price.free{color:var(--on-accent);background:var(--accent)}
+  .price.paid{color:var(--accent2);background:rgba(53,220,142,.12);border:1px solid rgba(53,220,142,.35)}
+  .pack-body{padding:20px;display:flex;flex-direction:column;flex:1}
+  .pack-body h3{font-size:16px;font-weight:800;margin-bottom:6px}
+  .pack-body p{color:var(--muted);font-size:13.5px;flex:1}
+  .pack-meta{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+  .pack-meta span{font-size:11px;color:var(--muted2);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .pack .btn{width:100%;justify-content:center;padding:11px}
+
+  .ph-note{text-align:center;color:var(--muted2);font-size:13px;margin-top:30px;font-style:italic}
+
+  /* CTA */
+  .cta-band{background:linear-gradient(135deg,#0f1f17,#121215);border:1px solid rgba(53,220,142,.25);border-radius:20px;padding:42px;text-align:center;margin-top:8px}
+  .cta-band h3{font-size:26px;font-weight:800;letter-spacing:-.4px}
+  .cta-band p{color:var(--muted);margin:10px auto 22px;max-width:520px;font-size:15px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px;margin-top:24px}
+  .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .foot-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px}
+  .foot-brand .dot{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+
+  @media(max-width:860px){
+    .packs{grid-template-columns:1fr 1fr}
+    .nav-links{display:none}
+    header{padding:60px 0 4px}
+  }
+  @media(max-width:600px){
+    .wrap{padding:0 18px}
+    .packs{grid-template-columns:1fr}
+    .nav-right .btn-primary{display:none}
+    .cta-band{padding:28px}
+  }
+  /* Scroll reveal animations */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal.delay-1{transition-delay:.1s}
+  .reveal.delay-2{transition-delay:.2s}
+  .reveal.delay-3{transition-delay:.3s}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="software.html" data-fr="Software" data-en="Software">Software</a>
+        <a href="rushr.html" data-fr="Rushr" data-en="Rushr">Rushr</a>
+        <a href="packs.html" class="on" data-fr="Packs" data-en="Packs">Packs</a>
+        <a href="index.html#contact" data-fr="Contact" data-en="Contact">Contact</a>
+      </div>
+      <div class="lang">
+        <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
+        <button id="len" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#packs" class="btn btn-primary" data-fr="Voir les packs" data-en="Browse packs">Voir les packs</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="hero-glow"></div>
+  <div class="wrap hero-in">
+    <span class="pill"><span class="d"></span><span data-fr="Ressources créateurs" data-en="Creator resources">Ressources créateurs</span></span>
+    <h1 data-fr="Presets & packs" data-en="Presets & packs">Presets & packs</h1>
+    <p class="sub" data-fr="Des LUTs, presets de montage, overlays, SFX et packs de sons pour accélérer votre flux créatif. Gratuits et premium." data-en="LUTs, editing presets, overlays, SFX and sound packs to speed up your creative flow. Free and premium.">LUTs, presets, overlays, SFX et sons pour accélérer votre flux.</p>
+  </div>
+</header>
+
+<section id="packs" class="reveal">
+  <div class="wrap">
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <button class="on" data-filter="all" data-fr="Tout" data-en="All">Tout</button>
+      <button data-filter="lut" data-fr="LUTs / Étalonnage" data-en="LUTs / Color">LUTs / Étalonnage</button>
+      <button data-filter="edit" data-fr="Presets montage" data-en="Editing presets">Presets montage</button>
+      <button data-filter="sfx" data-fr="Overlays / SFX" data-en="Overlays / SFX">Overlays / SFX</button>
+      <button data-filter="sound" data-fr="Packs de sons" data-en="Sound packs">Packs de sons</button>
+    </div>
+
+    <div class="packs">
+
+      <!-- LUTs -->
+      <div class="pack tilt-3d" data-cat="lut">
+        <div class="pack-thumb c-lut"><span class="cat" data-fr="LUTs" data-en="LUTs">LUTs</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Starter LUT Pack" data-en="Starter LUT Pack">Starter LUT Pack</h3>
+          <p data-fr="5 LUTs cinématiques gratuites pour démarrer votre étalonnage. Format .cube universel." data-en="5 free cinematic LUTs to kickstart your grade. Universal .cube format.">5 LUTs cinématiques gratuites. Format .cube.</p>
+          <div class="pack-meta"><span>.cube</span><span data-fr="5 LUTs" data-en="5 LUTs">5 LUTs</span></div>
+          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
+        </div>
+      </div>
+
+      <div class="pack tilt-3d" data-cat="lut">
+        <div class="pack-thumb c-lut"><span class="cat" data-fr="LUTs" data-en="LUTs">LUTs</span><span class="price paid">19€</span>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Cinematic LUTs Pro" data-en="Cinematic LUTs Pro">Cinematic LUTs Pro</h3>
+          <p data-fr="20 LUTs premium étalonnées pour différents rendus film. Compatibles toutes caméras." data-en="20 premium graded LUTs for varied film looks. Works with any camera.">20 LUTs premium pour rendus film.</p>
+          <div class="pack-meta"><span>.cube</span><span data-fr="20 LUTs" data-en="20 LUTs">20 LUTs</span></div>
+          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+        </div>
+      </div>
+
+      <!-- Editing presets -->
+      <div class="pack tilt-3d" data-cat="edit">
+        <div class="pack-thumb c-edit"><span class="cat" data-fr="Montage" data-en="Editing">Montage</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Quick Transitions" data-en="Quick Transitions">Quick Transitions</h3>
+          <p data-fr="10 transitions fluides prêtes à glisser. Pour Premiere Pro & DaVinci Resolve." data-en="10 smooth drag-and-drop transitions. For Premiere Pro & DaVinci Resolve.">10 transitions fluides prêtes à glisser.</p>
+          <div class="pack-meta"><span>Premiere</span><span>DaVinci</span></div>
+          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
+        </div>
+      </div>
+
+      <div class="pack tilt-3d" data-cat="edit">
+        <div class="pack-thumb c-edit"><span class="cat" data-fr="Montage" data-en="Editing">Montage</span><span class="price paid">29€</span>
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Editor's Toolkit" data-en="Editor's Toolkit">Editor's Toolkit</h3>
+          <p data-fr="Pack complet : presets, titres, transitions et templates de projet pour gagner du temps." data-en="Full pack: presets, titles, transitions and project templates to save time.">Pack complet presets, titres et templates.</p>
+          <div class="pack-meta"><span>Premiere</span><span data-fr="50+ presets" data-en="50+ presets">50+ presets</span></div>
+          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+        </div>
+      </div>
+
+      <!-- Overlays / SFX -->
+      <div class="pack tilt-3d" data-cat="sfx">
+        <div class="pack-thumb c-sfx"><span class="cat" data-fr="Overlays" data-en="Overlays">Overlays</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
+          <svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 7l3-4h12l3 4"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Light Leaks Vol.1" data-en="Light Leaks Vol.1">Light Leaks Vol.1</h3>
+          <p data-fr="8 overlays de fuites de lumière en 4K, à poser en mode écran sur vos plans." data-en="8 4K light-leak overlays to drop in screen mode over your shots.">8 overlays light leaks 4K.</p>
+          <div class="pack-meta"><span>4K</span><span>.mp4</span></div>
+          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
+        </div>
+      </div>
+
+      <div class="pack tilt-3d" data-cat="sfx">
+        <div class="pack-thumb c-sfx"><span class="cat" data-fr="SFX" data-en="SFX">SFX</span><span class="price paid">24€</span>
+          <svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 7l3-4h12l3 4"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="VFX Elements Pack" data-en="VFX Elements Pack">VFX Elements Pack</h3>
+          <p data-fr="Explosions, fumée, particules et flashs en 4K avec couche alpha, prêts à composer." data-en="Explosions, smoke, particles and flashes in 4K with alpha, ready to composite.">Éléments VFX 4K avec alpha.</p>
+          <div class="pack-meta"><span>4K</span><span>Alpha</span><span data-fr="30 éléments" data-en="30 elements">30 éléments</span></div>
+          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+        </div>
+      </div>
+
+      <!-- Sound packs -->
+      <div class="pack tilt-3d" data-cat="sound">
+        <div class="pack-thumb c-sound"><span class="cat" data-fr="Sons" data-en="Sound">Sons</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
+          <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15 9a4 4 0 010 6"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Transition SFX" data-en="Transition SFX">Transition SFX</h3>
+          <p data-fr="15 effets sonores de transition (whoosh, impacts) pour dynamiser vos montages." data-en="15 transition sound effects (whooshes, impacts) to energize your edits.">15 SFX de transition (whoosh, impacts).</p>
+          <div class="pack-meta"><span>.wav</span><span data-fr="15 sons" data-en="15 sounds">15 sons</span></div>
+          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
+        </div>
+      </div>
+
+      <div class="pack tilt-3d" data-cat="sound">
+        <div class="pack-thumb c-sound"><span class="cat" data-fr="Sons" data-en="Sound">Sons</span><span class="price paid">34€</span>
+          <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15 9a4 4 0 010 6"/></svg></div>
+        <div class="pack-body">
+          <h3 data-fr="Cinematic Soundscapes" data-en="Cinematic Soundscapes">Cinematic Soundscapes</h3>
+          <p data-fr="Ambiances, drones et nappes cinématiques libres de droits pour habiller vos films." data-en="Royalty-free cinematic ambiences, drones and pads to score your films.">Ambiances & drones cinématiques libres de droits.</p>
+          <div class="pack-meta"><span>.wav</span><span data-fr="40 sons" data-en="40 sounds">40 sons</span></div>
+          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="ph-note" data-fr="Packs de démonstration — remplacez par vos vrais fichiers et liens de téléchargement / achat." data-en="Demo packs — replace with your real files and download / purchase links.">Packs de démonstration — à remplacer par vos vrais fichiers et liens.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="reveal" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band">
+      <h3 data-fr="Une demande spéciale ?" data-en="A special request?">Une demande spéciale ?</h3>
+      <p data-fr="Besoin d'un pack sur mesure ou d'une licence pro ? Écrivez-nous, on s'occupe du reste." data-en="Need a custom pack or a pro license? Drop us a line and we'll handle the rest.">Besoin d'un pack sur mesure ou d'une licence pro ? Écrivez-nous.</p>
+      <a href="mailto:contact@thebackpacklab.com" class="btn btn-primary" data-fr="Nous écrire" data-en="Email us">Nous écrire</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="foot-brand"><span class="dot"></span>BACKPACK&nbsp;LAB</div>
+    <div data-fr="© 2026 BACKPACK LAB · Éditeur de logiciels. Tous droits réservés." data-en="© 2026 BACKPACK LAB · Software publisher. All rights reserved.">© 2026 BACKPACK LAB</div>
+    <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){
+      var v = el.getAttribute('data-'+lang);
+      if(v!==null) el.innerHTML = v;
+    });
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){
+      var v = el.getAttribute('data-'+lang+'-ph');
+      if(v!==null) el.setAttribute('placeholder', v);
+    });
+    var meta = document.querySelector('meta[name="description"]');
+    if(meta){ var m = meta.getAttribute('data-'+lang); if(m) meta.setAttribute('content', m); }
+    document.getElementById('lfr').classList.toggle('on', lang==='fr');
+    document.getElementById('len').classList.toggle('on', lang==='en');
+    try{ localStorage.setItem('bpl_lang', lang); }catch(e){}
+  }
+  // Category filter
+  function setupFilters(){
+    var btns = document.querySelectorAll('.filters button');
+    var packs = document.querySelectorAll('.pack');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        btns.forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        var f = b.getAttribute('data-filter');
+        packs.forEach(function(p){
+          p.style.display = (f==='all' || p.getAttribute('data-cat')===f) ? '' : 'none';
+        });
+      });
+    });
+  }
+  (function init(){
+    var saved = null;
+    try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
+    setLang(lang);
+    setupFilters();
+  })();
+
+  // Scroll reveal observer
+  (function(){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    },{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+  })();
+
+  // 3D Tilt effect on cards
+  (function(){
+    var cards = document.querySelectorAll('.tilt-3d');
+    cards.forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var centerX = rect.width / 2;
+        var centerY = rect.height / 2;
+        var rotateX = ((y - centerY) / centerY) * -5;
+        var rotateY = ((x - centerX) / centerX) * 5;
+        card.style.setProperty('--rx', rotateX + 'deg');
+        card.style.setProperty('--ry', rotateY + 'deg');
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+    });
+  })();
+</script>
+</body>
+</html>
