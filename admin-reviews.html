@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reviews — Admin — BACKPACK LAB</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--warn:#FFB454;--danger:#FF6B6B}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 22px;width:100%}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .brand .tag{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--accent2);border:1px solid rgba(53,220,142,.4);border-radius:5px;padding:1px 6px}
+  .nav-right{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+  main{flex:1;width:100%;padding:24px 0 60px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}.btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .logout-btn{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .logout-btn:hover{border-color:var(--danger);color:var(--danger)}
+
+  /* gates */
+  .gate{max-width:410px;margin:60px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:32px}
+  .gate .mark{width:44px;height:44px;border-radius:11px;background:rgba(53,220,142,.12);border:1px solid rgba(53,220,142,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  .gate .mark span{width:14px;height:14px;border-radius:4px;background:var(--accent);display:block}
+  .gate h1{font-size:20px;font-weight:800;text-align:center;margin-bottom:6px}
+  .gate p.sub{color:var(--muted);font-size:13.5px;text-align:center;margin-bottom:18px}
+  .tabs{display:flex;background:var(--surface2);border:1px solid var(--line2);border-radius:11px;padding:4px;margin-bottom:16px}
+  .tabs button{flex:1;background:transparent;border:0;color:var(--muted);font-size:13px;font-weight:600;padding:8px;border-radius:8px;cursor:pointer;font-family:inherit}
+  .tabs button.on{background:var(--accent);color:var(--on-accent)}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:5px}
+  .in{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:9px;color:#fff;padding:10px 13px;font-size:14px;font-family:inherit}
+  .in:focus{outline:none;border-color:var(--accent)}
+  .gate .btn-primary{width:100%;padding:12px;margin-top:4px}
+  .msg{font-size:12.5px;margin:4px 0 10px;min-height:15px}.msg.err{color:var(--danger)}.msg.ok{color:var(--accent2)}
+
+  /* app */
+  #app{display:none}
+  .layout{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
+  .col-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .col-head h2{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .plist{display:flex;flex-direction:column;gap:9px}
+  .pcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;cursor:pointer;transition:.15s}
+  .pcard:hover{border-color:var(--line2)}
+  .pcard.on{border-color:var(--accent)}
+  .pcard .nm{font-size:14px;font-weight:700}
+  .pcard .cl{font-size:12px;color:var(--muted2);margin-top:1px}
+  .pcard .meta{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:5px;padding:3px 7px}
+  .b-pending{color:#150A03;background:var(--warn)}.b-review{color:var(--on-accent);background:var(--accent)}.b-approved{color:#fff;background:#2F7D52;border:1px solid var(--accent)}.b-off{color:var(--muted);background:var(--surface2);border:1px solid var(--line2)}
+  .pcard .cnt{font-size:11px;color:var(--muted2)}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card+.card{margin-top:14px}
+  .card h3{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+  .empty{color:var(--muted);font-size:14px;text-align:center;padding:40px 20px}
+  .linkbox{display:flex;gap:8px;align-items:center;background:#0E0E11;border:1px dashed var(--line2);border-radius:9px;padding:9px 12px}
+  .linkbox code{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#D6D6D8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .linkbox button{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .linkbox button:hover{border-color:var(--accent);color:var(--accent2)}
+  .frow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+  .fg{display:flex;flex-direction:column;gap:5px}
+  .fg label{font-size:11.5px;color:var(--muted);font-weight:600}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+  .toggle-row:last-child{border-bottom:0}
+  .toggle-row .t{font-size:13px}.toggle-row .s{font-size:11.5px;color:var(--muted2)}
+  .switch{position:relative;width:40px;height:23px;flex-shrink:0}
+  .switch input{opacity:0;width:0;height:0;position:absolute}
+  .switch .tr{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--line2);border-radius:999px;transition:.2s}
+  .switch .tr::before{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:15px;height:15px;border-radius:50%;background:var(--muted);transition:.2s}
+  .switch input:checked + .tr{background:rgba(53,220,142,.25);border-color:var(--accent)}
+  .switch input:checked + .tr::before{background:var(--accent);left:20px}
+  .vrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .vrow:last-child{border-bottom:0}
+  .vrow .vi{flex:1;min-width:0}
+  .vrow .vi h4{font-size:13.5px;font-weight:700}
+  .vrow .vi p{font-size:11.5px;color:var(--muted2)}
+  .vtype{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--accent2);background:rgba(53,220,142,.1);border-radius:5px;padding:3px 7px}
+  .drop{border:1.5px dashed var(--line2);border-radius:11px;padding:22px;text-align:center;color:var(--muted);cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--accent);color:var(--accent2);background:rgba(53,220,142,.05)}
+  .drop small{display:block;color:var(--muted2);font-size:11px;margin-top:5px}
+  .prog{height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:10px;display:none}
+  .prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+  .danger-link{color:var(--danger);font-size:12.5px;font-weight:600;cursor:pointer}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:100;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{border-color:rgba(53,220,142,.5);color:var(--accent2)}.toast.err{border-color:rgba(255,107,107,.5);color:var(--danger)}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB<span class="tag">REVIEWS</span></a>
+  <div class="nav-right"><span id="whoami"></span><button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Déconnexion</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <div id="g-load" class="gate"><p class="sub">Chargement…</p></div>
+
+  <!-- LOGIN -->
+  <div id="g-login" class="gate" style="display:none">
+    <div class="mark"><span></span></div>
+    <h1>Espace Reviews</h1>
+    <p class="sub">Réservé à l'équipe Backpack Lab.</p>
+    <div class="tabs"><button id="tabIn" class="on" onclick="setMode('in')">Connexion</button><button id="tabUp" onclick="setMode('up')">Créer un compte</button></div>
+    <div class="msg" id="authMsg"></div>
+    <form onsubmit="return doAuth(event)">
+      <div class="field"><label>Email</label><input id="email" class="in" type="email" required placeholder="vous@email.com" /></div>
+      <div class="field"><label>Mot de passe</label><input id="pass" class="in" type="password" required minlength="6" placeholder="••••••••" /></div>
+      <button type="submit" class="btn btn-primary" id="authBtn">Se connecter</button>
+    </form>
+  </div>
+
+  <!-- DENIED -->
+  <div id="g-denied" class="gate" style="display:none">
+    <div class="mark"><span></span></div>
+    <h1>Accès refusé</h1>
+    <p class="sub">Ce compte n'a pas les droits admin.</p>
+    <button class="btn btn-ghost" style="width:100%" onclick="logout()">Se déconnecter</button>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+    <div class="layout">
+      <div>
+        <div class="col-head"><h2>Projets</h2><button class="btn btn-primary" onclick="showNewForm()">+ Nouveau</button></div>
+        <div class="plist" id="plist"></div>
+      </div>
+      <div id="detail"><div class="card"><div class="empty">Sélectionnez un projet ou créez-en un nouveau.</div></div></div>
+    </div>
+  </div>
+
+</div></main>
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var ME=null, PROJECTS=[], selId=null, mode='in';
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
+  function show(id){['g-load','g-login','g-denied','app'].forEach(function(x){document.getElementById(x).style.display=(x===id)?'block':'none';});}
+  function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast show '+(t||'');setTimeout(function(){e.className='toast '+(t||'');},2200);}
+  async function rpc(n,a){var r=await SB.rpc(n,a||{});if(r.error)throw r.error;return r.data;}
+  function reviewLink(token){ return location.origin + '/review.html?p=' + token; }
+
+  function setMode(m){mode=m;document.getElementById('tabIn').classList.toggle('on',m==='in');document.getElementById('tabUp').classList.toggle('on',m==='up');document.getElementById('authBtn').textContent=(m==='up')?'Créer mon compte':'Se connecter';document.getElementById('authMsg').textContent='';}
+  async function doAuth(e){
+    e.preventDefault();
+    var email=document.getElementById('email').value.trim(), pass=document.getElementById('pass').value;
+    var msg=document.getElementById('authMsg'); msg.className='msg'; msg.textContent='…';
+    try{
+      if(mode==='up'){ var r=await SB.auth.signUp({email:email,password:pass}); if(r.error) throw r.error; if(!r.data.session){ msg.className='msg ok'; msg.textContent='Compte créé. Si une confirmation email est demandée, valide-la puis connecte-toi.'; return false; } }
+      else { var r2=await SB.auth.signInWithPassword({email:email,password:pass}); if(r2.error) throw r2.error; }
+      msg.textContent='';
+    }catch(err){ msg.className='msg err'; var m=err.message||''; msg.textContent=/Invalid login/i.test(m)?'Email ou mot de passe incorrect.':m; }
+    return false;
+  }
+  async function logout(){ await SB.auth.signOut(); }
+
+  async function onSession(session){
+    ME=session?session.user:null;
+    if(!ME){ show('g-login'); return; }
+    document.getElementById('whoami').textContent=ME.email;
+    document.getElementById('logoutBtn').style.display='inline-flex';
+    var admin=false; try{ admin=await rpc('is_admin'); }catch(e){}
+    if(!admin){ show('g-denied'); return; }
+    show('app'); loadProjects();
+  }
+
+  async function loadProjects(){
+    try{ PROJECTS=await rpc('review_admin_list'); }catch(e){ toast('Erreur : '+e.message,'err'); PROJECTS=[]; }
+    renderList();
+    if(selId && !PROJECTS.find(function(p){return p.id===selId;})) selId=null;
+    if(selId) renderDetail();
+  }
+  function statusBadge(p){
+    if(p.is_disabled) return '<span class="badge b-off">Désactivé</span>';
+    var m={PENDING:['b-pending','En attente'],IN_REVIEW:['b-review','En révision'],APPROVED:['b-approved','Approuvé']}[p.status]||['b-review','En révision'];
+    return '<span class="badge '+m[0]+'">'+m[1]+'</span>';
+  }
+  function renderList(){
+    var el=document.getElementById('plist');
+    if(!PROJECTS.length){ el.innerHTML='<div class="empty" style="font-size:13px;padding:20px">Aucun projet.</div>'; return; }
+    el.innerHTML=PROJECTS.map(function(p){
+      return '<div class="pcard '+(p.id===selId?'on':'')+'" onclick="selectProject(\''+p.id+'\')">'+
+        '<div class="nm">'+esc(p.name)+'</div>'+(p.client_name?'<div class="cl">'+esc(p.client_name)+'</div>':'')+
+        '<div class="meta">'+statusBadge(p)+'<span class="cnt">'+p.versions+' version(s) · '+p.comments+' comm.</span></div></div>';
+    }).join('');
+  }
+  function selectProject(id){ selId=id; renderList(); renderDetail(); }
+
+  function renderDetail(){
+    var p=PROJECTS.find(function(x){return x.id===selId;}); if(!p){ document.getElementById('detail').innerHTML=''; return; }
+    var link=reviewLink(p.share_token);
+    var h='';
+    h+='<div class="card"><h3>Lien de partage client</h3>'+
+      '<div class="linkbox"><code>'+esc(link)+'</code><button onclick="copyLink(\''+esc(link)+'\',this)">Copier</button><button onclick="window.open(\''+esc(link)+'\',\'_blank\')">Ouvrir</button></div>'+
+      '<p style="font-size:11.5px;color:var(--muted2);margin-top:8px">Envoie ce lien à ton client — aucun compte requis de son côté.</p></div>';
+
+    // versions + upload
+    h+='<div class="card"><h3>Médias / versions</h3><div id="vlist"></div>'+
+      '<div class="drop" id="drop" style="margin-top:12px">📤 Glisse un fichier ici ou clique pour choisir'+
+      '<small>Vidéo MP4/MOV · Image JPG/PNG · Audio MP3/WAV — clips courts (limite de taille du plan gratuit)</small></div>'+
+      '<input type="file" id="fileInput" style="display:none" accept="video/*,image/*,audio/*" />'+
+      '<div class="prog" id="prog"><i></i></div></div>';
+
+    // settings
+    h+='<div class="card"><h3>Réglages</h3>'+
+      '<div class="toggle-row"><div><div class="t">Autoriser le téléchargement</div><div class="s">Le client peut télécharger le fichier original</div></div>'+
+        '<span class="switch"><input type="checkbox" id="setDl" '+(p.allow_download?'checked':'')+' onchange="saveSettings()"><span class="tr"></span></span></div>'+
+      '<div class="toggle-row"><div><div class="t">Désactiver le lien</div><div class="s">Coupe l\'accès client immédiatement</div></div>'+
+        '<span class="switch"><input type="checkbox" id="setOff" '+(p.is_disabled?'checked':'')+' onchange="saveSettings()"><span class="tr"></span></span></div>'+
+      '<div class="frow" style="margin-top:14px">'+
+        '<div class="fg" style="flex:1"><label>Expiration du lien (optionnel)</label><input type="date" id="setExp" class="in" value="'+(p.expires_at?p.expires_at.substring(0,10):'')+'" onchange="saveSettings()"></div>'+
+      '</div>'+
+      '<div class="frow" style="margin-top:12px">'+
+        '<div class="fg" style="flex:1"><label>Mot de passe '+(p.has_password?'(défini)':'(aucun)')+'</label><input type="text" id="setPwd" class="in" placeholder="Nouveau mot de passe (vide = retirer)"></div>'+
+        '<button class="btn btn-ghost" onclick="savePassword()">Appliquer</button>'+
+      '</div></div>';
+
+    h+='<div class="card"><span class="danger-link" onclick="deleteProject()">Supprimer ce projet définitivement</span></div>';
+
+    document.getElementById('detail').innerHTML=h;
+    renderVersions(p);
+    setupDrop(p);
+  }
+
+  function mediaType(name){
+    var e=(name.split('.').pop()||'').toLowerCase();
+    if(['mp4','mov','m4v','webm','ogv'].indexOf(e)>=0) return 'video';
+    if(['mp3','wav','m4a','aac','ogg','flac'].indexOf(e)>=0) return 'audio';
+    if(['jpg','jpeg','png','gif','webp','avif'].indexOf(e)>=0) return 'image';
+    return null;
+  }
+  async function renderVersions(p){
+    var vl=document.getElementById('vlist');
+    var r=await SB.from('review_versions').select('id,version_number,label,media_type,original_filename,created_at, review_comments(count)').eq('project_id', p.id).order('version_number');
+    if(r.error){ vl.innerHTML='<p style="font-size:12.5px;color:var(--danger)">Erreur de chargement des versions.</p>'; return; }
+    var vs=r.data||[];
+    vl.innerHTML=vs.length?vs.map(function(v){
+      var cc=(v.review_comments&&v.review_comments[0])?v.review_comments[0].count:0;
+      return '<div class="vrow"><span class="vtype">'+esc(v.media_type)+'</span><div class="vi"><h4>v'+v.version_number+(v.label?(' · '+esc(v.label)):'')+'</h4><p>'+esc(v.original_filename||'')+' · '+fmt(v.created_at)+' · '+cc+' comm.</p></div></div>';
+    }).join(''):'<p style="font-size:12.5px;color:var(--muted2)">Aucun média encore. Ajoute-en un ci-dessous.</p>';
+  }
+
+  function setupDrop(p){
+    var drop=document.getElementById('drop'), input=document.getElementById('fileInput');
+    drop.onclick=function(){ input.click(); };
+    input.onchange=function(){ if(input.files[0]) uploadFile(p, input.files[0]); };
+    ['dragover','dragenter'].forEach(function(ev){ drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add('over');}); });
+    ['dragleave','drop'].forEach(function(ev){ drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove('over');}); });
+    drop.addEventListener('drop',function(e){ if(e.dataTransfer.files[0]) uploadFile(p, e.dataTransfer.files[0]); });
+  }
+  async function uploadFile(p, file){
+    var mt=mediaType(file.name);
+    if(!mt){ toast('Format non supporté','err'); return; }
+    var prog=document.getElementById('prog'); prog.style.display='block'; prog.querySelector('i').style.width='40%';
+    var safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    var path=p.id+'/'+Date.now()+'_'+safe;
+    var up=await SB.storage.from('reviews').upload(path, file, {upsert:false, contentType:file.type||undefined});
+    if(up.error){ prog.style.display='none'; toast('Upload : '+up.error.message,'err'); return; }
+    prog.querySelector('i').style.width='80%';
+    try{ await rpc('review_admin_add_version',{p_project_id:p.id,p_media_type:mt,p_storage_path:path,p_original_filename:file.name,p_label:null}); }
+    catch(e){ prog.style.display='none'; toast('Erreur : '+e.message,'err'); return; }
+    prog.querySelector('i').style.width='100%';
+    setTimeout(function(){ prog.style.display='none'; prog.querySelector('i').style.width='0'; },400);
+    toast('Média ajouté ✓','ok'); loadProjects();
+  }
+
+  async function saveSettings(){
+    var p=PROJECTS.find(function(x){return x.id===selId;});
+    var dl=document.getElementById('setDl').checked, off=document.getElementById('setOff').checked;
+    var exp=document.getElementById('setExp').value; var expTs=exp?new Date(exp+'T23:59:59').toISOString():null;
+    try{ await rpc('review_admin_update_project',{p_id:selId,p_name:null,p_client:p.client_name,p_allow_download:dl,p_is_disabled:off,p_expires_at:expTs}); toast('Réglages enregistrés ✓','ok'); loadProjects(); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
+  async function savePassword(){
+    var pwd=document.getElementById('setPwd').value;
+    try{ await rpc('review_admin_set_password',{p_project_id:selId,p_password:pwd}); document.getElementById('setPwd').value=''; toast(pwd.trim()?'Mot de passe défini ✓':'Mot de passe retiré ✓','ok'); loadProjects(); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
+  async function deleteProject(){
+    if(!confirm('Supprimer ce projet, ses médias et commentaires ? Irréversible.')) return;
+    var r=await SB.from('review_projects').delete().eq('id',selId);
+    if(r.error){ toast('Erreur : '+r.error.message,'err'); return; }
+    selId=null; document.getElementById('detail').innerHTML='<div class="card"><div class="empty">Projet supprimé.</div></div>'; toast('Projet supprimé','ok'); loadProjects();
+  }
+
+  function showNewForm(){
+    selId=null; renderList();
+    document.getElementById('detail').innerHTML='<div class="card"><h3>Nouveau projet de review</h3>'+
+      '<div class="field"><label>Nom du projet *</label><input id="npName" class="in" placeholder="Ex : Pub Nike — montage 30s"></div>'+
+      '<div class="field"><label>Nom du client</label><input id="npClient" class="in" placeholder="Ex : Studio Machin"></div>'+
+      '<div class="field"><label>Mot de passe (optionnel)</label><input id="npPwd" class="in" placeholder="Laisser vide pour un accès libre par lien"></div>'+
+      '<div class="toggle-row"><div><div class="t">Autoriser le téléchargement</div></div><span class="switch"><input type="checkbox" id="npDl"><span class="tr"></span></span></div>'+
+      '<button class="btn btn-primary" style="margin-top:14px" onclick="createProject()">Créer le projet</button></div>';
+  }
+  async function createProject(){
+    var name=document.getElementById('npName').value.trim();
+    if(!name){ toast('Nom requis','err'); return; }
+    var client=document.getElementById('npClient').value.trim();
+    var pwd=document.getElementById('npPwd').value;
+    var dl=document.getElementById('npDl').checked;
+    try{ var v=await rpc('review_admin_create_project',{p_name:name,p_client:client,p_password:pwd,p_allow_download:dl,p_expires_at:null}); toast('Projet créé ✓','ok'); await loadProjects(); selectProject(v.id); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
+
+  function copyLink(link,btn){ var o=btn.textContent; function d(){btn.textContent='Copié ✓';setTimeout(function(){btn.textContent=o;},1400);} if(navigator.clipboard){navigator.clipboard.writeText(link).then(d).catch(d);}else d(); }
+
+  SB.auth.onAuthStateChange(function(_e,s){ onSession(s); });
+  SB.auth.getSession().then(function(r){ onSession(r.data.session); });
+</script>
+</body>
+</html>

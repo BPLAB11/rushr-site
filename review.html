@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Review — BACKPACK LAB</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;
+    --muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--warn:#FFB454;--danger:#FF6B6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1340px;margin:0 auto;padding:0 22px;width:100%}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;width:100%}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13.5px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+
+  /* gates */
+  .gate{max-width:420px;margin:70px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;text-align:center}
+  .gate .mark{width:44px;height:44px;border-radius:11px;background:rgba(53,220,142,.12);border:1px solid rgba(53,220,142,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+  .gate .mark span{width:14px;height:14px;border-radius:4px;background:var(--accent);display:block}
+  .gate h1{font-size:20px;font-weight:800;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .gate input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:#fff;padding:12px 14px;font-size:15px;font-family:inherit;margin-bottom:12px}
+  .gate input:focus{outline:none;border-color:var(--accent)}
+  .gate .btn-primary{width:100%;padding:12px}
+  .gate .err{color:var(--danger);font-size:13px;margin-bottom:12px;min-height:16px}
+
+  /* app */
+  #app{display:none;padding:18px 0 40px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .proj-title{font-size:20px;font-weight:800;letter-spacing:-.3px}
+  .proj-sub{color:var(--muted);font-size:13px;margin-top:1px}
+  .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:6px;padding:5px 10px}
+  .b-pending{color:#150A03;background:var(--warn)}
+  .b-review{color:var(--on-accent);background:var(--accent)}
+  .b-approved{color:#fff;background:#2F7D52;border:1px solid var(--accent)}
+
+  .vtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .vtab{background:var(--surface);border:1px solid var(--line2);color:var(--muted);border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .vtab.on{background:rgba(53,220,142,.12);border-color:var(--accent);color:var(--accent2)}
+
+  .grid{display:grid;grid-template-columns:1fr 372px;gap:18px;align-items:start}
+  .stage{background:#000;border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
+  .stage video,.stage audio,.stage img{display:block;width:100%;max-height:70vh;margin:0 auto;background:#000}
+  .stage audio{max-height:none;margin-top:40px;margin-bottom:40px}
+  .stage .empty{padding:60px 20px;text-align:center;color:var(--muted)}
+  .playbar{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border-top:1px solid var(--line);flex-wrap:wrap}
+  .playbar .tc{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--muted)}
+  .speed{display:flex;gap:4px}
+  .speed button{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:6px;padding:3px 8px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .speed button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+  /* comments */
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;max-height:74vh}
+  .panel h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700;padding:16px 18px 10px}
+  .clist{flex:1;overflow-y:auto;padding:0 12px}
+  .cmt{border:1px solid var(--line);border-radius:11px;padding:11px 12px;margin-bottom:9px;background:var(--surface2)}
+  .cmt.resolved{opacity:.55}
+  .cmt.reply{margin-left:18px;background:#121215}
+  .cmt-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .cmt-auth{font-size:12.5px;font-weight:700}
+  .cmt-auth.admin{color:var(--accent2)}
+  .tcbtn{font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;color:var(--on-accent);background:var(--accent);border:0;border-radius:5px;padding:2px 7px;cursor:pointer}
+  .cmt-body{font-size:13.5px;color:#E7E7E9;white-space:pre-wrap;word-break:break-word}
+  .cmt-meta{display:flex;align-items:center;gap:12px;margin-top:7px}
+  .cmt-meta button{background:transparent;border:0;color:var(--muted2);font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .cmt-meta button:hover{color:var(--accent2)}
+  .cmt-meta .done{color:var(--accent2)}
+  .empty-c{color:var(--muted2);font-size:13px;text-align:center;padding:26px 10px}
+
+  .composer{border-top:1px solid var(--line);padding:12px}
+  .composer input,.composer textarea{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:9px;color:#fff;padding:9px 12px;font-size:13.5px;font-family:inherit;margin-bottom:8px}
+  .composer textarea{resize:vertical;min-height:52px}
+  .composer input:focus,.composer textarea:focus{outline:none;border-color:var(--accent)}
+  .composer .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .composer label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);cursor:pointer}
+  .reply-to{font-size:11.5px;color:var(--accent2);padding:0 2px 8px}
+  .reply-to button{background:transparent;border:0;color:var(--muted2);cursor:pointer;font-family:inherit;margin-left:6px}
+
+  footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted2);font-size:12px;text-align:center}
+  @media(max-width:940px){.grid{grid-template-columns:1fr}.panel{max-height:none}}
+</style>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB · Review</a>
+  <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <!-- LOADING -->
+  <div id="g-load" class="gate"><p data-fr="Chargement…" data-en="Loading…">Chargement…</p></div>
+
+  <!-- ERROR -->
+  <div id="g-error" class="gate" style="display:none">
+    <div class="mark"><span></span></div>
+    <h1 id="errTitle" data-fr="Lien invalide" data-en="Invalid link">Lien invalide</h1>
+    <p id="errMsg" data-fr="Ce lien de review n'existe pas ou n'est plus actif." data-en="This review link doesn't exist or is no longer active.">Ce lien de review n'existe pas ou n'est plus actif.</p>
+  </div>
+
+  <!-- PASSWORD -->
+  <div id="g-pass" class="gate" style="display:none">
+    <div class="mark"><span></span></div>
+    <h1 data-fr="Projet protégé" data-en="Protected project">Projet protégé</h1>
+    <p data-fr="Entrez le mot de passe fourni par Backpack Lab." data-en="Enter the password provided by Backpack Lab.">Entrez le mot de passe fourni par Backpack Lab.</p>
+    <div class="err" id="passErr"></div>
+    <form onsubmit="return submitPassword(event)">
+      <input id="passInput" type="password" required data-fr-ph="Mot de passe" data-en-ph="Password" placeholder="Mot de passe" />
+      <button type="submit" class="btn btn-primary" data-fr="Accéder" data-en="Open">Accéder</button>
+    </form>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+    <div class="topbar">
+      <div>
+        <div class="proj-title" id="pTitle">—</div>
+        <div class="proj-sub" id="pSub"></div>
+      </div>
+      <div class="top-actions">
+        <span class="badge" id="pStatus"></span>
+        <a id="dlBtn" class="btn btn-ghost" style="display:none" download data-fr="Télécharger" data-en="Download">Télécharger</a>
+        <button id="approveBtn" class="btn btn-primary" onclick="approve()" data-fr="Approuver" data-en="Approve">Approuver</button>
+      </div>
+    </div>
+
+    <div class="vtabs" id="vtabs"></div>
+
+    <div class="grid">
+      <div>
+        <div class="stage" id="stage"></div>
+        <div class="playbar" id="playbar" style="display:none">
+          <span class="tc" id="tc">0:00 / 0:00</span>
+          <div class="speed" id="speed">
+            <button onclick="setSpeed(0.5)">0.5x</button>
+            <button class="on" onclick="setSpeed(1)">1x</button>
+            <button onclick="setSpeed(2)">2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 data-fr="Commentaires" data-en="Comments">Commentaires</h2>
+        <div class="clist" id="clist"></div>
+        <div class="composer">
+          <div class="reply-to" id="replyTo" style="display:none"></div>
+          <input id="cName" data-fr-ph="Votre nom" data-en-ph="Your name" placeholder="Votre nom" />
+          <textarea id="cBody" data-fr-ph="Votre commentaire…" data-en-ph="Your comment…" placeholder="Votre commentaire…"></textarea>
+          <div class="row">
+            <label id="tcWrap"><input type="checkbox" id="cTc" checked /> <span id="tcLabel" data-fr="À ce timecode" data-en="At this timecode">À ce timecode</span></label>
+            <button class="btn btn-primary" onclick="sendComment()" data-fr="Envoyer" data-en="Send">Envoyer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></main>
+
+<footer><span data-fr="Espace de review privé · " data-en="Private review space · ">Espace de review privé · </span>© 2026 BACKPACK LAB</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var PUBLIC="https://vztqykihtnkscwcodkyf.supabase.co/storage/v1/object/public/reviews/";
+
+  var TOKEN=new URLSearchParams(location.search).get('p');
+  var PASSWORD=null, DATA=null, curV=null, replyId=null, mediaEl=null;
+
+  function FR(){return (document.documentElement.lang||'fr')==='fr';}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function show(id){['g-load','g-error','g-pass','app'].forEach(function(x){document.getElementById(x).style.display=(x===id)?(x==='app'?'block':'block'):'none';});}
+  function tc(ms){ if(ms==null) return ''; var s=Math.floor(ms/1000); var m=Math.floor(s/60); s=s%60; return m+':'+(s<10?'0':'')+s; }
+
+  function setLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.innerHTML=v;});
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){var v=el.getAttribute('data-'+lang+'-ph');if(v!==null)el.setAttribute('placeholder',v);});
+    document.getElementById('lfr').classList.toggle('on',lang==='fr');
+    document.getElementById('len').classList.toggle('on',lang==='en');
+    try{localStorage.setItem('bpl_lang',lang);}catch(e){}
+    if(DATA) render();
+  }
+
+  async function load(){
+    if(!TOKEN){ showError(FR()?'Lien invalide':'Invalid link', FR()?"Aucun projet spécifié dans le lien.":'No project specified in the link.'); return; }
+    show('g-load');
+    var r=await SB.rpc('review_get',{p_token:TOKEN, p_password:PASSWORD});
+    if(r.error){
+      var m=r.error.message||'';
+      if(/PASSWORD_REQUIRED/.test(m)){ show('g-pass'); return; }
+      if(/EXPIRED/.test(m)){ showError(FR()?'Lien expiré':'Link expired', FR()?"Ce lien de review a expiré. Contactez Backpack Lab.":'This review link has expired. Contact Backpack Lab.'); return; }
+      if(/DISABLED/.test(m)){ showError(FR()?'Lien désactivé':'Link disabled', FR()?"Ce lien a été désactivé.":'This link has been disabled.'); return; }
+      if(/NOT_FOUND/.test(m)){ showError(FR()?'Lien invalide':'Invalid link', FR()?"Ce lien n'existe pas ou n'est plus actif.":"This link doesn't exist or is no longer active."); return; }
+      showError('Erreur', m); return;
+    }
+    DATA=r.data;
+    if(!curV && DATA.versions.length) curV=DATA.versions[DATA.versions.length-1].id;
+    show('app'); render();
+  }
+  function showError(t,m){ document.getElementById('errTitle').textContent=t; document.getElementById('errMsg').textContent=m; show('g-error'); }
+
+  async function submitPassword(e){
+    e.preventDefault();
+    PASSWORD=document.getElementById('passInput').value;
+    var r=await SB.rpc('review_get',{p_token:TOKEN, p_password:PASSWORD});
+    if(r.error && /PASSWORD_REQUIRED/.test(r.error.message||'')){ document.getElementById('passErr').textContent=FR()?'Mot de passe incorrect.':'Wrong password.'; return false; }
+    load(); return false;
+  }
+
+  function currentVersion(){ return (DATA.versions||[]).find(function(v){return v.id===curV;}); }
+
+  function render(){
+    var p=DATA.project;
+    document.getElementById('pTitle').textContent=p.name;
+    document.getElementById('pSub').textContent=(p.client_name?((FR()?'Client : ':'Client: ')+p.client_name):'');
+    var st=document.getElementById('pStatus');
+    var map={PENDING:['b-pending',FR()?'En attente':'Pending'],IN_REVIEW:['b-review',FR()?'En révision':'In review'],APPROVED:['b-approved',FR()?'Approuvé':'Approved']};
+    var m=map[p.status]||map.IN_REVIEW; st.className='badge '+m[0]; st.textContent=m[1];
+    document.getElementById('approveBtn').style.display=(p.status==='APPROVED')?'none':'inline-flex';
+
+    // version tabs
+    var vt=document.getElementById('vtabs');
+    vt.innerHTML=(DATA.versions.length>1)?DATA.versions.map(function(v){
+      return '<button class="vtab '+(v.id===curV?'on':'')+'" onclick="selectVersion(\''+v.id+'\')">v'+v.version_number+(v.label?(' · '+esc(v.label)):'')+'</button>';
+    }).join(''):'';
+
+    renderStage();
+    renderComments();
+  }
+
+  function selectVersion(id){ curV=id; replyId=null; render(); }
+
+  function renderStage(){
+    var v=currentVersion(); var stage=document.getElementById('stage'); var pb=document.getElementById('playbar');
+    var dl=document.getElementById('dlBtn');
+    if(!v){ stage.innerHTML='<div class="empty">'+(FR()?'Aucun média pour ce projet.':'No media for this project yet.')+'</div>'; pb.style.display='none'; dl.style.display='none'; return; }
+    var url=PUBLIC+v.storage_path;
+    if(DATA.project.allow_download){ dl.style.display='inline-flex'; dl.href=url; dl.setAttribute('download', v.original_filename||''); } else dl.style.display='none';
+    if(v.media_type==='video'){
+      stage.innerHTML='<video id="media" src="'+esc(url)+'" controls playsinline></video>';
+    } else if(v.media_type==='audio'){
+      stage.innerHTML='<audio id="media" src="'+esc(url)+'" controls></audio>';
+    } else {
+      stage.innerHTML='<img id="media" src="'+esc(url)+'" alt="" />';
+    }
+    mediaEl=document.getElementById('media');
+    var timed=(v.media_type==='video'||v.media_type==='audio');
+    pb.style.display=timed?'flex':'none';
+    document.getElementById('tcWrap').style.display=timed?'flex':'none';
+    if(timed){
+      mediaEl.addEventListener('timeupdate',function(){ document.getElementById('tc').textContent=tc(mediaEl.currentTime*1000)+' / '+tc((mediaEl.duration||0)*1000); });
+      setSpeed(1);
+    }
+  }
+  function setSpeed(x){ if(mediaEl && mediaEl.playbackRate!==undefined) mediaEl.playbackRate=x; document.querySelectorAll('#speed button').forEach(function(b){ b.classList.toggle('on', b.textContent===x+'x'); }); }
+  function seekTo(ms){ if(mediaEl && mediaEl.currentTime!==undefined){ mediaEl.currentTime=ms/1000; if(mediaEl.play) mediaEl.play(); } }
+
+  function renderComments(){
+    var v=currentVersion(); var list=document.getElementById('clist');
+    if(!v){ list.innerHTML=''; return; }
+    var cs=v.comments||[];
+    if(!cs.length){ list.innerHTML='<div class="empty-c">'+(FR()?'Aucun commentaire. Soyez le premier à donner votre retour.':'No comments yet. Be the first to give feedback.')+'</div>'; return; }
+    var roots=cs.filter(function(c){return !c.parent_id;});
+    var byParent={}; cs.forEach(function(c){ if(c.parent_id){ (byParent[c.parent_id]=byParent[c.parent_id]||[]).push(c);} });
+    function row(c, isReply){
+      var seek=(c.timecode_ms!=null)?'<button class="tcbtn" onclick="seekTo('+c.timecode_ms+')">'+tc(c.timecode_ms)+'</button>':'';
+      var auth=esc(c.author_name||(FR()?'Anonyme':'Anonymous'));
+      return '<div class="cmt'+(c.resolved?' resolved':'')+(isReply?' reply':'')+'">'+
+        '<div class="cmt-top">'+seek+'<span class="cmt-auth'+(c.author_is_admin?' admin':'')+'">'+auth+(c.author_is_admin?' · Backpack':'')+'</span></div>'+
+        '<div class="cmt-body">'+esc(c.body)+'</div>'+
+        '<div class="cmt-meta">'+
+          (isReply?'':'<button onclick="setReply(\''+c.id+'\',\''+auth.replace(/\'/g,"")+'\')">'+(FR()?'Répondre':'Reply')+'</button>')+
+          '<button class="'+(c.resolved?'done':'')+'" onclick="toggleResolved(\''+c.id+'\','+(c.resolved?'false':'true')+')">'+(c.resolved?(FR()?'✓ Résolu':'✓ Resolved'):(FR()?'Marquer résolu':'Mark resolved'))+'</button>'+
+        '</div></div>';
+    }
+    list.innerHTML=roots.map(function(c){
+      return row(c,false)+(byParent[c.id]||[]).map(function(r){return row(r,true);}).join('');
+    }).join('');
+  }
+
+  function setReply(id, name){
+    replyId=id;
+    var rt=document.getElementById('replyTo'); rt.style.display='block';
+    rt.innerHTML=(FR()?'↳ Réponse à ':'↳ Replying to ')+esc(name)+'<button onclick="cancelReply()">✕</button>';
+    document.getElementById('cBody').focus();
+  }
+  function cancelReply(){ replyId=null; document.getElementById('replyTo').style.display='none'; }
+
+  async function sendComment(){
+    var name=document.getElementById('cName').value.trim();
+    var body=document.getElementById('cBody').value.trim();
+    if(!body){ return; }
+    try{ localStorage.setItem('bpl_review_name', name); }catch(e){}
+    var v=currentVersion(); var timed=(v.media_type==='video'||v.media_type==='audio');
+    var useTc=timed && document.getElementById('cTc').checked && mediaEl;
+    var ms=useTc?Math.round(mediaEl.currentTime*1000):null;
+    var r=await SB.rpc('review_add_comment',{p_token:TOKEN,p_version_id:curV,p_author:name,p_body:body,p_timecode_ms:ms,p_parent_id:replyId,p_password:PASSWORD});
+    if(r.error){ alert(r.error.message); return; }
+    document.getElementById('cBody').value=''; cancelReply();
+    load();
+  }
+  async function toggleResolved(id, val){
+    var r=await SB.rpc('review_set_resolved',{p_token:TOKEN,p_comment_id:id,p_resolved:val,p_password:PASSWORD});
+    if(r.error){ alert(r.error.message); return; } load();
+  }
+  async function approve(){
+    if(!confirm(FR()?'Approuver ce montage ? Cela informera Backpack Lab.':'Approve this cut? This will notify Backpack Lab.')) return;
+    var r=await SB.rpc('review_approve',{p_token:TOKEN,p_password:PASSWORD});
+    if(r.error){ alert(r.error.message); return; } load();
+  }
+
+  (function init(){
+    var lang='fr'; try{ lang=localStorage.getItem('bpl_lang')|| ((navigator.language||'fr').toLowerCase().indexOf('fr')===0?'fr':'en'); }catch(e){}
+    setLang(lang);
+    try{ var n=localStorage.getItem('bpl_review_name'); if(n) document.getElementById('cName').value=n; }catch(e){}
+    load();
+  })();
+</script>
+</body>
+</html>
