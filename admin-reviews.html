@@ -216,7 +216,12 @@
       '<div class="drop" id="drop" style="margin-top:12px">📤 Glisse un fichier ici ou clique pour choisir'+
       '<small>Vidéo MP4/MOV · Image JPG/PNG · Audio MP3/WAV — clips courts (limite de taille du plan gratuit)</small></div>'+
       '<input type="file" id="fileInput" style="display:none" accept="video/*,image/*,audio/*" />'+
-      '<div class="prog" id="prog"><i></i></div></div>';
+      '<div class="prog" id="prog"><i></i></div>'+
+      '<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">'+
+        '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Ou ajouter par URL (Cloudflare R2 — gros fichiers, pas de limite Supabase) :</div>'+
+        '<div class="frow"><div class="fg" style="flex:1"><input id="urlInput" class="in" placeholder="https://pub-xxxx.r2.dev/ma-video.mp4" style="width:100%"></div>'+
+        '<button class="btn btn-ghost" onclick="addByUrl()">Ajouter</button></div>'+
+      '</div></div>';
 
     // settings
     h+='<div class="card"><h3>Réglages</h3>'+
@@ -279,6 +284,17 @@
     prog.querySelector('i').style.width='100%';
     setTimeout(function(){ prog.style.display='none'; prog.querySelector('i').style.width='0'; },400);
     toast('Média ajouté ✓','ok'); loadProjects();
+  }
+
+  async function addByUrl(){
+    var url=document.getElementById('urlInput').value.trim();
+    if(!url||!/^https?:\/\//.test(url)){ toast('URL invalide','err'); return; }
+    var clean=url.split('?')[0];
+    var mt=mediaType(clean);
+    if(!mt){ toast('Format non reconnu dans l\'URL (mp4, mov, jpg, mp3…)','err'); return; }
+    var name=decodeURIComponent(clean.split('/').pop());
+    try{ await rpc('review_admin_add_version',{p_project_id:selId,p_media_type:mt,p_storage_path:url,p_original_filename:name,p_label:null}); document.getElementById('urlInput').value=''; toast('Média ajouté ✓','ok'); loadProjects(); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
   }
 
   async function saveSettings(){

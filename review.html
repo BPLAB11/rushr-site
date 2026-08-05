@@ -160,7 +160,7 @@
       </div>
 
       <div class="panel">
-        <h2 data-fr="Commentaires" data-en="Comments">Commentaires</h2>
+        <h2 style="display:flex;align-items:center;gap:8px"><span data-fr="Commentaires" data-en="Comments">Commentaires</span><span id="liveDot" style="display:none;font-size:10px;color:var(--accent2);font-weight:700">● <span data-fr="en direct" data-en="live">en direct</span></span></h2>
         <div class="clist" id="clist"></div>
         <div class="composer">
           <div class="reply-to" id="replyTo" style="display:none"></div>
@@ -218,7 +218,7 @@
     }
     DATA=r.data;
     if(!curV && DATA.versions.length) curV=DATA.versions[DATA.versions.length-1].id;
-    show('app'); render();
+    show('app'); render(); subscribeRealtime();
   }
   function showError(t,m){ document.getElementById('errTitle').textContent=t; document.getElementById('errMsg').textContent=m; show('g-error'); }
 
@@ -232,7 +232,7 @@
 
   function currentVersion(){ return (DATA.versions||[]).find(function(v){return v.id===curV;}); }
 
-  function render(){
+  function updateStatus(){
     var p=DATA.project;
     document.getElementById('pTitle').textContent=p.name;
     document.getElementById('pSub').textContent=(p.client_name?((FR()?'Client : ':'Client: ')+p.client_name):'');
@@ -240,6 +240,9 @@
     var map={PENDING:['b-pending',FR()?'En attente':'Pending'],IN_REVIEW:['b-review',FR()?'En révision':'In review'],APPROVED:['b-approved',FR()?'Approuvé':'Approved']};
     var m=map[p.status]||map.IN_REVIEW; st.className='badge '+m[0]; st.textContent=m[1];
     document.getElementById('approveBtn').style.display=(p.status==='APPROVED')?'none':'inline-flex';
+  }
+  function render(){
+    updateStatus();
 
     // version tabs
     var vt=document.getElementById('vtabs');
@@ -251,13 +254,31 @@
     renderComments();
   }
 
+  async function refreshComments(scroll){
+    var r=await SB.rpc('review_get',{p_token:TOKEN,p_password:PASSWORD});
+    if(r.error) return;
+    DATA=r.data;
+    updateStatus();
+    renderComments();
+    if(scroll){ var l=document.getElementById('clist'); if(l) l.scrollTop=l.scrollHeight; }
+  }
+  var chan=null, subscribed=false;
+  function subscribeRealtime(){
+    if(subscribed||!TOKEN) return; subscribed=true;
+    chan=SB.channel('review-'+TOKEN, {config:{broadcast:{self:false}}});
+    chan.on('broadcast',{event:'update'},function(){ refreshComments(true); }).subscribe(function(status){
+      if(status==='SUBSCRIBED'){ var d=document.getElementById('liveDot'); if(d) d.style.display='inline'; }
+    });
+  }
+  function bump(){ if(chan){ chan.send({type:'broadcast', event:'update', payload:{t:Date.now()}}); } }
+
   function selectVersion(id){ curV=id; replyId=null; render(); }
 
   function renderStage(){
     var v=currentVersion(); var stage=document.getElementById('stage'); var pb=document.getElementById('playbar');
     var dl=document.getElementById('dlBtn');
     if(!v){ stage.innerHTML='<div class="empty">'+(FR()?'Aucun média pour ce projet.':'No media for this project yet.')+'</div>'; pb.style.display='none'; dl.style.display='none'; return; }
-    var url=PUBLIC+v.storage_path;
+    var url=/^https?:\/\//.test(v.storage_path)?v.storage_path:(PUBLIC+v.storage_path);
     if(DATA.project.allow_download){ dl.style.display='inline-flex'; dl.href=url; dl.setAttribute('download', v.original_filename||''); } else dl.style.display='none';
     if(v.media_type==='video'){
       stage.innerHTML='<video id="media" src="'+esc(url)+'" controls playsinline></video>';
@@ -320,16 +341,16 @@
     var r=await SB.rpc('review_add_comment',{p_token:TOKEN,p_version_id:curV,p_author:name,p_body:body,p_timecode_ms:ms,p_parent_id:replyId,p_password:PASSWORD});
     if(r.error){ alert(r.error.message); return; }
     document.getElementById('cBody').value=''; cancelReply();
-    load();
+    await refreshComments(true); bump();
   }
   async function toggleResolved(id, val){
     var r=await SB.rpc('review_set_resolved',{p_token:TOKEN,p_comment_id:id,p_resolved:val,p_password:PASSWORD});
-    if(r.error){ alert(r.error.message); return; } load();
+    if(r.error){ alert(r.error.message); return; } await refreshComments(); bump();
   }
   async function approve(){
     if(!confirm(FR()?'Approuver ce montage ? Cela informera Backpack Lab.':'Approve this cut? This will notify Backpack Lab.')) return;
     var r=await SB.rpc('review_approve',{p_token:TOKEN,p_password:PASSWORD});
-    if(r.error){ alert(r.error.message); return; } load();
+    if(r.error){ alert(r.error.message); return; } await refreshComments(); bump();
   }
 
   (function init(){
