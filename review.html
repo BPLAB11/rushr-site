@@ -156,7 +156,7 @@
       <div class="top-actions">
         <span class="badge" id="pStatus"></span>
         <a id="dlBtn" class="btn btn-ghost" style="display:none" download data-fr="Télécharger" data-en="Download">Télécharger</a>
-        <button class="btn btn-ghost" onclick="exportPDF()" data-fr="⤓ PDF" data-en="⤓ PDF">⤓ PDF</button>
+        <button class="btn btn-ghost" onclick="exportPDF(this)" data-fr="⤓ PDF" data-en="⤓ PDF">⤓ PDF</button>
         <button id="approveBtn" class="btn btn-primary" onclick="approve()" data-fr="Approuver" data-en="Approve">Approuver</button>
       </div>
     </div>
@@ -365,12 +365,35 @@
     var list=(viewingAnno?displayShapes:annoShapes).slice(); if(temp) list.push(temp);
     list.forEach(drawShape);
   }
-  function drawShape(s){
-    var W=annoCanvas.width,H=annoCanvas.height,c=annoCtx;
-    c.strokeStyle=s.color||'#FF5252'; c.lineWidth=3; c.lineCap='round'; c.lineJoin='round';
+  function drawShapeOn(c,s,W,H){
+    c.strokeStyle=s.color||'#FF5252'; c.lineWidth=Math.max(2,Math.round(W/240)); c.lineCap='round'; c.lineJoin='round';
     if(s.type==='pen'){ c.beginPath(); (s.pts||[]).forEach(function(p,i){ var x=p[0]*W,y=p[1]*H; if(i===0)c.moveTo(x,y); else c.lineTo(x,y); }); c.stroke(); }
     else if(s.type==='rect'){ c.strokeRect(s.x1*W,s.y1*H,(s.x2-s.x1)*W,(s.y2-s.y1)*H); }
-    else if(s.type==='arrow'){ var x1=s.x1*W,y1=s.y1*H,x2=s.x2*W,y2=s.y2*H; c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke(); var a=Math.atan2(y2-y1,x2-x1),L=15; c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-L*Math.cos(a-0.4),y2-L*Math.sin(a-0.4));c.moveTo(x2,y2);c.lineTo(x2-L*Math.cos(a+0.4),y2-L*Math.sin(a+0.4));c.stroke(); }
+    else if(s.type==='arrow'){ var x1=s.x1*W,y1=s.y1*H,x2=s.x2*W,y2=s.y2*H; c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke(); var a=Math.atan2(y2-y1,x2-x1),L=Math.max(11,W/40); c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-L*Math.cos(a-0.4),y2-L*Math.sin(a-0.4));c.moveTo(x2,y2);c.lineTo(x2-L*Math.cos(a+0.4),y2-L*Math.sin(a+0.4));c.stroke(); }
+  }
+  function drawShape(s){ if(annoCtx) drawShapeOn(annoCtx, s, annoCanvas.width, annoCanvas.height); }
+  function compose(el, iw, ih, shapes){
+    try{
+      var maxW=520, sc=Math.min(1, maxW/iw), W=Math.round(iw*sc), H=Math.round(ih*sc);
+      var cv=document.createElement('canvas'); cv.width=W; cv.height=H; var c=cv.getContext('2d');
+      c.drawImage(el,0,0,W,H); (shapes||[]).forEach(function(s){ drawShapeOn(c,s,W,H); });
+      return {data:cv.toDataURL('image/jpeg',0.82), w:W, h:H};
+    }catch(e){ return null; }
+  }
+  function captureFrame(v, ms, shapes){
+    return new Promise(function(resolve){
+      if(v.media_type==='audio'){ resolve(null); return; }
+      if(v.media_type==='image'){
+        var im=new Image(); im.crossOrigin='anonymous';
+        im.onload=function(){ resolve(compose(im, im.naturalWidth, im.naturalHeight, shapes)); };
+        im.onerror=function(){ resolve(null); }; im.src=mediaUrl(v); return;
+      }
+      var el=document.createElement('video'); el.crossOrigin='anonymous'; el.muted=true; el.preload='auto'; el.src=mediaUrl(v);
+      var done=false, to=setTimeout(function(){ if(!done){done=true;resolve(null);} }, 7000);
+      el.addEventListener('error',function(){ if(!done){done=true;clearTimeout(to);resolve(null);} });
+      el.addEventListener('loadeddata',function(){ try{ el.currentTime=(ms||0)/1000; }catch(e){ if(!done){done=true;clearTimeout(to);resolve(null);} } });
+      el.addEventListener('seeked',function(){ if(done)return; done=true; clearTimeout(to); resolve(compose(el, el.videoWidth, el.videoHeight, shapes)); });
+    });
   }
   function toggleAnno(){
     annoMode=!annoMode; viewingAnno=false;
@@ -429,8 +452,18 @@
   }
 
   /* ===== PDF export of comments ===== */
-  function exportPDF(){
+  async function exportPDF(btn){
     if(!window.jspdf){ alert(FR()?'Librairie PDF non chargée, réessaie.':'PDF library not loaded, retry.'); return; }
+    var old; if(btn){ old=btn.textContent; btn.disabled=true; btn.textContent=FR()?'Génération…':'Generating…'; }
+    var annoMap={};
+    for(var vi=0; vi<(DATA.versions||[]).length; vi++){
+      var vv=DATA.versions[vi]; var anns=(vv.annotations||[]);
+      for(var ai=0; ai<anns.length; ai++){
+        var a=anns[ai]; if(!a.comment_id) continue;
+        var img=await captureFrame(vv, a.timecode_ms, (a.data&&a.data.shapes)||[]);
+        if(img) annoMap[a.comment_id]=img;
+      }
+    }
     var doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});
     var p=DATA.project, M=48, y=58, W=595-2*M;
     function nl(h){ y+=h; if(y>800){ doc.addPage(); y=58; } }
@@ -448,11 +481,14 @@
         doc.text(head, M, y); nl(14);
         doc.setFont('helvetica','normal'); doc.setFontSize(10);
         doc.splitTextToSize(String(c.body||''), W).forEach(function(ln){ doc.text(ln, M, y); nl(13); });
+        var im=annoMap[c.id];
+        if(im){ var iw=Math.min(im.w,300), ih=im.h*(iw/im.w); if(y+ih>800){ doc.addPage(); y=58; } try{ doc.addImage(im.data,'JPEG', M, y, iw, ih); }catch(e){} y+=ih+6; if(y>800){ doc.addPage(); y=58; } }
         nl(6);
       });
       nl(10);
     });
     doc.save('review-'+String(p.name||'projet').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.pdf');
+    if(btn){ btn.disabled=false; btn.textContent=old; }
   }
 
   function renderComments(){
