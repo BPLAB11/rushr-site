@@ -156,6 +156,7 @@
       <div class="top-actions">
         <span class="badge" id="pStatus"></span>
         <a id="dlBtn" class="btn btn-ghost" style="display:none" download data-fr="Télécharger" data-en="Download">Télécharger</a>
+        <button class="btn btn-ghost" onclick="exportPDF()" data-fr="⤓ PDF" data-en="⤓ PDF">⤓ PDF</button>
         <button id="approveBtn" class="btn btn-primary" onclick="approve()" data-fr="Approuver" data-en="Approve">Approuver</button>
       </div>
     </div>
@@ -195,6 +196,7 @@
 
 <footer><span data-fr="Espace de review privé · " data-en="Private review space · ">Espace de review privé · </span>© 2026 BACKPACK LAB</footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
@@ -206,6 +208,7 @@
   var PASSWORD=null, DATA=null, curV=null, replyId=null, mediaEl=null;
   var ANNO_COLORS=['#FF5252','#35DC8E','#FFD54A','#FFFFFF'];
   var annoMode=false, annoTool='pen', annoColor='#FF5252', annoShapes=[], annoCur=null, annoDrawing=false, viewingAnno=false, displayShapes=[], annoCanvas=null, annoCtx=null;
+  var compareMode=false, cmpWith=null, cmpSync=true;
 
   function FR(){return (document.documentElement.lang||'fr')==='fr';}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -264,9 +267,9 @@
 
     // version tabs
     var vt=document.getElementById('vtabs');
-    vt.innerHTML=(DATA.versions.length>1)?DATA.versions.map(function(v){
+    vt.innerHTML=(DATA.versions.length>1)?(DATA.versions.map(function(v){
       return '<button class="vtab '+(v.id===curV?'on':'')+'" onclick="selectVersion(\''+v.id+'\')">v'+v.version_number+(v.label?(' · '+esc(v.label)):'')+'</button>';
-    }).join(''):'';
+    }).join('')+'<button class="vtab" onclick="toggleCompare()" style="margin-left:6px">⇆ '+(FR()?'Comparer':'Compare')+'</button>'):'';
 
     renderStage();
     renderComments();
@@ -386,6 +389,70 @@
     if(a.timecode_ms!=null && mediaEl && mediaEl.currentTime!==undefined){ mediaEl.currentTime=a.timecode_ms/1000; if(mediaEl.pause) mediaEl.pause(); }
     viewingAnno=true; displayShapes=(a.data&&a.data.shapes)||[];
     sizeAnno(); redrawAnno();
+  }
+
+  /* ===== version comparison ===== */
+  function mediaUrl(v){ return /^https?:\/\//.test(v.storage_path)?v.storage_path:(PUBLIC+v.storage_path); }
+  function toggleCompare(){
+    if(DATA.versions.length<2) return;
+    compareMode=!compareMode;
+    if(compareMode){
+      if(!cmpWith || cmpWith===curV){ var o=DATA.versions.filter(function(x){return x.id!==curV;}); cmpWith=o.length?o[o.length-1].id:curV; }
+      renderCompare();
+    } else { render(); }
+  }
+  function cmpSelect(side,id){ if(side==='l') cmpWith=id; else curV=id; renderCompare(); }
+  function renderCompare(){
+    var stage=document.getElementById('stage'); document.getElementById('playbar').style.display='none';
+    var L=DATA.versions.find(function(x){return x.id===cmpWith;})||DATA.versions[0];
+    var R=currentVersion();
+    function pane(side,v){
+      var opts=DATA.versions.map(function(x){return '<option value="'+x.id+'" '+(x.id===v.id?'selected':'')+'>v'+x.version_number+(x.label?(' · '+esc(x.label)):'')+'</option>';}).join('');
+      var m=v.media_type==='video'?'<video id="cmp-'+side+'" src="'+esc(mediaUrl(v))+'" controls playsinline style="width:100%;background:#000;border-radius:8px"></video>'
+        :v.media_type==='image'?'<img src="'+esc(mediaUrl(v))+'" style="width:100%;border-radius:8px">'
+        :'<audio id="cmp-'+side+'" src="'+esc(mediaUrl(v))+'" controls style="width:100%;margin-top:30px"></audio>';
+      return '<div style="flex:1;min-width:0"><select onchange="cmpSelect(\''+side+'\',this.value)" style="width:100%;margin-bottom:8px;background:#0E0E11;border:1px solid var(--line2);color:#fff;border-radius:8px;padding:7px;font-family:inherit">'+opts+'</select>'+m+'</div>';
+    }
+    stage.innerHTML='<div style="display:flex;gap:10px;padding:10px;background:var(--surface)">'+pane('l',L)+pane('r',R)+'</div>'+
+      '<div class="playbar" style="display:flex"><label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer"><input type="checkbox" id="cmpSyncCk" '+(cmpSync?'checked':'')+' onchange="cmpSync=this.checked"> '+(FR()?'Lecture synchronisée':'Synced playback')+'</label><div style="flex:1"></div><button class="btn btn-ghost" onclick="toggleCompare()">'+(FR()?'Quitter la comparaison':'Exit compare')+'</button></div>';
+    setupCmpSync();
+  }
+  function setupCmpSync(){
+    var L=document.getElementById('cmp-l'), R=document.getElementById('cmp-r'); if(!L||!R) return;
+    var guard=false;
+    function mirror(from,to){
+      from.addEventListener('play',function(){ if(cmpSync&&!guard){guard=true;try{to.currentTime=from.currentTime;to.play();}catch(e){}guard=false;} });
+      from.addEventListener('pause',function(){ if(cmpSync&&!guard){guard=true;try{to.pause();}catch(e){}guard=false;} });
+      from.addEventListener('seeked',function(){ if(cmpSync&&!guard){guard=true;try{to.currentTime=from.currentTime;}catch(e){}guard=false;} });
+    }
+    mirror(L,R); mirror(R,L);
+  }
+
+  /* ===== PDF export of comments ===== */
+  function exportPDF(){
+    if(!window.jspdf){ alert(FR()?'Librairie PDF non chargée, réessaie.':'PDF library not loaded, retry.'); return; }
+    var doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});
+    var p=DATA.project, M=48, y=58, W=595-2*M;
+    function nl(h){ y+=h; if(y>800){ doc.addPage(); y=58; } }
+    doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.text('BACKPACK LAB — Review', M, y); nl(22);
+    doc.setFontSize(13); doc.text(String(p.name||''), M, y); nl(16);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(120);
+    doc.text((p.client_name?('Client : '+p.client_name+'   ·   '):'')+'Statut : '+p.status+'   ·   '+new Date().toLocaleDateString(FR()?'fr-FR':'en-US'), M, y); doc.setTextColor(0); nl(24);
+    (DATA.versions||[]).forEach(function(v){
+      nl(0); doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('Version '+v.version_number+(v.label?(' — '+v.label):''), M, y); nl(16);
+      var cs=(v.comments||[]).slice().sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);});
+      if(!cs.length){ doc.setFont('helvetica','italic'); doc.setFontSize(10); doc.setTextColor(120); doc.text(FR()?'Aucun commentaire.':'No comments.', M, y); doc.setTextColor(0); nl(18); }
+      cs.forEach(function(c){
+        doc.setFont('helvetica','bold'); doc.setFontSize(10);
+        var head=(c.timecode_ms!=null?('['+tc(c.timecode_ms)+'] '):'')+(c.author_name||(FR()?'Anonyme':'Anonymous'))+(c.author_is_admin?' (Backpack)':'')+(c.parent_id?'  ↳':'')+(c.resolved?'   ✓':'');
+        doc.text(head, M, y); nl(14);
+        doc.setFont('helvetica','normal'); doc.setFontSize(10);
+        doc.splitTextToSize(String(c.body||''), W).forEach(function(ln){ doc.text(ln, M, y); nl(13); });
+        nl(6);
+      });
+      nl(10);
+    });
+    doc.save('review-'+String(p.name||'projet').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.pdf');
   }
 
   function renderComments(){
