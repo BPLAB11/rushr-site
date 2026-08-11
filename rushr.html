@@ -73,6 +73,17 @@ ml('account', '2426476');
   .cta .btn{padding:13px 24px;font-size:15px}
   .mark{height:34px;width:auto}
 
+  /* DEMO VIDEO SECTION */
+  .demo-section{margin-top:48px}
+  .demo-wrapper{text-align:center}
+  .video-placeholder{position:relative;aspect-ratio:16/9;max-width:800px;margin:0 auto;background:linear-gradient(135deg,#1a1a1e,#121215);border:1px solid var(--line);border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;overflow:hidden}
+  .video-placeholder:hover{transform:scale(1.02);box-shadow:0 20px 40px rgba(255,106,0,.15);border-color:rgba(255,106,0,.35)}
+  .play-btn{width:72px;height:72px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s ease,background .3s ease}
+  .play-btn svg{width:28px;height:28px;color:#150A03;margin-left:4px}
+  .video-placeholder:hover .play-btn{transform:scale(1.1);background:var(--accent2)}
+  .demo-text{position:absolute;bottom:16px;left:16px;font-size:13px;color:var(--muted);background:rgba(0,0,0,.5);border-radius:6px;padding:6px 12px}
+  .demo-caption{margin-top:16px;color:var(--muted);font-size:14px}
+
   /* APP MOCK */
   .mock{margin:54px auto 0;max-width:980px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0E0E11;box-shadow:0 30px 80px rgba(0,0,0,.5);transform-style:preserve-3d;perspective:2000px;transition:transform .5s ease}
   .mock:hover{transform:rotateX(5deg) rotateY(-5deg) scale(1.02)}
@@ -104,15 +115,15 @@ ml('account', '2426476');
   .lead{color:var(--muted);text-align:center;max-width:620px;margin:14px auto 0;font-size:16px}
 
   .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
-  .feat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
+  .feat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
   .feat:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(255,106,0,.12);border-color:rgba(255,106,0,.35)}
   .feat.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
   .feat.tilt-3d:hover{box-shadow:0 30px 60px rgba(255,106,0,.2)}
-  .feat .ic{width:42px;height:42px;border-radius:11px;background:rgba(255,106,0,.12);border:1px solid rgba(255,106,0,.28);display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:transform .3s ease;transform-style:preserve-3d;transform:translateZ(10px)}
-  .feat:hover .ic{transform:translateZ(10px) rotateY(15deg) rotateX(-10deg) scale(1.1)}
-  .feat .ic svg{width:21px;height:21px;stroke:var(--accent2);fill:none;stroke-width:1.8}
-  .feat h3{font-size:17px;font-weight:700;margin-bottom:7px}
-  .feat p{color:var(--muted);font-size:14px}
+  .feat .ic{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,rgba(255,106,0,.18),rgba(255,106,0,.08));border:2px solid rgba(255,106,0,.35);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:transform .3s ease,background .3s ease,border-color .3s ease;transform-style:preserve-3d;transform:translateZ(10px)}
+  .feat:hover .ic{transform:translateZ(10px) rotateY(15deg) rotateX(-10deg) scale(1.1);background:linear-gradient(135deg,rgba(255,106,0,.25),rgba(255,106,0,.12));border-color:rgba(255,106,0,.5)}
+  .feat .ic svg{width:28px;height:28px;stroke:var(--accent2);fill:none;stroke-width:2}
+  .feat h3{font-size:18px;font-weight:700;margin-bottom:8px}
+  .feat p{color:var(--muted);font-size:14px;line-height:1.5}
 
   /* STEPS */
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:46px}
@@ -123,6 +134,51 @@ ml('account', '2426476');
   .step .n{font-size:13px;font-weight:700;color:#150A03;background:var(--accent);width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;transform:translateZ(10px)}
   .step h4{font-size:15px;font-weight:700;margin-bottom:6px}
   .step p{color:var(--muted);font-size:13.5px}
+
+  /* PRICING */
+  .pricing{margin-top:46px}
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .price-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:32px 24px;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
+  .price-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(255,106,0,.12);border-color:rgba(255,106,0,.35)}
+  .price-card.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
+  .price-card.tilt-3d:hover{box-shadow:0 30px 60px rgba(255,106,0,.2)}
+  .price-card.featured{border:2px solid var(--accent);background:linear-gradient(135deg,var(--surface),rgba(255,106,0,.08))}
+  .price-card.featured:hover{border-color:var(--accent2)}
+  .price-header{text-align:center;margin-bottom:24px}
+  .price-name{font-size:18px;font-weight:800;margin-bottom:8px}
+  .price-amount{font-size:42px;font-weight:800;color:var(--accent2);line-height:1}
+  .price-amount span{font-size:16px;color:var(--muted);font-weight:500}
+  .price-desc{font-size:13px;color:var(--muted);margin-top:8px}
+  .price-features{flex:1;display:flex;flex-direction:column;gap:12px}
+  .price-feature{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#D6D6D8}
+  .price-feature .c{color:var(--accent2);font-weight:800;flex-shrink:0}
+  .price-cta{margin-top:24px}
+  .price-cta .btn{width:100%;justify-content:center}
+  .price-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent2);background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.4);border-radius:6px;padding:4px 10px;margin-bottom:12px}
+
+  /* TESTIMONIALS */
+  .testimonials{margin-top:46px}
+  .testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .testimonial{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
+  .testimonial:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(255,106,0,.12);border-color:rgba(255,106,0,.35)}
+  .testimonial.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
+  .testimonial.tilt-3d:hover{box-shadow:0 30px 60px rgba(255,106,0,.2)}
+  .testimonial-quote{font-size:15px;line-height:1.6;color:#D6D6D8;flex:1;margin-bottom:18px;font-style:italic}
+  .testimonial-author{display:flex;align-items:center;gap:12px}
+  .testimonial-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;color:#150A03;font-size:16px}
+  .testimonial-info{display:flex;flex-direction:column}
+  .testimonial-name{font-size:14px;font-weight:700}
+  .testimonial-role{font-size:12px;color:var(--muted)}
+
+  /* FAQ */
+  .faq{margin-top:46px;max-width:800px;margin-left:auto;margin-right:auto}
+  .faq-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .3s ease}
+  .faq-item:hover{border-color:rgba(255,106,0,.35)}
+  .faq-question{padding:20px 24px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:15px}
+  .faq-question::after{content:'+';font-size:20px;color:var(--accent2);font-weight:700;transition:transform .3s ease}
+  .faq-item.open .faq-question::after{transform:rotate(45deg)}
+  .faq-answer{padding:0 24px 20px;color:var(--muted);font-size:14px;line-height:1.6;display:none}
+  .faq-item.open .faq-answer{display:block}
 
   /* MODULE */
   .module{background:linear-gradient(135deg,#16100A,#121215);border:1px solid rgba(255,106,0,.25);border-radius:20px;padding:42px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center}
@@ -170,6 +226,8 @@ ml('account', '2426476');
 
   @media(max-width:860px){
     .features,.steps{grid-template-columns:1fr 1fr}
+    .pricing-grid{grid-template-columns:1fr}
+    .testimonials-grid{grid-template-columns:1fr}
     .module{grid-template-columns:1fr;padding:32px}
     .nav-links{display:none}
     .m-grid{grid-template-columns:repeat(2,1fr)}
@@ -214,9 +272,10 @@ ml('account', '2426476');
       <div class="nav-links">
         <a href="index.html" data-fr="← Backpack Lab" data-en="← Backpack Lab">← Backpack Lab</a>
         <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
-        <a href="#how" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</a>
-        <a href="#module" data-fr="Modules" data-en="Modules">Modules</a>
-        <a href="packs.html" data-fr="Packs" data-en="Packs">Packs</a>
+        <a href="#demo" data-fr="Démo" data-en="Demo">Démo</a>
+        <a href="#pricing" data-fr="Tarifs" data-en="Pricing">Tarifs</a>
+        <a href="#testimonials" data-fr="Témoignages" data-en="Testimonials">Témoignages</a>
+        <a href="#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
       </div>
       <div class="lang">
         <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
@@ -236,8 +295,21 @@ ml('account', '2426476');
       <h1 data-fr="Triez vos rushes.<br>Montez plus vite." data-en="Sort your rushes.<br>Edit faster.">Triez vos rushes.<br>Montez plus vite.</h1>
       <p class="sub" data-fr="BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs. Structurez votre projet, importez, prévisualisez et taguez vos prises — le tout avant d'ouvrir votre logiciel de montage." data-en="BACKPACK RUSHR is the dérushage tool for videographers, editors and creators. Build your project structure, import, preview and tag your takes — all before you open your editing software.">BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs.</p>
       <div class="cta">
-        <a href="#beta" class="btn btn-primary" data-fr="S'inscrire à la beta" data-en="Sign up for the beta">S'inscrire à la beta</a>
-        <a href="#features" class="btn btn-ghost" data-fr="Découvrir les fonctionnalités" data-en="Explore the features">Découvrir les fonctionnalités</a>
+        <a href="#pricing" class="btn btn-primary" data-fr="Précommander -20%" data-en="Pre-order -20%">Précommander -20%</a>
+        <a href="#demo" class="btn btn-ghost" data-fr="Voir la démo" data-en="Watch the demo">Voir la démo</a>
+      </div>
+    </div>
+
+    <!-- VIDEO DEMO SECTION -->
+    <div class="demo-section" id="demo">
+      <div class="demo-wrapper">
+        <div class="video-placeholder">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p class="demo-text" data-fr="Démo Rushr (30s)" data-en="Rushr demo (30s)">Démo Rushr (30s)</p>
+        </div>
+        <p class="demo-caption" data-fr="Importez, taguez et préparez vos rushes en 30 secondes." data-en="Import, tag and prepare your rushes in 30 seconds.">Importez, taguez et préparez vos rushes en 30 secondes.</p>
       </div>
     </div>
 
@@ -345,6 +417,149 @@ ml('account', '2426476');
   </div>
 </section>
 
+<!-- PRICING -->
+<section id="pricing" class="reveal">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Tarifs" data-en="Pricing">Tarifs</div>
+    <div class="h2" data-fr="Choisissez votre licence" data-en="Choose your license">Choisissez votre licence</div>
+    <p class="lead" data-fr="Une licence à vie, sans abonnement. Choisissez la version qui correspond à vos besoins." data-en="A lifetime license, no subscription. Choose the version that fits your needs.">Une licence à vie, sans abonnement.</p>
+
+    <div class="pricing">
+      <div class="pricing-grid">
+        <!-- FREE -->
+        <div class="price-card tilt-3d">
+          <div class="price-header">
+            <div class="price-name">Free</div>
+            <div class="price-amount">0€<span></span></div>
+            <div class="price-desc" data-fr="Pour découvrir Rushr" data-en="To discover Rushr">Pour découvrir Rushr</div>
+          </div>
+          <div class="price-features">
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Structure (presets limités)" data-en="Structure (limited presets)">Structure (presets limités)</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Tagging basique" data-en="Basic tagging">Tagging basique</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="1 projet à la fois" data-en="1 project at a time">1 projet à la fois</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Lecteur intégré" data-en="Built-in preview">Lecteur intégré</span></div>
+          </div>
+          <div class="price-cta">
+            <a href="#beta" class="btn btn-ghost" data-fr="Télécharger Free" data-en="Download Free">Télécharger Free</a>
+          </div>
+        </div>
+
+        <!-- PRO -->
+        <div class="price-card featured tilt-3d">
+          <div class="price-header">
+            <span class="price-badge" data-fr="POPULAIRE" data-en="POPULAR">POPULAIRE</span>
+            <div class="price-name">Pro</div>
+            <div class="price-amount">39€<span data-fr="/vie" data-en="/lifetime">/vie</span></div>
+            <div class="price-desc" data-fr="Pour les monteurs indépendants" data-en="For freelance editors">Pour les monteurs indépendants</div>
+          </div>
+          <div class="price-features">
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Tout Free +" data-en="Everything in Free +">Tout Free +</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Export FCPXML / FCP7 XML" data-en="Export FCPXML / FCP7 XML">Export FCPXML / FCP7 XML</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Export Script Resolve" data-en="Export Resolve Script">Export Script Resolve</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Tags illimités" data-en="Unlimited tags">Tags illimités</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Projets illimités" data-en="Unlimited projects">Projets illimités</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Presets illimités" data-en="Unlimited presets">Presets illimités</span></div>
+          </div>
+          <div class="price-cta">
+            <a href="#beta" class="btn btn-primary" data-fr="Précommander Pro -20%" data-en="Pre-order Pro -20%">Précommander Pro -20%</a>
+          </div>
+        </div>
+
+        <!-- STUDIO -->
+        <div class="price-card tilt-3d">
+          <div class="price-header">
+            <div class="price-name">Studio</div>
+            <div class="price-amount">59€<span data-fr="/vie" data-en="/lifetime">/vie</span></div>
+            <div class="price-desc" data-fr="Pour les équipes et studios" data-en="For teams and studios">Pour les équipes et studios</div>
+          </div>
+          <div class="price-features">
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Tout Pro +" data-en="Everything in Pro +">Tout Pro +</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Support prioritaire" data-en="Priority support">Support prioritaire</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Updates majeures à vie" data-en="Lifetime major updates">Updates majeures à vie</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="3 licences incluses" data-en="3 licenses included">3 licences incluses</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Module Rename Tool inclus" data-en="Rename Tool module included">Module Rename Tool inclus</span></div>
+          </div>
+          <div class="price-cta">
+            <a href="#beta" class="btn btn-ghost" data-fr="Précommander Studio -20%" data-en="Pre-order Studio -20%">Précommander Studio -20%</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="reveal" style="background:#0E0E11">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Témoignages" data-en="Testimonials">Témoignages</div>
+    <div class="h2" data-fr="Ce que disent nos bêta-testeurs" data-en="What our beta testers say">Ce que disent nos bêta-testeurs</div>
+    <p class="lead" data-fr="Premiers retours de vidéastes et monteurs qui testent Rushr." data-en="First feedback from videographers and editors testing Rushr.">Premiers retours de vidéastes et monteurs.</p>
+
+    <div class="testimonials">
+      <div class="testimonials-grid">
+        <div class="testimonial tilt-3d">
+          <div class="testimonial-quote" data-fr="Rushr a transformé mon workflow de dérushage. Ce qui me prenait 2 heures se fait maintenant en 30 minutes. Les tags clavier sont géniaux." data-en="Rushr transformed my dérushage workflow. What used to take me 2 hours now takes 30 minutes. The keyboard tags are brilliant.">Rushr a transformé mon workflow de dérushage. Ce qui me prenait 2 heures se fait maintenant en 30 minutes. Les tags clavier sont géniaux.</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">ML</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Marie L.</div>
+              <div class="testimonial-role" data-fr="Monteuse freelance" data-en="Freelance editor">Monteuse freelance</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial tilt-3d">
+          <div class="testimonial-quote" data-fr="Enfin un outil pensé pour les monteurs ! L'interface est intuitive et les presets de structure m'ont fait gagner un temps fou sur mes weddings." data-en="Finally a tool built for editors! The interface is intuitive and the structure presets saved me so much time on my weddings.">Enfin un outil pensé pour les monteurs ! L'interface est intuitive et les presets de structure m'ont fait gagner un temps fou sur mes weddings.</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">TD</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Thomas D.</div>
+              <div class="testimonial-role" data-fr="Vidéaste événementiel" data-en="Event videographer">Vidéaste événementiel</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial tilt-3d">
+          <div class="testimonial-quote" data-fr="J'ai testé beaucoup d'outils de dérushage, mais Rushr est le seul qui s'intègre vraiment dans mon flux. Le lecteur intégré est parfait pour les sélections rapides." data-en="I've tested many dérushage tools, but Rushr is the only one that really fits my workflow. The built-in preview is perfect for quick selections.">J'ai testé beaucoup d'outils de dérushage, mais Rushr est le seul qui s'intègre vraiment dans mon flux. Le lecteur intégré est parfait pour les sélections rapides.</div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SB</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Sophie B.</div>
+              <div class="testimonial-role" data-fr="Monteuse documentaire" data-en="Documentary editor">Monteuse documentaire</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="reveal">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="FAQ" data-en="FAQ">FAQ</div>
+    <div class="h2" data-fr="Questions fréquentes" data-en="Frequently asked questions">Questions fréquentes</div>
+    <p class="lead" data-fr="Tout ce que vous devez savoir sur Rushr." data-en="Everything you need to know about Rushr.">Tout ce que vous devez savoir sur Rushr.</p>
+
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Est-ce que Rushr est bien offline ?" data-en="Is Rushr really offline?">Est-ce que Rushr est bien offline ?</div>
+        <div class="faq-answer" data-fr="Oui, Rushr fonctionne 100% offline une fois installé. Toutes les fonctionnalités de dérushage, tagging et organisation sont locales. Seule la validation de licence nécessite une connexion ponctuelle." data-en="Yes, Rushr works 100% offline once installed. All dérushage, tagging and organization features are local. Only license validation requires an occasional connection.">Oui, Rushr fonctionne 100% offline une fois installé. Toutes les fonctionnalités de dérushage, tagging et organisation sont locales. Seule la validation de licence nécessite une connexion ponctuelle.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Puis-je l'utiliser sur plusieurs machines ?" data-en="Can I use it on multiple machines?">Puis-je l'utiliser sur plusieurs machines ?</div>
+        <div class="faq-answer" data-fr="La licence Free est limitée à 1 machine. La licence Pro permet 1 machine. La licence Studio inclut 3 licences pour 3 machines différentes. Des licences supplémentaires sont disponibles sur demande." data-en="The Free license is limited to 1 machine. The Pro license allows 1 machine. The Studio license includes 3 licenses for 3 different machines. Additional licenses are available on request.">La licence Free est limitée à 1 machine. La licence Pro permet 1 machine. La licence Studio inclut 3 licences pour 3 machines différentes. Des licences supplémentaires sont disponibles sur demande.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Comment se passe la mise à jour ?" data-en="How do updates work?">Comment se passe la mise à jour ?</div>
+        <div class="faq-answer" data-fr="Rushr vérifie automatiquement les mises à jour au démarrage. Si une nouvelle version est disponible, vous serez notifié et pourrez la télécharger en un clic. Les versions Pro et Studio incluent les mises à jour majeures à vie." data-en="Rushr automatically checks for updates on startup. If a new version is available, you'll be notified and can download it with one click. Pro and Studio versions include lifetime major updates.">Rushr vérifie automatiquement les mises à jour au démarrage. Si une nouvelle version est disponible, vous serez notifié et pourrez la télécharger en un clic. Les versions Pro et Studio incluent les mises à jour majeures à vie.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="beta" class="beta reveal" style="background:#0E0E11">
   <div class="wrap">
     <div class="eyebrow" data-fr="Programme beta" data-en="Beta program">Programme beta</div>
@@ -425,6 +640,17 @@ ml('account', '2426476');
       card.addEventListener('mouseleave', function(){
         card.style.setProperty('--rx', '0deg');
         card.style.setProperty('--ry', '0deg');
+      });
+    });
+  })();
+
+  // FAQ accordion
+  (function(){
+    var faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(function(item){
+      var question = item.querySelector('.faq-question');
+      question.addEventListener('click', function(){
+        item.classList.toggle('open');
       });
     });
   })();
