@@ -180,18 +180,6 @@ ml('account', '2426476');
   .faq-answer{padding:0 24px 20px;color:var(--muted);font-size:14px;line-height:1.6;display:none}
   .faq-item.open .faq-answer{display:block}
 
-  /* MODULE */
-  .module{background:linear-gradient(135deg,#16100A,#121215);border:1px solid rgba(255,106,0,.25);border-radius:20px;padding:42px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center}
-  .module .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent2);background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.4);border-radius:6px;padding:4px 10px;margin-bottom:16px}
-  .module h3{font-size:26px;font-weight:800;letter-spacing:-.5px}
-  .module p{color:var(--muted);margin-top:12px;font-size:15px}
-  .module ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px}
-  .module li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#D6D6D8}
-  .module li .c{color:var(--accent2);font-weight:800}
-  .module-card{background:#0E0E11;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
-  .module-card .price{font-size:13px;color:var(--muted)}
-  .module-card .ext{font-family:ui-monospace,monospace;font-size:24px;font-weight:700;color:var(--accent2);margin:6px 0 4px}
-
   /* BETA */
   .beta{text-align:center}
   .beta-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px}
@@ -281,7 +269,7 @@ ml('account', '2426476');
         <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
         <button id="len" onclick="setLang('en')">EN</button>
       </div>
-      <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
+      <a href="#pricing" class="btn btn-primary" data-fr="Acheter Pro" data-en="Buy Pro">Acheter Pro</a>
     </div>
   </div>
 </nav>
@@ -291,11 +279,11 @@ ml('account', '2426476');
   <div class="wrap hero">
     <div>
       <img class="hero-logo" src="assets/logo.png" alt="BACKPACK RUSHR" />
-      <span class="pill"><span class="d"></span><span data-fr="Recherche préliminaire · V1 Beta" data-en="Research preview · V1 Beta">Recherche préliminaire · V1 Beta</span></span>
+      <span class="pill"><span class="d"></span><span data-fr="Version 1.0.0 · Disponible maintenant" data-en="Version 1.0.0 · Available now">Version 1.0.0 · Disponible maintenant</span></span>
       <h1 data-fr="Triez vos rushes.<br>Montez plus vite." data-en="Sort your rushes.<br>Edit faster.">Triez vos rushes.<br>Montez plus vite.</h1>
       <p class="sub" data-fr="BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs. Structurez votre projet, importez, prévisualisez et taguez vos prises — le tout avant d'ouvrir votre logiciel de montage." data-en="BACKPACK RUSHR is the dérushage tool for videographers, editors and creators. Build your project structure, import, preview and tag your takes — all before you open your editing software.">BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs.</p>
       <div class="cta">
-        <a href="#pricing" class="btn btn-primary" data-fr="Précommander -20%" data-en="Pre-order -20%">Précommander -20%</a>
+        <a href="#pricing" class="btn btn-primary" data-fr="Acheter Pro" data-en="Buy Pro">Acheter Pro</a>
         <a href="#demo" class="btn btn-ghost" data-fr="Voir la démo" data-en="Watch the demo">Voir la démo</a>
       </div>
     </div>
@@ -375,9 +363,9 @@ ml('account', '2426476');
         <p data-fr="Mal tagué ? Changez le tag et le fichier est déplacé vers la bonne destination — sans doublon." data-en="Wrong tag? Change it and the file moves to the right destination — no duplicates.">Re-taguez : le fichier est déplacé, sans doublon.</p>
       </div>
       <div class="feat tilt-3d">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7V5a2 2 0 012-2h2M20 7V5a2 2 0 00-2-2h-2M4 17v2a2 2 0 002 2h2M20 17v2a2 2 0 01-2 2h-2"/></svg></div>
-        <h3 data-fr="Module Rename Tool" data-en="Rename Tool module">Module Rename Tool</h3>
-        <p data-fr="Renommez vos fichiers en masse via un module installable, avec sa propre extension proprietaire." data-en="Batch-rename your files with an installable add-on module, with its own proprietary extension.">Renommage en masse via un module installable.</p>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+        <h3 data-fr="Export multi-format" data-en="Multi-format export">Export multi-format</h3>
+        <p data-fr="Exportez votre projet vers FCPXML, FCP7 XML ou Script Resolve pour une intégration fluide dans votre logiciel de montage." data-en="Export your project to FCPXML, FCP7 XML or Resolve Script for seamless integration into your editing software.">Exportez vers FCPXML, FCP7 XML ou Script Resolve.</p>
       </div>
     </div>
   </div>
@@ -392,27 +380,6 @@ ml('account', '2426476');
       <div class="step tilt-3d"><div class="n">2</div><h4 data-fr="Importez les rushes" data-en="Import the rushes">Importez les rushes</h4><p data-fr="Glissez vos dossiers de prises : vignettes et métadonnées générées automatiquement." data-en="Drop your source folders: thumbnails and metadata are generated automatically.">Glissez vos dossiers : vignettes auto.</p></div>
       <div class="step tilt-3d"><div class="n">3</div><h4 data-fr="Triez & taguez" data-en="Sort & tag">Triez & taguez</h4><p data-fr="Prévisualisez, taguez au clavier, rejetez les mauvaises prises en un instant." data-en="Preview, tag from the keyboard, reject bad takes in an instant.">Prévisualisez et taguez au clavier.</p></div>
       <div class="step tilt-3d"><div class="n">4</div><h4 data-fr="Préparez le montage" data-en="Prepare for editing">Préparez le montage</h4><p data-fr="« Prepare » range chaque prise dans le bon dossier, prêt pour votre logiciel de montage." data-en="“Prepare” files each take into the right folder, ready for your editing software.">« Prepare » range tout au bon endroit.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="module" class="reveal">
-  <div class="wrap">
-    <div class="module">
-      <div>
-        <span class="badge" data-fr="MODULE INSTALLABLE" data-en="INSTALLABLE MODULE">MODULE INSTALLABLE</span>
-        <h3 data-fr="Rename Tool" data-en="Rename Tool">Rename Tool</h3>
-        <p data-fr="Un module premium pour renommer proprement les fichiers d'un projet, avec règles de nommage et numérotation. Installé via un fichier .bprx et activé par licence." data-en="A premium add-on to cleanly rename a project's files, with naming rules and numbering. Installed via a .bprx file and unlocked by license.">Un module premium pour renommer proprement les fichiers d'un projet.</p>
-        <ul>
-          <li><span class="c">✓</span> <span data-fr="Renommage en masse avec aperçu avant/après" data-en="Batch rename with before/after preview">Renommage en masse avec aperçu</span></li>
-          <li><span class="c">✓</span> <span data-fr="Extension proprietaire .bprx" data-en="Proprietary .bprx extension">Extension proprietaire .bprx</span></li>
-          <li><span class="c">✓</span> <span data-fr="Activation par licence, vérifiée en ligne" data-en="License activation, verified online">Activation par licence</span></li>
-        </ul>
-      </div>
-      <div class="module-card">
-        <div class="ext">.bprx</div>
-        <div class="price" data-fr="Module additionnel · disponible au lancement" data-en="Add-on module · available at launch">Module additionnel · disponible au lancement</div>
-      </div>
     </div>
   </div>
 </section>
@@ -434,13 +401,16 @@ ml('account', '2426476');
             <div class="price-desc" data-fr="Pour découvrir Rushr" data-en="To discover Rushr">Pour découvrir Rushr</div>
           </div>
           <div class="price-features">
-            <div class="price-feature"><span class="c">✓</span> <span data-fr="Structure (presets limités)" data-en="Structure (limited presets)">Structure (presets limités)</span></div>
-            <div class="price-feature"><span class="c">✓</span> <span data-fr="Tagging basique" data-en="Basic tagging">Tagging basique</span></div>
-            <div class="price-feature"><span class="c">✓</span> <span data-fr="1 projet à la fois" data-en="1 project at a time">1 projet à la fois</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Structure (presets intégrés)" data-en="Structure (built-in presets)">Structure (presets intégrés)</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="5 tags personnalisés max" data-en="5 custom tags max">5 tags personnalisés max</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="30 clips max par "Prepare"" data-en="30 clips max per "Prepare"">30 clips max par "Prepare"</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="1 projet sauvegardé à la fois" data-en="1 saved project at a time">1 projet sauvegardé à la fois</span></div>
             <div class="price-feature"><span class="c">✓</span> <span data-fr="Lecteur intégré" data-en="Built-in preview">Lecteur intégré</span></div>
+            <div class="price-feature"><span class="c">✗</span> <span data-fr="Pas d'export (FCPXML/Resolve)" data-en="No export (FCPXML/Resolve)">Pas d'export (FCPXML/Resolve)</span></div>
+            <div class="price-feature"><span class="c">✗</span> <span data-fr="Pas de presets personnalisés" data-en="No custom presets">Pas de presets personnalisés</span></div>
           </div>
           <div class="price-cta">
-            <a href="#beta" class="btn btn-ghost" data-fr="Télécharger Free" data-en="Download Free">Télécharger Free</a>
+            <a href="#download" class="btn btn-ghost" data-fr="Télécharger Free" data-en="Download Free">Télécharger Free</a>
           </div>
         </div>
 
@@ -459,9 +429,11 @@ ml('account', '2426476');
             <div class="price-feature"><span class="c">✓</span> <span data-fr="Tags illimités" data-en="Unlimited tags">Tags illimités</span></div>
             <div class="price-feature"><span class="c">✓</span> <span data-fr="Projets illimités" data-en="Unlimited projects">Projets illimités</span></div>
             <div class="price-feature"><span class="c">✓</span> <span data-fr="Presets illimités" data-en="Unlimited presets">Presets illimités</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Clips illimités par "Prepare"" data-en="Unlimited clips per "Prepare"">Clips illimités par "Prepare"</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Fonctionne offline" data-en="Works offline">Fonctionne offline</span></div>
           </div>
           <div class="price-cta">
-            <a href="#beta" class="btn btn-primary" data-fr="Précommander Pro -20%" data-en="Pre-order Pro -20%">Précommander Pro -20%</a>
+            <button class="btn btn-primary" onclick="buyLicense('pro')" data-fr="Acheter Pro - 39€" data-en="Buy Pro - 39€">Acheter Pro - 39€</button>
           </div>
         </div>
 
@@ -477,10 +449,10 @@ ml('account', '2426476');
             <div class="price-feature"><span class="c">✓</span> <span data-fr="Support prioritaire" data-en="Priority support">Support prioritaire</span></div>
             <div class="price-feature"><span class="c">✓</span> <span data-fr="Updates majeures à vie" data-en="Lifetime major updates">Updates majeures à vie</span></div>
             <div class="price-feature"><span class="c">✓</span> <span data-fr="3 licences incluses" data-en="3 licenses included">3 licences incluses</span></div>
-            <div class="price-feature"><span class="c">✓</span> <span data-fr="Module Rename Tool inclus" data-en="Rename Tool module included">Module Rename Tool inclus</span></div>
+            <div class="price-feature"><span class="c">✓</span> <span data-fr="Accès prioritaire aux nouvelles fonctionnalités" data-en="Priority access to new features">Accès prioritaire aux nouvelles fonctionnalités</span></div>
           </div>
           <div class="price-cta">
-            <a href="#beta" class="btn btn-ghost" data-fr="Précommander Studio -20%" data-en="Pre-order Studio -20%">Précommander Studio -20%</a>
+            <button class="btn btn-ghost" onclick="buyLicense('studio')" data-fr="Acheter Studio - 59€" data-en="Buy Studio - 59€">Acheter Studio - 59€</button>
           </div>
         </div>
       </div>
@@ -556,19 +528,36 @@ ml('account', '2426476');
         <div class="faq-question" data-fr="Comment se passe la mise à jour ?" data-en="How do updates work?">Comment se passe la mise à jour ?</div>
         <div class="faq-answer" data-fr="Rushr vérifie automatiquement les mises à jour au démarrage. Si une nouvelle version est disponible, vous serez notifié et pourrez la télécharger en un clic. Les versions Pro et Studio incluent les mises à jour majeures à vie." data-en="Rushr automatically checks for updates on startup. If a new version is available, you'll be notified and can download it with one click. Pro and Studio versions include lifetime major updates.">Rushr vérifie automatiquement les mises à jour au démarrage. Si une nouvelle version est disponible, vous serez notifié et pourrez la télécharger en un clic. Les versions Pro et Studio incluent les mises à jour majeures à vie.</div>
       </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Que devient ma licence en cas de réinstallation ?" data-en="What happens to my license if I reinstall?">Que devient ma licence en cas de réinstallation ?</div>
+        <div class="faq-answer" data-fr="Votre licence est liée à votre clé de licence. En cas de réinstallation, il vous suffit de réactiver votre clé dans Rushr. La licence reste valide tant qu'elle n'a pas expiré." data-en="Your license is linked to your license key. If you reinstall, simply reactivate your key in Rushr. The license remains valid as long as it hasn't expired.">Votre licence est liée à votre clé de licence. En cas de réinstallation, il vous suffit de réactiver votre clé dans Rushr. La licence reste valide tant qu'elle n'a pas expiré.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Quelles sont les limites de la version Free ?" data-en="What are the Free version limits?">Quelles sont les limites de la version Free ?</div>
+        <div class="faq-answer" data-fr="La version Free est limitée à 30 clips par opération "Prepare", 5 tags personnalisés, 1 projet sauvegardé à la fois, et n'inclut pas les exports (FCPXML, FCP7 XML, Script Resolve). Elle ne permet pas non plus de créer des presets personnalisés." data-en="The Free version is limited to 30 clips per "Prepare" operation, 5 custom tags, 1 saved project at a time, and does not include exports (FCPXML, FCP7 XML, Resolve Script). It also doesn't allow creating custom presets.">La version Free est limitée à 30 clips par opération "Prepare", 5 tags personnalisés, 1 projet sauvegardé à la fois, et n'inclut pas les exports (FCPXML, FCP7 XML, Script Resolve). Elle ne permet pas non plus de créer des presets personnalisés.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Puis-je passer de Free à Pro ou Studio ?" data-en="Can I upgrade from Free to Pro or Studio?">Puis-je passer de Free à Pro ou Studio ?</div>
+        <div class="faq-answer" data-fr="Oui, vous pouvez acheter une licence Pro ou Studio à tout moment et l'activer dans Rushr. Vos projets et paramètres seront conservés. La mise à niveau est instantanée." data-en="Yes, you can purchase a Pro or Studio license at any time and activate it in Rushr. Your projects and settings will be preserved. The upgrade is instant.">Oui, vous pouvez acheter une licence Pro ou Studio à tout moment et l'activer dans Rushr. Vos projets et paramètres seront conservés. La mise à niveau est instantanée.</div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="beta" class="beta reveal" style="background:#0E0E11">
+<section id="download" class="beta reveal" style="background:#0E0E11">
   <div class="wrap">
-    <div class="eyebrow" data-fr="Programme beta" data-en="Beta program">Programme beta</div>
-    <div class="h2" data-fr="Devenez bêta-testeur" data-en="Become a beta tester">Devenez bêta-testeur</div>
-    <p class="lead" data-fr="BACKPACK RUSHR est en recherche préliminaire. Laissez votre email pour recevoir l'accès et aider à façonner l'outil." data-en="BACKPACK RUSHR is in research preview. Drop your email to get access and help shape the tool.">Laissez votre email pour recevoir l'accès.</p>
+    <div class="eyebrow" data-fr="Téléchargement" data-en="Download">Téléchargement</div>
+    <div class="h2" data-fr="Commencez gratuitement" data-en="Start for free">Commencez gratuitement</div>
+    <p class="lead" data-fr="Téléchargez Rushr Free pour découvrir l'outil. Pas de carte bancaire requise." data-en="Download Rushr Free to discover the tool. No credit card required.">Téléchargez Rushr Free pour découvrir l'outil.</p>
 
     <div class="beta-card">
-      <!-- MailerLite embedded Beta Form -->
-      <div class="ml-embedded" data-form="ix1zaq"></div>
+      <div class="cta" style="justify-content:center">
+        <a href="https://github.com/backpacklab/rushr/releases/latest" class="btn btn-primary" data-fr="Télécharger pour Windows" data-en="Download for Windows">Télécharger pour Windows</a>
+      </div>
+      <p class="beta-note" data-fr="Version 1.0.0 · Windows 10/11 · 64-bit" data-en="Version 1.0.0 · Windows 10/11 · 64-bit">Version 1.0.0 · Windows 10/11 · 64-bit</p>
     </div>
   </div>
 </section>
@@ -653,6 +642,50 @@ ml('account', '2426476');
         item.classList.toggle('open');
       });
     });
+  })();
+
+  // Stripe checkout
+  async function buyLicense(tier) {
+    try {
+      const response = await fetch('https://vztqykihtnkscwcodkyf.supabase.co/functions/v1/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tier: tier,
+          successUrl: window.location.origin + '?purchase=success',
+          cancelUrl: window.location.origin + '?purchase=cancel'
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Failed to create checkout session:', data.error);
+        alert('Failed to create checkout session. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      alert('Failed to create checkout session. Please try again.');
+    }
+  }
+
+  // Check for purchase success/cancel
+  (function(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const purchaseStatus = urlParams.get('purchase');
+    
+    if (purchaseStatus === 'success') {
+      alert('Thank you for your purchase! Your license key will be sent to your email.');
+      // Remove the parameter from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (purchaseStatus === 'cancel') {
+      // Remove the parameter from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   })();
 </script>
 </body>

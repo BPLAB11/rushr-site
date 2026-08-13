@@ -1,6 +1,8 @@
-# RUSHR — Email de bienvenue beta (à coller dans Formspree / MailerLite / Brevo)
+# RUSHR — Email de bienvenue après achat (à coller dans Lemon Squeezy / MailerLite)
 
-Lien Discord déjà intégré : https://discord.gg/hyrP2f9g — prêt à coller dans ton automatisation MailerLite.
+Lien Discord : https://discord.gg/hyrP2f9g
+Site web : https://backpacklab.com/rushr
+Documentation : https://backpacklab.com/rushr#faq
 
 Tu as **deux versions** ci-dessous (FR et EN). Une automatisation MailerLite = **un seul email**, donc le plus simple est de coller la **version unique bilingue** juste ci-dessous (tout le monde la reçoit, chacun lit sa langue). Les versions séparées FR / EN plus bas servent si tu préfères créer deux automatisations par langue.
 
@@ -8,19 +10,33 @@ Tu as **deux versions** ci-dessous (FR et EN). Une automatisation MailerLite = *
 
 ## ✅ Version unique bilingue (recommandée — colle CECI dans MailerLite)
 
-**Objet :** Bienvenue dans la beta de RUSHR 🎒 / Welcome to the RUSHR beta
+**Objet :** Ta licence RUSHR est prête 🎒 / Your RUSHR license is ready
 
 Salut,
 
-Merci pour ton intérêt pour **RUSHR** ! Tu fais partie des premiers à tester l'outil de dérushage pensé pour les vidéastes et les monteurs.
+Merci d'avoir choisi **RUSHR** ! Ta licence est maintenant active et tu peux commencer à dérusher tes rushes plus efficacement.
 
-👉 **Rejoins la communauté sur Discord : https://discord.gg/hyrP2f9g**
-Annonces de versions, support, et un espace pour partager tes idées et signaler des bugs.
+🔑 **Ta clé de licence :** {{license_key}}
+📦 **Version :** {{tier}} (Free / Pro / Studio)
 
-**Ce qui t'attend :**
-- 📥 L'accès à la beta (le lien de téléchargement arrive très bientôt)
-- 💬 Tes retours façonnent directement l'outil
-- 🔕 Pas de spam : uniquement les infos utiles
+👉 **Télécharge RUSHR :** https://github.com/backpacklab/rushr/releases/latest
+
+**Pour activer ta licence :**
+1. Lance RUSHR
+2. Va dans Settings → License
+3. Entre ta clé de licence ci-dessus
+4. Clique sur "Activer"
+
+**Besoin d'aide ?**
+- 📚 Documentation : https://backpacklab.com/rushr#faq
+- 💬 Communauté Discord : https://discord.gg/hyrP2f9g
+- 📧 Support : contact@thebackpacklab.com
+
+**Ce qui est inclus avec ta licence :**
+- ✅ Fonctionne offline (validation requise tous les 7 jours)
+- ✅ Mises à jour automatiques
+- ✅ Export vers FCPXML, FCP7 XML et Resolve Script (Pro/Studio)
+- ✅ Tags et projets illimités (Pro/Studio)
 
 À très vite — l'équipe **BACKPACK LAB**
 
@@ -28,15 +44,29 @@ Annonces de versions, support, et un espace pour partager tes idées et signaler
 
 Hi,
 
-Thanks for your interest in **RUSHR**! You're among the first to test the dérushage tool built for videographers and editors.
+Thanks for choosing **RUSHR**! Your license is now active and you can start sorting your rushes more efficiently.
 
-👉 **Join the community on Discord: https://discord.gg/hyrP2f9g**
-Release announcements, support, and a place to share ideas and report bugs.
+🔑 **Your license key:** {{license_key}}
+📦 **Version:** {{tier}} (Free / Pro / Studio)
 
-**What's next:**
-- 📥 Beta access (the download link is coming very soon)
-- 💬 Your feedback shapes the tool directly
-- 🔕 No spam: only useful updates
+👉 **Download RUSHR:** https://github.com/backpacklab/rushr/releases/latest
+
+**To activate your license:**
+1. Launch RUSHR
+2. Go to Settings → License
+3. Enter your license key above
+4. Click "Activate"
+
+**Need help?**
+- 📚 Documentation: https://backpacklab.com/rushr#faq
+- 💬 Discord community: https://discord.gg/hyrP2f9g
+- 📧 Support: contact@thebackpacklab.com
+
+**What's included with your license:**
+- ✅ Works offline (validation required every 7 days)
+- ✅ Automatic updates
+- ✅ Export to FCPXML, FCP7 XML and Resolve Script (Pro/Studio)
+- ✅ Unlimited tags and projects (Pro/Studio)
 
 See you soon — the **BACKPACK LAB** team
 
@@ -48,19 +78,27 @@ See you soon — the **BACKPACK LAB** team
 
 ## 🇫🇷 Version française
 
-**Objet :** Bienvenue dans la beta de RUSHR 🎒
+**Objet :** Ta licence RUSHR est prête 🎒
 
 Salut,
 
-Merci pour ton intérêt pour **RUSHR** ! Tu fais désormais partie des premiers à tester l'outil de dérushage pensé pour les vidéastes et les monteurs.
+Merci d'avoir choisi **RUSHR** ! Ta licence est maintenant active et tu peux commencer à dérusher tes rushes plus efficacement.
 
-👉 **Rejoins la communauté sur Discord : https://discord.gg/hyrP2f9g**
-Tu y trouveras les annonces de nouvelles versions, le support, et un espace pour partager tes idées et signaler des bugs.
+� **Ta clé de licence :** {{license_key}}
+📦 **Version :** {{tier}} (Free / Pro / Studio)
 
-**Ce qui t'attend :**
-- 📥 L'accès à la beta (le lien de téléchargement arrive très bientôt)
-- 💬 Tes retours comptent vraiment — ils façonnent directement l'outil
-- 🔕 Pas de spam : uniquement les infos utiles
+👉 **Télécharge RUSHR :** https://github.com/backpacklab/rushr/releases/latest
+
+**Pour activer ta licence :**
+1. Lance RUSHR
+2. Va dans Settings → License
+3. Entre ta clé de licence ci-dessus
+4. Clique sur "Activer"
+
+**Besoin d'aide ?**
+- � Documentation : https://backpacklab.com/rushr#faq
+- 💬 Communauté Discord : https://discord.gg/hyrP2f9g
+- � Support : contact@thebackpacklab.com
 
 À très vite,
 L'équipe **BACKPACK LAB**
@@ -69,19 +107,27 @@ L'équipe **BACKPACK LAB**
 
 ## 🇬🇧 English version
 
-**Subject:** Welcome to the RUSHR beta 🎒
+**Subject:** Your RUSHR license is ready 🎒
 
 Hi,
 
-Thanks for your interest in **RUSHR**! You're now among the first to test the dérushage tool built for videographers and editors.
+Thanks for choosing **RUSHR**! Your license is now active and you can start sorting your rushes more efficiently.
 
-👉 **Join the community on Discord: https://discord.gg/hyrP2f9g**
-You'll find release announcements, support, and a place to share ideas and report bugs.
+🔑 **Your license key:** {{license_key}}
+� **Version:** {{tier}} (Free / Pro / Studio)
 
-**What's next:**
-- 📥 Beta access (the download link is coming very soon)
-- 💬 Your feedback truly matters — it shapes the tool directly
-- 🔕 No spam: only useful updates
+👉 **Download RUSHR:** https://github.com/backpacklab/rushr/releases/latest
+
+**To activate your license:**
+1. Launch RUSHR
+2. Go to Settings → License
+3. Enter your license key above
+4. Click "Activate"
+
+**Need help?**
+- � Documentation: https://backpacklab.com/rushr#faq
+- 💬 Discord community: https://discord.gg/hyrP2f9g
+- � Support: contact@thebackpacklab.com
 
 See you soon,
 The **BACKPACK LAB** team
