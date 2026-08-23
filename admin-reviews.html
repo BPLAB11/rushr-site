@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Reviews — Admin — BACKPACK LAB</title>
+<title>Admin — BACKPACK LAB</title>
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/png" href="assets/mark.png" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -95,11 +95,40 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.ok{border-color:rgba(53,220,142,.5);color:var(--accent2)}.toast.err{border-color:rgba(255,107,107,.5);color:var(--danger)}
   @media(max-width:860px){.layout{grid-template-columns:1fr}}
+
+  /* main section tabs */
+  .mtabs{display:flex;gap:8px;margin-bottom:18px}
+  .mtabs button{background:var(--surface);border:1px solid var(--line2);color:var(--muted);font-size:13px;font-weight:600;padding:9px 16px;border-radius:9px;cursor:pointer;font-family:inherit}
+  .mtabs button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+  /* beta signups view */
+  .stats{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 20px;min-width:120px}
+  .stat .n{font-size:22px;font-weight:800}
+  .stat .l{font-size:11.5px;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+  .toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+  .toolbar .in{max-width:260px}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:12px 16px;font-size:13.5px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--accent);font-weight:700}
+  tbody tr:hover{background:var(--surface2)}
+  td.mono{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#D6D6D8}
+  .b-win{color:#04150C;background:#5FB8E8}
+  .b-mac{color:#04150C;background:var(--accent)}
+  .row-actions{display:flex;gap:8px}
+  .icon-btn{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .icon-btn:hover{border-color:var(--accent);color:var(--accent2)}
+  .icon-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+  @media(max-width:640px){
+    #view-beta th:nth-child(4),#view-beta td:nth-child(4){display:none}
+    #view-beta .toolbar{flex-direction:column;align-items:stretch}
+    #view-beta .toolbar .in{max-width:none}
+  }
 </style>
 </head>
 <body>
 <nav><div class="wrap nav-in">
-  <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB<span class="tag">REVIEWS</span></a>
+  <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
   <div class="nav-right"><span id="whoami"></span><button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Déconnexion</button></div>
 </div></nav>
 
@@ -110,7 +139,7 @@
   <!-- LOGIN -->
   <div id="g-login" class="gate" style="display:none">
     <div class="mark"><span></span></div>
-    <h1>Espace Reviews</h1>
+    <h1>Espace Admin</h1>
     <p class="sub">Réservé à l'équipe Backpack Lab.</p>
     <div class="tabs"><button id="tabIn" class="on" onclick="setMode('in')">Connexion</button><button id="tabUp" onclick="setMode('up')">Créer un compte</button></div>
     <div class="msg" id="authMsg"></div>
@@ -131,12 +160,35 @@
 
   <!-- APP -->
   <div id="app">
-    <div class="layout">
-      <div>
-        <div class="col-head"><h2>Projets</h2><button class="btn btn-primary" onclick="showNewForm()">+ Nouveau</button></div>
-        <div class="plist" id="plist"></div>
+    <div class="mtabs">
+      <button id="mtabReviews" class="on" onclick="switchView('reviews')">Reviews</button>
+      <button id="mtabBeta" onclick="switchView('beta')">Beta signups</button>
+    </div>
+
+    <div id="view-reviews">
+      <div class="layout">
+        <div>
+          <div class="col-head"><h2>Projets</h2><button class="btn btn-primary" onclick="showNewForm()">+ Nouveau</button></div>
+          <div class="plist" id="plist"></div>
+        </div>
+        <div id="detail"><div class="card"><div class="empty">Sélectionnez un projet ou créez-en un nouveau.</div></div></div>
       </div>
-      <div id="detail"><div class="card"><div class="empty">Sélectionnez un projet ou créez-en un nouveau.</div></div></div>
+    </div>
+
+    <div id="view-beta" style="display:none">
+      <div class="stats" id="stats"></div>
+      <div class="toolbar">
+        <input id="search" class="in" placeholder="Rechercher nom ou email…" oninput="renderSignupTable()" />
+        <button class="btn btn-ghost" onclick="exportCsv()">Exporter CSV</button>
+        <button class="btn btn-ghost" onclick="loadSignups()">Rafraîchir</button>
+      </div>
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>Nom</th><th>Email</th><th>Plateforme</th><th>Inscrit le</th><th></th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="empty" id="emptyMsg" style="display:none">Aucune inscription pour le moment.</div>
+      </div>
     </div>
   </div>
 
@@ -149,6 +201,7 @@
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
   var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var ME=null, PROJECTS=[], selId=null, mode='in';
+  var SIGNUPS=[], signupsLoaded=false, curView='reviews';
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
@@ -179,6 +232,59 @@
     var admin=false; try{ admin=await rpc('is_admin'); }catch(e){}
     if(!admin){ show('g-denied'); return; }
     show('app'); loadProjects();
+  }
+
+  function switchView(v){
+    curView=v;
+    document.getElementById('mtabReviews').classList.toggle('on', v==='reviews');
+    document.getElementById('mtabBeta').classList.toggle('on', v==='beta');
+    document.getElementById('view-reviews').style.display=(v==='reviews')?'block':'none';
+    document.getElementById('view-beta').style.display=(v==='beta')?'block':'none';
+    if(v==='beta' && !signupsLoaded) loadSignups();
+  }
+
+  async function loadSignups(){
+    try{ SIGNUPS=await rpc('beta_signup_admin_list'); signupsLoaded=true; }catch(e){ toast('Erreur : '+e.message,'err'); SIGNUPS=[]; }
+    renderStats(); renderSignupTable();
+  }
+  function renderStats(){
+    var win=SIGNUPS.filter(function(s){return s.platform==='WIN';}).length;
+    var mac=SIGNUPS.filter(function(s){return s.platform==='MAC';}).length;
+    document.getElementById('stats').innerHTML=
+      '<div class="stat"><div class="n">'+SIGNUPS.length+'</div><div class="l">Total</div></div>'+
+      '<div class="stat"><div class="n">'+win+'</div><div class="l">Windows</div></div>'+
+      '<div class="stat"><div class="n">'+mac+'</div><div class="l">macOS</div></div>';
+  }
+  function renderSignupTable(){
+    var q=(document.getElementById('search').value||'').trim().toLowerCase();
+    var rows=SIGNUPS.filter(function(s){ return !q || (s.name||'').toLowerCase().indexOf(q)>=0 || (s.email||'').toLowerCase().indexOf(q)>=0; });
+    var tb=document.getElementById('tbody');
+    document.getElementById('emptyMsg').style.display=rows.length?'none':'block';
+    tb.innerHTML=rows.map(function(s){
+      return '<tr><td>'+esc(s.name)+'</td><td class="mono">'+esc(s.email)+'</td>'+
+        '<td><span class="badge '+(s.platform==='MAC'?'b-mac':'b-win')+'">'+esc(s.platform)+'</span></td>'+
+        '<td>'+fmt(s.created_at)+'</td>'+
+        '<td><div class="row-actions"><button class="icon-btn" onclick="copyEmail(\''+esc(s.email)+'\',this)">Copier</button>'+
+        '<button class="icon-btn danger" onclick="deleteSignup(\''+s.id+'\')">Suppr.</button></div></td></tr>';
+    }).join('');
+  }
+  function copyEmail(email,btn){ var o=btn.textContent; function d(){btn.textContent='Copié ✓';setTimeout(function(){btn.textContent=o;},1400);} if(navigator.clipboard){navigator.clipboard.writeText(email).then(d).catch(d);}else d(); }
+  async function deleteSignup(id){
+    if(!confirm('Supprimer cette inscription ?')) return;
+    var r=await SB.from('beta_signups').delete().eq('id',id);
+    if(r.error){ toast('Erreur : '+r.error.message,'err'); return; }
+    toast('Supprimé','ok'); loadSignups();
+  }
+  function exportCsv(){
+    if(!SIGNUPS.length){ toast('Rien à exporter','err'); return; }
+    var lines=['Nom,Email,Plateforme,Inscrit le'];
+    SIGNUPS.forEach(function(s){
+      lines.push(['"'+String(s.name||'').replace(/"/g,'""')+'"','"'+String(s.email||'').replace(/"/g,'""')+'"',s.platform,s.created_at].join(','));
+    });
+    var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a'); a.href=url; a.download='rushr-beta-signups.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   async function loadProjects(){

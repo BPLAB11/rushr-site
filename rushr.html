@@ -9,15 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-<!-- MailerLite Universal -->
-<script>
-(function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-.push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-ml('account', '2426476');
-</script>
-<!-- End MailerLite Universal -->
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -76,15 +67,6 @@ ml('account', '2426476');
   .mark{height:34px;width:auto}
 
   /* DEMO VIDEO SECTION */
-  .demo-section{margin-top:48px}
-  .demo-wrapper{text-align:center}
-  .video-placeholder{position:relative;aspect-ratio:16/9;max-width:800px;margin:0 auto;background:linear-gradient(135deg,#1a1a1e,#121215);border:1px solid var(--line);border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;overflow:hidden}
-  .video-placeholder:hover{transform:scale(1.02);box-shadow:0 20px 40px rgba(255,106,0,.15);border-color:rgba(255,106,0,.35)}
-  .play-btn{width:72px;height:72px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s ease,background .3s ease}
-  .play-btn svg{width:28px;height:28px;color:#150A03;margin-left:4px}
-  .video-placeholder:hover .play-btn{transform:scale(1.1);background:var(--accent2)}
-  .demo-text{position:absolute;bottom:16px;left:16px;font-size:13px;color:var(--muted);background:rgba(0,0,0,.5);border-radius:6px;padding:6px 12px}
-  .demo-caption{margin-top:16px;color:var(--muted);font-size:14px}
 
   /* APP MOCK */
   .mock{margin:54px auto 0;max-width:980px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0E0E11;box-shadow:0 30px 80px rgba(0,0,0,.5);transform-style:preserve-3d;perspective:2000px;transition:transform .5s ease}
@@ -197,30 +179,16 @@ ml('account', '2426476');
   /* BETA */
   .beta{text-align:center}
   .beta-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px}
-  .beta-form{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
-  .beta-form input{flex:1;min-width:200px;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit}
+  .beta-form{display:flex;flex-direction:column;gap:12px;margin-top:22px;text-align:left}
+  .beta-form input{background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit;width:100%}
   .beta-form input:focus{outline:none;border-color:var(--accent)}
+  .beta-platform{display:flex;gap:20px;padding:2px 2px 4px}
+  .beta-platform label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);cursor:pointer}
+  .beta-platform input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
   .beta-note{font-size:12.5px;color:var(--muted2);margin-top:14px}
-
-  /* MailerLite embedded form -> match dark/orange theme */
-  .beta-card .ml-form-embedContainer,
-  .beta-card .ml-form-embedWrapper,
-  .beta-card .ml-form-embedBody{background:transparent !important;border:none !important;box-shadow:none !important;max-width:none !important;width:100% !important;padding:0 !important}
-  .beta-card .ml-form-embedContent{display:none !important}
-  .beta-card .ml-form-formContent{padding:0 !important}
-  .beta-card .ml-form-fieldRow{margin:0 0 12px !important}
-  .beta-card .ml-form-fieldRow input,
-  .beta-card .ml-form-embedBody input[type=email],
-  .beta-card .ml-form-embedBody input[type=text]{background:#0E0E11 !important;border:1px solid rgba(255,255,255,.14) !important;border-radius:10px !important;color:#fff !important;height:50px !important;padding:0 16px !important;font-size:15px !important;font-family:inherit !important;box-shadow:none !important;width:100% !important;max-width:100% !important;box-sizing:border-box !important}
-  .beta-card .ml-embedded,.beta-card .ml-form-embedContainer{max-width:100% !important;overflow:hidden !important}
-  .beta-card .ml-form-fieldRow input::placeholder{color:#6E6E73 !important}
-  .beta-card .ml-form-embedSubmit{margin-top:4px !important}
-  .beta-card .ml-form-embedSubmit button,
-  .beta-card .ml-form-embedSubmit button.primary{background:#FF6A00 !important;color:#150A03 !important;border:none !important;border-radius:10px !important;height:50px !important;font-weight:600 !important;font-size:15px !important;font-family:inherit !important;box-shadow:none !important}
-  .beta-card .ml-form-embedSubmit button:hover{background:#FF8A3D !important}
-  .beta-card .ml-form-successBody{padding:0 !important}
-  .beta-card .ml-form-successContent h4{color:#fff !important}
-  .beta-card .ml-form-successContent p{color:#9A9A9E !important}
+  .beta-msg{font-size:13px;text-align:center;min-height:16px}
+  .beta-msg.ok{color:var(--accent2)}
+  .beta-msg.err{color:#FF6B6B}
 
   /* FOOTER */
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
@@ -274,7 +242,6 @@ ml('account', '2426476');
       <div class="nav-links">
         <a href="index.html" data-fr="← Backpack Lab" data-en="← Backpack Lab">← Backpack Lab</a>
         <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
-        <a href="#demo" data-fr="Démo" data-en="Demo">Démo</a>
         <a href="#testimonials" data-fr="Témoignages" data-en="Testimonials">Témoignages</a>
         <a href="#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
       </div>
@@ -296,21 +263,7 @@ ml('account', '2426476');
       <h1 data-fr="Triez vos rushes.<br>Montez plus vite." data-en="Sort your rushes.<br>Edit faster.">Triez vos rushes.<br>Montez plus vite.</h1>
       <p class="sub" data-fr="BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs. Structurez votre projet, importez, prévisualisez et taguez vos prises — le tout avant d'ouvrir votre logiciel de montage." data-en="BACKPACK RUSHR is the dérushage tool for videographers, editors and creators. Build your project structure, import, preview and tag your takes — all before you open your editing software.">BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs.</p>
       <div class="cta">
-        <a href="#beta" class="btn btn-primary" data-fr="Télécharger Rushr" data-en="Download Rushr">Télécharger Rushr</a>
-        <a href="#demo" class="btn btn-ghost" data-fr="Voir la démo" data-en="Watch the demo">Voir la démo</a>
-      </div>
-    </div>
-
-    <!-- VIDEO DEMO SECTION -->
-    <div class="demo-section" id="demo">
-      <div class="demo-wrapper">
-        <div class="video-placeholder">
-          <div class="play-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <p class="demo-text" data-fr="Démo Rushr (30s)" data-en="Rushr demo (30s)">Démo Rushr (30s)</p>
-        </div>
-        <p class="demo-caption" data-fr="Importez, taguez et préparez vos rushes en 30 secondes." data-en="Import, tag and prepare your rushes in 30 seconds.">Importez, taguez et préparez vos rushes en 30 secondes.</p>
+        <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
       </div>
     </div>
 
@@ -471,8 +424,16 @@ ml('account', '2426476');
     <p class="lead" data-fr="BACKPACK RUSHR est en recherche préliminaire. Laissez votre email pour recevoir l'accès et aider à façonner l'outil." data-en="BACKPACK RUSHR is in research preview. Drop your email to get access and help shape the tool.">Laissez votre email pour recevoir l'accès.</p>
 
     <div class="beta-card">
-      <!-- MailerLite embedded Beta Form -->
-      <div class="ml-embedded" data-form="ix1zaq"></div>
+      <form id="betaForm" class="beta-form" onsubmit="return submitBeta(event)">
+        <input id="bfName" type="text" required data-fr-ph="Votre nom" data-en-ph="Your name" placeholder="Votre nom" />
+        <input id="bfEmail" type="email" required placeholder="vous@email.com" />
+        <div class="beta-platform">
+          <label><input type="radio" name="bfPlatform" value="WIN" checked /> Windows</label>
+          <label><input type="radio" name="bfPlatform" value="MAC" /> macOS</label>
+        </div>
+        <button type="submit" class="btn btn-primary" id="bfSubmit" style="justify-content:center;padding:13px" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</button>
+        <p class="beta-msg" id="bfMsg"></p>
+      </form>
     </div>
   </div>
 </section>
@@ -485,7 +446,12 @@ ml('account', '2426476');
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
   function setLang(lang){
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-fr]').forEach(function(el){
@@ -503,8 +469,30 @@ ml('account', '2426476');
     try{ localStorage.setItem('bpl_lang', lang); }catch(e){}
   }
 
-  // Beta sign-ups are handled by the MailerLite embedded form (see the
-  // ml-embedded div + the MailerLite Universal script in the page head).
+  async function submitBeta(e){
+    e.preventDefault();
+    var btn=document.getElementById('bfSubmit'), msg=document.getElementById('bfMsg');
+    var name=document.getElementById('bfName').value.trim();
+    var email=document.getElementById('bfEmail').value.trim();
+    var platform=(document.querySelector('input[name="bfPlatform"]:checked')||{}).value;
+    var lang=document.documentElement.lang==='en'?'en':'fr';
+    var L={
+      fr:{sending:'Inscription…',ok:'Merci ! Tu es inscrit à la beta ✓',err:'Une erreur est survenue, réessaie.'},
+      en:{sending:'Signing up…',ok:'Thanks! You\'re on the beta list ✓',err:'Something went wrong, please try again.'}
+    }[lang];
+    btn.disabled=true; msg.className='beta-msg'; msg.textContent=L.sending;
+    try{
+      var r=await SB.rpc('beta_signup_create',{p_name:name,p_email:email,p_platform:platform});
+      if(r.error) throw r.error;
+      msg.className='beta-msg ok'; msg.textContent=L.ok;
+      document.getElementById('betaForm').reset();
+    }catch(err){
+      msg.className='beta-msg err'; msg.textContent=L.err;
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
 
   (function init(){
     var saved = null;
