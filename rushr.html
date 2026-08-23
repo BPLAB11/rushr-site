@@ -42,8 +42,10 @@ ml('account', '2426476');
   .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px;font-size:15px}
   .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
   .brand-logo{height:44px;width:auto;display:block}
-  .hero-logo{height:130px;width:auto;display:block;margin:0 auto 26px;animation:float3D 6s ease-in-out infinite;transform-style:preserve-3d}
-  @keyframes float3D{0%,100%{transform:translateY(0) rotateX(0) rotateY(0)}25%{transform:translateY(-10px) rotateX(5deg) rotateY(5deg)}50%{transform:translateY(0) rotateX(0) rotateY(0)}75%{transform:translateY(-10px) rotateX(-5deg) rotateY(-5deg)}}
+  .hero-logo-wrap{position:relative;display:block;height:130px;width:fit-content;margin:0 auto 26px;overflow:hidden;-webkit-mask-image:url('assets/mark.png');-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;mask-image:url('assets/mark.png');mask-size:contain;mask-repeat:no-repeat;mask-position:center}
+  .hero-logo{height:100%;width:auto;display:block}
+  .hero-logo-wrap::after{content:'';position:absolute;top:0;bottom:0;left:-40%;width:40%;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.95) 50%,transparent 100%);animation:shineSweep 5s ease-in-out infinite;mix-blend-mode:overlay;pointer-events:none}
+  @keyframes shineSweep{0%,80%{left:-40%}94%,100%{left:100%}}
   .foot-logo{height:22px;width:auto;display:block}
   .nav-right{display:flex;align-items:center;gap:18px}
   .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
@@ -241,7 +243,7 @@ ml('account', '2426476');
     section{padding:46px 0}
     .features,.steps{grid-template-columns:1fr}
     .m-side{display:none}
-    .hero-logo{height:auto;width:min(74%,320px)}
+    .hero-logo-wrap{height:auto;width:min(74%,320px)}
     .cta{flex-direction:column;gap:10px}
     .cta .btn{width:100%;justify-content:center}
     .nav-right .btn-primary{display:none}
@@ -289,7 +291,7 @@ ml('account', '2426476');
   <div class="hero-glow"></div>
   <div class="wrap hero">
     <div>
-      <img class="hero-logo" src="assets/logo.png" alt="BACKPACK RUSHR" />
+      <div class="hero-logo-wrap"><img class="hero-logo" src="assets/mark.png" alt="BACKPACK RUSHR" /></div>
       <span class="pill"><span class="d"></span><span data-fr="Recherche préliminaire · V1 Beta" data-en="Research preview · V1 Beta">Recherche préliminaire · V1 Beta</span></span>
       <h1 data-fr="Triez vos rushes.<br>Montez plus vite." data-en="Sort your rushes.<br>Edit faster.">Triez vos rushes.<br>Montez plus vite.</h1>
       <p class="sub" data-fr="BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs. Structurez votre projet, importez, prévisualisez et taguez vos prises — le tout avant d'ouvrir votre logiciel de montage." data-en="BACKPACK RUSHR is the dérushage tool for videographers, editors and creators. Build your project structure, import, preview and tag your takes — all before you open your editing software.">BACKPACK RUSHR est l'outil de dérushage pour vidéastes, monteurs et créateurs.</p>
