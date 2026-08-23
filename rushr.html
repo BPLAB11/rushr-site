@@ -164,18 +164,6 @@
   .faq-answer{padding:0 24px 20px;color:var(--muted);font-size:14px;line-height:1.6;display:none}
   .faq-item.open .faq-answer{display:block}
 
-  /* MODULE */
-  .module{background:linear-gradient(135deg,#16100A,#121215);border:1px solid rgba(255,106,0,.25);border-radius:20px;padding:42px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center}
-  .module .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent2);background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.4);border-radius:6px;padding:4px 10px;margin-bottom:16px}
-  .module h3{font-size:26px;font-weight:800;letter-spacing:-.5px}
-  .module p{color:var(--muted);margin-top:12px;font-size:15px}
-  .module ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px}
-  .module li{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#D6D6D8}
-  .module li .c{color:var(--accent2);font-weight:800}
-  .module-card{background:#0E0E11;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
-  .module-card .price{font-size:13px;color:var(--muted)}
-  .module-card .ext{font-family:ui-monospace,monospace;font-size:24px;font-weight:700;color:var(--accent2);margin:6px 0 4px}
-
   /* BETA */
   .beta{text-align:center}
   .beta-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px}
@@ -198,7 +186,6 @@
     .features,.steps{grid-template-columns:1fr 1fr}
     .pricing-grid{grid-template-columns:1fr}
     .testimonials-grid{grid-template-columns:1fr}
-    .module{grid-template-columns:1fr;padding:32px}
     .nav-links{display:none}
     .m-grid{grid-template-columns:repeat(2,1fr)}
     header{padding:60px 0 48px}
@@ -216,7 +203,6 @@
     .cta .btn{width:100%;justify-content:center}
     .nav-right .btn-primary{display:none}
     .beta-card{padding:22px}
-    .module{padding:22px;border-radius:16px}
     .mock{margin-top:34px}
     .step,.feat{padding:20px}
   }
@@ -384,13 +370,43 @@
       </div>
 
       <div class="faq-item">
+        <div class="faq-question" data-fr="Mes rushes sont-ils envoyés en ligne ?" data-en="Are my rushes uploaded anywhere?">Mes rushes sont-ils envoyés en ligne ?</div>
+        <div class="faq-answer" data-fr="Non. Rushr lit et organise vos fichiers directement sur votre disque — rien n'est uploadé. Vos rushes ne quittent jamais votre machine." data-en="No. Rushr reads and organizes your files straight from your local disk — nothing gets uploaded. Your footage never leaves your machine.">Non. Rushr lit et organise vos fichiers directement sur votre disque — rien n'est uploadé. Vos rushes ne quittent jamais votre machine.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Est-ce que Rushr modifie mes fichiers originaux ?" data-en="Does Rushr modify my original files?">Est-ce que Rushr modifie mes fichiers originaux ?</div>
+        <div class="faq-answer" data-fr="Non, par défaut Rushr travaille en mode Copie : vos fichiers originaux ne sont jamais modifiés ni déplacés. Un mode Déplacement est aussi disponible si vous préférez réorganiser directement vos rushes." data-en="No, by default Rushr works in Copy mode: your original files are never modified or moved. A Move mode is also available if you'd rather reorganize your rushes directly.">Non, par défaut Rushr travaille en mode Copie : vos fichiers originaux ne sont jamais modifiés ni déplacés. Un mode Déplacement est aussi disponible si vous préférez réorganiser directement vos rushes.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Comment fonctionne le tag au clavier ?" data-en="How does keyboard tagging work?">Comment fonctionne le tag au clavier ?</div>
+        <div class="faq-answer" data-fr="Chaque catégorie (Interview, B-Roll, Drone…) est associée à une touche du clavier, de 1 à 9. Sélectionnez un ou plusieurs clips et appuyez sur la touche pour les taguer instantanément, même sur une sélection multiple entre plusieurs dossiers." data-en="Each category (Interview, B-Roll, Drone…) is mapped to a number key, 1 through 9. Select one or several clips and hit the key to tag them instantly, even across a multi-folder selection.">Chaque catégorie (Interview, B-Roll, Drone…) est associée à une touche du clavier, de 1 à 9. Sélectionnez un ou plusieurs clips et appuyez sur la touche pour les taguer instantanément, même sur une sélection multiple entre plusieurs dossiers.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Que fait exactement le bouton Prepare ?" data-en="What does the Prepare button actually do?">Que fait exactement le bouton Prepare ?</div>
+        <div class="faq-answer" data-fr="« Prepare » déplace chaque prise taguée vers le bon dossier de destination selon la structure de votre projet, en un clic — plus besoin de trier manuellement avant d'ouvrir votre logiciel de montage." data-en="'Prepare' moves every tagged take into its correct destination folder based on your project structure, in one click — no more manual sorting before opening your editing software.">« Prepare » déplace chaque prise taguée vers le bon dossier de destination selon la structure de votre projet, en un clic — plus besoin de trier manuellement avant d'ouvrir votre logiciel de montage.</div>
+      </div>
+
+      <div class="faq-item">
         <div class="faq-question" data-fr="Puis-je l'utiliser sur plusieurs machines ?" data-en="Can I use it on multiple machines?">Puis-je l'utiliser sur plusieurs machines ?</div>
         <div class="faq-answer" data-fr="Oui, Rushr est gratuit et peut être installé sur autant de machines que vous le souhaitez." data-en="Yes, Rushr is free and can be installed on as many machines as you like.">Oui, Rushr est gratuit et peut être installé sur autant de machines que vous le souhaitez.</div>
       </div>
 
       <div class="faq-item">
+        <div class="faq-question" data-fr="Combien coûte Rushr ?" data-en="How much does Rushr cost?">Combien coûte Rushr ?</div>
+        <div class="faq-answer" data-fr="Rushr est gratuit pendant toute la phase de beta. Le modèle tarifaire de la version finale n'est pas encore arrêté — les bêta-testeurs seront prévenus en priorité avant tout changement." data-en="Rushr is free during the entire beta phase. Pricing for the final release hasn't been decided yet — beta testers will be the first to know before anything changes.">Rushr est gratuit pendant toute la phase de beta. Le modèle tarifaire de la version finale n'est pas encore arrêté — les bêta-testeurs seront prévenus en priorité avant tout changement.</div>
+      </div>
+
+      <div class="faq-item">
         <div class="faq-question" data-fr="Comment se passe la mise à jour ?" data-en="How do updates work?">Comment se passe la mise à jour ?</div>
         <div class="faq-answer" data-fr="Rushr vérifie automatiquement les mises à jour au démarrage. Si une nouvelle version est disponible, vous serez notifié et pourrez la télécharger en un clic." data-en="Rushr automatically checks for updates on startup. If a new version is available, you'll be notified and can download it with one click.">Rushr vérifie automatiquement les mises à jour au démarrage. Si une nouvelle version est disponible, vous serez notifié et pourrez la télécharger en un clic.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" data-fr="Comment donner mon avis pendant la beta ?" data-en="How can I give feedback during the beta?">Comment donner mon avis pendant la beta ?</div>
+        <div class="faq-answer" data-fr="Écrivez-nous directement à contact@thebackpacklab.com : bugs, idées de fonctionnalités, retours d'usage... tout nous intéresse pour façonner la V1." data-en="Just email us at contact@thebackpacklab.com — bugs, feature ideas, day-to-day feedback, all of it helps shape the V1.">Écrivez-nous directement à contact@thebackpacklab.com : bugs, idées de fonctionnalités, retours d'usage... tout nous intéresse pour façonner la V1.</div>
       </div>
     </div>
   </div>
