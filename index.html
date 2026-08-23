@@ -31,7 +31,7 @@
   nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
-  .brand .dot{width:12px;height:12px;border-radius:3px;background:var(--accent);display:block}
+  .brand .mark{width:24px;height:24px;display:block}
   .nav-right{display:flex;align-items:center;gap:18px}
   .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
   .nav-links a:hover{color:var(--text)}
@@ -105,7 +105,7 @@
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
   .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
   .foot-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px}
-  .foot-brand .dot{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .foot-brand .mark{width:18px;height:18px;display:block}
 
   @media(max-width:860px){
     .pillars{grid-template-columns:1fr}
@@ -137,7 +137,7 @@
 
 <nav>
   <div class="wrap nav-in">
-    <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB</a>
+    <a class="brand" href="index.html"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
     <div class="nav-right">
       <div class="nav-links">
         <a href="software.html" data-fr="Software" data-en="Software">Software</a>
@@ -159,7 +159,7 @@
   <div class="wrap hero">
     <span class="pill"><span class="d"></span><span data-fr="Studio créatif · Éditeur de logiciels" data-en="Creative studio · Software publisher">Studio créatif · Éditeur de logiciels</span></span>
     <h1 data-fr="Des logiciels pour<br>les créateurs vidéo." data-en="Software for<br>video creators.">Des logiciels pour<br>les créateurs vidéo.</h1>
-    <p class="sub" data-fr="Backpack Lab conçoit des outils pour vidéastes et monteurs — à commencer par Rushr." data-en="Backpack Lab builds tools for videographers and editors — starting with Rushr.">Backpack Lab conçoit des outils pour vidéastes et monteurs.</p>
+    <p class="sub" data-fr="Backpack Lab construit les outils qui manquaient aux monteurs — à commencer par Rushr." data-en="Backpack Lab builds the tools editors have been missing — starting with Rushr.">Backpack Lab construit les outils qui manquaient aux monteurs.</p>
     <div class="cta">
       <a href="software.html" class="btn btn-primary" data-fr="Découvrir nos logiciels" data-en="Explore our software">Découvrir nos logiciels</a>
       <a href="rushr.html" class="btn btn-ghost" data-fr="Rejoindre la beta Rushr" data-en="Join the Rushr beta">Rejoindre la beta Rushr</a>
@@ -171,19 +171,19 @@
 <section id="what" class="reveal">
   <div class="wrap">
     <div class="eyebrow" data-fr="Ce que nous faisons" data-en="What we do">Ce que nous faisons</div>
-    <div class="h2" data-fr="Des outils pensés pour les monteurs" data-en="Tools built for editors">Des outils pensés pour les monteurs</div>
+    <div class="h2" data-fr="Des outils qui collent au vrai flux de montage" data-en="Tools shaped by real editing workflows">Des outils qui collent au vrai flux de montage</div>
     <p class="lead" data-fr="Nous développons des applications desktop pour accélérer le flux de post-production." data-en="We build desktop apps to speed up post-production workflows.">Nous développons des applications desktop pour accélérer le flux de post-production.</p>
     <div class="pillars">
       <div class="pillar tilt-3d">
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H4zM2 20h20"/></svg></div>
         <h3 data-fr="Software" data-en="Software">Software</h3>
-        <p data-fr="Des applications desktop pensées pour le flux réel des monteurs, compatibles Windows et macOS. Rushr est le premier — d'autres logiciels arrivent." data-en="Desktop apps built around how editors really work, for Windows and macOS. Rushr is the first — more software is on the way.">Des applications desktop pour Windows et macOS. Rushr est le premier, d'autres arrivent.</p>
+        <p data-fr="Des applications desktop qui suivent le flux réel des monteurs, compatibles Windows et macOS. Rushr est le premier — d'autres logiciels arrivent." data-en="Desktop apps that follow how editors really work, for Windows and macOS. Rushr is the first — more software is on the way.">Des applications desktop pour Windows et macOS. Rushr est le premier, d'autres arrivent.</p>
         <a class="link" href="software.html" data-fr="Voir les logiciels →" data-en="See the software →">Voir les logiciels →</a>
       </div>
       <div class="pillar tilt-3d">
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H4zM2 20h20"/><path d="M9 9l4 2.5L9 14z" fill="currentColor" stroke="none"/></svg></div>
         <h3 data-fr="Rushr · Beta ouverte" data-en="Rushr · Open beta">Rushr · Beta ouverte</h3>
-        <p data-fr="Notre premier logiciel : l'outil de dérushage qui vous fait trier, prévisualiser et taguer vos rushes avant le montage. Disponible en beta." data-en="Our first software: the dérushage tool to sort, preview and tag your rushes before editing. Available in beta.">Notre premier logiciel : l'outil de dérushage. Disponible en beta.</p>
+        <p data-fr="Notre premier logiciel : dérushez, structurez votre projet et gagnez des heures de tri avant le montage. Disponible en beta." data-en="Our first software: dérush your footage, structure your project, and save hours of sorting before editing. Available in beta.">Notre premier logiciel : dérushez et structurez votre projet. Disponible en beta.</p>
         <a class="link" href="rushr.html" data-fr="Rejoindre la beta →" data-en="Join the beta →">Rejoindre la beta →</a>
       </div>
     </div>
@@ -199,7 +199,7 @@
       <a class="soft live tilt-3d" href="rushr.html">
         <span class="tag on">Rushr</span>
         <h3 data-fr="Backpack Rushr" data-en="Backpack Rushr">Backpack Rushr</h3>
-        <p data-fr="L'outil de dérushage : organisez, prévisualisez et triez vos rushes avant le montage." data-en="The dérushage tool: organize, preview and sort your rushes before editing.">L'outil de dérushage : triez vos rushes avant le montage.</p>
+        <p data-fr="Organisez, prévisualisez et taguez vos rushes — prêts pour le montage en quelques minutes." data-en="Organize, preview and tag your rushes — ready for editing in minutes.">Organisez, prévisualisez et taguez vos rushes — prêts en quelques minutes.</p>
         <span class="go" data-fr="Découvrir Rushr →" data-en="Discover Rushr →">Découvrir Rushr →</span>
       </a>
       <div class="soft tilt-3d">
@@ -233,7 +233,7 @@
 
 <footer>
   <div class="wrap foot-in">
-    <div class="foot-brand"><span class="dot"></span>BACKPACK&nbsp;LAB</div>
+    <div class="foot-brand"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</div>
     <div data-fr="© 2026 BACKPACK LAB · Éditeur de logiciels. Tous droits réservés." data-en="© 2026 BACKPACK LAB · Software publisher. All rights reserved.">© 2026 BACKPACK LAB</div>
     <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
   </div>

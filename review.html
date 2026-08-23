@@ -20,7 +20,7 @@
   nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
-  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .brand .mark{width:22px;height:22px;display:block}
   .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
   .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
   .lang button.on{background:var(--accent);color:var(--on-accent)}
@@ -118,7 +118,7 @@
 </head>
 <body>
 <nav><div class="wrap nav-in">
-  <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB · Review</a>
+  <a class="brand" href="index.html"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB · Review</a>
   <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
 </div></nav>
 

@@ -16,7 +16,7 @@
   nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
-  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent)}
+  .brand .mark{width:22px;height:22px;display:block}
   .brand .tag{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--accent2);border:1px solid rgba(53,220,142,.4);border-radius:5px;padding:1px 6px}
   .nav-right{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
   main{flex:1;width:100%;padding:24px 0 60px}
@@ -128,7 +128,7 @@
 </head>
 <body>
 <nav><div class="wrap nav-in">
-  <a class="brand" href="index.html"><span class="dot"></span>BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
+  <a class="brand" href="index.html"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
   <div class="nav-right"><span id="whoami"></span><button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Déconnexion</button></div>
 </div></nav>
 
