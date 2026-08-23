@@ -59,12 +59,6 @@
 
   section{padding:40px 0 64px}
 
-  /* FILTERS */
-  .filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0 36px}
-  .filters button{background:var(--surface);border:1px solid var(--line2);color:var(--muted);font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;cursor:pointer;font-family:inherit;transition:.15s}
-  .filters button:hover{color:var(--text);border-color:var(--accent)}
-  .filters button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
-
   /* PACK GRID */
   .packs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .pack{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
@@ -81,6 +75,7 @@
   .pack-thumb .price{position:absolute;top:12px;right:12px;font-size:11px;font-weight:800;letter-spacing:.3px;border-radius:6px;padding:3px 10px;transform:translateZ(10px)}
   .price.free{color:var(--on-accent);background:var(--accent)}
   .price.paid{color:var(--accent2);background:rgba(53,220,142,.12);border:1px solid rgba(53,220,142,.35)}
+  .price.soon{color:var(--muted);background:var(--surface2);border:1px solid var(--line2)}
   .pack-body{padding:20px;display:flex;flex-direction:column;flex:1}
   .pack-body h3{font-size:16px;font-weight:800;margin-bottom:6px}
   .pack-body p{color:var(--muted);font-size:13.5px;flex:1}
@@ -89,6 +84,9 @@
   .pack .btn{width:100%;justify-content:center;padding:11px}
 
   .ph-note{text-align:center;color:var(--muted2);font-size:13px;margin-top:30px;font-style:italic}
+  .soon-banner{background:var(--surface);border:1px solid rgba(53,220,142,.35);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:32px}
+  .soon-banner h3{font-size:18px;font-weight:800}
+  .soon-banner p{color:var(--muted);font-size:14px;margin-top:6px}
 
   /* CTA */
   .cta-band{background:linear-gradient(135deg,#0f1f17,#121215);border:1px solid rgba(53,220,142,.25);border-radius:20px;padding:42px;text-align:center;margin-top:8px}
@@ -101,9 +99,22 @@
   .foot-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px}
   .foot-brand .mark{width:18px;height:18px;display:block}
 
+  /* MOBILE MENU */
+  .menu-btn{display:none;flex-direction:column;justify-content:center;gap:5px;width:30px;height:30px;background:transparent;border:0;cursor:pointer;padding:0;flex-shrink:0}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.25s ease}
+  .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .menu-btn.open span:nth-child(2){opacity:0}
+  .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-menu{display:none;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line)}
+  .mobile-menu a{padding:14px 24px;font-size:15px;color:var(--muted);border-bottom:1px solid var(--line)}
+  .mobile-menu a.on{color:var(--text)}
+  .mobile-menu .btn{margin:14px 24px 18px}
+
   @media(max-width:860px){
     .packs{grid-template-columns:1fr 1fr}
     .nav-links{display:none}
+    .menu-btn{display:flex}
+    .mobile-menu.show{display:flex}
     header{padding:60px 0 4px}
   }
   @media(max-width:600px){
@@ -137,7 +148,15 @@
         <button id="len" onclick="setLang('en')">EN</button>
       </div>
       <a href="#packs" class="btn btn-primary" data-fr="Voir les packs" data-en="Browse packs">Voir les packs</a>
+      <button class="menu-btn" id="menuBtn" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="software.html" data-fr="Software" data-en="Software">Software</a>
+    <a href="rushr.html" data-fr="Rushr" data-en="Rushr">Rushr</a>
+    <a href="packs.html" class="on" data-fr="Packs" data-en="Packs">Packs</a>
+    <a href="index.html#contact" data-fr="Contact" data-en="Contact">Contact</a>
+    <a href="#packs" class="btn btn-primary" data-fr="Voir les packs" data-en="Browse packs">Voir les packs</a>
   </div>
 </nav>
 
@@ -146,119 +165,57 @@
   <div class="wrap hero-in">
     <span class="pill"><span class="d"></span><span data-fr="Ressources créateurs" data-en="Creator resources">Ressources créateurs</span></span>
     <h1 data-fr="Presets & packs" data-en="Presets & packs">Presets & packs</h1>
-    <p class="sub" data-fr="Des LUTs, presets de montage, overlays, SFX et packs de sons pour accélérer votre flux créatif. Gratuits et premium." data-en="LUTs, editing presets, overlays, SFX and sound packs to speed up your creative flow. Free and premium.">LUTs, presets, overlays, SFX et sons pour accélérer votre flux.</p>
+    <p class="sub" data-fr="Des LUTs, presets de montage, overlays, SFX et packs de sons pour accélérer votre flux créatif — bientôt disponibles." data-en="LUTs, editing presets, overlays, SFX and sound packs to speed up your creative flow — coming soon.">LUTs, presets, overlays, SFX et sons — bientôt disponibles.</p>
   </div>
 </header>
 
 <section id="packs" class="reveal">
   <div class="wrap">
 
-    <!-- FILTERS -->
-    <div class="filters">
-      <button class="on" data-filter="all" data-fr="Tout" data-en="All">Tout</button>
-      <button data-filter="lut" data-fr="LUTs / Étalonnage" data-en="LUTs / Color">LUTs / Étalonnage</button>
-      <button data-filter="edit" data-fr="Presets montage" data-en="Editing presets">Presets montage</button>
-      <button data-filter="sfx" data-fr="Overlays / SFX" data-en="Overlays / SFX">Overlays / SFX</button>
-      <button data-filter="sound" data-fr="Packs de sons" data-en="Sound packs">Packs de sons</button>
+    <div class="soon-banner">
+      <h3 data-fr="Section en construction" data-en="Section under construction">Section en construction</h3>
+      <p data-fr="Les packs et presets Backpack Lab seront disponibles très prochainement." data-en="Backpack Lab packs and presets will be available very soon.">Les packs et presets Backpack Lab seront disponibles très prochainement.</p>
     </div>
 
     <div class="packs">
 
       <!-- LUTs -->
       <div class="pack tilt-3d" data-cat="lut">
-        <div class="pack-thumb c-lut"><span class="cat" data-fr="LUTs" data-en="LUTs">LUTs</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
+        <div class="pack-thumb c-lut"><span class="cat" data-fr="LUTs" data-en="LUTs">LUTs</span><span class="price soon" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/></svg></div>
         <div class="pack-body">
           <h3 data-fr="Starter LUT Pack" data-en="Starter LUT Pack">Starter LUT Pack</h3>
-          <p data-fr="5 LUTs cinématiques gratuites pour démarrer votre étalonnage. Format .cube universel." data-en="5 free cinematic LUTs to kickstart your grade. Universal .cube format.">5 LUTs cinématiques gratuites. Format .cube.</p>
+          <p data-fr="5 LUTs cinématiques pour démarrer votre étalonnage. Format .cube universel." data-en="5 cinematic LUTs to kickstart your grade. Universal .cube format.">5 LUTs cinématiques. Format .cube.</p>
           <div class="pack-meta"><span>.cube</span><span data-fr="5 LUTs" data-en="5 LUTs">5 LUTs</span></div>
-          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
-        </div>
-      </div>
-
-      <div class="pack tilt-3d" data-cat="lut">
-        <div class="pack-thumb c-lut"><span class="cat" data-fr="LUTs" data-en="LUTs">LUTs</span><span class="price paid">19€</span>
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Cinematic LUTs Pro" data-en="Cinematic LUTs Pro">Cinematic LUTs Pro</h3>
-          <p data-fr="20 LUTs premium étalonnées pour différents rendus film. Compatibles toutes caméras." data-en="20 premium graded LUTs for varied film looks. Works with any camera.">20 LUTs premium pour rendus film.</p>
-          <div class="pack-meta"><span>.cube</span><span data-fr="20 LUTs" data-en="20 LUTs">20 LUTs</span></div>
-          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+          <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
         </div>
       </div>
 
       <!-- Editing presets -->
       <div class="pack tilt-3d" data-cat="edit">
-        <div class="pack-thumb c-edit"><span class="cat" data-fr="Montage" data-en="Editing">Montage</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
-          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Quick Transitions" data-en="Quick Transitions">Quick Transitions</h3>
-          <p data-fr="10 transitions fluides prêtes à glisser. Pour Premiere Pro & DaVinci Resolve." data-en="10 smooth drag-and-drop transitions. For Premiere Pro & DaVinci Resolve.">10 transitions fluides prêtes à glisser.</p>
-          <div class="pack-meta"><span>Premiere</span><span>DaVinci</span></div>
-          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
-        </div>
-      </div>
-
-      <div class="pack tilt-3d" data-cat="edit">
-        <div class="pack-thumb c-edit"><span class="cat" data-fr="Montage" data-en="Editing">Montage</span><span class="price paid">29€</span>
+        <div class="pack-thumb c-edit"><span class="cat" data-fr="Montage" data-en="Editing">Montage</span><span class="price soon" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
         <div class="pack-body">
           <h3 data-fr="Editor's Toolkit" data-en="Editor's Toolkit">Editor's Toolkit</h3>
           <p data-fr="Pack complet : presets, titres, transitions et templates de projet pour gagner du temps." data-en="Full pack: presets, titles, transitions and project templates to save time.">Pack complet presets, titres et templates.</p>
           <div class="pack-meta"><span>Premiere</span><span data-fr="50+ presets" data-en="50+ presets">50+ presets</span></div>
-          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
-        </div>
-      </div>
-
-      <!-- Overlays / SFX -->
-      <div class="pack tilt-3d" data-cat="sfx">
-        <div class="pack-thumb c-sfx"><span class="cat" data-fr="Overlays" data-en="Overlays">Overlays</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
-          <svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 7l3-4h12l3 4"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Light Leaks Vol.1" data-en="Light Leaks Vol.1">Light Leaks Vol.1</h3>
-          <p data-fr="8 overlays de fuites de lumière en 4K, à poser en mode écran sur vos plans." data-en="8 4K light-leak overlays to drop in screen mode over your shots.">8 overlays light leaks 4K.</p>
-          <div class="pack-meta"><span>4K</span><span>.mp4</span></div>
-          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
-        </div>
-      </div>
-
-      <div class="pack tilt-3d" data-cat="sfx">
-        <div class="pack-thumb c-sfx"><span class="cat" data-fr="SFX" data-en="SFX">SFX</span><span class="price paid">24€</span>
-          <svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 7l3-4h12l3 4"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="VFX Elements Pack" data-en="VFX Elements Pack">VFX Elements Pack</h3>
-          <p data-fr="Explosions, fumée, particules et flashs en 4K avec couche alpha, prêts à composer." data-en="Explosions, smoke, particles and flashes in 4K with alpha, ready to composite.">Éléments VFX 4K avec alpha.</p>
-          <div class="pack-meta"><span>4K</span><span>Alpha</span><span data-fr="30 éléments" data-en="30 elements">30 éléments</span></div>
-          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+          <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
         </div>
       </div>
 
       <!-- Sound packs -->
       <div class="pack tilt-3d" data-cat="sound">
-        <div class="pack-thumb c-sound"><span class="cat" data-fr="Sons" data-en="Sound">Sons</span><span class="price free" data-fr="Gratuit" data-en="Free">Gratuit</span>
-          <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15 9a4 4 0 010 6"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Transition SFX" data-en="Transition SFX">Transition SFX</h3>
-          <p data-fr="15 effets sonores de transition (whoosh, impacts) pour dynamiser vos montages." data-en="15 transition sound effects (whooshes, impacts) to energize your edits.">15 SFX de transition (whoosh, impacts).</p>
-          <div class="pack-meta"><span>.wav</span><span data-fr="15 sons" data-en="15 sounds">15 sons</span></div>
-          <a href="#" class="btn btn-primary" data-fr="Télécharger" data-en="Download">Télécharger</a>
-        </div>
-      </div>
-
-      <div class="pack tilt-3d" data-cat="sound">
-        <div class="pack-thumb c-sound"><span class="cat" data-fr="Sons" data-en="Sound">Sons</span><span class="price paid">34€</span>
+        <div class="pack-thumb c-sound"><span class="cat" data-fr="Sons" data-en="Sound">Sons</span><span class="price soon" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15 9a4 4 0 010 6"/></svg></div>
         <div class="pack-body">
           <h3 data-fr="Cinematic Soundscapes" data-en="Cinematic Soundscapes">Cinematic Soundscapes</h3>
           <p data-fr="Ambiances, drones et nappes cinématiques libres de droits pour habiller vos films." data-en="Royalty-free cinematic ambiences, drones and pads to score your films.">Ambiances & drones cinématiques libres de droits.</p>
           <div class="pack-meta"><span>.wav</span><span data-fr="40 sons" data-en="40 sounds">40 sons</span></div>
-          <a href="#" class="btn btn-ghost" data-fr="Acheter" data-en="Buy">Acheter</a>
+          <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
         </div>
       </div>
 
     </div>
-
-    <p class="ph-note" data-fr="Packs de démonstration — remplacez par vos vrais fichiers et liens de téléchargement / achat." data-en="Demo packs — replace with your real files and download / purchase links.">Packs de démonstration — à remplacer par vos vrais fichiers et liens.</p>
   </div>
 </section>
 
@@ -282,6 +239,16 @@
 </footer>
 
 <script>
+  function toggleMenu(){
+    document.getElementById('menuBtn').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('show');
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.mobile-menu a').forEach(function(a){
+      a.addEventListener('click', function(){ toggleMenu(); });
+    });
+  });
+
   function setLang(lang){
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-fr]').forEach(function(el){
@@ -298,27 +265,11 @@
     document.getElementById('len').classList.toggle('on', lang==='en');
     try{ localStorage.setItem('bpl_lang', lang); }catch(e){}
   }
-  // Category filter
-  function setupFilters(){
-    var btns = document.querySelectorAll('.filters button');
-    var packs = document.querySelectorAll('.pack');
-    btns.forEach(function(b){
-      b.addEventListener('click', function(){
-        btns.forEach(function(x){x.classList.remove('on');});
-        b.classList.add('on');
-        var f = b.getAttribute('data-filter');
-        packs.forEach(function(p){
-          p.style.display = (f==='all' || p.getAttribute('data-cat')===f) ? '' : 'none';
-        });
-      });
-    });
-  }
   (function init(){
     var saved = null;
     try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
     var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
     setLang(lang);
-    setupFilters();
   })();
 
   // Scroll reveal observer

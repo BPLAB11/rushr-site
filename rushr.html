@@ -182,11 +182,24 @@
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
   .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
+  /* MOBILE MENU */
+  .menu-btn{display:none;flex-direction:column;justify-content:center;gap:5px;width:30px;height:30px;background:transparent;border:0;cursor:pointer;padding:0;flex-shrink:0}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.25s ease}
+  .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .menu-btn.open span:nth-child(2){opacity:0}
+  .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-menu{display:none;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line)}
+  .mobile-menu a{padding:14px 24px;font-size:15px;color:var(--muted);border-bottom:1px solid var(--line)}
+  .mobile-menu a.on{color:var(--text)}
+  .mobile-menu .btn{margin:14px 24px 18px}
+
   @media(max-width:860px){
     .features,.steps{grid-template-columns:1fr 1fr}
     .pricing-grid{grid-template-columns:1fr}
     .testimonials-grid{grid-template-columns:1fr}
     .nav-links{display:none}
+    .menu-btn{display:flex}
+    .mobile-menu.show{display:flex}
     .m-grid{grid-template-columns:repeat(2,1fr)}
     header{padding:60px 0 48px}
     section{padding:56px 0}
@@ -236,7 +249,15 @@
         <button id="len" onclick="setLang('en')">EN</button>
       </div>
       <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
+      <button class="menu-btn" id="menuBtn" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" data-fr="← Backpack Lab" data-en="← Backpack Lab">← Backpack Lab</a>
+    <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
+    <a href="#testimonials" data-fr="Témoignages" data-en="Testimonials">Témoignages</a>
+    <a href="#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
+    <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
   </div>
 </nav>
 
@@ -446,6 +467,16 @@
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
   var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  function toggleMenu(){
+    document.getElementById('menuBtn').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('show');
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.mobile-menu a').forEach(function(a){
+      a.addEventListener('click', function(){ toggleMenu(); });
+    });
+  });
 
   function setLang(lang){
     document.documentElement.lang = lang;

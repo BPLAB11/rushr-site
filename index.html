@@ -107,10 +107,23 @@
   .foot-brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px}
   .foot-brand .mark{width:18px;height:18px;display:block}
 
+  /* MOBILE MENU */
+  .menu-btn{display:none;flex-direction:column;justify-content:center;gap:5px;width:30px;height:30px;background:transparent;border:0;cursor:pointer;padding:0;flex-shrink:0}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.25s ease}
+  .menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .menu-btn.open span:nth-child(2){opacity:0}
+  .menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-menu{display:none;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line)}
+  .mobile-menu a{padding:14px 24px;font-size:15px;color:var(--muted);border-bottom:1px solid var(--line)}
+  .mobile-menu a.on{color:var(--text)}
+  .mobile-menu .btn{margin:14px 24px 18px}
+
   @media(max-width:860px){
     .pillars{grid-template-columns:1fr}
     .soft-grid{grid-template-columns:1fr 1fr}
     .nav-links{display:none}
+    .menu-btn{display:flex}
+    .mobile-menu.show{display:flex}
     header{padding:64px 0 48px}
     section{padding:56px 0}
   }
@@ -150,7 +163,15 @@
         <button id="len" onclick="setLang('en')">EN</button>
       </div>
       <a href="#contact" class="btn btn-primary" data-fr="Nous contacter" data-en="Get in touch">Nous contacter</a>
+      <button class="menu-btn" id="menuBtn" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="software.html" data-fr="Software" data-en="Software">Software</a>
+    <a href="rushr.html" data-fr="Rushr" data-en="Rushr">Rushr</a>
+    <a href="packs.html" data-fr="Packs" data-en="Packs">Packs</a>
+    <a href="#contact" data-fr="Contact" data-en="Contact">Contact</a>
+    <a href="#contact" class="btn btn-primary" data-fr="Nous contacter" data-en="Get in touch">Nous contacter</a>
   </div>
 </nav>
 
@@ -240,6 +261,16 @@
 </footer>
 
 <script>
+  function toggleMenu(){
+    document.getElementById('menuBtn').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('show');
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.mobile-menu a').forEach(function(a){
+      a.addEventListener('click', function(){ toggleMenu(); });
+    });
+  });
+
   function setLang(lang){
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-fr]').forEach(function(el){
