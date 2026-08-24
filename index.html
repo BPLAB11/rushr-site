@@ -145,6 +145,14 @@
   .reveal.delay-2{transition-delay:.2s}
   .reveal.delay-3{transition-delay:.3s}
 </style>
+<!-- Microsoft Clarity analytics -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "y7gx8q653a");
+</script>
 </head>
 <body>
 
@@ -260,6 +268,52 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  (function(){
+    var sid = sessionStorage.getItem('bpl_sid');
+    if(!sid){
+      sid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0,v=c=='x'?r:(r&0x3|0x8);return v.toString(16);});
+      try{ sessionStorage.setItem('bpl_sid', sid); }catch(e){}
+    }
+    window.BPL_SID = sid;
+    var device = /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+    var browser = (function(){
+      var ua = navigator.userAgent;
+      if(/Edg\//.test(ua)) return 'Edge';
+      if(/Chrome\//.test(ua) && !/Edg\//.test(ua)) return 'Chrome';
+      if(/Firefox\//.test(ua)) return 'Firefox';
+      if(/Safari\//.test(ua) && !/Chrome\//.test(ua)) return 'Safari';
+      return 'Other';
+    })();
+    var pvId = null, startTime = Date.now();
+    function track(country){
+      SB.rpc('analytics_track', {
+        p_session_id: sid, p_path: location.pathname, p_referrer: document.referrer || null,
+        p_country: country || null, p_device: device, p_browser: browser, p_lang: document.documentElement.lang || 'fr'
+      }).then(function(r){ if(!r.error) pvId = r.data; });
+    }
+    fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){track(d && d.country_code);}).catch(function(){track(null);});
+    function ping(){
+      if(!pvId) return;
+      fetch(SUPABASE_URL+'/rest/v1/rpc/analytics_ping', {
+        method:'POST', keepalive:true,
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY},
+        body: JSON.stringify({p_id: pvId, p_duration_ms: Date.now()-startTime})
+      });
+    }
+    document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='hidden') ping(); });
+    window.addEventListener('pagehide', ping);
+
+    function heartbeat(){ SB.rpc('analytics_heartbeat', {p_session_id: sid, p_path: location.pathname}).then(function(){}); }
+    heartbeat();
+    var hbInterval = setInterval(heartbeat, 20000);
+    window.addEventListener('pagehide', function(){ clearInterval(hbInterval); });
+  })();
+</script>
 <script>
   function toggleMenu(){
     document.getElementById('menuBtn').classList.toggle('open');

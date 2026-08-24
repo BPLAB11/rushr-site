@@ -10,7 +10,8 @@
 <style>
   :root{--bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--warn:#FFB454;--danger:#FF6B6B}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  html{overflow-x:hidden}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;width:100%;max-width:100%}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:1240px;margin:0 auto;padding:0 22px;width:100%}
   nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
@@ -45,7 +46,8 @@
 
   /* app */
   #app{display:none}
-  .layout{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
+  .layout{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;min-width:0}
+  .layout > *{min-width:0}
   .col-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .col-head h2{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700}
   .plist{display:flex;flex-direction:column;gap:9px}
@@ -59,7 +61,7 @@
   .b-pending{color:#150A03;background:var(--warn)}.b-review{color:var(--on-accent);background:var(--accent)}.b-approved{color:#fff;background:#2F7D52;border:1px solid var(--accent)}.b-off{color:var(--muted);background:var(--surface2);border:1px solid var(--line2)}
   .pcard .cnt{font-size:11px;color:var(--muted2)}
 
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;min-width:0;overflow-x:auto}
   .card+.card{margin-top:14px}
   .card h3{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
   .empty{color:var(--muted);font-size:14px;text-align:center;padding:40px 20px}
@@ -67,8 +69,8 @@
   .linkbox code{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#D6D6D8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .linkbox button{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
   .linkbox button:hover{border-color:var(--accent);color:var(--accent2)}
-  .frow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-  .fg{display:flex;flex-direction:column;gap:5px}
+  .frow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;min-width:0}
+  .fg{display:flex;flex-direction:column;gap:5px;min-width:0}
   .fg label{font-size:11.5px;color:var(--muted);font-weight:600}
   .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
   .toggle-row:last-child{border-bottom:0}
@@ -119,10 +121,46 @@
   .icon-btn{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit}
   .icon-btn:hover{border-color:var(--accent);color:var(--accent2)}
   .icon-btn.danger:hover{border-color:var(--danger);color:var(--danger)}
+
+  /* analytics */
+  .range-tabs{display:flex;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:3px}
+  .range-tabs button{background:transparent;border:0;color:var(--muted);font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:7px;cursor:pointer;font-family:inherit}
+  .range-tabs button.on{background:var(--accent);color:var(--on-accent)}
+  .a-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .a-list{display:flex;flex-direction:column;gap:9px}
+  .a-row{display:flex;align-items:center;gap:10px;font-size:13px}
+  .a-row .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#D6D6D8}
+  .a-row .n{font-size:11.5px;color:var(--muted2);flex-shrink:0}
+  .a-row .bar{position:relative;height:6px;background:var(--surface2);border-radius:4px;flex:2;overflow:hidden}
+  .a-row .bar i{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:4px}
+  .bars{display:flex;align-items:flex-end;gap:4px;height:110px;margin-top:6px}
+  .bars .b{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+  .bars .b:hover::after{content:attr(data-tip);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--line2);border-radius:6px;padding:4px 8px;font-size:10.5px;white-space:nowrap;margin-bottom:5px;color:#fff}
+  .empty-mini{color:var(--muted2);font-size:12.5px;padding:8px 0}
+  .live-card{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .live-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite}
+  @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(53,220,142,.5)}50%{box-shadow:0 0 0 7px rgba(53,220,142,0)}}
+  .live-n{font-size:22px;font-weight:800}
+  .live-card .l{font-size:11.5px;color:var(--muted2)}
+  .live-paths{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .live-paths span{font-size:10.5px;color:var(--muted);background:var(--surface2);border:1px solid var(--line2);border-radius:6px;padding:3px 8px}
+  .funnel-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .funnel-step{text-align:center}
+  .funnel-step .n{font-size:24px;font-weight:800}
+  .funnel-step .l{font-size:11.5px;color:var(--muted2);margin-top:2px}
+  .funnel-arrow{color:var(--muted2);font-size:18px}
+  .funnel-rate{margin-left:auto;text-align:center;background:var(--surface2);border:1px solid var(--line2);border-radius:10px;padding:10px 18px}
+  .funnel-rate .n{font-size:20px;font-weight:800;color:var(--accent2)}
+  .funnel-rate .l{font-size:11px;color:var(--muted2)}
   @media(max-width:640px){
     #view-beta th:nth-child(4),#view-beta td:nth-child(4){display:none}
     #view-beta .toolbar{flex-direction:column;align-items:stretch}
     #view-beta .toolbar .in{max-width:none}
+    #view-analytics .a-grid{grid-template-columns:1fr}
+    #view-analytics .toolbar{flex-direction:column;align-items:stretch}
+    .live-card{flex-wrap:wrap}
+    .live-paths{margin-left:0;justify-content:flex-start}
+    .funnel-rate{margin-left:0;width:100%}
   }
 </style>
 </head>
@@ -163,6 +201,7 @@
     <div class="mtabs">
       <button id="mtabReviews" class="on" onclick="switchView('reviews')">Reviews</button>
       <button id="mtabBeta" onclick="switchView('beta')">Beta signups</button>
+      <button id="mtabAnalytics" onclick="switchView('analytics')">Analytics</button>
     </div>
 
     <div id="view-reviews">
@@ -190,6 +229,62 @@
         <div class="empty" id="emptyMsg" style="display:none">Aucune inscription pour le moment.</div>
       </div>
     </div>
+
+    <div id="view-analytics" style="display:none">
+      <div class="card live-card">
+        <div class="live-dot"></div>
+        <div><div class="live-n" id="aLiveCount">—</div><div class="l">visiteur(s) actif(s) maintenant</div></div>
+        <div class="live-paths" id="aLivePaths"></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="range-tabs" id="rangeTabs">
+          <button data-days="7" onclick="setRange(7)">7 jours</button>
+          <button data-days="30" class="on" onclick="setRange(30)">30 jours</button>
+          <button data-days="90" onclick="setRange(90)">90 jours</button>
+        </div>
+        <button class="btn btn-ghost" onclick="loadAnalytics()">Rafraîchir</button>
+      </div>
+
+      <div class="stats" id="aStats"></div>
+
+      <div class="card">
+        <h3>Funnel Rushr → Beta</h3>
+        <div id="aFunnel"></div>
+      </div>
+
+      <div class="card">
+        <h3>Visites par jour</h3>
+        <div class="bars" id="aDaily"></div>
+      </div>
+
+      <div class="a-grid">
+        <div class="card">
+          <h3>Pays</h3>
+          <div id="aCountry" class="a-list"></div>
+        </div>
+        <div class="card">
+          <h3>Pages les plus vues</h3>
+          <div id="aPath" class="a-list"></div>
+        </div>
+        <div class="card">
+          <h3>Pages de sortie</h3>
+          <div id="aExit" class="a-list"></div>
+        </div>
+        <div class="card">
+          <h3>Appareils</h3>
+          <div id="aDevice" class="a-list"></div>
+        </div>
+        <div class="card">
+          <h3>Navigateurs</h3>
+          <div id="aBrowser" class="a-list"></div>
+        </div>
+        <div class="card" style="grid-column:1/-1">
+          <h3>Référents</h3>
+          <div id="aReferrer" class="a-list"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div></main>
@@ -202,6 +297,7 @@
   var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var ME=null, PROJECTS=[], selId=null, mode='in';
   var SIGNUPS=[], signupsLoaded=false, curView='reviews';
+  var analyticsLoaded=false, rangeDays=30, liveInterval=null;
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
@@ -238,9 +334,28 @@
     curView=v;
     document.getElementById('mtabReviews').classList.toggle('on', v==='reviews');
     document.getElementById('mtabBeta').classList.toggle('on', v==='beta');
+    document.getElementById('mtabAnalytics').classList.toggle('on', v==='analytics');
     document.getElementById('view-reviews').style.display=(v==='reviews')?'block':'none';
     document.getElementById('view-beta').style.display=(v==='beta')?'block':'none';
+    document.getElementById('view-analytics').style.display=(v==='analytics')?'block':'none';
     if(v==='beta' && !signupsLoaded) loadSignups();
+    if(v==='analytics'){
+      if(!analyticsLoaded) loadAnalytics();
+      loadLiveNow();
+      if(liveInterval) clearInterval(liveInterval);
+      liveInterval = setInterval(loadLiveNow, 15000);
+    } else if(liveInterval){
+      clearInterval(liveInterval); liveInterval=null;
+    }
+  }
+
+  async function loadLiveNow(){
+    try{
+      var d = await rpc('analytics_active_now');
+      document.getElementById('aLiveCount').textContent = d.count;
+      var paths = d.by_path||[];
+      document.getElementById('aLivePaths').innerHTML = paths.map(function(p){ return '<span>'+esc(p.path)+' · '+p.count+'</span>'; }).join('');
+    }catch(e){ /* silent: non-critical background refresh */ }
   }
 
   async function loadSignups(){
@@ -285,6 +400,63 @@
     var url=URL.createObjectURL(blob);
     var a=document.createElement('a'); a.href=url; a.download='rushr-beta-signups.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  var COUNTRY_NAMES={FR:'France',US:'États-Unis',GB:'Royaume-Uni',CA:'Canada',BE:'Belgique',CH:'Suisse',DE:'Allemagne',ES:'Espagne',IT:'Italie',NL:'Pays-Bas',PT:'Portugal',MA:'Maroc',DZ:'Algérie',TN:'Tunisie',SN:'Sénégal',CI:'Côte d\'Ivoire',AU:'Australie',BR:'Brésil',IN:'Inde',JP:'Japon','??':'Inconnu'};
+  function countryLabel(cc){ if(!cc||cc==='??') return '🏳️ Inconnu'; var flag=cc.replace(/./g,function(c){return String.fromCodePoint(127397+c.charCodeAt());}); return flag+' '+(COUNTRY_NAMES[cc]||cc); }
+  function fmtDuration(ms){ if(!ms||ms<=0) return '—'; var s=Math.round(ms/1000); var m=Math.floor(s/60); s=s%60; return m>0?(m+'m '+s+'s'):(s+'s'); }
+  function fmtDay(d){ try{ return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }catch(e){ return d; } }
+
+  function setRange(days){
+    rangeDays=days;
+    document.querySelectorAll('#rangeTabs button').forEach(function(b){ b.classList.toggle('on', +b.getAttribute('data-days')===days); });
+    loadAnalytics();
+  }
+
+  async function loadAnalytics(){
+    var data;
+    try{ data=await rpc('analytics_admin_summary',{p_days:rangeDays}); analyticsLoaded=true; }
+    catch(e){ toast('Erreur : '+e.message,'err'); return; }
+
+    document.getElementById('aStats').innerHTML=
+      '<div class="stat"><div class="n">'+data.total_views+'</div><div class="l">Vues totales</div></div>'+
+      '<div class="stat"><div class="n">'+data.unique_visitors+'</div><div class="l">Visiteurs uniques</div></div>'+
+      '<div class="stat"><div class="n">'+fmtDuration(data.avg_duration_ms)+'</div><div class="l">Durée moyenne</div></div>'+
+      '<div class="stat"><div class="n">'+(data.unique_visitors?(data.total_views/data.unique_visitors).toFixed(1):'0')+'</div><div class="l">Pages / visite</div></div>';
+
+    var daily=data.daily||[];
+    var max=Math.max.apply(null,daily.map(function(d){return d.count;}).concat([1]));
+    document.getElementById('aDaily').innerHTML = daily.length ? daily.map(function(d){
+      var h=Math.max(4,Math.round((d.count/max)*100));
+      return '<div class="b" style="height:'+h+'%" data-tip="'+fmtDay(d.day)+' · '+d.count+'"></div>';
+    }).join('') : '<div class="empty-mini">Pas encore de données sur cette période.</div>';
+
+    function renderList(elId, rows, labelFn){
+      var el=document.getElementById(elId);
+      if(!rows.length){ el.innerHTML='<div class="empty-mini">Pas de données.</div>'; return; }
+      var max=Math.max.apply(null,rows.map(function(r){return r.count;}));
+      el.innerHTML=rows.map(function(r){
+        var pct=Math.max(4,Math.round((r.count/max)*100));
+        return '<div class="a-row"><span class="lbl">'+labelFn(r)+'</span><span class="bar"><i style="width:'+pct+'%"></i></span><span class="n">'+r.count+'</span></div>';
+      }).join('');
+    }
+    renderList('aCountry', data.by_country||[], function(r){ return countryLabel(r.country); });
+    renderList('aPath', data.by_path||[], function(r){ return esc(r.path); });
+    renderList('aExit', data.by_exit||[], function(r){ return esc(r.path); });
+    renderList('aDevice', data.by_device||[], function(r){ return esc(r.device); });
+    renderList('aBrowser', data.by_browser||[], function(r){ return esc(r.browser); });
+    renderList('aReferrer', data.by_referrer||[], function(r){ return esc(r.ref); });
+
+    var f = data.funnel || {rushr_visitors:0, beta_signups:0, beta_signups_from_rushr:0};
+    var rate = f.rushr_visitors ? ((f.beta_signups_from_rushr / f.rushr_visitors) * 100).toFixed(1) : '0.0';
+    document.getElementById('aFunnel').innerHTML =
+      '<div class="funnel-row">'+
+        '<div class="funnel-step"><div class="n">'+f.rushr_visitors+'</div><div class="l">Visiteurs Rushr</div></div>'+
+        '<div class="funnel-arrow">→</div>'+
+        '<div class="funnel-step"><div class="n">'+f.beta_signups_from_rushr+'</div><div class="l">Inscrits (venant de Rushr)</div></div>'+
+        '<div class="funnel-rate"><div class="n">'+rate+'%</div><div class="l">Taux de conversion</div></div>'+
+      '</div>'+
+      (f.beta_signups>f.beta_signups_from_rushr ? '<p style="font-size:11.5px;color:var(--muted2);margin-top:10px">'+f.beta_signups+' inscriptions au total sur la période, dont '+f.beta_signups_from_rushr+' rattachées à une visite de rushr.html.</p>' : '');
   }
 
   async function loadProjects(){
