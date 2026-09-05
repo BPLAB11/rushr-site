@@ -202,6 +202,7 @@
       <button id="mtabReviews" class="on" onclick="switchView('reviews')">Reviews</button>
       <button id="mtabBeta" onclick="switchView('beta')">Beta signups</button>
       <button id="mtabAnalytics" onclick="switchView('analytics')">Analytics</button>
+      <button id="mtabVersions" onclick="switchView('versions')">Mises à jour</button>
     </div>
 
     <div id="view-reviews">
@@ -285,6 +286,34 @@
         </div>
       </div>
     </div>
+
+    <div id="view-versions" style="display:none">
+      <div class="card">
+        <h3>Publier une version</h3>
+        <div class="frow">
+          <div class="fg"><label>Plateforme</label>
+            <select id="vPlatform" class="in">
+              <option value="windows">Windows</option>
+              <option value="mac">macOS</option>
+            </select>
+          </div>
+          <div class="fg" style="flex:1"><label>Version</label><input id="vVersion" class="in" placeholder="Ex : 1.0.11-beta" style="width:100%"></div>
+        </div>
+        <div class="field" style="margin-top:12px"><label>URL de téléchargement</label><input id="vUrl" class="in" placeholder="https://…"></div>
+        <div class="field"><label>Notes de version</label><textarea id="vChangelog" class="in" rows="3" placeholder="Ce qui a changé…" style="resize:vertical"></textarea></div>
+        <div class="toggle-row"><div><div class="t">Mise à jour obligatoire</div><div class="s">L'app pourra bloquer l'usage tant qu'elle n'est pas installée</div></div>
+          <span class="switch"><input type="checkbox" id="vMandatory"><span class="tr"></span></span></div>
+        <button class="btn btn-primary" style="margin-top:14px" onclick="publishVersion()">Publier</button>
+      </div>
+
+      <div class="card" style="padding:0">
+        <table>
+          <thead><tr><th>Plateforme</th><th>Version</th><th>Obligatoire</th><th>Publiée le</th><th></th></tr></thead>
+          <tbody id="vTbody"></tbody>
+        </table>
+        <div class="empty" id="vEmptyMsg" style="display:none">Aucune version publiée.</div>
+      </div>
+    </div>
   </div>
 
 </div></main>
@@ -298,6 +327,7 @@
   var ME=null, PROJECTS=[], selId=null, mode='in';
   var SIGNUPS=[], signupsLoaded=false, curView='reviews';
   var analyticsLoaded=false, rangeDays=30, liveInterval=null;
+  var VERSIONS=[], versionsLoaded=false;
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
@@ -335,10 +365,13 @@
     document.getElementById('mtabReviews').classList.toggle('on', v==='reviews');
     document.getElementById('mtabBeta').classList.toggle('on', v==='beta');
     document.getElementById('mtabAnalytics').classList.toggle('on', v==='analytics');
+    document.getElementById('mtabVersions').classList.toggle('on', v==='versions');
     document.getElementById('view-reviews').style.display=(v==='reviews')?'block':'none';
     document.getElementById('view-beta').style.display=(v==='beta')?'block':'none';
     document.getElementById('view-analytics').style.display=(v==='analytics')?'block':'none';
+    document.getElementById('view-versions').style.display=(v==='versions')?'block':'none';
     if(v==='beta' && !signupsLoaded) loadSignups();
+    if(v==='versions' && !versionsLoaded) loadVersions();
     if(v==='analytics'){
       if(!analyticsLoaded) loadAnalytics();
       loadLiveNow();
@@ -614,6 +647,44 @@
   }
 
   function copyLink(link,btn){ var o=btn.textContent; function d(){btn.textContent='Copié ✓';setTimeout(function(){btn.textContent=o;},1400);} if(navigator.clipboard){navigator.clipboard.writeText(link).then(d).catch(d);}else d(); }
+
+  async function loadVersions(){
+    var r=await SB.from('app_versions').select('*').order('created_at',{ascending:false});
+    if(r.error){ toast('Erreur : '+r.error.message,'err'); VERSIONS=[]; } else { VERSIONS=r.data||[]; }
+    versionsLoaded=true;
+    renderVersionsTable();
+  }
+  function platformLabel(p){ return p==='mac'?'macOS':(p==='windows'?'Windows':esc(p)); }
+  function renderVersionsTable(){
+    var tb=document.getElementById('vTbody');
+    document.getElementById('vEmptyMsg').style.display=VERSIONS.length?'none':'block';
+    tb.innerHTML=VERSIONS.map(function(v){
+      return '<tr><td>'+platformLabel(v.platform)+'</td>'+
+        '<td class="mono">'+esc(v.latest_version)+(v.download_url?' · <a href="'+esc(v.download_url)+'" target="_blank" style="color:var(--accent2)">lien</a>':'')+'</td>'+
+        '<td>'+(v.mandatory?'<span class="badge b-pending">Oui</span>':'—')+'</td>'+
+        '<td>'+fmt(v.created_at)+'</td>'+
+        '<td><div class="row-actions"><button class="icon-btn danger" onclick="deleteVersion(\''+v.id+'\')">Suppr.</button></div></td></tr>';
+    }).join('');
+  }
+  async function publishVersion(){
+    var platform=document.getElementById('vPlatform').value;
+    var version=document.getElementById('vVersion').value.trim();
+    var url=document.getElementById('vUrl').value.trim();
+    var changelog=document.getElementById('vChangelog').value.trim();
+    var mandatory=document.getElementById('vMandatory').checked;
+    if(!version){ toast('La version est requise','err'); return; }
+    try{
+      await rpc('admin_upsert_version',{p_platform:platform,p_version:version,p_url:url||null,p_changelog:changelog||null,p_mandatory:mandatory});
+      toast('Version publiée ✓','ok');
+      document.getElementById('vVersion').value=''; document.getElementById('vUrl').value=''; document.getElementById('vChangelog').value=''; document.getElementById('vMandatory').checked=false;
+      loadVersions();
+    }catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
+  async function deleteVersion(id){
+    if(!confirm('Supprimer cette entrée de version ?')) return;
+    try{ await rpc('admin_delete_version',{p_id:id}); toast('Supprimé','ok'); loadVersions(); }
+    catch(e){ toast('Erreur : '+e.message,'err'); }
+  }
 
   SB.auth.onAuthStateChange(function(_e,s){ onSession(s); });
   SB.auth.getSession().then(function(r){ onSession(r.data.session); });
