@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Réclamer ma licence — BACKPACK RUSHR</title>
+<meta name="description" content="Réclame ta licence bêta gratuite RushR." />
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141417;--line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;
+    --muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--danger:#FF6B6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1340px;margin:0 auto;padding:0 22px;width:100%}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .mark{width:22px;height:22px;display:block;border-radius:6px}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;width:100%;display:flex;align-items:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13.5px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent);width:100%;padding:12px}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-primary[disabled]{opacity:.5;cursor:not-allowed}
+
+  .gate{max-width:420px;margin:40px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;text-align:center}
+  .gate .mark{width:44px;height:44px;border-radius:11px;overflow:hidden;margin:0 auto 16px}
+  .gate .mark img{width:100%;height:100%;display:block}
+  .gate h1{font-size:20px;font-weight:800;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .gate input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:#fff;padding:12px 14px;font-size:15px;font-family:inherit;margin-bottom:12px}
+  .gate input:focus{outline:none;border-color:var(--accent)}
+  .gate .err{color:var(--danger);font-size:13px;margin-bottom:12px;min-height:16px}
+
+  .key-box{background:#0E0E11;border:1px solid var(--accent);border-radius:10px;padding:16px;margin-bottom:16px}
+  .key-box code{font-family:ui-monospace,Menlo,monospace;font-size:19px;font-weight:700;letter-spacing:1px;color:var(--accent2);word-break:break-all}
+  .copy-btn{margin-top:10px}
+  .copy-btn.copied{background:var(--accent2)}
+
+  footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted2);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="index.html"><img class="mark" src="assets/bp-mark.png" alt="" style="border-radius:6px" />BACKPACK&nbsp;LAB · RushR</a>
+  <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <!-- FORM -->
+  <div id="g-form" class="gate">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</h1>
+    <p data-fr="Entre l'adresse email que tu as utilisée pour t'inscrire à la bêta RushR." data-en="Enter the email address you used to sign up for the RushR beta.">Entre l'adresse email que tu as utilisée pour t'inscrire à la bêta RushR.</p>
+    <div class="err" id="formErr"></div>
+    <form onsubmit="return submitClaim(event)">
+      <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
+      <button type="submit" id="claimBtn" class="btn btn-primary" data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</button>
+    </form>
+  </div>
+
+  <!-- RESULT -->
+  <div id="g-result" class="gate" style="display:none">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Ta clé de licence" data-en="Your license key">Ta clé de licence</h1>
+    <p data-fr="Copie cette clé et colle-la dans RushR, avec ton adresse email, pour activer l'app." data-en="Copy this key and paste it into RushR, along with your email, to activate the app.">Copie cette clé et colle-la dans RushR, avec ton adresse email, pour activer l'app.</p>
+    <div class="key-box"><code id="keyText"></code></div>
+    <button class="btn btn-primary copy-btn" id="copyBtn" onclick="copyKey()" data-fr="Copier la clé" data-en="Copy key">Copier la clé</button>
+  </div>
+
+</div></main>
+
+<footer>© 2026 BACKPACK LAB</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  function FR(){return (document.documentElement.lang||'fr')==='fr';}
+
+  function setLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.innerHTML=v;});
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){var v=el.getAttribute('data-'+lang+'-ph');if(v!==null)el.setAttribute('placeholder',v);});
+    document.getElementById('lfr').classList.toggle('on',lang==='fr');
+    document.getElementById('len').classList.toggle('on',lang==='en');
+    try{localStorage.setItem('bpl_lang',lang);}catch(e){}
+  }
+
+  async function submitClaim(e){
+    e.preventDefault();
+    var btn=document.getElementById('claimBtn'), err=document.getElementById('formErr');
+    var email=document.getElementById('emailInput').value.trim();
+    err.textContent='';
+    btn.disabled=true;
+    try{
+      var r=await SB.rpc('claim_beta_key',{p_email:email});
+      if(r.error) throw r.error;
+      document.getElementById('keyText').textContent=r.data;
+      document.getElementById('g-form').style.display='none';
+      document.getElementById('g-result').style.display='block';
+    }catch(ex){
+      var m=(ex&&ex.message)||'';
+      if(/NOT_A_BETA_SIGNUP/.test(m)) err.textContent=FR()?"Cette adresse n'est pas inscrite à la bêta. Inscris-toi d'abord sur la page RushR.":"This address isn't signed up for the beta. Sign up on the RushR page first.";
+      else if(/INVALID_EMAIL/.test(m)) err.textContent=FR()?'Adresse email invalide.':'Invalid email address.';
+      else if(/NO_KEYS_LEFT/.test(m)) err.textContent=FR()?'Toutes les clés bêta ont été distribuées. Contacte-nous.':'All beta keys have been claimed. Contact us.';
+      else err.textContent=FR()?'Une erreur est survenue, réessaie.':'Something went wrong, please try again.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  function copyKey(){
+    var text=document.getElementById('keyText').textContent;
+    var btn=document.getElementById('copyBtn');
+    navigator.clipboard.writeText(text).then(function(){
+      btn.classList.add('copied');
+      btn.textContent=FR()?'✓ Copié':'✓ Copied';
+      setTimeout(function(){
+        btn.classList.remove('copied');
+        btn.textContent=FR()?'Copier la clé':'Copy key';
+      },1800);
+    });
+  }
+
+  (function init(){
+    var saved=null;
+    try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang=saved||((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en');
+    setLang(lang);
+
+    var prefill=new URLSearchParams(location.search).get('email');
+    if(prefill) document.getElementById('emailInput').value=prefill;
+  })();
+</script>
+</body>
+</html>
