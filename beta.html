@@ -125,7 +125,7 @@
   <!-- APP -->
   <div id="app">
     <div class="topbar">
-      <div class="who" data-fr-html="Connecté&nbsp;: <b id="whoEmail"></b>" data-en-html="Signed in as&nbsp;: <b id="whoEmail2"></b>">Connecté&nbsp;: <b id="whoEmail"></b></div>
+      <div class="who"><span id="whoLabel">Connecté&nbsp;:</span> <b id="whoEmail"></b></div>
       <button class="btn btn-ghost" onclick="signOut()" data-fr="Se déconnecter" data-en="Sign out">Se déconnecter</button>
     </div>
 
@@ -251,6 +251,7 @@
 
     var session=(await SB.auth.getSession()).data.session;
     var email=session&&session.user&&session.user.email||pendingEmail;
+    document.getElementById('whoLabel').textContent=FR()?'Connecté :':'Signed in as :';
     document.getElementById('whoEmail').textContent=email;
 
     ['g-email','g-code','g-nolicense'].forEach(function(g){document.getElementById(g).style.display='none';});
