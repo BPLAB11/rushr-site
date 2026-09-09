@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Espace Bêta — BACKPACK RUSHR</title>
+<meta name="description" content="Ta licence RushR et le support bêta, réservés aux testeurs." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;
+    --muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--warn:#FFB454;--danger:#FF6B6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:720px;margin:0 auto;padding:0 22px;width:100%}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .mark{width:22px;height:22px;display:block;border-radius:6px}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;width:100%;padding:36px 0 40px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13.5px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-primary[disabled]{opacity:.5;cursor:not-allowed}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+
+  /* gate */
+  .gate{max-width:420px;margin:40px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;text-align:center}
+  .gate .mark{width:44px;height:44px;border-radius:11px;overflow:hidden;margin:0 auto 16px}
+  .gate .mark img{width:100%;height:100%;display:block}
+  .gate h1{font-size:20px;font-weight:800;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .gate input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:#fff;padding:12px 14px;font-size:15px;font-family:inherit;margin-bottom:12px;text-align:center}
+  .gate input:focus{outline:none;border-color:var(--accent)}
+  .gate .btn-primary{width:100%;padding:12px}
+  .gate .err{color:var(--danger);font-size:13px;margin-bottom:12px;min-height:16px}
+  .gate .hint{color:var(--muted2);font-size:12.5px;margin-top:14px}
+  .gate .hint button{background:transparent;border:0;color:var(--accent2);cursor:pointer;font-family:inherit;font-size:12.5px;text-decoration:underline}
+
+  /* app */
+  #app{display:none}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:18px}
+  .card h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px}
+  .who{font-size:13px;color:var(--muted)}
+  .who b{color:var(--text)}
+
+  .key-row{display:flex;align-items:center;gap:12px;background:#0E0E11;border:1px solid var(--accent);border-radius:10px;padding:14px 16px;margin-bottom:14px;flex-wrap:wrap}
+  .key-row code{font-family:ui-monospace,Menlo,monospace;font-size:17px;font-weight:700;letter-spacing:.5px;color:var(--accent2);word-break:break-all;flex:1}
+  .copy-btn.copied{background:var(--accent2)}
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+  .meta-grid div{font-size:13px}
+  .meta-grid .k{color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:6px;padding:4px 9px}
+  .b-active{color:var(--on-accent);background:var(--accent)}
+  .b-off{color:#fff;background:#5a2b2b}
+
+  .composer textarea,.composer input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:9px;color:#fff;padding:11px 13px;font-size:13.5px;font-family:inherit;margin-bottom:10px}
+  .composer textarea{resize:vertical;min-height:100px}
+  .composer input:focus,.composer textarea:focus{outline:none;border-color:var(--accent)}
+  .ok-msg{color:var(--accent2);font-size:13px;margin-top:10px;display:none}
+
+  .thist{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+  .thist .t{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface2)}
+  .thist .t .row1{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
+  .thist .t .subj{font-size:12.5px;font-weight:700}
+  .thist .t .date{font-size:11px;color:var(--muted2)}
+  .thist .t .msg{font-size:12.5px;color:var(--muted);white-space:pre-wrap;word-break:break-word}
+  .empty-t{color:var(--muted2);font-size:12.5px}
+
+  footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted2);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="index.html"><img class="mark" src="assets/bp-mark.png" alt="" style="border-radius:6px" />BACKPACK&nbsp;LAB · RushR</a>
+  <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <!-- STEP 1: email -->
+  <div id="g-email" class="gate">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Espace bêta" data-en="Beta space">Espace bêta</h1>
+    <p data-fr="Réservé aux testeurs RushR : ta licence, et un accès direct au support." data-en="For RushR beta testers only: your license, and direct access to support.">Réservé aux testeurs RushR : ta licence, et un accès direct au support.</p>
+    <div class="err" id="emailErr"></div>
+    <form onsubmit="return sendCode(event)">
+      <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
+      <button type="submit" id="sendBtn" class="btn btn-primary" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
+    </form>
+  </div>
+
+  <!-- STEP 2: code -->
+  <div id="g-code" class="gate" style="display:none">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Vérification" data-en="Verification">Vérification</h1>
+    <p data-fr="Entre le code reçu par email." data-en="Enter the code you received by email.">Entre le code reçu par email.</p>
+    <div class="err" id="codeErr"></div>
+    <form onsubmit="return verifyCode(event)">
+      <input id="codeInput" type="text" required autocomplete="one-time-code" maxlength="16" data-fr-ph="Code à 6 chiffres" data-en-ph="6-digit code" placeholder="Code à 6 chiffres" />
+      <button type="submit" id="verifyBtn" class="btn btn-primary" data-fr="Vérifier" data-en="Verify">Vérifier</button>
+    </form>
+    <div class="hint"><button onclick="backToEmail()" data-fr="← Changer d'email" data-en="← Change email">← Changer d'email</button></div>
+  </div>
+
+  <!-- STEP 3: no license -->
+  <div id="g-nolicense" class="gate" style="display:none">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Pas encore de licence" data-en="No license yet">Pas encore de licence</h1>
+    <p data-fr="Aucune licence bêta n'est associée à cet email. Si tu es inscrit à la bêta, réclame ta clé ci-dessous." data-en="No beta license is linked to this email. If you signed up for the beta, claim your key below.">Aucune licence bêta n'est associée à cet email. Si tu es inscrit à la bêta, réclame ta clé ci-dessous.</p>
+    <a class="btn btn-primary" style="width:100%;padding:12px;margin-bottom:10px" href="claim.html" data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</a>
+    <div class="hint"><button onclick="signOut()" data-fr="Se déconnecter" data-en="Sign out">Se déconnecter</button></div>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+    <div class="topbar">
+      <div class="who" data-fr-html="Connecté&nbsp;: <b id="whoEmail"></b>" data-en-html="Signed in as&nbsp;: <b id="whoEmail2"></b>">Connecté&nbsp;: <b id="whoEmail"></b></div>
+      <button class="btn btn-ghost" onclick="signOut()" data-fr="Se déconnecter" data-en="Sign out">Se déconnecter</button>
+    </div>
+
+    <div class="card">
+      <h2 data-fr="Ta licence" data-en="Your license">Ta licence</h2>
+      <div class="key-row">
+        <code id="keyText"></code>
+        <button class="btn btn-primary copy-btn" id="copyBtn" onclick="copyKey()" data-fr="Copier" data-en="Copy">Copier</button>
+      </div>
+      <div class="meta-grid">
+        <div><div class="k" data-fr="Statut" data-en="Status">Statut</div><span class="badge" id="statusBadge"></span></div>
+        <div><div class="k" data-fr="Plan" data-en="Plan">Plan</div><div id="planText"></div></div>
+        <div><div class="k" data-fr="Appareil(s) autorisé(s)" data-en="Allowed device(s)">Appareil(s) autorisé(s)</div><div id="devicesText"></div></div>
+        <div><div class="k" data-fr="Réclamée le" data-en="Claimed on">Réclamée le</div><div id="createdText"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-fr="Contacter le support" data-en="Contact support">Contacter le support</h2>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:14px" data-fr="Un bug, une idée, un retour d'usage ? Écris-nous, on lit tout." data-en="A bug, an idea, general feedback? Write to us, we read everything.">Un bug, une idée, un retour d'usage ? Écris-nous, on lit tout.</p>
+      <div class="composer">
+        <div class="err" id="ticketErr"></div>
+        <form onsubmit="return submitTicket(event)">
+          <input id="subjectInput" type="text" data-fr-ph="Sujet (optionnel)" data-en-ph="Subject (optional)" placeholder="Sujet (optionnel)" />
+          <textarea id="messageInput" required data-fr-ph="Ton message..." data-en-ph="Your message..." placeholder="Ton message..."></textarea>
+          <button type="submit" id="ticketBtn" class="btn btn-primary" data-fr="Envoyer" data-en="Send">Envoyer</button>
+        </form>
+        <div class="ok-msg" id="ticketOk" data-fr="✓ Envoyé, on te répond par email." data-en="✓ Sent, we'll reply by email.">✓ Envoyé, on te répond par email.</div>
+      </div>
+      <div class="thist" id="ticketHist"></div>
+    </div>
+  </div>
+
+</div></main>
+
+<footer>© 2026 BACKPACK LAB</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var pendingEmail='';
+
+  function FR(){return (document.documentElement.lang||'fr')==='fr';}
+
+  function setLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.textContent=v;});
+    document.querySelectorAll('[data-fr-html]').forEach(function(el){var v=el.getAttribute('data-'+lang+'-html');if(v!==null)el.innerHTML=v;});
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){var v=el.getAttribute('data-'+lang+'-ph');if(v!==null)el.setAttribute('placeholder',v);});
+    document.getElementById('lfr').classList.toggle('on',lang==='fr');
+    document.getElementById('len').classList.toggle('on',lang==='en');
+    try{localStorage.setItem('bpl_lang',lang);}catch(e){}
+  }
+
+  function showGate(id){
+    ['g-email','g-code','g-nolicense'].forEach(function(g){document.getElementById(g).style.display=(g===id)?'block':'none';});
+    document.getElementById('app').style.display='none';
+  }
+
+  async function sendCode(e){
+    e.preventDefault();
+    var btn=document.getElementById('sendBtn'), err=document.getElementById('emailErr');
+    var email=document.getElementById('emailInput').value.trim().toLowerCase();
+    err.textContent=''; btn.disabled=true;
+    try{
+      var r=await SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true}});
+      if(r.error) throw r.error;
+      pendingEmail=email;
+      showGate('g-code');
+    }catch(ex){
+      err.textContent=FR()?'Impossible d\'envoyer le code, réessaie.':'Could not send the code, please retry.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  async function verifyCode(e){
+    e.preventDefault();
+    var btn=document.getElementById('verifyBtn'), err=document.getElementById('codeErr');
+    var code=document.getElementById('codeInput').value.trim();
+    err.textContent=''; btn.disabled=true;
+    try{
+      var r=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'email'});
+      if(r.error) throw r.error;
+      await loadPortal();
+    }catch(ex){
+      err.textContent=FR()?'Code invalide ou expiré.':'Invalid or expired code.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  function backToEmail(){
+    document.getElementById('codeInput').value='';
+    showGate('g-email');
+  }
+
+  async function signOut(){
+    await SB.auth.signOut();
+    showGate('g-email');
+    document.getElementById('emailInput').value='';
+    document.getElementById('codeInput').value='';
+  }
+
+  async function loadPortal(){
+    var lic=await SB.rpc('get_my_license');
+    if(lic.error){
+      showGate('g-nolicense');
+      return;
+    }
+    renderLicense(lic.data);
+
+    var session=(await SB.auth.getSession()).data.session;
+    var email=session&&session.user&&session.user.email||pendingEmail;
+    document.getElementById('whoEmail').textContent=email;
+
+    ['g-email','g-code','g-nolicense'].forEach(function(g){document.getElementById(g).style.display='none';});
+    document.getElementById('app').style.display='block';
+
+    loadTicketHistory();
+  }
+
+  function renderLicense(lic){
+    document.getElementById('keyText').textContent=lic.license_key;
+    var badge=document.getElementById('statusBadge');
+    var active=(lic.status||'').toUpperCase()==='ACTIVE';
+    badge.textContent=lic.status;
+    badge.className='badge '+(active?'b-active':'b-off');
+    document.getElementById('planText').textContent=lic.plan||'—';
+    document.getElementById('devicesText').textContent=lic.max_devices;
+    document.getElementById('createdText').textContent=lic.created_at?new Date(lic.created_at).toLocaleDateString(FR()?'fr-FR':'en-US'):'—';
+  }
+
+  function copyKey(){
+    var text=document.getElementById('keyText').textContent;
+    var btn=document.getElementById('copyBtn');
+    navigator.clipboard.writeText(text).then(function(){
+      btn.classList.add('copied');
+      btn.textContent=FR()?'✓ Copié':'✓ Copied';
+      setTimeout(function(){
+        btn.classList.remove('copied');
+        btn.textContent=FR()?'Copier':'Copy';
+      },1800);
+    });
+  }
+
+  async function submitTicket(e){
+    e.preventDefault();
+    var btn=document.getElementById('ticketBtn'), err=document.getElementById('ticketErr'), ok=document.getElementById('ticketOk');
+    var subject=document.getElementById('subjectInput').value.trim();
+    var message=document.getElementById('messageInput').value.trim();
+    err.textContent=''; ok.style.display='none'; btn.disabled=true;
+    try{
+      var r=await SB.rpc('submit_support_ticket',{p_subject:subject, p_message:message});
+      if(r.error) throw r.error;
+      document.getElementById('subjectInput').value='';
+      document.getElementById('messageInput').value='';
+      ok.style.display='block';
+      loadTicketHistory();
+    }catch(ex){
+      err.textContent=FR()?'Impossible d\'envoyer le message, réessaie.':'Could not send the message, please retry.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  async function loadTicketHistory(){
+    var hist=document.getElementById('ticketHist');
+    var r=await SB.from('support_tickets').select('subject,message,created_at').order('created_at',{ascending:false}).limit(5);
+    if(r.error || !r.data || !r.data.length){
+      hist.innerHTML='<div class="empty-t">'+(FR()?'Aucun message envoyé pour le moment.':'No messages sent yet.')+'</div>';
+      return;
+    }
+    hist.innerHTML=r.data.map(function(t){
+      var d=new Date(t.created_at).toLocaleDateString(FR()?'fr-FR':'en-US');
+      var subj=t.subject&&t.subject!=='(sans sujet)'?t.subject:(FR()?'(sans sujet)':'(no subject)');
+      return '<div class="t"><div class="row1"><span class="subj">'+escapeHtml(subj)+'</span><span class="date">'+d+'</span></div><div class="msg">'+escapeHtml(t.message)+'</div></div>';
+    }).join('');
+  }
+
+  function escapeHtml(s){
+    var d=document.createElement('div');
+    d.textContent=s;
+    return d.innerHTML;
+  }
+
+  (async function init(){
+    var saved=null;
+    try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang=saved||((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en');
+    setLang(lang);
+
+    var session=(await SB.auth.getSession()).data.session;
+    if(session){
+      await loadPortal();
+    }
+  })();
+</script>
+</body>
+</html>
