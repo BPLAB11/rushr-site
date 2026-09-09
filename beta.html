@@ -107,7 +107,7 @@
     <p data-fr="Entre le code reçu par email." data-en="Enter the code you received by email.">Entre le code reçu par email.</p>
     <div class="err" id="codeErr"></div>
     <form onsubmit="return verifyCode(event)">
-      <input id="codeInput" type="text" required autocomplete="one-time-code" maxlength="16" data-fr-ph="Code à 6 chiffres" data-en-ph="6-digit code" placeholder="Code à 6 chiffres" />
+      <input id="codeInput" type="text" required autocomplete="one-time-code" maxlength="16" data-fr-ph="Code reçu par email" data-en-ph="Code from the email" placeholder="Code reçu par email" />
       <button type="submit" id="verifyBtn" class="btn btn-primary" data-fr="Vérifier" data-en="Verify">Vérifier</button>
     </form>
     <div class="hint"><button onclick="backToEmail()" data-fr="← Changer d'email" data-en="← Change email">← Changer d'email</button></div>
@@ -212,7 +212,12 @@
     err.textContent=''; btn.disabled=true;
     try{
       var r=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'email'});
-      if(r.error) throw r.error;
+      if(r.error){
+        // A never-confirmed address gets its code issued as a "signup" token rather
+        // than "email" — retry with that type before giving up (same fix as the app).
+        r=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'signup'});
+        if(r.error) throw r.error;
+      }
       await loadPortal();
     }catch(ex){
       err.textContent=FR()?'Code invalide ou expiré.':'Invalid or expired code.';
