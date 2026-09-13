@@ -70,6 +70,9 @@
   .card-btn.primary:hover{background:rgba(255,106,0,.24)}
   .card-btn.secondary{background:var(--surface2);color:var(--muted)}
   .card-btn.secondary:hover{color:var(--text)}
+  button.card-btn{width:100%;border:0;font-family:inherit;cursor:pointer}
+  .card-btn.copied,.card-btn.copied:hover{color:var(--accent2)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
   /* FOOTER */
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
@@ -202,7 +205,8 @@
       <p data-fr="Indique ta version de Rushr, ton système (Windows ou macOS), ce que tu faisais et le message d'erreur exact. Chaque message est suivi par l'équipe, et on te répond par email." data-en="Include your Rushr version, your system (Windows or macOS), what you were doing and the exact error message. Every message is followed up by the team, and we reply by email.">Indique ta version de Rushr, ton système (Windows ou macOS), ce que tu faisais et le message d'erreur exact. Chaque message est suivi par l'équipe, et on te répond par email.</p>
       <div class="card-actions">
         <a class="card-btn primary" href="mailto:support@thebackpacklab.com" data-fr="Écrire au support" data-en="Email support">Écrire au support</a>
-        <a class="card-btn secondary" href="mailto:support@thebackpacklab.com">support@thebackpacklab.com</a>
+        <button type="button" class="card-btn secondary copy-email" data-email="support@thebackpacklab.com" data-copied-fr="Adresse copiée ✓" data-copied-en="Address copied ✓">support@thebackpacklab.com</button>
+        <span class="sr-only" id="copyStatus" aria-live="polite"></span>
       </div>
     </article>
 
@@ -295,6 +299,60 @@
     setLang(lang);
   })();
 
+  // Clicking the support address copies it to the clipboard ("Écrire au support" above still
+  // opens the mail client). The label flips to a confirmation for 2s, and the same message is
+  // announced to screen readers through the #copyStatus live region.
+  (function(){
+    // The textarea + execCommand route: works in older browsers and in contexts that deny the
+    // async Clipboard API (e.g. a page embedded without the clipboard-write permission).
+    function legacyCopy(text){
+      return new Promise(function(resolve, reject){
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy') ? resolve() : reject(); }
+        catch(e){ reject(e); }
+        finally{ document.body.removeChild(ta); }
+      });
+    }
+
+    // Async Clipboard API first; if it's missing or refuses ("Write permission denied"),
+    // try the legacy route before giving up.
+    function copyText(text){
+      if(navigator.clipboard && window.isSecureContext){
+        return navigator.clipboard.writeText(text).catch(function(){ return legacyCopy(text); });
+      }
+      return legacyCopy(text);
+    }
+
+    var status = document.getElementById('copyStatus');
+    document.querySelectorAll('.copy-email').forEach(function(btn){
+      var email = btn.getAttribute('data-email');
+      var timer = null;
+      btn.addEventListener('click', function(){
+        var lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
+        copyText(email).then(function(){
+          var msg = btn.getAttribute('data-copied-' + lang);
+          btn.textContent = msg;
+          btn.classList.add('copied');
+          if(status) status.textContent = msg;
+          clearTimeout(timer);
+          timer = setTimeout(function(){
+            btn.textContent = email;
+            btn.classList.remove('copied');
+            if(status) status.textContent = '';
+          }, 2000);
+        }).catch(function(){
+          // Copy refused (permissions, very old browser): fall back to opening the mail client.
+          window.location.href = 'mailto:' + email;
+        });
+      });
+    });
+  })();
 </script>
 </body>
 </html>
