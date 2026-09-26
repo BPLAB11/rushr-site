@@ -1,6 +1,6 @@
 # RUSHR — Email de bienvenue beta (à coller dans Formspree / MailerLite / Brevo)
 
-Lien Discord déjà intégré : https://discord.gg/R5cDCPcu4 — prêt à coller dans ton automatisation MailerLite.
+Lien Discord déjà intégré : https://discord.gg/wtb3YUxuNN — prêt à coller dans ton automatisation MailerLite.
 
 Tu as **deux versions** ci-dessous (FR et EN). Une automatisation MailerLite = **un seul email**, donc le plus simple est de coller la **version unique bilingue** juste ci-dessous (tout le monde la reçoit, chacun lit sa langue). Les versions séparées FR / EN plus bas servent si tu préfères créer deux automatisations par langue.
 
@@ -14,7 +14,7 @@ Salut,
 
 Merci pour ton intérêt pour **RUSHR** ! Tu fais partie des premiers à tester l'outil de dérushage pensé pour les vidéastes et les monteurs.
 
-👉 **Rejoins la communauté sur Discord : https://discord.gg/R5cDCPcu4**
+👉 **Rejoins la communauté sur Discord : https://discord.gg/wtb3YUxuNN**
 Annonces de versions, support, et un espace pour partager tes idées et signaler des bugs.
 
 **Ce qui t'attend :**
@@ -30,7 +30,7 @@ Hi,
 
 Thanks for your interest in **RUSHR**! You're among the first to test the dérushage tool built for videographers and editors.
 
-👉 **Join the community on Discord: https://discord.gg/R5cDCPcu4**
+👉 **Join the community on Discord: https://discord.gg/wtb3YUxuNN**
 Release announcements, support, and a place to share ideas and report bugs.
 
 **What's next:**
@@ -54,7 +54,7 @@ Salut,
 
 Merci pour ton intérêt pour **RUSHR** ! Tu fais désormais partie des premiers à tester l'outil de dérushage pensé pour les vidéastes et les monteurs.
 
-👉 **Rejoins la communauté sur Discord : https://discord.gg/R5cDCPcu4**
+👉 **Rejoins la communauté sur Discord : https://discord.gg/wtb3YUxuNN**
 Tu y trouveras les annonces de nouvelles versions, le support, et un espace pour partager tes idées et signaler des bugs.
 
 **Ce qui t'attend :**
@@ -75,7 +75,7 @@ Hi,
 
 Thanks for your interest in **RUSHR**! You're now among the first to test the dérushage tool built for videographers and editors.
 
-👉 **Join the community on Discord: https://discord.gg/R5cDCPcu4**
+👉 **Join the community on Discord: https://discord.gg/wtb3YUxuNN**
 You'll find release announcements, support, and a place to share ideas and report bugs.
 
 **What's next:**
