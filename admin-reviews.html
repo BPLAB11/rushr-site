@@ -163,10 +163,11 @@
     .funnel-rate{margin-left:0;width:100%}
   }
 </style>
+<script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
 </head>
 <body>
 <nav><div class="wrap nav-in">
-  <a class="brand" href="index.html"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
+  <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
   <div class="nav-right"><span id="whoami"></span><button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Déconnexion</button></div>
 </div></nav>
 
@@ -334,7 +335,7 @@
   function show(id){['g-load','g-login','g-denied','app'].forEach(function(x){document.getElementById(x).style.display=(x===id)?'block':'none';});}
   function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast show '+(t||'');setTimeout(function(){e.className='toast '+(t||'');},2200);}
   async function rpc(n,a){var r=await SB.rpc(n,a||{});if(r.error)throw r.error;return r.data;}
-  function reviewLink(token){ return location.origin + '/review.html?p=' + token; }
+  function reviewLink(token){ return location.origin + '/review?p=' + token; }
 
   function setMode(m){mode=m;document.getElementById('tabIn').classList.toggle('on',m==='in');document.getElementById('tabUp').classList.toggle('on',m==='up');document.getElementById('authBtn').textContent=(m==='up')?'Créer mon compte':'Se connecter';document.getElementById('authMsg').textContent='';}
   async function doAuth(e){
