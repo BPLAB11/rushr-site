@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mon compte — BACKPACK LAB</title>
+<meta name="description" content="Ton compte BACKPACK LAB : tes licences, tes appareils et ton historique." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);
+    --line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;
+    --muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--warn:#FFB454;--danger:#FF6B6B;--ok:#35DC8E;
+    /* orange = couleur de RUSHR, réservée aux licences RUSHR */
+    --rushr:#FF6A00;--rushr2:#FF8A3D;--on-rushr:#150A03;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px;width:100%}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .mark{width:22px;height:22px;display:block;border-radius:6px}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;width:100%;padding:36px 0 48px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13.5px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-primary[disabled]{opacity:.5;cursor:not-allowed}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn-sm{padding:6px 11px;font-size:12.5px}
+
+  /* gate */
+  .gate{max-width:420px;margin:40px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;text-align:center}
+  .gate .mark{width:44px;height:44px;border-radius:11px;overflow:hidden;margin:0 auto 16px}
+  .gate .mark img{width:100%;height:100%;display:block}
+  .gate h1{font-size:20px;font-weight:800;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .gate input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:#fff;padding:12px 14px;font-size:15px;font-family:inherit;margin-bottom:12px;text-align:center}
+  .gate input:focus{outline:none;border-color:var(--accent)}
+  .gate .btn-primary{width:100%;padding:12px}
+  .gate .err{color:var(--danger);font-size:13px;margin-bottom:12px;min-height:16px}
+  .gate .hint{color:var(--muted2);font-size:12.5px;margin-top:14px}
+  .gate .hint button{background:transparent;border:0;color:var(--accent2);cursor:pointer;font-family:inherit;font-size:12.5px;text-decoration:underline}
+
+  /* app : en-tête + menu de sections */
+  #app{display:none}
+  .acc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .ident{min-width:0}
+  .ident-name{font-size:19px;font-weight:800;word-break:break-word}
+  .ident-mail{font-size:13.5px;color:var(--muted);word-break:break-all}
+  .linkbtn{background:transparent;border:0;color:var(--accent2);cursor:pointer;font-family:inherit;font-size:12.5px;text-decoration:underline;padding:0;margin-top:6px}
+  .navsel{width:280px;max-width:100%}
+  .navsel select{width:100%;background:var(--surface);border:1px solid var(--line2);border-radius:10px;color:#fff;padding:13px 14px;font-size:14px;font-family:inherit;cursor:pointer}
+  .navsel select:focus{outline:none;border-color:var(--accent)}
+  .view-title{font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-.5px;margin:34px 0 22px}
+  .back{display:inline-block;color:var(--muted);font-size:13px;margin:-8px 0 18px}
+  .back:hover{color:var(--accent2)}
+
+  /* vue d'ensemble : tuiles */
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .tile{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:150px;transition:border-color .2s,transform .2s}
+  .tile:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .tile-title{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:700}
+  .tile-title svg{width:24px;height:24px;flex:none;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .tile-desc{color:var(--muted);font-size:13.5px;line-height:1.55}
+  .tile-stat{margin-top:auto;padding-top:6px;font-size:12.5px;font-weight:600;color:var(--accent2)}
+  .tile-stat.soon{color:var(--muted2)}
+
+  /* contenu des sections */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:18px}
+  .card h2{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+  .card .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2);margin-bottom:5px}
+  .in,.composer textarea,.composer input{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:9px;color:#fff;padding:11px 13px;font-size:13.5px;font-family:inherit}
+  .in:focus,.composer textarea:focus,.composer input:focus{outline:none;border-color:var(--accent)}
+  .in[readonly]{color:var(--muted);cursor:default}
+  select.in{appearance:auto}
+  .composer input{margin-bottom:10px}
+  .composer textarea{resize:vertical;min-height:100px;margin-bottom:10px}
+  .checks{display:flex;flex-direction:column;gap:9px;margin:4px 0 16px}
+  .checks label{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--text);cursor:pointer}
+  .checks input{margin-top:3px;accent-color:var(--accent)}
+  .checks small{display:block;color:var(--muted2);font-size:12px}
+  .ok-msg{color:var(--ok);font-size:13px;margin-top:10px;display:none}
+  .err-msg{color:var(--danger);font-size:13px;margin-top:10px;min-height:0}
+  .info-line{font-size:12.5px;color:var(--muted);margin-top:14px}
+
+  .lic{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface2);margin-bottom:12px}
+  .lic:last-child{margin-bottom:0}
+  .lic-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .prod-tag{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent2);border-radius:99px;padding:3px 10px}
+  .prod-sub{font-size:12.5px;color:var(--muted)}
+  .lic.rushr .prod-tag{border-color:var(--rushr);color:var(--rushr2)}
+  .lic.rushr .key-row{border-color:var(--rushr)}
+  .lic.rushr .key-row code{color:var(--rushr2)}
+  .lic.rushr .copy-btn{background:var(--rushr);color:var(--on-rushr)}
+  .lic.rushr .copy-btn:hover,.lic.rushr .copy-btn.copied{background:var(--rushr2)}
+  .lic.rushr .b-active{background:var(--rushr);color:var(--on-rushr)}
+  .key-row{display:flex;align-items:center;gap:12px;background:#0E0E11;border:1px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:14px;flex-wrap:wrap}
+  .key-row code{font-family:ui-monospace,Menlo,monospace;font-size:16px;font-weight:700;letter-spacing:.5px;color:var(--accent2);word-break:break-all;flex:1;min-width:0}
+  .copy-btn.copied{background:var(--accent2)}
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+  .meta-grid div{font-size:13px}
+  .meta-grid .k{color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:6px;padding:4px 9px}
+  .b-active{color:var(--on-accent);background:var(--accent)}
+  .b-off{color:#fff;background:#5a2b2b}
+  .devs .k{color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .dev{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+  .dev + .dev{border-top:1px solid var(--line)}
+  .dev .name{font-size:13.5px;font-weight:600;word-break:break-word}
+  .dev .meta{font-size:12px;color:var(--muted2)}
+  .empty{color:var(--muted2);font-size:13px}
+  .empty a,.sub a{color:var(--accent2);text-decoration:underline}
+  .add-row{display:flex;gap:10px}
+  .add-row .in{flex:1;min-width:0;font-family:ui-monospace,Menlo,monospace}
+  .mod-name{font-weight:700;font-size:14px;margin-bottom:10px}
+  .soon{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13.5px}
+  .soon .pill{font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--accent2);border:1px solid var(--accent);border-radius:99px;padding:3px 9px;white-space:nowrap}
+
+  .thist{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+  .thist .t{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface2)}
+  .thist .t .row1{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
+  .thist .t .subj{font-size:12.5px;font-weight:700}
+  .thist .t .date{font-size:11px;color:var(--muted2)}
+  .thist .t .msg{font-size:12.5px;color:var(--muted);white-space:pre-wrap;word-break:break-word}
+  .empty-t{color:var(--muted2);font-size:12.5px}
+
+  footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted2);font-size:12px;text-align:center}
+  @media(max-width:720px){
+    .tiles{grid-template-columns:1fr}
+    .tile{min-height:0}
+    .navsel{width:100%}
+    .meta-grid{grid-template-columns:1fr}
+    .add-row{flex-direction:column}
+    .dev{flex-direction:column;align-items:flex-start}
+  }
+</style>
+<link rel="canonical" href="https://thebackpacklab.com/account" />
+<script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
+  <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <!-- STEP 1: email -->
+  <div id="g-email" class="gate">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Mon compte" data-en="My account">Mon compte</h1>
+    <p data-fr="Un seul compte BACKPACK LAB : tes licences, tes appareils et ton historique au même endroit. Pas encore de compte ? Entre ton email, il sera créé automatiquement." data-en="One BACKPACK LAB account: your licenses, devices and history in one place. No account yet? Enter your email and it will be created automatically.">Un seul compte BACKPACK LAB : tes licences, tes appareils et ton historique au même endroit. Pas encore de compte ? Entre ton email, il sera créé automatiquement.</p>
+    <div class="err" id="emailErr"></div>
+    <form onsubmit="return sendCode(event)">
+      <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
+      <button type="submit" id="sendBtn" class="btn btn-primary" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
+    </form>
+  </div>
+
+  <!-- STEP 2: code -->
+  <div id="g-code" class="gate" style="display:none">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Vérification" data-en="Verification">Vérification</h1>
+    <p data-fr="Entre le code reçu par email." data-en="Enter the code you received by email.">Entre le code reçu par email.</p>
+    <div class="err" id="codeErr"></div>
+    <form onsubmit="return verifyCode(event)">
+      <input id="codeInput" type="text" required autocomplete="one-time-code" maxlength="16" data-fr-ph="Code reçu par email" data-en-ph="Code from the email" placeholder="Code reçu par email" />
+      <button type="submit" id="verifyBtn" class="btn btn-primary" data-fr="Vérifier" data-en="Verify">Vérifier</button>
+    </form>
+    <div class="hint"><button onclick="backToEmail()" data-fr="← Changer d'email" data-en="← Change email">← Changer d'email</button></div>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+
+    <div class="acc-head">
+      <div class="ident">
+        <div class="ident-name" id="identName"></div>
+        <div class="ident-mail" id="identMail"></div>
+        <button class="linkbtn" onclick="signOut()" data-fr="Se déconnecter" data-en="Sign out">Se déconnecter</button>
+      </div>
+      <div class="navsel">
+        <select id="navSelect" aria-label="Navigation" onchange="location.hash=this.value">
+          <option value="overview" data-fr="Vue d'ensemble" data-en="Overview">Vue d'ensemble</option>
+          <option value="licenses" data-fr="Mes licences" data-en="My licenses">Mes licences</option>
+          <option value="devices" data-fr="Mes appareils" data-en="My devices">Mes appareils</option>
+          <option value="modules" data-fr="Mes modules" data-en="My modules">Mes modules</option>
+          <option value="purchases" data-fr="Achats et factures" data-en="Purchases &amp; invoices">Achats et factures</option>
+          <option value="profile" data-fr="Profil et préférences" data-en="Profile &amp; preferences">Profil et préférences</option>
+          <option value="support" data-fr="Support" data-en="Support">Support</option>
+        </select>
+      </div>
+    </div>
+
+    <h1 class="view-title" id="viewTitle"></h1>
+
+    <!-- Vue d'ensemble -->
+    <section class="view" id="v-overview">
+      <div class="tiles">
+        <a class="tile" href="#licenses">
+          <div class="tile-title"><svg viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 21 2M17 6l3 3M14 9l2 2"/></svg><span data-fr="Mes licences" data-en="My licenses">Mes licences</span></div>
+          <div class="tile-desc" data-fr="Tes clés de licence, leur statut et le logiciel concerné." data-en="Your license keys, their status and the software they unlock.">Tes clés de licence, leur statut et le logiciel concerné.</div>
+          <div class="tile-stat" id="stLicenses"></div>
+        </a>
+        <a class="tile" href="#devices">
+          <div class="tile-title"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span data-fr="Mes appareils" data-en="My devices">Mes appareils</span></div>
+          <div class="tile-desc" data-fr="Les machines où tes licences sont activées. Libère-en une pour changer d'ordinateur." data-en="The machines where your licenses are activated. Free one up to switch computers.">Les machines où tes licences sont activées. Libère-en une pour changer d'ordinateur.</div>
+          <div class="tile-stat" id="stDevices"></div>
+        </a>
+        <a class="tile" href="#modules">
+          <div class="tile-title"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg><span data-fr="Mes modules" data-en="My modules">Mes modules</span></div>
+          <div class="tile-desc" data-fr="Les modules complémentaires ajoutés à tes logiciels." data-en="The add-on modules you have added to your software.">Les modules complémentaires ajoutés à tes logiciels.</div>
+          <div class="tile-stat" id="stModules"></div>
+        </a>
+        <a class="tile" href="#purchases">
+          <div class="tile-title"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v15a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span data-fr="Achats et factures" data-en="Purchases &amp; invoices">Achats et factures</span></div>
+          <div class="tile-desc" data-fr="Retrouve tes commandes passées et tes factures." data-en="Find your past orders and invoices.">Retrouve tes commandes passées et tes factures.</div>
+          <div class="tile-stat soon" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</div>
+        </a>
+        <a class="tile" href="#profile">
+          <div class="tile-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span data-fr="Profil et préférences" data-en="Profile &amp; preferences">Profil et préférences</span></div>
+          <div class="tile-desc" data-fr="Ton nom, ta langue et les emails que tu souhaites recevoir." data-en="Your name, language and the emails you want to receive.">Ton nom, ta langue et les emails que tu souhaites recevoir.</div>
+        </a>
+        <a class="tile" href="#support">
+          <div class="tile-title"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-fr="Support" data-en="Support">Support</span></div>
+          <div class="tile-desc" data-fr="Un bug, une question ? Écris-nous et retrouve tes échanges." data-en="A bug, a question? Write to us and find your past messages.">Un bug, une question ? Écris-nous et retrouve tes échanges.</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Mes licences -->
+    <section class="view" id="v-licenses" style="display:none">
+      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
+      <div class="card">
+        <div id="licList"></div>
+      </div>
+      <div class="card">
+        <h2 data-fr="Ajouter une clé" data-en="Add a key">Ajouter une clé</h2>
+        <p class="sub" data-fr="Associe une licence ou un module à ton compte avec sa clé." data-en="Link a license or a module to your account with its key.">Associe une licence ou un module à ton compte avec sa clé.</p>
+        <form class="add-row" onsubmit="return addKey(event)">
+          <input id="keyInput" class="in" type="text" autocomplete="off" spellcheck="false" maxlength="64" placeholder="RUSHR-XXXX-XXXX-XXXX" />
+          <button type="submit" id="keyBtn" class="btn btn-primary" data-fr="Ajouter" data-en="Add">Ajouter</button>
+        </form>
+        <div class="err-msg" id="keyErr"></div>
+        <div class="ok-msg" id="keyOk" data-fr="✓ Clé ajoutée à ton compte." data-en="✓ Key added to your account.">✓ Clé ajoutée à ton compte.</div>
+      </div>
+    </section>
+
+    <!-- Mes appareils -->
+    <section class="view" id="v-devices" style="display:none">
+      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
+      <div id="devList"></div>
+    </section>
+
+    <!-- Mes modules -->
+    <section class="view" id="v-modules" style="display:none">
+      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
+      <div class="card"><div id="modList"></div></div>
+    </section>
+
+    <!-- Achats -->
+    <section class="view" id="v-purchases" style="display:none">
+      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
+      <div class="card">
+        <div class="soon"><span class="pill" data-fr="Bientôt" data-en="Soon">Bientôt</span><span data-fr="Tes achats et tes factures apparaîtront ici." data-en="Your purchases and invoices will show up here.">Tes achats et tes factures apparaîtront ici.</span></div>
+      </div>
+    </section>
+
+    <!-- Profil -->
+    <section class="view" id="v-profile" style="display:none">
+      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
+      <div class="card">
+        <form onsubmit="return saveProfile(event)">
+          <div class="field"><label data-fr="Email" data-en="Email">Email</label><input id="pEmail" class="in" type="email" readonly /></div>
+          <div class="field"><label data-fr="Nom" data-en="Name">Nom</label><input id="pName" class="in" type="text" maxlength="80" data-fr-ph="Ton nom" data-en-ph="Your name" placeholder="Ton nom" /></div>
+          <div class="field"><label data-fr="Langue" data-en="Language">Langue</label>
+            <select id="pLang" class="in"><option value="fr">Français</option><option value="en">English</option></select>
+          </div>
+          <div class="checks">
+            <label><input type="checkbox" id="pReleases" /><span><span data-fr="Nouvelles versions" data-en="New releases">Nouvelles versions</span><small data-fr="Être prévenu quand une version de nos logiciels sort." data-en="Get notified when a new version of our software is out.">Être prévenu quand une version de nos logiciels sort.</small></span></label>
+            <label><input type="checkbox" id="pTips" /><span><span data-fr="Conseils et astuces" data-en="Tips &amp; tricks">Conseils et astuces</span><small data-fr="Des conseils pour mieux utiliser nos outils." data-en="Advice to get more out of our tools.">Des conseils pour mieux utiliser nos outils.</small></span></label>
+            <label><input type="checkbox" id="pOffers" /><span><span data-fr="Offres" data-en="Offers">Offres</span><small data-fr="Promotions et nouveautés commerciales." data-en="Promotions and commercial news.">Promotions et nouveautés commerciales.</small></span></label>
+          </div>
+          <button type="submit" id="profileBtn" class="btn btn-primary" data-fr="Enregistrer" data-en="Save">Enregistrer</button>
+          <div class="err-msg" id="profileErr"></div>
+          <div class="ok-msg" id="profileOk" data-fr="✓ Enregistré." data-en="✓ Saved.">✓ Enregistré.</div>
+        </form>
+        <div class="info-line" id="profileInfo"></div>
+      </div>
+    </section>
+
+    <!-- Support -->
+    <section class="view" id="v-support" style="display:none">
+      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
+      <div class="card">
+        <div id="supportNoLic" style="display:none">
+          <p class="sub" id="supportNoLicText"></p>
+        </div>
+        <div id="supportForm">
+          <p class="sub" data-fr="Un bug, une idée, un retour d'usage ? Écris-nous, on lit tout." data-en="A bug, an idea, general feedback? Write to us, we read everything.">Un bug, une idée, un retour d'usage ? Écris-nous, on lit tout.</p>
+          <div class="composer">
+            <div class="err-msg" id="ticketErr"></div>
+            <form onsubmit="return submitTicket(event)">
+              <input id="subjectInput" type="text" data-fr-ph="Sujet (optionnel)" data-en-ph="Subject (optional)" placeholder="Sujet (optionnel)" />
+              <textarea id="messageInput" required data-fr-ph="Ton message..." data-en-ph="Your message..." placeholder="Ton message..."></textarea>
+              <button type="submit" id="ticketBtn" class="btn btn-primary" data-fr="Envoyer" data-en="Send">Envoyer</button>
+            </form>
+            <div class="ok-msg" id="ticketOk" data-fr="✓ Envoyé, on te répond par email." data-en="✓ Sent, we'll reply by email.">✓ Envoyé, on te répond par email.</div>
+          </div>
+          <div class="thist" id="ticketHist"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</div></main>
+
+<footer>© 2026 BACKPACK LAB</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var pendingEmail='';
+  var ACCOUNT=null;
+  var VIEWS=['overview','licenses','devices','modules','purchases','profile','support'];
+
+  function FR(){return (document.documentElement.lang||'fr')==='fr';}
+
+  function setLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.textContent=v;});
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){var v=el.getAttribute('data-'+lang+'-ph');if(v!==null)el.setAttribute('placeholder',v);});
+    document.getElementById('lfr').classList.toggle('on',lang==='fr');
+    document.getElementById('len').classList.toggle('on',lang==='en');
+    try{localStorage.setItem('bpl_lang',lang);}catch(e){}
+    if(ACCOUNT){ renderAccount(); updateViewTitle(); }
+  }
+
+  function escapeHtml(s){
+    return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function fmtDate(d){
+    if(!d) return '—';
+    var x=new Date(d); if(isNaN(x)) return '—';
+    return x.toLocaleDateString(FR()?'fr-FR':'en-US');
+  }
+  function plural(n,one,many){ return n+' '+(n===1?one:many); }
+
+  function showGate(id){
+    ['g-email','g-code'].forEach(function(g){document.getElementById(g).style.display=(g===id)?'block':'none';});
+    document.getElementById('app').style.display='none';
+  }
+  function showApp(){
+    ['g-email','g-code'].forEach(function(g){document.getElementById(g).style.display='none';});
+    document.getElementById('app').style.display='block';
+    routeView();
+  }
+
+  /* ---------- sections (#overview, #licenses, ...) ---------- */
+  function currentView(){
+    var h=(location.hash||'').replace('#','');
+    return VIEWS.indexOf(h)>=0?h:'overview';
+  }
+  function updateViewTitle(){
+    var sel=document.getElementById('navSelect');
+    var opt=sel.options[sel.selectedIndex];
+    document.getElementById('viewTitle').textContent=opt?opt.textContent:'';
+  }
+  function routeView(){
+    var v=currentView();
+    VIEWS.forEach(function(id){document.getElementById('v-'+id).style.display=(id===v)?'block':'none';});
+    document.getElementById('navSelect').value=v;
+    updateViewTitle();
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',function(){ if(ACCOUNT) routeView(); });
+
+  /* ---------- connexion ---------- */
+  async function sendCode(e){
+    e.preventDefault();
+    var btn=document.getElementById('sendBtn'), err=document.getElementById('emailErr');
+    var email=document.getElementById('emailInput').value.trim().toLowerCase();
+    err.textContent=''; btn.disabled=true;
+    try{
+      var r=await SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true}});
+      if(r.error) throw r.error;
+      pendingEmail=email;
+      showGate('g-code');
+    }catch(ex){
+      err.textContent=FR()?'Impossible d\'envoyer le code, réessaie.':'Could not send the code, please retry.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  async function verifyCode(e){
+    e.preventDefault();
+    var btn=document.getElementById('verifyBtn'), err=document.getElementById('codeErr');
+    var code=document.getElementById('codeInput').value.trim();
+    err.textContent=''; btn.disabled=true;
+    try{
+      var r=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'email'});
+      if(r.error){
+        // Une adresse jamais confirmée reçoit son code en type "signup" plutôt que "email".
+        r=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'signup'});
+        if(r.error) throw r.error;
+      }
+    }catch(ex){
+      var base=FR()?'Code invalide ou expiré.':'Invalid or expired code.';
+      err.textContent=base+(ex&&ex.message?' ('+ex.message+')':'');
+      console.error('verifyOtp failed:',ex);
+      btn.disabled=false;
+      return false;
+    }
+    try{
+      await loadPortal();
+    }catch(ex){
+      console.error('loadPortal failed:',ex);
+      err.textContent=FR()?'Connecté, mais impossible de charger ton compte. Recharge la page.':'Signed in, but your account could not be loaded. Please reload the page.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  function backToEmail(){
+    document.getElementById('codeInput').value='';
+    showGate('g-email');
+  }
+
+  async function signOut(){
+    await SB.auth.signOut();
+    ACCOUNT=null;
+    showGate('g-email');
+    document.getElementById('emailInput').value='';
+    document.getElementById('codeInput').value='';
+  }
+
+  /* ---------- chargement du compte ---------- */
+  async function fetchAccount(){
+    var r=await SB.rpc('get_my_account');
+    if(r.error) throw r.error;
+    ACCOUNT=r.data;
+  }
+
+  async function loadPortal(){
+    await fetchAccount();
+    var savedLang=null;
+    try{savedLang=localStorage.getItem('bpl_lang');}catch(e){}
+    var pl=ACCOUNT.profile&&ACCOUNT.profile.language;
+    if(!savedLang && (pl==='fr'||pl==='en') && pl!==document.documentElement.lang) setLang(pl);
+    fillProfile();
+    renderAccount();
+    showApp();
+    loadTicketHistory();
+  }
+
+  /* ---------- profil ---------- */
+  function fillProfile(){
+    var p=ACCOUNT.profile||{};
+    document.getElementById('pEmail').value=ACCOUNT.user.email||'';
+    document.getElementById('pName').value=p.full_name||'';
+    document.getElementById('pLang').value=(p.language==='en')?'en':'fr';
+    document.getElementById('pReleases').checked=!!p.email_pref_releases;
+    document.getElementById('pTips').checked=!!p.email_pref_tips;
+    document.getElementById('pOffers').checked=!!p.email_pref_offers;
+  }
+
+  async function saveProfile(e){
+    e.preventDefault();
+    var btn=document.getElementById('profileBtn'), err=document.getElementById('profileErr'), ok=document.getElementById('profileOk');
+    err.textContent=''; ok.style.display='none'; btn.disabled=true;
+    var patch={
+      full_name:document.getElementById('pName').value.trim()||null,
+      language:document.getElementById('pLang').value,
+      email_pref_releases:document.getElementById('pReleases').checked,
+      email_pref_tips:document.getElementById('pTips').checked,
+      email_pref_offers:document.getElementById('pOffers').checked,
+      updated_at:new Date().toISOString()
+    };
+    try{
+      var r=await SB.from('profiles').update(patch).eq('id',ACCOUNT.user.id);
+      if(r.error) throw r.error;
+      ACCOUNT.profile=patch;
+      ok.style.display='block';
+      if(patch.language!==document.documentElement.lang) setLang(patch.language); else renderAccount();
+    }catch(ex){
+      console.error('saveProfile failed:',ex);
+      err.textContent=FR()?'Impossible d\'enregistrer, réessaie.':'Could not save, please retry.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  /* ---------- rendu ---------- */
+  function renderAccount(){
+    if(!ACCOUNT) return;
+    var fr=FR();
+    var email=ACCOUNT.user.email||'';
+    var name=(ACCOUNT.profile&&ACCOUNT.profile.full_name)||email.split('@')[0]||'';
+    document.getElementById('identName').textContent=name;
+    document.getElementById('identMail').textContent=email;
+
+    var lics=ACCOUNT.licenses||[], mods=ACCOUNT.modules||[];
+    var nDev=lics.reduce(function(n,l){return n+((l.activations||[]).length);},0);
+    document.getElementById('stLicenses').textContent=fr?plural(lics.length,'licence','licences'):plural(lics.length,'license','licenses');
+    document.getElementById('stDevices').textContent=fr?plural(nDev,'appareil activé','appareils activés'):plural(nDev,'device activated','devices activated');
+    document.getElementById('stModules').textContent=plural(mods.length,fr?'module':'module',fr?'modules':'modules');
+
+    // infos sous le formulaire de profil
+    var info=[];
+    info.push((fr?'Compte créé le ':'Account created on ')+fmtDate(ACCOUNT.user.created_at));
+    if(ACCOUNT.beta_signup){
+      var plat=ACCOUNT.beta_signup.platform==='MAC'?'macOS':'Windows';
+      info.push((fr?'Inscrit à la bêta RUSHR le ':'Signed up for the RUSHR beta on ')+fmtDate(ACCOUNT.beta_signup.created_at)+' ('+plat+')');
+    }
+    document.getElementById('profileInfo').innerHTML=info.map(escapeHtml).join('<br>');
+
+    renderLicenses();
+    renderDevices();
+    renderModules();
+
+    // support : réservé aux comptes qui ont une licence
+    var has=lics.length>0;
+    document.getElementById('supportForm').style.display=has?'block':'none';
+    document.getElementById('supportNoLic').style.display=has?'none':'block';
+    document.getElementById('supportNoLicText').innerHTML=fr
+      ?'Le support intégré est réservé aux détenteurs d\'une licence. Pour toute question, écris-nous à <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>.'
+      :'In-app support is reserved for license holders. For any question, write to us at <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>.';
+  }
+
+  // Logiciels connus : nom affiché = valeur de la colonne product ; description sous le nom.
+  var PRODUCTS={
+    RUSHR:{fr:'Outil de dérushage pour vidéastes et monteurs',en:'Dérushage tool for videographers and editors'}
+  };
+  function productHead(code){
+    if(!code) return '';
+    var p=PRODUCTS[String(code).toUpperCase()];
+    var sub=p?(FR()?p.fr:p.en):'';
+    return '<div class="lic-head"><span class="prod-tag">'+escapeHtml(code)+'</span>'+(sub?'<span class="prod-sub">'+escapeHtml(sub)+'</span>':'')+'</div>';
+  }
+  function isRushr(code){ return String(code||'').toUpperCase()==='RUSHR'; }
+
+  function renderLicenses(){
+    var fr=FR(), list=ACCOUNT.licenses||[], el=document.getElementById('licList');
+    if(!list.length){
+      el.innerHTML='<p class="empty">'+(fr
+        ?'Aucune licence pour l\'instant. Ajoute une clé ci-dessous, ou <a href="claim">réclame une licence bêta gratuite</a>.'
+        :'No license yet. Add a key below, or <a href="claim">claim a free beta license</a>.')+'</p>';
+      return;
+    }
+    el.innerHTML=list.map(function(l){
+      var active=String(l.status||'').toUpperCase()==='ACTIVE';
+      var n=(l.activations||[]).length;
+      return '<div class="lic'+(isRushr(l.product)?' rushr':'')+'">'
+        +productHead(l.product)
+        +'<div class="key-row"><code>'+escapeHtml(l.license_key)+'</code>'
+        +'<button class="btn btn-primary copy-btn" data-copy="'+escapeHtml(l.license_key)+'">'+(fr?'Copier':'Copy')+'</button></div>'
+        +'<div class="meta-grid">'
+        +'<div><div class="k">'+(fr?'Statut':'Status')+'</div><span class="badge '+(active?'b-active':'b-off')+'">'+escapeHtml(l.status)+'</span></div>'
+        +'<div><div class="k">Plan</div><div>'+escapeHtml(l.plan||'—')+'</div></div>'
+        +'<div><div class="k">'+(fr?'Appareils':'Devices')+'</div><div>'+n+' / '+escapeHtml(l.max_devices)+' · <a href="#devices" style="color:var(--accent2);text-decoration:underline">'+(fr?'gérer':'manage')+'</a></div></div>'
+        +'<div><div class="k">'+(fr?'Créée le':'Created on')+'</div><div>'+fmtDate(l.created_at)+'</div></div>'
+        +(l.expires_at?'<div><div class="k">'+(fr?'Expire le':'Expires on')+'</div><div>'+fmtDate(l.expires_at)+'</div></div>':'')
+        +'</div></div>';
+    }).join('');
+  }
+
+  function renderDevices(){
+    var fr=FR(), list=ACCOUNT.licenses||[], el=document.getElementById('devList');
+    if(!list.length){
+      el.innerHTML='<div class="card"><p class="empty">'+(fr?'Aucune licence, donc aucun appareil pour l\'instant.':'No license yet, so no device.')+'</p></div>';
+      return;
+    }
+    el.innerHTML=list.map(function(l){
+      var acts=l.activations||[];
+      var devs=acts.length?acts.map(function(a){
+        var meta=[];
+        if(a.app_version) meta.push('v'+a.app_version);
+        meta.push((fr?'activé le ':'activated ')+fmtDate(a.activated_at));
+        meta.push((fr?'vu le ':'last seen ')+fmtDate(a.last_check_at));
+        return '<div class="dev"><div><div class="name">'+escapeHtml(a.machine_name||(fr?'Appareil':'Device'))+'</div>'
+          +'<div class="meta">'+escapeHtml(meta.join(' · '))+'</div></div>'
+          +'<button class="btn btn-ghost btn-sm" data-free="'+escapeHtml(a.id)+'">'+(fr?'Libérer':'Free up')+'</button></div>';
+      }).join(''):'<div class="empty">'+(fr?'Aucun appareil activé.':'No device activated.')+'</div>';
+      return '<div class="card"><div class="lic'+(isRushr(l.product)?' rushr':'')+'" style="margin:0">'
+        +productHead(l.product)
+        +'<div class="k" style="color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px"><code style="font-family:ui-monospace,Menlo,monospace">'+escapeHtml(l.license_key)+'</code> · '+(acts.length)+' / '+escapeHtml(l.max_devices)+'</div>'
+        +'<div class="devs">'+devs+'</div></div></div>';
+    }).join('');
+  }
+
+  function renderModules(){
+    var fr=FR(), list=ACCOUNT.modules||[], el=document.getElementById('modList');
+    if(!list.length){
+      el.innerHTML='<p class="empty">'+(fr?'Aucun module pour l\'instant. Ajoute une clé de module depuis <a href="#licenses">Mes licences</a>.':'No module yet. Add a module key from <a href="#licenses">My licenses</a>.')+'</p>';
+      return;
+    }
+    el.innerHTML=list.map(function(m){
+      var active=String(m.status||'').toUpperCase()==='ACTIVE';
+      return '<div class="lic">'+productHead(m.product)+'<div class="mod-name">'+escapeHtml(m.module_id)+' <span class="badge '+(active?'b-active':'b-off')+'" style="margin-left:6px">'+escapeHtml(m.status)+'</span></div>'
+        +'<div class="key-row"><code>'+escapeHtml(m.activation_key)+'</code>'
+        +'<button class="btn btn-primary copy-btn" data-copy="'+escapeHtml(m.activation_key)+'">'+(fr?'Copier':'Copy')+'</button></div>'
+        +'<div class="meta-grid"><div><div class="k">Plan</div><div>'+escapeHtml(m.plan||'—')+'</div></div>'
+        +'<div><div class="k">'+(fr?'Ajouté le':'Added on')+'</div><div>'+fmtDate(m.created_at)+'</div></div></div></div>';
+    }).join('');
+  }
+
+  /* ---------- actions : copier / libérer un appareil ---------- */
+  document.addEventListener('click',function(e){
+    var c=e.target.closest&&e.target.closest('[data-copy]');
+    if(c){ copyText(c.getAttribute('data-copy'),c); return; }
+    var f=e.target.closest&&e.target.closest('[data-free]');
+    if(f){ freeDevice(f.getAttribute('data-free'),f); }
+  });
+
+  function copyText(text,btn){
+    var label=btn.textContent;
+    navigator.clipboard.writeText(text).then(function(){
+      btn.classList.add('copied');
+      btn.textContent=FR()?'✓ Copié':'✓ Copied';
+      setTimeout(function(){btn.classList.remove('copied');btn.textContent=label;},1800);
+    });
+  }
+
+  async function freeDevice(id,btn){
+    var msg=FR()?'Libérer cet appareil ? Il devra être réactivé pour utiliser la licence.':'Free up this device? It will need to be activated again to use the license.';
+    if(!window.confirm(msg)) return;
+    btn.disabled=true;
+    try{
+      var r=await SB.rpc('deactivate_activation',{p_activation_id:id});
+      if(r.error) throw r.error;
+      await fetchAccount();
+      renderAccount();
+    }catch(ex){
+      console.error('deactivate failed:',ex);
+      btn.disabled=false;
+      window.alert(FR()?'Impossible de libérer cet appareil, réessaie.':'Could not free up this device, please retry.');
+    }
+  }
+
+  /* ---------- ajouter une clé (licence ou module) ---------- */
+  async function addKey(e){
+    e.preventDefault();
+    var btn=document.getElementById('keyBtn'), err=document.getElementById('keyErr'), ok=document.getElementById('keyOk');
+    var key=document.getElementById('keyInput').value.trim();
+    err.textContent=''; ok.style.display='none';
+    if(!key) return false;
+    btn.disabled=true;
+    try{
+      var r=await SB.rpc('claim_license',{p_key:key});
+      if(r.error){
+        if(/LICENSE_NOT_FOUND/.test(r.error.message||'')){
+          r=await SB.rpc('claim_module_license',{p_key:key});
+        }
+        if(r.error) throw r.error;
+      }
+      document.getElementById('keyInput').value='';
+      await fetchAccount();
+      renderAccount();
+      ok.style.display='block';
+    }catch(ex){
+      var m=(ex&&ex.message)||'';
+      if(/LICENSE_NOT_FOUND/.test(m)) err.textContent=FR()?'Clé introuvable. Vérifie qu\'elle est correcte.':'Key not found. Please check it.';
+      else if(/LICENSE_ALREADY_CLAIMED/.test(m)) err.textContent=FR()?'Cette clé est déjà liée à un autre compte.':'This key is already linked to another account.';
+      else { console.error('addKey failed:',ex); err.textContent=FR()?'Impossible d\'ajouter la clé, réessaie.':'Could not add the key, please retry.'; }
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  /* ---------- support ---------- */
+  async function submitTicket(e){
+    e.preventDefault();
+    var btn=document.getElementById('ticketBtn'), err=document.getElementById('ticketErr'), ok=document.getElementById('ticketOk');
+    var subject=document.getElementById('subjectInput').value.trim();
+    var message=document.getElementById('messageInput').value.trim();
+    err.textContent=''; ok.style.display='none'; btn.disabled=true;
+    try{
+      var r=await SB.rpc('submit_support_ticket',{p_subject:subject, p_message:message});
+      if(r.error) throw r.error;
+      document.getElementById('subjectInput').value='';
+      document.getElementById('messageInput').value='';
+      ok.style.display='block';
+      loadTicketHistory();
+    }catch(ex){
+      err.textContent=FR()?'Impossible d\'envoyer le message, réessaie.':'Could not send the message, please retry.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  async function loadTicketHistory(){
+    var hist=document.getElementById('ticketHist');
+    var r=await SB.from('support_tickets').select('subject,message,created_at').order('created_at',{ascending:false}).limit(5);
+    if(r.error || !r.data || !r.data.length){
+      hist.innerHTML='<div class="empty-t">'+(FR()?'Aucun message envoyé pour le moment.':'No messages sent yet.')+'</div>';
+      return;
+    }
+    hist.innerHTML=r.data.map(function(t){
+      var subj=t.subject&&t.subject!=='(sans sujet)'?t.subject:(FR()?'(sans sujet)':'(no subject)');
+      return '<div class="t"><div class="row1"><span class="subj">'+escapeHtml(subj)+'</span><span class="date">'+fmtDate(t.created_at)+'</span></div><div class="msg">'+escapeHtml(t.message)+'</div></div>';
+    }).join('');
+  }
+
+  (async function init(){
+    var saved=null;
+    try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang=saved||((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en');
+    setLang(lang);
+
+    var session=(await SB.auth.getSession()).data.session;
+    if(session){
+      try{
+        await loadPortal();
+      }catch(ex){
+        console.error('loadPortal failed:',ex);
+        showGate('g-email');
+        document.getElementById('emailErr').textContent=FR()?'Impossible de charger ton compte, reconnecte-toi.':'Could not load your account, please sign in again.';
+      }
+    }
+  })();
+</script>
+</body>
+</html>
