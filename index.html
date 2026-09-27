@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BACKPACK LAB — Software & Creative Studio</title>
+<title>BACKPACK LAB — Rushr, le nouvel outil de dérushage (beta gratuite)</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/bp-favicon-32.png" />
 <link rel="icon" type="image/x-icon" href="assets/bp-favicon.ico" />
 <link rel="apple-touch-icon" href="assets/bp-apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="BACKPACK LAB" />
-<meta property="og:title" content="BACKPACK LAB — Software &amp; Creative Studio" />
-<meta property="og:description" content="Backpack Lab : studio créatif et éditeur de logiciels." />
+<meta property="og:title" content="Rushr — vos rushes triés avant même d'ouvrir le montage · BACKPACK LAB" />
+<meta property="og:description" content="Rushr, le nouvel outil de dérushage pour vidéastes et monteurs. Importez, prévisualisez, taguez au clavier, puis un clic range tout. Beta gratuite sur Windows et macOS." />
 <meta property="og:url" content="https://thebackpacklab.com/" />
 <meta property="og:image" content="https://thebackpacklab.com/assets/og-backpacklab.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://thebackpacklab.com/assets/og-backpacklab.png" />
-<meta name="description" data-fr="Backpack Lab : studio créatif et éditeur de logiciels. Outils pour vidéastes (Rushr), VFX, montage, étalonnage et plus." data-en="Backpack Lab: creative studio and software publisher. Tools for video creators (Rushr), VFX, editing, color grading and more." content="Backpack Lab : studio créatif et éditeur de logiciels." />
+<meta name="description" data-fr="Rushr, le nouvel outil de dérushage de Backpack Lab : importez, prévisualisez, taguez au clavier, puis un clic range tout. Beta gratuite sur Windows et macOS." data-en="Rushr, the new dérushage tool from Backpack Lab: import, preview, tag from the keyboard, then one click files everything. Free beta for Windows and macOS." content="Rushr, le nouvel outil de dérushage de Backpack Lab : importez, prévisualisez, taguez au clavier, puis un clic range tout. Beta gratuite sur Windows et macOS." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -107,6 +107,73 @@
   .soft .go{margin-top:16px;color:var(--accent2);font-weight:600;font-size:14px}
   .soft .go:hover{color:var(--accent)}
 
+  /* ANNOUNCE BAR */
+  .announce{display:block;background:linear-gradient(90deg,rgba(53,220,142,.16),rgba(53,220,142,.05));border-bottom:1px solid rgba(53,220,142,.25);text-align:center;font-size:13px;padding:9px 16px;color:var(--text)}
+  .announce b{color:var(--accent2)}
+  .announce .go{color:var(--accent2);font-weight:600;margin-left:8px;white-space:nowrap}
+  .announce:hover .go{color:var(--accent)}
+  .nav-links a .new,.mobile-menu a .new{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--on-accent);background:var(--accent);border-radius:5px;padding:2px 6px;vertical-align:2px}
+
+  /* HERO extras */
+  .sub b{color:var(--text)}
+  .hero-points{display:flex;gap:10px 24px;justify-content:center;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:13.5px}
+  .hero-points span::before{content:"✓";color:var(--accent);font-weight:800;margin-right:7px}
+  .shot-wrap{position:relative;z-index:1;max-width:1040px;margin:56px auto 0}
+  .shot-wrap::before{content:"";position:absolute;inset:6% 4% -8%;background:radial-gradient(closest-side,rgba(255,106,0,.20),rgba(53,220,142,.10) 62%,transparent);filter:blur(44px);z-index:0;pointer-events:none}
+  .shot{position:relative;z-index:1;border:1px solid var(--line2);border-radius:16px;overflow:hidden;background:#0B0B0B;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+  .shot .bar{display:flex;gap:6px;padding:11px 14px;background:#141417;border-bottom:1px solid var(--line)}
+  .shot .bar i{display:block;width:10px;height:10px;border-radius:50%;background:#2a2a30}
+  .shot img{display:block;width:100%;height:auto}
+  /* zoom sur la grille de tags (évite de répéter la même vue que le héros) */
+  .shot.crop{aspect-ratio:1.25}
+  .shot.crop img{width:175%;max-width:none;margin:-3% 0 0 -4%}
+
+  /* WHY RUSHR : avant / après */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:46px}
+  .vs{border-radius:18px;padding:30px;border:1px solid var(--line);background:var(--surface)}
+  .vs.after{border-color:rgba(53,220,142,.35);background:linear-gradient(180deg,rgba(53,220,142,.08),var(--surface) 65%)}
+  .vs h3{font-size:12.5px;letter-spacing:1.3px;text-transform:uppercase;font-weight:700;margin-bottom:20px;color:var(--muted)}
+  .vs.after h3{color:var(--accent)}
+  .vs ul{list-style:none;display:flex;flex-direction:column;gap:15px}
+  .vs li{position:relative;padding-left:32px;font-size:15px;color:var(--muted)}
+  .vs li::before{content:"✕";position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:rgba(255,107,107,.12);color:#FF6B6B;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .vs.after li{color:var(--text)}
+  .vs.after li::before{content:"✓";background:rgba(53,220,142,.16);color:var(--accent)}
+
+  /* SHOWCASE : captures + texte */
+  .showcase{display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center;margin-top:72px}
+  .showcase.flip{grid-template-columns:.85fr 1.15fr}
+  .showcase.flip .sc-text{order:-1}
+  .showcase .shot-wrap{margin:0;width:100%}
+  .sc-text .k{color:var(--accent);font-weight:600;font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase}
+  .sc-text h3{font-size:clamp(23px,3vw,31px);font-weight:800;letter-spacing:-.5px;line-height:1.15;margin-top:8px}
+  .sc-text p{color:var(--muted);margin-top:14px;font-size:15.5px}
+  .sc-text ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .sc-text li{position:relative;padding-left:26px;font-size:14.5px}
+  .sc-text li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:800}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .chips span{border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:12.5px;color:var(--muted)}
+
+  /* TRUST */
+  .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .tr{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .tr b{display:block;font-size:15px;margin-bottom:5px}
+  .tr span{color:var(--muted);font-size:13.5px;line-height:1.5}
+
+  /* BETA */
+  .beta{text-align:center}
+  .beta-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid rgba(53,220,142,.3);border-radius:18px;padding:36px;box-shadow:0 20px 60px rgba(53,220,142,.08)}
+  .beta-form{display:flex;flex-direction:column;gap:12px;text-align:left}
+  .beta-form input[type=text],.beta-form input[type=email]{background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit;width:100%}
+  .beta-form input:focus{outline:none;border-color:var(--accent)}
+  .beta-platform{display:flex;gap:20px;padding:2px 2px 4px}
+  .beta-platform label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);cursor:pointer}
+  .beta-platform input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+  .beta-note{font-size:12.5px;color:var(--muted2);margin-top:14px;text-align:center}
+  .beta-msg{font-size:13px;text-align:center;min-height:16px}
+  .beta-msg.ok{color:var(--accent2)}
+  .beta-msg.err{color:#FF6B6B}
+
   /* CONTACT */
   .contact{text-align:center}
   .contact-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:40px 36px}
@@ -131,6 +198,10 @@
   .mobile-menu .btn{margin:14px 24px 18px}
 
   @media(max-width:860px){
+    .versus{grid-template-columns:1fr}
+    .showcase,.showcase.flip{grid-template-columns:1fr;gap:28px;margin-top:52px}
+    .showcase.flip .sc-text{order:0}
+    .trust{grid-template-columns:1fr 1fr}
     .pillars{grid-template-columns:1fr}
     .soft-grid{grid-template-columns:1fr 1fr}
     .nav-links{display:none}
@@ -140,6 +211,9 @@
     section{padding:56px 0}
   }
   @media(max-width:600px){
+    .trust{grid-template-columns:1fr}
+    .vs,.beta-card{padding:22px}
+    .shot-wrap{margin-top:40px}
     .wrap{padding:0 18px}
     header{padding:48px 0 36px}
     section{padding:46px 0}
@@ -170,13 +244,15 @@
 </head>
 <body>
 
+<a class="announce" href="#beta"><b data-fr="Nouveau" data-en="New">Nouveau</b> · <span data-fr="Rushr, l'outil de dérushage, est en beta gratuite" data-en="Rushr, the dérushage tool, is in free beta">Rushr, l'outil de dérushage, est en beta gratuite</span><span class="go" data-fr="Rejoindre →" data-en="Join →">Rejoindre →</span></a>
+
 <nav>
   <div class="wrap nav-in">
     <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
     <div class="nav-right">
       <div class="nav-links">
         <a href="software" data-fr="Software" data-en="Software">Software</a>
-        <a href="rushr" data-fr="Rushr" data-en="Rushr">Rushr</a>
+        <a href="rushr"><span data-fr="Rushr" data-en="Rushr">Rushr</span><span class="new" data-fr="Nouveau" data-en="New">Nouveau</span></a>
         <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
         <a href="#contact" data-fr="Contact" data-en="Contact">Contact</a>
       </div>
@@ -190,7 +266,7 @@
   </div>
   <div class="mobile-menu" id="mobileMenu">
     <a href="software" data-fr="Software" data-en="Software">Software</a>
-    <a href="rushr" data-fr="Rushr" data-en="Rushr">Rushr</a>
+    <a href="rushr"><span data-fr="Rushr" data-en="Rushr">Rushr</span><span class="new" data-fr="Nouveau" data-en="New">Nouveau</span></a>
     <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
     <a href="#contact" data-fr="Contact" data-en="Contact">Contact</a>
     <a href="#contact" class="btn btn-primary" data-fr="Nous contacter" data-en="Get in touch">Nous contacter</a>
@@ -200,15 +276,125 @@
 <header>
   <div class="hero-glow"></div>
   <div class="wrap hero">
-    <span class="pill"><span class="d"></span><span data-fr="Studio créatif · Éditeur de logiciels" data-en="Creative studio · Software publisher">Studio créatif · Éditeur de logiciels</span></span>
-    <h1 data-fr="Des logiciels pour<br>les créateurs vidéo." data-en="Software for<br>video creators.">Des logiciels pour<br>les créateurs vidéo.</h1>
-    <p class="sub" data-fr="Backpack Lab construit les outils qui manquaient aux monteurs — à commencer par Rushr." data-en="Backpack Lab builds the tools editors have been missing — starting with Rushr.">Backpack Lab construit les outils qui manquaient aux monteurs.</p>
+    <span class="pill"><span class="d"></span><span data-fr="Nouveau · Beta gratuite" data-en="New · Free beta">Nouveau · Beta gratuite</span></span>
+    <h1 data-fr="Vos rushes triés<br>avant même d'ouvrir le montage." data-en="Your footage sorted<br>before you even open your editor.">Vos rushes triés<br>avant même d'ouvrir le montage.</h1>
+    <p class="sub" data-fr="<b>Rushr</b>, le nouvel outil de Backpack Lab : importez vos prises, prévisualisez, taguez au clavier — puis un clic range tout au bon endroit. Pensé par des monteurs, pour des monteurs." data-en="<b>Rushr</b>, the new tool from Backpack Lab: import your takes, preview, tag from the keyboard — then one click files everything where it belongs. Built by editors, for editors.">Rushr, le nouvel outil de Backpack Lab : importez vos prises, prévisualisez, taguez au clavier — puis un clic range tout au bon endroit.</p>
     <div class="cta">
-      <a href="software" class="btn btn-primary" data-fr="Découvrir nos logiciels" data-en="Explore our software">Découvrir nos logiciels</a>
-      <a href="rushr" class="btn btn-ghost" data-fr="Rejoindre la beta Rushr" data-en="Join the Rushr beta">Rejoindre la beta Rushr</a>
+      <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta gratuite" data-en="Join the free beta">Rejoindre la beta gratuite</a>
+      <a href="rushr" class="btn btn-ghost" data-fr="Découvrir Rushr" data-en="Discover Rushr">Découvrir Rushr</a>
+    </div>
+    <div class="hero-points">
+      <span data-fr="Gratuit pendant la beta" data-en="Free during the beta">Gratuit pendant la beta</span>
+      <span data-fr="Windows &amp; macOS" data-en="Windows &amp; macOS">Windows &amp; macOS</span>
+      <span data-fr="Fonctionne hors ligne" data-en="Works offline">Fonctionne hors ligne</span>
+    </div>
+  </div>
+  <div class="wrap shot-wrap">
+    <div class="shot">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <img src="assets/rushr-app-shot.webp" width="2400" height="1633" alt="Interface de Rushr : grille de rushes taggés par catégorie, lecteur de prévisualisation et bouton Prepare" />
     </div>
   </div>
 </header>
+
+<!-- WHY RUSHR -->
+<section id="why" class="reveal">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Pourquoi Rushr" data-en="Why Rushr">Pourquoi Rushr</div>
+    <div class="h2" data-fr="Le dérushage ne devrait pas manger votre temps de montage" data-en="Sorting footage shouldn't eat your editing time">Le dérushage ne devrait pas manger votre temps de montage</div>
+    <p class="lead" data-fr="Cartes mémoire en vrac, clips à ouvrir un par un, tri à la main : Rushr transforme cette corvée en un flux simple, avant même d'ouvrir votre logiciel de montage." data-en="Memory cards everywhere, clips to open one by one, sorting by hand: Rushr turns that chore into a simple flow, before you even open your editing software.">Cartes mémoire en vrac, clips à ouvrir un par un, tri à la main : Rushr transforme cette corvée en un flux simple.</p>
+    <div class="versus">
+      <div class="vs before">
+        <h3 data-fr="Sans Rushr" data-en="Without Rushr">Sans Rushr</h3>
+        <ul>
+          <li data-fr="Des rushes éparpillés sur plusieurs cartes et disques" data-en="Footage scattered across cards and drives">Des rushes éparpillés sur plusieurs cartes et disques</li>
+          <li data-fr="Ouvrir chaque clip pour savoir ce qu'il contient" data-en="Opening every clip to see what's in it">Ouvrir chaque clip pour savoir ce qu'il contient</li>
+          <li data-fr="Trier à la main dans l'explorateur de fichiers" data-en="Sorting by hand in the file explorer">Trier à la main dans l'explorateur de fichiers</li>
+          <li data-fr="Recréer la même arborescence à chaque projet" data-en="Rebuilding the same folder tree on every project">Recréer la même arborescence à chaque projet</li>
+        </ul>
+      </div>
+      <div class="vs after">
+        <h3 data-fr="Avec Rushr" data-en="With Rushr">Avec Rushr</h3>
+        <ul>
+          <li data-fr="Tous vos dossiers de prises importés au même endroit" data-en="All your source folders imported in one place">Tous vos dossiers de prises importés au même endroit</li>
+          <li data-fr="Aperçu intégré : scrubbez et naviguez sans quitter l'app" data-en="Built-in preview: scrub and jump around without leaving the app">Aperçu intégré : scrubbez et naviguez sans quitter l'app</li>
+          <li data-fr="Tag au clavier (touches 1 à 9), même en lot" data-en="Keyboard tagging (keys 1 to 9), even in batches">Tag au clavier (touches 1 à 9), même en lot</li>
+          <li data-fr="Structure de projet en un clic grâce aux presets" data-en="Project structure in one click with presets">Structure de projet en un clic grâce aux presets</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="showcase">
+      <div class="shot-wrap">
+        <div class="shot crop">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <img src="assets/rushr-app-shot.webp" width="2400" height="1633" loading="lazy" alt="Rushr, zoom sur la grille : vignettes des rushes avec leurs tags (Drone, B-Roll, Ceremony, Reject…)" />
+        </div>
+      </div>
+      <div class="sc-text">
+        <div class="k" data-fr="Trier" data-en="Sort">Trier</div>
+        <h3 data-fr="Importez. Prévisualisez. Taguez." data-en="Import. Preview. Tag.">Importez. Prévisualisez. Taguez.</h3>
+        <p data-fr="Glissez vos dossiers de prises : vignettes et informations sont générées automatiquement. Prévisualisez chaque clip, taguez d'une touche (B-Roll, Drone, Reject…) et suivez l'avancement en direct." data-en="Drop your source folders: thumbnails and info are generated automatically. Preview each clip, tag it with one key (B-Roll, Drone, Reject…) and follow your progress live.">Glissez vos dossiers de prises : vignettes et informations sont générées automatiquement. Prévisualisez chaque clip, taguez d'une touche (B-Roll, Drone, Reject…) et suivez l'avancement en direct.</p>
+        <ul>
+          <li data-fr="Plusieurs dossiers, jamais mélangés" data-en="Several folders, never mixed up">Plusieurs dossiers, jamais mélangés</li>
+          <li data-fr="Tag en lot, même entre plusieurs dossiers" data-en="Batch tagging, even across folders">Tag en lot, même entre plusieurs dossiers</li>
+          <li data-fr="Un tag changé ? Le fichier est déplacé, sans doublon" data-en="Changed a tag? The file moves, no duplicates">Un tag changé ? Le fichier est déplacé, sans doublon</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="showcase flip">
+      <div class="shot-wrap">
+        <div class="shot">
+          <div class="bar"><i></i><i></i><i></i></div>
+          <img src="assets/rushr-structure-shot.webp" width="2400" height="1633" loading="lazy" alt="Rushr Structure Builder : preset Wedding et aperçu de l'arborescence du projet" />
+        </div>
+      </div>
+      <div class="sc-text">
+        <div class="k" data-fr="Structurer" data-en="Structure">Structurer</div>
+        <h3 data-fr="Une arborescence propre, en un clic" data-en="A clean folder tree, in one click">Une arborescence propre, en un clic</h3>
+        <p data-fr="Choisissez un preset, ajustez l'arborescence, créez le projet. Puis « Prepare » range chaque prise taguée dans le bon dossier, prête pour votre logiciel de montage." data-en="Pick a preset, tweak the tree, create the project. Then “Prepare” files every tagged take into the right folder, ready for your editing software.">Choisissez un preset, ajustez l'arborescence, créez le projet. Puis « Prepare » range chaque prise taguée dans le bon dossier.</p>
+        <div class="chips">
+          <span>Wedding</span><span>Event</span><span>Music video</span><span>Documentary</span><span>FPV</span><span>Social content</span><span data-fr="+ vos propres presets" data-en="+ your own presets">+ vos propres presets</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section id="trust" class="reveal" style="padding-top:0">
+  <div class="wrap">
+    <div class="trust">
+      <div class="tr"><b data-fr="100 % local" data-en="100% local">100 % local</b><span data-fr="Vos rushes ne quittent jamais votre machine : rien n'est envoyé en ligne." data-en="Your footage never leaves your machine: nothing is uploaded.">Vos rushes ne quittent jamais votre machine : rien n'est envoyé en ligne.</span></div>
+      <div class="tr"><b data-fr="Originaux préservés" data-en="Originals kept safe">Originaux préservés</b><span data-fr="Mode Copie par défaut : vos fichiers d'origine ne sont jamais modifiés ni déplacés." data-en="Copy mode by default: your original files are never modified or moved.">Mode Copie par défaut : vos fichiers d'origine ne sont jamais modifiés ni déplacés.</span></div>
+      <div class="tr"><b data-fr="Windows &amp; macOS" data-en="Windows &amp; macOS">Windows &amp; macOS</b><span data-fr="Une application desktop, disponible sur les deux plateformes." data-en="A desktop app, available on both platforms.">Une application desktop, disponible sur les deux plateformes.</span></div>
+      <div class="tr"><b data-fr="Gratuit pendant la beta" data-en="Free during the beta">Gratuit pendant la beta</b><span data-fr="Les bêta-testeurs sont prévenus en priorité avant tout changement." data-en="Beta testers are the first to know before anything changes.">Les bêta-testeurs sont prévenus en priorité avant tout changement.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BETA SIGNUP -->
+<section id="beta" class="beta reveal" style="background:#0E0E11">
+  <div class="wrap">
+    <div class="eyebrow" data-fr="Programme beta" data-en="Beta program">Programme beta</div>
+    <div class="h2" data-fr="Rejoignez les premiers testeurs de Rushr" data-en="Join the first Rushr testers">Rejoignez les premiers testeurs de Rushr</div>
+    <p class="lead" data-fr="Accès gratuit pendant toute la beta, places limitées. Vos retours façonnent directement l'outil." data-en="Free access throughout the beta, limited spots. Your feedback directly shapes the tool.">Accès gratuit pendant toute la beta, places limitées. Vos retours façonnent directement l'outil.</p>
+    <div class="beta-card">
+      <form id="betaForm" class="beta-form" onsubmit="return submitBeta(event)">
+        <input id="bfName" type="text" required autocomplete="name" data-fr-ph="Votre nom" data-en-ph="Your name" placeholder="Votre nom" />
+        <input id="bfEmail" type="email" required autocomplete="email" data-fr-ph="vous@email.com" data-en-ph="you@email.com" placeholder="vous@email.com" />
+        <div class="beta-platform">
+          <label><input type="radio" name="bfPlatform" value="WIN" checked /> Windows</label>
+          <label><input type="radio" name="bfPlatform" value="MAC" /> macOS</label>
+        </div>
+        <button type="submit" class="btn btn-primary" id="bfSubmit" style="justify-content:center;padding:13px" data-fr="Rejoindre la beta gratuite" data-en="Join the free beta">Rejoindre la beta gratuite</button>
+        <p class="beta-msg" id="bfMsg"></p>
+      </form>
+      <p class="beta-note" data-fr="Vous recevez un email de bienvenue avec l'invitation à notre Discord. Pas de spam : uniquement les infos utiles." data-en="You'll get a welcome email with the invitation to our Discord. No spam, only useful updates.">Vous recevez un email de bienvenue avec l'invitation à notre Discord. Pas de spam : uniquement les infos utiles.</p>
+    </div>
+  </div>
+</section>
 
 <!-- TWO PILLARS -->
 <section id="what" class="reveal">
@@ -240,7 +426,7 @@
     <div class="h2" data-fr="Des outils faits par des monteurs" data-en="Tools built by editors">Des outils faits par des monteurs</div>
     <div class="soft-grid">
       <a class="soft live tilt-3d" href="rushr">
-        <span class="tag on">Rushr</span>
+        <span class="tag on" data-fr="Nouveau · Beta" data-en="New · Beta">Nouveau · Beta</span>
         <h3 data-fr="Backpack Rushr" data-en="Backpack Rushr">Backpack Rushr</h3>
         <p data-fr="Organisez, prévisualisez et taguez vos rushes — prêts pour le montage en quelques minutes." data-en="Organize, preview and tag your rushes — ready for editing in minutes.">Organisez, prévisualisez et taguez vos rushes — prêts en quelques minutes.</p>
         <span class="go" data-fr="Découvrir Rushr →" data-en="Discover Rushr →">Découvrir Rushr →</span>
@@ -361,6 +547,32 @@
     var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
     setLang(lang);
   })();
+
+  // Inscription à la beta Rushr (même fonction que sur la page Rushr)
+  async function submitBeta(e){
+    e.preventDefault();
+    var btn=document.getElementById('bfSubmit'), msg=document.getElementById('bfMsg');
+    var name=document.getElementById('bfName').value.trim();
+    var email=document.getElementById('bfEmail').value.trim();
+    var platform=(document.querySelector('input[name="bfPlatform"]:checked')||{}).value;
+    var lang=document.documentElement.lang==='en'?'en':'fr';
+    var L={
+      fr:{sending:'Inscription…',ok:'Merci ! Tu es inscrit à la beta ✓ Regarde tes emails.',err:'Une erreur est survenue, réessaie.'},
+      en:{sending:'Signing up…',ok:'Thanks! You\'re on the beta list ✓ Check your inbox.',err:'Something went wrong, please try again.'}
+    }[lang];
+    btn.disabled=true; msg.className='beta-msg'; msg.textContent=L.sending;
+    try{
+      var r=await SB.rpc('beta_signup_create',{p_name:name,p_email:email,p_platform:platform,p_session_id:window.BPL_SID||null});
+      if(r.error) throw r.error;
+      msg.className='beta-msg ok'; msg.textContent=L.ok;
+      document.getElementById('betaForm').reset();
+    }catch(err){
+      msg.className='beta-msg err'; msg.textContent=L.err;
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
 
   // Scroll reveal observer
   (function(){
