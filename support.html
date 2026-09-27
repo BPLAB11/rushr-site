@@ -117,6 +117,9 @@
   @media(max-width:380px){
     .brand-logo{height:32px}
   }
+  /* menu : libellés sur une ligne, bouton d'action masqué quand la place manque */
+  .nav-links a,.nav-right .btn{white-space:nowrap}
+  @media(max-width:1020px){.nav-right .btn-primary{display:none}.nav-links{gap:16px}}
 </style>
 <!-- Microsoft Clarity analytics -->
 <script type="text/javascript">
@@ -141,6 +144,7 @@
         <a href="rushr#testimonials" data-fr="Témoignages" data-en="Testimonials">Témoignages</a>
         <a href="rushr#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
         <a href="support" class="on" aria-current="page" data-fr="Support" data-en="Support">Support</a>
+        <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
       </div>
       <div class="lang">
         <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
@@ -156,6 +160,7 @@
     <a href="rushr#testimonials" data-fr="Témoignages" data-en="Testimonials">Témoignages</a>
     <a href="rushr#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
     <a href="support" class="on" aria-current="page" data-fr="Support" data-en="Support">Support</a>
+    <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
     <a href="rushr#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
   </div>
 </nav>

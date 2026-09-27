@@ -167,6 +167,9 @@
   .reveal.delay-1{transition-delay:.1s}
   .reveal.delay-2{transition-delay:.2s}
   .reveal.delay-3{transition-delay:.3s}
+  /* menu : libellés sur une ligne, bouton d'action masqué quand la place manque */
+  .nav-links a,.nav-right .btn{white-space:nowrap}
+  @media(max-width:1020px){.nav-right .btn-primary{display:none}.nav-links{gap:16px}}
 </style>
 <!-- Microsoft Clarity analytics -->
 <script type="text/javascript">
@@ -190,6 +193,7 @@
         <a href="rushr" data-fr="Rushr" data-en="Rushr">Rushr</a>
         <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
         <a href="/#contact" data-fr="Contact" data-en="Contact">Contact</a>
+        <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
       </div>
       <div class="lang">
         <button id="lfr" class="on" onclick="setLang('fr')">FR</button>
@@ -204,6 +208,7 @@
     <a href="rushr" data-fr="Rushr" data-en="Rushr">Rushr</a>
     <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
     <a href="/#contact" data-fr="Contact" data-en="Contact">Contact</a>
+    <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
     <a href="rushr" class="btn btn-primary" data-fr="Découvrir Rushr" data-en="Discover Rushr">Découvrir Rushr</a>
   </div>
 </nav>
