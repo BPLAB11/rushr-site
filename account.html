@@ -67,6 +67,7 @@
   .tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .tile{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:150px;transition:border-color .2s,transform .2s}
   .tile:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .tile:last-child:nth-child(odd){grid-column:1/-1}
   .tile-title{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:700}
   .tile-title svg{width:24px;height:24px;flex:none;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .tile-desc{color:var(--muted);font-size:13.5px;line-height:1.55}
@@ -194,7 +195,6 @@
           <option value="overview" data-fr="Vue d'ensemble" data-en="Overview">Vue d'ensemble</option>
           <option value="licenses" data-fr="Mes licences" data-en="My licenses">Mes licences</option>
           <option value="devices" data-fr="Mes appareils" data-en="My devices">Mes appareils</option>
-          <option value="modules" data-fr="Mes modules" data-en="My modules">Mes modules</option>
           <option value="purchases" data-fr="Achats et factures" data-en="Purchases &amp; invoices">Achats et factures</option>
           <option value="profile" data-fr="Profil et préférences" data-en="Profile &amp; preferences">Profil et préférences</option>
           <option value="support" data-fr="Support" data-en="Support">Support</option>
@@ -216,11 +216,6 @@
           <div class="tile-title"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span data-fr="Mes appareils" data-en="My devices">Mes appareils</span></div>
           <div class="tile-desc" data-fr="Les machines où tes licences sont activées. Libère-en une pour changer d'ordinateur." data-en="The machines where your licenses are activated. Free one up to switch computers.">Les machines où tes licences sont activées. Libère-en une pour changer d'ordinateur.</div>
           <div class="tile-stat" id="stDevices"></div>
-        </a>
-        <a class="tile" href="#modules">
-          <div class="tile-title"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg><span data-fr="Mes modules" data-en="My modules">Mes modules</span></div>
-          <div class="tile-desc" data-fr="Les modules complémentaires ajoutés à tes logiciels." data-en="The add-on modules you have added to your software.">Les modules complémentaires ajoutés à tes logiciels.</div>
-          <div class="tile-stat" id="stModules"></div>
         </a>
         <a class="tile" href="#purchases">
           <div class="tile-title"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v15a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span data-fr="Achats et factures" data-en="Purchases &amp; invoices">Achats et factures</span></div>
@@ -246,7 +241,7 @@
       </div>
       <div class="card">
         <h2 data-fr="Ajouter une clé" data-en="Add a key">Ajouter une clé</h2>
-        <p class="sub" data-fr="Associe une licence ou un module à ton compte avec sa clé." data-en="Link a license or a module to your account with its key.">Associe une licence ou un module à ton compte avec sa clé.</p>
+        <p class="sub" data-fr="Associe une licence à ton compte avec sa clé." data-en="Link a license to your account with its key.">Associe une licence à ton compte avec sa clé.</p>
         <form class="add-row" onsubmit="return addKey(event)">
           <input id="keyInput" class="in" type="text" autocomplete="off" spellcheck="false" maxlength="64" placeholder="RUSHR-XXXX-XXXX-XXXX" />
           <button type="submit" id="keyBtn" class="btn btn-primary" data-fr="Ajouter" data-en="Add">Ajouter</button>
@@ -260,12 +255,6 @@
     <section class="view" id="v-devices" style="display:none">
       <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
       <div id="devList"></div>
-    </section>
-
-    <!-- Mes modules -->
-    <section class="view" id="v-modules" style="display:none">
-      <a class="back" href="#overview" data-fr="← Vue d'ensemble" data-en="← Overview">← Vue d'ensemble</a>
-      <div class="card"><div id="modList"></div></div>
     </section>
 
     <!-- Achats -->
@@ -335,7 +324,7 @@
   var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var pendingEmail='';
   var ACCOUNT=null;
-  var VIEWS=['overview','licenses','devices','modules','purchases','profile','support'];
+  var VIEWS=['overview','licenses','devices','purchases','profile','support'];
 
   function FR(){return (document.documentElement.lang||'fr')==='fr';}
 
@@ -516,11 +505,10 @@
     document.getElementById('identName').textContent=name;
     document.getElementById('identMail').textContent=email;
 
-    var lics=ACCOUNT.licenses||[], mods=ACCOUNT.modules||[];
+    var lics=ACCOUNT.licenses||[];
     var nDev=lics.reduce(function(n,l){return n+((l.activations||[]).length);},0);
     document.getElementById('stLicenses').textContent=fr?plural(lics.length,'licence','licences'):plural(lics.length,'license','licenses');
     document.getElementById('stDevices').textContent=fr?plural(nDev,'appareil activé','appareils activés'):plural(nDev,'device activated','devices activated');
-    document.getElementById('stModules').textContent=plural(mods.length,fr?'module':'module',fr?'modules':'modules');
 
     // infos sous le formulaire de profil
     var info=[];
@@ -533,7 +521,6 @@
 
     renderLicenses();
     renderDevices();
-    renderModules();
 
     // support : réservé aux comptes qui ont une licence
     var has=lics.length>0;
@@ -546,7 +533,8 @@
 
   // Logiciels connus : nom affiché = valeur de la colonne product ; description sous le nom.
   var PRODUCTS={
-    RUSHR:{fr:'Outil de dérushage pour vidéastes et monteurs',en:'Dérushage tool for videographers and editors'}
+    RUSHR:{fr:'Outil de dérushage pour vidéastes et monteurs',en:'Dérushage tool for videographers and editors'},
+    RENAME:{fr:'Outil de renommage par lot pour vos fichiers médias',en:'Batch renaming tool for your media files'}
   };
   function productHead(code){
     if(!code) return '';
@@ -605,22 +593,6 @@
     }).join('');
   }
 
-  function renderModules(){
-    var fr=FR(), list=ACCOUNT.modules||[], el=document.getElementById('modList');
-    if(!list.length){
-      el.innerHTML='<p class="empty">'+(fr?'Aucun module pour l\'instant. Ajoute une clé de module depuis <a href="#licenses">Mes licences</a>.':'No module yet. Add a module key from <a href="#licenses">My licenses</a>.')+'</p>';
-      return;
-    }
-    el.innerHTML=list.map(function(m){
-      var active=String(m.status||'').toUpperCase()==='ACTIVE';
-      return '<div class="lic">'+productHead(m.product)+'<div class="mod-name">'+escapeHtml(m.module_id)+' <span class="badge '+(active?'b-active':'b-off')+'" style="margin-left:6px">'+escapeHtml(m.status)+'</span></div>'
-        +'<div class="key-row"><code>'+escapeHtml(m.activation_key)+'</code>'
-        +'<button class="btn btn-primary copy-btn" data-copy="'+escapeHtml(m.activation_key)+'">'+(fr?'Copier':'Copy')+'</button></div>'
-        +'<div class="meta-grid"><div><div class="k">Plan</div><div>'+escapeHtml(m.plan||'—')+'</div></div>'
-        +'<div><div class="k">'+(fr?'Ajouté le':'Added on')+'</div><div>'+fmtDate(m.created_at)+'</div></div></div></div>';
-    }).join('');
-  }
-
   /* ---------- actions : copier / libérer un appareil ---------- */
   document.addEventListener('click',function(e){
     var c=e.target.closest&&e.target.closest('[data-copy]');
@@ -654,7 +626,7 @@
     }
   }
 
-  /* ---------- ajouter une clé (licence ou module) ---------- */
+  /* ---------- ajouter une clé de licence ---------- */
   async function addKey(e){
     e.preventDefault();
     var btn=document.getElementById('keyBtn'), err=document.getElementById('keyErr'), ok=document.getElementById('keyOk');
@@ -664,12 +636,7 @@
     btn.disabled=true;
     try{
       var r=await SB.rpc('claim_license',{p_key:key});
-      if(r.error){
-        if(/LICENSE_NOT_FOUND/.test(r.error.message||'')){
-          r=await SB.rpc('claim_module_license',{p_key:key});
-        }
-        if(r.error) throw r.error;
-      }
+      if(r.error) throw r.error;
       document.getElementById('keyInput').value='';
       await fetchAccount();
       renderAccount();
