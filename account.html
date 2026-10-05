@@ -506,7 +506,7 @@
     document.getElementById('identMail').textContent=email;
 
     var lics=ACCOUNT.licenses||[];
-    var nDev=lics.reduce(function(n,l){return n+((l.activations||[]).length);},0);
+    var nDev=lics.reduce(function(n,l){return n+((l.activations||[]).filter(occupies).length);},0);
     document.getElementById('stLicenses').textContent=fr?plural(lics.length,'licence','licences'):plural(lics.length,'license','licenses');
     document.getElementById('stDevices').textContent=fr?plural(nDev,'appareil activé','appareils activés'):plural(nDev,'device activated','devices activated');
 
@@ -544,6 +544,19 @@
   }
   function isRushr(code){ return String(code||'').toUpperCase()==='RUSHR'; }
 
+  // Même règle que le serveur : un appareil compte dans la limite tant qu'il n'est pas révoqué,
+  // ou tant que son bail court encore (libération différée).
+  function occupies(a){
+    if(!a.revoked_at) return true;
+    return !!a.lease_expires_at && new Date(a.lease_expires_at)>new Date();
+  }
+  function deviceStatus(a){
+    var fr=FR();
+    if(!a.revoked_at) return {label:fr?'Actif':'Active',cls:'b-active',canFree:true,detail:a.lease_expires_at?(fr?'bail jusqu\'au ':'lease until ')+fmtDate(a.lease_expires_at):''};
+    if(occupies(a)) return {label:fr?'Libération en cours':'Releasing',cls:'b-off',canFree:false,detail:(fr?'libéré le ':'freed on ')+fmtDate(a.lease_expires_at)};
+    return {label:fr?'Libéré':'Freed',cls:'b-off',canFree:false,detail:''};
+  }
+
   function renderLicenses(){
     var fr=FR(), list=ACCOUNT.licenses||[], el=document.getElementById('licList');
     if(!list.length){
@@ -554,7 +567,7 @@
     }
     el.innerHTML=list.map(function(l){
       var active=String(l.status||'').toUpperCase()==='ACTIVE';
-      var n=(l.activations||[]).length;
+      var n=(l.activations||[]).filter(occupies).length;
       return '<div class="lic'+(isRushr(l.product)?' rushr':'')+'">'
         +productHead(l.product)
         +'<div class="key-row"><code>'+escapeHtml(l.license_key)+'</code>'
@@ -578,17 +591,20 @@
     el.innerHTML=list.map(function(l){
       var acts=l.activations||[];
       var devs=acts.length?acts.map(function(a){
+        var st=deviceStatus(a);
         var meta=[];
         if(a.app_version) meta.push('v'+a.app_version);
         meta.push((fr?'activé le ':'activated ')+fmtDate(a.activated_at));
         meta.push((fr?'vu le ':'last seen ')+fmtDate(a.last_check_at));
-        return '<div class="dev"><div><div class="name">'+escapeHtml(a.machine_name||(fr?'Appareil':'Device'))+'</div>'
+        if(st.detail) meta.push(st.detail);
+        return '<div class="dev"><div><div class="name">'+escapeHtml(a.machine_name||(fr?'Appareil':'Device'))
+          +' <span class="badge '+st.cls+'">'+escapeHtml(st.label)+'</span></div>'
           +'<div class="meta">'+escapeHtml(meta.join(' · '))+'</div></div>'
-          +'<button class="btn btn-ghost btn-sm" data-free="'+escapeHtml(a.id)+'">'+(fr?'Libérer':'Free up')+'</button></div>';
+          +(st.canFree?'<button class="btn btn-ghost btn-sm" data-free="'+escapeHtml(a.id)+'">'+(fr?'Libérer':'Free up')+'</button>':'')+'</div>';
       }).join(''):'<div class="empty">'+(fr?'Aucun appareil activé.':'No device activated.')+'</div>';
       return '<div class="card"><div class="lic'+(isRushr(l.product)?' rushr':'')+'" style="margin:0">'
         +productHead(l.product)
-        +'<div class="k" style="color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px"><code style="font-family:ui-monospace,Menlo,monospace">'+escapeHtml(l.license_key)+'</code> · '+(acts.length)+' / '+escapeHtml(l.max_devices)+'</div>'
+        +'<div class="k" style="color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px"><code style="font-family:ui-monospace,Menlo,monospace">'+escapeHtml(l.license_key)+'</code> · '+(acts.filter(occupies).length)+' / '+escapeHtml(l.max_devices)+'</div>'
         +'<div class="devs">'+devs+'</div></div></div>';
     }).join('');
   }
@@ -610,19 +626,25 @@
     });
   }
 
+  // Libération différée : l'appareil reste compté dans la limite jusqu'à l'expiration de son bail.
   async function freeDevice(id,btn){
-    var msg=FR()?'Libérer cet appareil ? Il devra être réactivé pour utiliser la licence.':'Free up this device? It will need to be activated again to use the license.';
+    var fr=FR();
+    var msg=fr
+      ?'Libérer cet appareil ? Il ne sera libéré qu\'à l\'expiration de son bail en cours (jusqu\'à 30 jours). D\'ici là, il compte toujours dans la limite de ta licence.'
+      :'Free up this device? It will only be freed when its current lease expires (up to 30 days). Until then it still counts toward your license limit.';
     if(!window.confirm(msg)) return;
     btn.disabled=true;
     try{
-      var r=await SB.rpc('deactivate_activation',{p_activation_id:id});
+      var r=await SB.functions.invoke('release_device',{body:{device_id:id}});
       if(r.error) throw r.error;
+      var at=r.data&&r.data.slot_frees_at;
       await fetchAccount();
       renderAccount();
+      if(at) window.alert(fr?'Libération enregistrée. L\'appareil sera libéré le '+fmtDate(at)+'.':'Release saved. The device will be freed on '+fmtDate(at)+'.');
     }catch(ex){
-      console.error('deactivate failed:',ex);
+      console.error('release failed:',ex);
       btn.disabled=false;
-      window.alert(FR()?'Impossible de libérer cet appareil, réessaie.':'Could not free up this device, please retry.');
+      window.alert(fr?'Impossible de libérer cet appareil, réessaie.':'Could not free up this device, please retry.');
     }
   }
 
