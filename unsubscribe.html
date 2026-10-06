@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Désabonnement — BACKPACK LAB</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="assets/mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141417;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);
+    --accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--danger:#FF6B6B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:720px;margin:0 auto;padding:0 22px;width:100%}
+  nav{border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .mark{width:22px;height:22px;display:block;border-radius:6px}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;padding:36px 0 40px}
+  .gate{max-width:440px;margin:40px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;text-align:center}
+  .gate h1{font-size:20px;font-weight:800;margin-bottom:10px}
+  .gate p{color:var(--muted);font-size:14px;margin-bottom:20px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:9px;font-weight:600;font-size:14px;padding:12px 18px;cursor:pointer;border:1px solid transparent;font-family:inherit;width:100%}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .link{display:inline-block;margin-top:14px;color:var(--accent2);font-size:13px;text-decoration:underline}
+  .err{color:var(--danger);font-size:13px;margin-top:12px;min-height:16px}
+  footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted2);font-size:12px;text-align:center}
+</style>
+<link rel="canonical" href="https://thebackpacklab.com/unsubscribe" />
+<script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
+  <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <!-- confirmation -->
+  <div id="s-confirm" class="gate" style="display:none">
+    <h1 data-fr="Se désabonner ?" data-en="Unsubscribe?">Se désabonner ?</h1>
+    <p data-fr="Tu ne recevras plus nos emails d'information sur RUSHR et BACKPACK LAB. Tu ne perds ni ton compte ni tes licences." data-en="You will no longer receive our update emails about RUSHR and BACKPACK LAB. Your account and licenses are not affected.">Tu ne recevras plus nos emails d'information sur RUSHR et BACKPACK LAB. Tu ne perds ni ton compte ni tes licences.</p>
+    <button id="unsubBtn" class="btn btn-primary" onclick="doUnsub()" data-fr="Me désabonner" data-en="Unsubscribe me">Me désabonner</button>
+    <div class="err" id="unsubErr"></div>
+    <a class="link" href="/" data-fr="Non, rester abonné" data-en="No, keep me subscribed">Non, rester abonné</a>
+  </div>
+
+  <!-- fait -->
+  <div id="s-done" class="gate" style="display:none">
+    <h1 data-fr="C'est fait ✓" data-en="Done ✓">C'est fait ✓</h1>
+    <p data-fr="Tu es désabonné. Tu peux te réinscrire à tout moment depuis la page Rushr." data-en="You have been unsubscribed. You can sign up again at any time from the Rushr page.">Tu es désabonné. Tu peux te réinscrire à tout moment depuis la page Rushr.</p>
+    <a class="link" href="/" data-fr="Retour au site" data-en="Back to the site">Retour au site</a>
+  </div>
+
+  <!-- lien invalide -->
+  <div id="s-invalid" class="gate" style="display:none">
+    <h1 data-fr="Lien invalide" data-en="Invalid link">Lien invalide</h1>
+    <p data-fr="Ce lien de désabonnement n'est pas valide ou a été modifié. Écris-nous à contact@thebackpacklab.com et on s'en occupe." data-en="This unsubscribe link is not valid or has been altered. Write to us at contact@thebackpacklab.com and we will take care of it.">Ce lien de désabonnement n'est pas valide ou a été modifié. Écris-nous à contact@thebackpacklab.com et on s'en occupe.</p>
+    <a class="link" href="/" data-fr="Retour au site" data-en="Back to the site">Retour au site</a>
+  </div>
+
+</div></main>
+
+<footer>© 2026 BACKPACK LAB</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  var TOKEN=null;
+  var UUID_RE=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+  function FR(){return (document.documentElement.lang||'fr')==='fr';}
+  function setLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.textContent=v;});
+    document.getElementById('lfr').classList.toggle('on',lang==='fr');
+    document.getElementById('len').classList.toggle('on',lang==='en');
+    try{localStorage.setItem('bpl_lang',lang);}catch(e){}
+  }
+  function showState(id){['s-confirm','s-done','s-invalid'].forEach(function(s){document.getElementById(s).style.display=(s===id)?'block':'none';});}
+
+  // La confirmation passe par un clic : un scanner de liens qui ouvre simplement l'URL ne désabonne personne.
+  async function doUnsub(){
+    var btn=document.getElementById('unsubBtn'), err=document.getElementById('unsubErr');
+    err.textContent=''; btn.disabled=true;
+    try{
+      var r=await SB.rpc('beta_unsubscribe',{p_token:TOKEN});
+      if(r.error) throw r.error;
+      showState(r.data===true?'s-done':'s-invalid');
+    }catch(ex){
+      console.error('unsubscribe failed:',ex);
+      err.textContent=FR()?'Une erreur est survenue, réessaie.':'Something went wrong, please try again.';
+    }finally{
+      btn.disabled=false;
+    }
+  }
+
+  (function init(){
+    var saved=null;
+    try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
+    setLang(saved||((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en'));
+    var t=new URLSearchParams(location.search).get('t');
+    if(t && UUID_RE.test(t)){ TOKEN=t; showState('s-confirm'); }
+    else showState('s-invalid');
+  })();
+</script>
+</body>
+</html>
