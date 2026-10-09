@@ -73,7 +73,7 @@
   <div id="g-form" class="gate">
     <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
     <h1 data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</h1>
-    <p data-fr="Entre ton email pour recevoir une clé de licence bêta gratuite — en nombre limité." data-en="Enter your email to get a free beta license key — limited quantity available.">Entre ton email pour recevoir une clé de licence bêta gratuite — en nombre limité.</p>
+    <p data-fr="Entre l'adresse email avec laquelle tu t'es inscrit à la bêta pour obtenir ta clé de licence gratuite. Pas encore inscrit ? <a href='rushr#beta'>Rejoins la bêta</a> d'abord." data-en="Enter the email you used to sign up for the beta to get your free license key. Not signed up yet? <a href='rushr#beta'>Join the beta</a> first.">Entre l'adresse email avec laquelle tu t'es inscrit à la bêta pour obtenir ta clé de licence gratuite. Pas encore inscrit ? <a href='rushr#beta'>Rejoins la bêta</a> d'abord.</p>
     <div class="err" id="formErr"></div>
     <form onsubmit="return submitClaim(event)">
       <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
@@ -126,6 +126,9 @@
     }catch(ex){
       var m=(ex&&ex.message)||'';
       if(/INVALID_EMAIL/.test(m)) err.textContent=FR()?'Adresse email invalide.':'Invalid email address.';
+      else if(/NOT_REGISTERED/.test(m)) err.innerHTML=FR()
+        ?'Cette adresse n\'est pas inscrite à la bêta. <a href="rushr#beta">Inscris-toi d\'abord</a> avec cette adresse, puis réessaie.'
+        :'This email is not signed up for the beta. <a href="rushr#beta">Sign up first</a> with this address, then try again.';
       else if(/NO_KEYS_LEFT/.test(m)) err.textContent=FR()?'Toutes les clés bêta ont été distribuées. Contacte-nous.':'All beta keys have been claimed. Contact us.';
       else err.textContent=FR()?'Une erreur est survenue, réessaie.':'Something went wrong, please try again.';
     }finally{

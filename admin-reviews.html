@@ -372,6 +372,24 @@
           <div class="em-hint">Dans l'aperçu et le test, {{name}} est remplacé par ton nom (modifiable dans Mon compte, rubrique Profil). Le lien « Se désabonner » y est inactif ; dans l'envoi réel, chaque inscrit a son propre nom et son propre lien.</div>
         </div>
       </div>
+      <div class="card" style="margin-top:14px">
+        <h3>Accès beta : licence + téléchargement</h3>
+        <div class="em-hint" style="margin:0 0 12px">Chaque inscrit reçoit un mail avec le lien de téléchargement de <b>sa plateforme</b> (Windows ou macOS, choisie à l'inscription) et un bouton vers son compte, où se trouve sa clé de licence. Une clé libre lui est attribuée à l'envoi. Les inscrits déjà servis et les désabonnés sont exclus : un second envoi ne renvoie rien à ceux qui l'ont déjà reçu.</div>
+        <div class="stats" id="baStats"></div>
+        <div class="em-actions">
+          <button class="btn btn-ghost" id="baTestBtn" onclick="baSend(true)">M'envoyer un test (Windows + Mac)</button>
+          <button class="btn btn-primary" id="baSendBtn" onclick="baAskConfirm()">Envoyer aux inscrits…</button>
+        </div>
+        <div class="em-confirm" id="baConfirm">
+          <p id="baConfirmText"></p>
+          <div class="frow">
+            <div class="fg" style="flex:1;min-width:160px"><label>Tape ENVOYER pour confirmer</label><input id="baConfirmInput" class="in" autocomplete="off" oninput="baCheckConfirm()" style="width:100%"></div>
+            <button class="btn btn-danger" id="baConfirmBtn" disabled onclick="baSend(false)">Confirmer l'envoi</button>
+            <button class="btn btn-ghost" id="baCancelBtn" onclick="baCancelConfirm()">Annuler</button>
+          </div>
+        </div>
+      </div>
+
       <div class="card" style="padding:0;margin-top:14px">
         <table>
           <thead><tr><th>Date</th><th>Objet</th><th>Type</th><th>Inscrits</th><th>Statut</th></tr></thead>
@@ -457,7 +475,7 @@
   function fmtDT(iso){ if(!iso) return '—'; try{ return new Date(iso).toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }catch(e){ return iso; } }
 
   async function loadEmailing(){
-    await Promise.all([loadAudience(), loadBroadcasts(true)]);
+    await Promise.all([loadAudience(), loadBetaAccess(), loadBroadcasts(true)]);
   }
   async function loadAudience(){
     try{
@@ -503,7 +521,7 @@
     var map={NOT_ADMIN:'Accès réservé aux admins',INVALID_SUBJECT:'Objet invalide (1 à 150 caractères)',INVALID_BODY:'Message vide ou trop long',
       CTA_INCOMPLETE:'Le bouton a besoin d\'un texte ET d\'un lien',INVALID_URL:'Le lien du bouton doit commencer par https://',INVALID_CTA:'Texte du bouton trop long (40 caractères max)',
       DUPLICATE_RECENT:'Ce message vient déjà d\'être envoyé (moins de 5 min). Rien n\'a été renvoyé.',NO_RECIPIENTS:'Aucun inscrit abonné à qui envoyer',
-      TOO_MANY_RECIPIENTS:'Plus de 100 destinataires : envoi bloqué par sécurité (limite à lever avant)',NO_EMAIL_KEY:'Clé d\'envoi Resend introuvable dans Supabase',NO_ADMIN_EMAIL:'Ton compte n\'a pas d\'adresse email'};
+      TOO_MANY_RECIPIENTS:'Plus de 100 destinataires : envoi bloqué par sécurité (limite à lever avant)',NO_KEYS_LEFT:'Pas assez de clés de licence libres : rien n\'a été envoyé et personne n\'a été marqué comme servi. Crée des clés (onglet licences) puis réessaie.',NO_EMAIL_KEY:'Clé d\'envoi Resend introuvable dans Supabase',NO_ADMIN_EMAIL:'Ton compte n\'a pas d\'adresse email'};
     for(var k in map){ if(m.indexOf(k)>=0) return map[k]; }
     return 'Erreur : '+m;
   }
@@ -563,6 +581,57 @@
       await loadBroadcasts(true);
     }catch(e){ toast(emErr(e),'err'); }
     finally{ setEmBusy(false); }
+  }
+
+  /* ---------- Accès beta : licence + lien de téléchargement par plateforme ---------- */
+  var BA_AUD=null;
+  async function loadBetaAccess(){
+    try{
+      BA_AUD=await rpc('admin_beta_access_audience');
+      document.getElementById('baStats').innerHTML=
+        '<div class="stat"><div class="n">'+BA_AUD.to_send+'</div><div class="l">À servir</div></div>'+
+        '<div class="stat"><div class="n">'+BA_AUD.to_send_win+'</div><div class="l">dont Windows</div></div>'+
+        '<div class="stat"><div class="n">'+BA_AUD.to_send_mac+'</div><div class="l">dont macOS</div></div>'+
+        '<div class="stat"><div class="n">'+BA_AUD.already_sent+'</div><div class="l">Déjà servis</div></div>'+
+        '<div class="stat"><div class="n">'+BA_AUD.free_keys+'</div><div class="l">Clés libres</div></div>';
+    }catch(e){ BA_AUD=null; toast(emErr(e),'err'); }
+  }
+  function setBaBusy(b){ ['baTestBtn','baSendBtn','baConfirmBtn','baCancelBtn'].forEach(function(id){ var el=document.getElementById(id); if(el) el.disabled=b; }); if(!b) baCheckConfirm(); }
+  function baAskConfirm(){
+    if(!BA_AUD){ toast('Audience non chargée, réessaie','err'); return; }
+    if(BA_AUD.to_send<1){ toast('Personne à servir : tous les inscrits abonnés ont déjà reçu leur accès','err'); return; }
+    var n=BA_AUD.to_send;
+    document.getElementById('baConfirmText').textContent=
+      'Tu vas envoyer l\'accès beta (licence + téléchargement) à '+n+' inscrit'+(n>1?'s':'')+' : '+BA_AUD.to_send_win+' Windows, '+BA_AUD.to_send_mac+' macOS. '+
+      'Une clé libre sera attribuée à chacun ('+BA_AUD.free_keys+' disponible'+(BA_AUD.free_keys>1?'s':'')+'). Cet envoi est définitif. Si tu n\'as pas encore cliqué sur « M\'envoyer un test », fais-le d\'abord.';
+    document.getElementById('baConfirmInput').value='';
+    document.getElementById('baConfirm').style.display='block';
+    baCheckConfirm();
+    document.getElementById('baConfirmInput').focus();
+  }
+  function baCheckConfirm(){
+    var ok=document.getElementById('baConfirmInput').value.trim()==='ENVOYER';
+    document.getElementById('baConfirmBtn').disabled=!ok;
+  }
+  function baCancelConfirm(){
+    document.getElementById('baConfirm').style.display='none';
+    document.getElementById('baConfirmInput').value='';
+    baCheckConfirm();
+  }
+  async function baSend(isTest){
+    if(!isTest && document.getElementById('baConfirmInput').value.trim()!=='ENVOYER'){ toast('Tape ENVOYER pour confirmer','err'); return; }
+    setBaBusy(true);
+    try{
+      var r=await rpc('admin_send_beta_access',{p_test:isTest});
+      if(isTest){
+        toast('2 tests envoyés (Windows + macOS) à '+(ME&&ME.email||'ton adresse')+' ✓','ok');
+      }else{
+        toast('Accès envoyé à '+r.recipients+' inscrit'+(r.recipients>1?'s':'')+' ✓','ok');
+        baCancelConfirm();
+      }
+      await Promise.all([loadBetaAccess(), loadBroadcasts(true)]);
+    }catch(e){ toast(emErr(e),'err'); }
+    finally{ setBaBusy(false); }
   }
 
   async function loadLiveNow(){
