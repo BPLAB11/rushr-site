@@ -73,12 +73,25 @@
   <div id="g-form" class="gate">
     <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
     <h1 data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</h1>
-    <p data-fr="Entre l'adresse email avec laquelle tu t'es inscrit à la bêta pour obtenir ta clé de licence gratuite. Pas encore inscrit ? <a href='rushr#beta'>Rejoins la bêta</a> d'abord." data-en="Enter the email you used to sign up for the beta to get your free license key. Not signed up yet? <a href='rushr#beta'>Join the beta</a> first.">Entre l'adresse email avec laquelle tu t'es inscrit à la bêta pour obtenir ta clé de licence gratuite. Pas encore inscrit ? <a href='rushr#beta'>Rejoins la bêta</a> d'abord.</p>
+    <p data-fr="Entre l'adresse email avec laquelle tu t'es inscrit à la bêta. Un code de vérification t'est envoyé, puis ta clé de licence gratuite s'affiche. Pas encore inscrit ? <a href='rushr#beta'>Rejoins la bêta</a> d'abord." data-en="Enter the email you used to sign up for the beta. A verification code is sent to you, then your free license key is shown. Not signed up yet? <a href='rushr#beta'>Join the beta</a> first.">Entre l'adresse email avec laquelle tu t'es inscrit à la bêta. Un code de vérification t'est envoyé, puis ta clé de licence gratuite s'affiche. Pas encore inscrit ? <a href='rushr#beta'>Rejoins la bêta</a> d'abord.</p>
     <div class="err" id="formErr"></div>
-    <form onsubmit="return submitClaim(event)">
+    <form onsubmit="return sendCode(event)">
       <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
-      <button type="submit" id="claimBtn" class="btn btn-primary" data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</button>
+      <button type="submit" id="claimBtn" class="btn btn-primary" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
     </form>
+  </div>
+
+  <!-- CODE -->
+  <div id="g-code" class="gate" style="display:none">
+    <div class="mark"><img src="assets/bp-mark.png" alt="" /></div>
+    <h1 data-fr="Vérification" data-en="Verification">Vérification</h1>
+    <p data-fr="Entre le code reçu par email pour afficher ta clé." data-en="Enter the code you received by email to show your key.">Entre le code reçu par email pour afficher ta clé.</p>
+    <div class="err" id="codeErr"></div>
+    <form onsubmit="return verifyCode(event)">
+      <input id="codeInput" type="text" required autocomplete="one-time-code" maxlength="16" data-fr-ph="Code reçu par email" data-en-ph="Code from the email" placeholder="Code reçu par email" />
+      <button type="submit" id="verifyBtn" class="btn btn-primary" data-fr="Afficher ma clé" data-en="Show my key">Afficher ma clé</button>
+    </form>
+    <p style="margin:14px 0 0;font-size:13px"><a href="#" onclick="return backToEmail()" data-fr="← Changer d'email" data-en="← Change email" style="color:var(--muted);text-decoration:underline">← Changer d'email</a></p>
   </div>
 
   <!-- RESULT -->
@@ -111,22 +124,60 @@
     try{localStorage.setItem('bpl_lang',lang);}catch(e){}
   }
 
-  async function submitClaim(e){
+  var pendingEmail='';
+
+  function showGate(id){
+    ['g-form','g-code','g-result'].forEach(function(g){ document.getElementById(g).style.display=(g===id)?'block':'none'; });
+  }
+
+  // Étape 1 : un code est envoyé à l'adresse saisie. La clé n'est remise qu'après vérification
+  // de ce code, donc seulement à la personne qui possède réellement l'adresse.
+  async function sendCode(e){
     e.preventDefault();
     var btn=document.getElementById('claimBtn'), err=document.getElementById('formErr');
-    var email=document.getElementById('emailInput').value.trim();
-    err.textContent='';
-    btn.disabled=true;
+    var email=document.getElementById('emailInput').value.trim().toLowerCase();
+    err.textContent=''; btn.disabled=true;
     try{
-      var r=await SB.rpc('claim_beta_key',{p_email:email});
+      var r=await SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true}});
+      if(r.error) throw r.error;
+      pendingEmail=email;
+      document.getElementById('codeInput').value='';
+      document.getElementById('codeErr').textContent='';
+      showGate('g-code');
+    }catch(ex){
+      err.textContent=FR()?'Impossible d\'envoyer le code, vérifie l\'adresse et réessaie.':'Could not send the code, check the address and try again.';
+    }finally{
+      btn.disabled=false;
+    }
+    return false;
+  }
+
+  // Étape 2 : le code est vérifié, puis la clé de CETTE adresse est demandée au serveur.
+  async function verifyCode(e){
+    e.preventDefault();
+    var btn=document.getElementById('verifyBtn'), err=document.getElementById('codeErr');
+    var code=document.getElementById('codeInput').value.trim();
+    err.textContent=''; btn.disabled=true;
+    try{
+      var v=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'email'});
+      if(v.error){
+        // Une adresse jamais confirmée reçoit son code en type "signup" plutôt que "email".
+        v=await SB.auth.verifyOtp({email:pendingEmail, token:code, type:'signup'});
+        if(v.error) throw v.error;
+      }
+    }catch(ex){
+      err.textContent=FR()?'Code invalide ou expiré.':'Invalid or expired code.';
+      btn.disabled=false;
+      return false;
+    }
+    try{
+      var r=await SB.rpc('claim_my_beta_key');
       if(r.error) throw r.error;
       document.getElementById('keyText').textContent=r.data;
-      document.getElementById('g-form').style.display='none';
-      document.getElementById('g-result').style.display='block';
+      showGate('g-result');
     }catch(ex){
       var m=(ex&&ex.message)||'';
-      if(/INVALID_EMAIL/.test(m)) err.textContent=FR()?'Adresse email invalide.':'Invalid email address.';
-      else if(/NOT_REGISTERED/.test(m)) err.innerHTML=FR()
+      if(/NOT_REGISTERED/.test(m)) err.innerHTML=FR()
         ?'Cette adresse n\'est pas inscrite à la bêta. <a href="rushr#beta">Inscris-toi d\'abord</a> avec cette adresse, puis réessaie.'
         :'This email is not signed up for the beta. <a href="rushr#beta">Sign up first</a> with this address, then try again.';
       else if(/NO_KEYS_LEFT/.test(m)) err.textContent=FR()?'Toutes les clés bêta ont été distribuées. Contacte-nous.':'All beta keys have been claimed. Contact us.';
@@ -134,6 +185,12 @@
     }finally{
       btn.disabled=false;
     }
+    return false;
+  }
+
+  function backToEmail(){
+    pendingEmail='';
+    showGate('g-form');
     return false;
   }
 
