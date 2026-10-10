@@ -120,6 +120,8 @@
   .feat .ic svg{width:28px;height:28px;stroke:var(--accent2);fill:none;stroke-width:2}
   .feat h3{font-size:18px;font-weight:700;margin-bottom:8px}
   .feat p{color:var(--muted);font-size:14px;line-height:1.5}
+  .new-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#150A03;background:var(--accent);border-radius:6px;padding:3px 9px;margin-right:8px;vertical-align:middle}
+  .feat-note{color:var(--muted);font-size:13px;text-align:center;margin-top:22px}
 
   /* STEPS */
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:46px}
@@ -268,6 +270,7 @@
       <div class="nav-links">
         <a href="/" data-fr="← Backpack Lab" data-en="← Backpack Lab">← Backpack Lab</a>
         <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
+        <a href="#offload" data-fr="Offload" data-en="Offload">Offload</a>
         <a href="#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
         <a href="support" data-fr="Support" data-en="Support">Support</a>
         <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
@@ -283,6 +286,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="/" data-fr="← Backpack Lab" data-en="← Backpack Lab">← Backpack Lab</a>
     <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
+    <a href="#offload" data-fr="Offload" data-en="Offload">Offload</a>
     <a href="#faq" data-fr="FAQ" data-en="FAQ">FAQ</a>
     <a href="support" data-fr="Support" data-en="Support">Support</a>
     <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
@@ -310,6 +314,48 @@
     </div>
   </div>
 </header>
+
+<section id="offload" class="reveal" style="background:#0E0E11">
+  <div class="wrap">
+    <div class="eyebrow"><span class="new-tag" data-fr="Nouveau" data-en="New">Nouveau</span><span data-fr="Offload" data-en="Offload">Offload</span></div>
+    <div class="h2" data-fr="Videz vos cartes en toute confiance" data-en="Offload your cards with confidence">Videz vos cartes en toute confiance</div>
+    <p class="lead" data-fr="Offload copie vos cartes vers un ou plusieurs disques, vérifie chaque fichier, puis envoie le tout dans le Rush Manager. Vous ne formatez la carte que lorsque c'est prouvé." data-en="Offload copies your cards to one or more drives, checks every file, then hands everything over to the Rush Manager. You only format the card once it's proven.">Copie vérifiée vers un ou plusieurs disques, puis import direct dans le Rush Manager.</p>
+
+    <div class="features">
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M8 8h11v11H8zM5 16V5h11"/></svg></div>
+        <h3 data-fr="Jusqu'à 4 destinations en une passe" data-en="Up to 4 destinations in one pass">Jusqu'à 4 destinations en une passe</h3>
+        <p data-fr="La carte n'est lue qu'une fois : chaque bloc est écrit en parallèle sur 1 à 4 disques, pour gagner du temps et sécuriser vos prises." data-en="The card is read once: every block is written in parallel to 1 to 4 drives, saving time and securing your takes.">La carte n'est lue qu'une fois : chaque bloc est écrit en parallèle sur 1 à 4 disques, pour gagner du temps et sécuriser vos prises.</p>
+      </div>
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <h3 data-fr="Chaque fichier vérifié" data-en="Every file verified">Chaque fichier vérifié</h3>
+        <p data-fr="Un fichier ne prend son nom définitif qu'après avoir été relu sur le disque (pas depuis le cache) et comparé à l'original par empreinte xxHash64." data-en="A file only gets its final name after being re-read from the disk (not from cache) and matched to the original by xxHash64 checksum.">Un fichier ne prend son nom définitif qu'après avoir été relu sur le disque (pas depuis le cache) et comparé à l'original par empreinte xxHash64.</p>
+      </div>
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg></div>
+        <h3 data-fr="Reprise après interruption" data-en="Resumes after interruptions">Reprise après interruption</h3>
+        <p data-fr="Un disque débranché ou plein se met en pause tout seul pendant que les autres continuent. Une copie inachevée reprend là où elle s'était arrêtée." data-en="An unplugged or full drive pauses on its own while the others keep going. An unfinished offload picks up where it stopped.">Un disque débranché ou plein se met en pause tout seul pendant que les autres continuent. Une copie inachevée reprend là où elle s'était arrêtée.</p>
+      </div>
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v4h4M10 13h5M10 17h5"/></svg></div>
+        <h3 data-fr="Rapport PDF et historique MHL" data-en="PDF report and MHL history">Rapport PDF et historique MHL</h3>
+        <p data-fr="Chaque bobine est livrée avec un rapport PDF et un historique ASC MHL v2 : la preuve de ce qui a été copié, et quand." data-en="Each roll comes with a PDF report and an ASC MHL v2 history: proof of what was copied, and when.">Chaque bobine est livrée avec un rapport PDF et un historique ASC MHL v2 : la preuve de ce qui a été copié, et quand.</p>
+      </div>
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h6v5H4zM14 9h6v5h-6zM14 17h6v4h-6zM7 9v10h7M7 12h7"/></svg></div>
+        <h3 data-fr="Dossiers de destination automatiques" data-en="Automatic destination folders">Dossiers de destination automatiques</h3>
+        <p data-fr="Presets Projet / Date / Caméra_Bobine, avec un compteur de bobines (A001, A002…) qui se poursuit d'un disque à l'autre." data-en="Project / Date / Camera_Roll presets, with a roll counter (A001, A002…) that carries on from one drive to the next.">Presets Projet / Date / Caméra_Bobine, avec un compteur de bobines (A001, A002…) qui se poursuit d'un disque à l'autre.</p>
+      </div>
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div>
+        <h3 data-fr="Contrôles avant la copie" data-en="Checks before copying">Contrôles avant la copie</h3>
+        <p data-fr="Espace libre, droits d'écriture, limite de 4 Go sur FAT32, noms interdits : les problèmes sont signalés avant de copier, et une carte déjà copiée est reconnue." data-en="Free space, write access, FAT32's 4 GB limit, forbidden names: problems are flagged before copying, and a card that was already offloaded is recognised.">Espace libre, droits d'écriture, limite de 4 Go sur FAT32, noms interdits : les problèmes sont signalés avant de copier, et une carte déjà copiée est reconnue.</p>
+      </div>
+    </div>
+    <p class="feat-note" data-fr="L'ordinateur reste éveillé pendant la copie, et la carte peut être éjectée en toute sécurité une fois vérifiée (Windows)." data-en="Your computer stays awake while copying, and the card can be safely ejected once verified (Windows).">L'ordinateur reste éveillé pendant la copie, et la carte peut être éjectée en toute sécurité une fois vérifiée (Windows).</p>
+  </div>
+</section>
 
 <section id="features" class="reveal">
   <div class="wrap">
@@ -342,6 +388,11 @@
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></div>
         <h3 data-fr="Mémoire par projet" data-en="Per-project memory">Mémoire par projet</h3>
         <p data-fr="Mal tagué ? Changez le tag et le fichier est déplacé vers la bonne destination — sans doublon." data-en="Wrong tag? Change it and the file moves to the right destination — no duplicates.">Re-taguez : le fichier est déplacé, sans doublon.</p>
+      </div>
+      <div class="feat tilt-3d">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></div>
+        <h3 data-fr="Rapide, avec débit en direct" data-en="Fast, with live throughput">Rapide, avec débit en direct</h3>
+        <p data-fr="Import et copie en parallèle, débit affiché en direct dans la barre de statut, et espace disque vérifié avant de lancer Prepare." data-en="Import and copy run in parallel, live throughput shows in the status bar, and disk space is checked before Prepare starts.">Import et copie en parallèle, débit affiché en direct dans la barre de statut, et espace disque vérifié avant de lancer Prepare.</p>
       </div>
     </div>
   </div>
