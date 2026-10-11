@@ -289,13 +289,40 @@
       return 'Other';
     })();
     var pvId = null, startTime = Date.now();
-    function track(country){
-      SB.rpc('analytics_track', {
-        p_session_id: sid, p_path: location.pathname, p_referrer: document.referrer || null,
-        p_country: country || null, p_device: device, p_browser: browser, p_lang: document.documentElement.lang || 'fr'
-      }).then(function(r){ if(!r.error) pvId = r.data; });
+    // Campagne : UTM de l'URL d'arrivee, conserves pour la session.
+    var utm = {};
+    try{
+      var q = new URLSearchParams(location.search);
+      ['utm_source','utm_medium','utm_campaign'].forEach(function(k){ if(q.get(k)) utm[k] = q.get(k); });
+      if(Object.keys(utm).length) sessionStorage.setItem('bpl_utm', JSON.stringify(utm));
+      else utm = JSON.parse(sessionStorage.getItem('bpl_utm') || '{}');
+    }catch(e){ utm = {}; }
+    // Le pays est deduit cote serveur (en-tete du CDN) : plus aucun appel a un tiers.
+    SB.rpc('analytics_track', {
+      p_session_id: sid, p_path: location.pathname, p_referrer: document.referrer || null,
+      p_country: null, p_device: device, p_browser: browser, p_lang: document.documentElement.lang || 'fr',
+      p_utm_source: utm.utm_source || null, p_utm_medium: utm.utm_medium || null, p_utm_campaign: utm.utm_campaign || null
+    }).then(function(r){ if(!r.error) pvId = r.data; });
+
+    // Clics : data-track="evenement" ou detection automatique (beta, Discord, telechargements).
+    function trackEvent(ev, label){
+      try{
+        SB.rpc('analytics_event', {p_session_id: sid, p_event: ev, p_label: (label||'').slice(0,120) || null, p_path: location.pathname}).then(function(){});
+      }catch(e){}
     }
-    fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){track(d && d.country_code);}).catch(function(){track(null);});
+    window.bplTrack = trackEvent;
+    document.addEventListener('click', function(e){
+      var el = e.target.closest && e.target.closest('a,button,[data-track]');
+      if(!el) return;
+      var href = el.getAttribute('href') || '';
+      var ev = el.getAttribute('data-track');
+      if(!ev){
+        if(/^#beta/.test(href) || /[?&#]beta/.test(href)) ev = 'cta_beta';
+        else if(/discord\.(gg|com)/i.test(href)) ev = 'discord';
+        else if(/\.(exe|dmg|zip|msi|pkg)(\?|#|$)/i.test(href)) ev = 'download';
+      }
+      if(ev) trackEvent(ev, el.getAttribute('data-track-label') || (el.textContent||'').trim().replace(/\s+/g,' ') || href);
+    }, true);
     function ping(){
       if(!pvId) return;
       fetch(SUPABASE_URL+'/rest/v1/rpc/analytics_ping', {
