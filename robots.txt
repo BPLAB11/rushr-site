@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /admin-reviews
+Disallow: /review
+Disallow: /claim
+Disallow: /unsubscribe
+Disallow: /beta
+
+Sitemap: https://thebackpacklab.com/sitemap.xml
