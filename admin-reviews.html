@@ -278,6 +278,16 @@
       </div>
 
       <div class="card">
+        <h3>Campagnes &amp; sources <span style="font-weight:400;font-size:12px;color:var(--muted2)">— visiteurs et inscrits par origine (ajoute ?utm_source=reddit&amp;utm_campaign=lancement à tes liens)</span></h3>
+        <div id="aCampaign"></div>
+      </div>
+
+      <div class="card">
+        <h3>Clics <span style="font-weight:400;font-size:12px;color:var(--muted2)">— boutons beta, Discord, téléchargements</span></h3>
+        <div id="aClicks" class="a-list"></div>
+      </div>
+
+      <div class="card">
         <h3>Visites par jour</h3>
         <div class="bars" id="aDaily"></div>
       </div>
@@ -731,6 +741,21 @@
     renderList('aDevice', data.by_device||[], function(r){ return esc(r.device); });
     renderList('aBrowser', data.by_browser||[], function(r){ return esc(r.browser); });
     renderList('aReferrer', data.by_referrer||[], function(r){ return esc(r.ref); });
+    renderList('aClicks', data.clicks||[], function(r){
+      return esc(r.event)+(r.label?' <span style="color:var(--muted2)">· '+esc(r.label)+'</span>':'');
+    });
+
+    var camps=data.by_campaign||[], campEl=document.getElementById('aCampaign');
+    campEl.innerHTML = camps.length
+      ? '<table style="width:100%;font-size:13px;border-collapse:collapse">'+
+          '<tr style="text-align:left;color:var(--muted2);font-size:11.5px"><th style="padding:4px 6px">Source</th><th>Medium</th><th>Campagne</th><th style="text-align:right">Visiteurs</th><th style="text-align:right">Inscrits</th><th style="text-align:right">Conv.</th></tr>'+
+          camps.map(function(c){
+            var conv=c.visitors?((c.signups/c.visitors)*100).toFixed(1)+'%':'-';
+            return '<tr style="border-top:1px solid var(--surface2)"><td style="padding:6px">'+esc(c.source)+'</td><td>'+esc(c.medium||'-')+'</td><td>'+esc(c.campaign||'-')+'</td>'+
+                   '<td style="text-align:right">'+c.visitors+'</td><td style="text-align:right">'+c.signups+'</td><td style="text-align:right">'+conv+'</td></tr>';
+          }).join('')+'</table>'
+      : '<div class="empty-mini">Pas encore de données.</div>';
+    if(data.bots_filtered) campEl.insertAdjacentHTML('beforeend','<p style="font-size:11.5px;color:var(--muted2);margin-top:10px">'+data.bots_filtered+' vues de robots ignorées sur la période.</p>');
 
     var f = data.funnel || {rushr_visitors:0, beta_signups:0, beta_signups_from_rushr:0};
     var rate = f.rushr_visitors ? ((f.beta_signups_from_rushr / f.rushr_visitors) * 100).toFixed(1) : '0.0';
