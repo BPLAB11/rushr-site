@@ -73,10 +73,34 @@
 
   /* PACK GRID */
   .packs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .pack{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transform-style:preserve-3d;perspective:1000px}
-  .pack:hover{border-color:rgba(53,220,142,.4);transform:translateY(-6px);box-shadow:0 20px 40px rgba(53,220,142,.12)}
-  .pack.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
-  .pack.tilt-3d:hover{box-shadow:0 30px 60px rgba(53,220,142,.2)}
+  .pack{position:relative;perspective:1400px;outline:none;cursor:pointer;transition:transform .3s ease}
+  .pack:hover{transform:translateY(-6px)}
+  .flip-inner{position:relative;height:100%;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.2,.8,.2,1)}
+  .flip-face{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;
+    -webkit-backface-visibility:hidden;backface-visibility:hidden;transition:border-color .3s ease,box-shadow .3s ease}
+  .flip-front{height:100%}
+  .flip-back{position:absolute;inset:0;transform:rotateY(180deg);padding:24px;justify-content:center;gap:0}
+  .flip-back.c-lut{background:linear-gradient(135deg,#1d2a24,#101713)}
+  .flip-back.c-edit{background:linear-gradient(135deg,#231d2a,#141017)}
+  .flip-back.c-sfx{background:linear-gradient(135deg,#2a241d,#171310)}
+  .flip-back.c-sound{background:linear-gradient(135deg,#1d242a,#101417)}
+  .pack:hover .flip-face{border-color:rgba(53,220,142,.4);box-shadow:0 20px 40px rgba(53,220,142,.12)}
+  .pack:focus-visible .flip-face{border-color:var(--accent)}
+  @media(hover:hover){.pack:hover .flip-inner{transform:rotateY(180deg)}}
+  .pack:focus-visible .flip-inner,.pack.flipped .flip-inner{transform:rotateY(180deg)}
+  .flip-hint{display:inline-flex;align-items:center;gap:6px;margin-top:auto;color:var(--accent2);font-size:12.5px;font-weight:600}
+  .flip-hint svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .5s ease}
+  .pack:hover .flip-hint svg{transform:rotate(180deg)}
+  .flip-back > *{opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease}
+  .pack:focus-visible .flip-back > *,.pack.flipped .flip-back > *{opacity:1;transform:none}
+  @media(hover:hover){.pack:hover .flip-back > *{opacity:1;transform:none}}
+  .flip-back > *:nth-child(1){transition-delay:.25s}
+  .flip-back > *:nth-child(2){transition-delay:.33s}
+  .flip-back > *:nth-child(3){transition-delay:.41s}
+  .flip-back > *:nth-child(4){transition-delay:.49s}
+  .flip-back h3{font-size:16px;font-weight:800;margin-bottom:6px}
+  .flip-back p{flex:none;margin-bottom:0;color:var(--muted);font-size:13.5px}
+  @media(prefers-reduced-motion:reduce){.flip-inner,.flip-back > *{transition-duration:.01ms!important;transition-delay:0s!important}}
   .pack-thumb{position:relative;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center}
   .pack-thumb.c-lut{background:linear-gradient(135deg,#1d2a24,#101713)}
   .pack-thumb.c-edit{background:linear-gradient(135deg,#231d2a,#141017)}
@@ -209,38 +233,65 @@
     <div class="packs">
 
       <!-- LUTs -->
-      <div class="pack tilt-3d" data-cat="lut">
+      <div class="pack" data-cat="lut" tabindex="0" role="button" aria-label="Retourner la carte">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
         <div class="pack-thumb c-lut"><span class="cat" data-fr="LUTs" data-en="LUTs">LUTs</span><span class="price soon" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Starter LUT Pack" data-en="Starter LUT Pack">Starter LUT Pack</h3>
-          <p data-fr="5 LUTs cinématiques pour démarrer votre étalonnage. Format .cube universel." data-en="5 cinematic LUTs to kickstart your grade. Universal .cube format.">5 LUTs cinématiques. Format .cube.</p>
-          <div class="pack-meta"><span>.cube</span><span data-fr="5 LUTs" data-en="5 LUTs">5 LUTs</span></div>
-          <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
+            <div class="pack-body">
+              <h3 data-fr="Starter LUT Pack" data-en="Starter LUT Pack">Starter LUT Pack</h3>
+              <div class="pack-meta"><span>.cube</span><span data-fr="5 LUTs" data-en="5 LUTs">5 LUTs</span></div>
+              <span class="flip-hint"><span data-fr="Voir le détail" data-en="See details">Voir le détail</span><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg></span>
+            </div>
+          </div>
+          <div class="flip-face flip-back c-lut">
+            <h3 data-fr="Starter LUT Pack" data-en="Starter LUT Pack">Starter LUT Pack</h3>
+            <p data-fr="5 LUTs cinématiques pour démarrer votre étalonnage. Format .cube universel." data-en="5 cinematic LUTs to kickstart your grade. Universal .cube format.">5 LUTs cinématiques. Format .cube.</p>
+            <div class="pack-meta"><span>.cube</span><span data-fr="5 LUTs" data-en="5 LUTs">5 LUTs</span></div>
+            <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
+          </div>
         </div>
       </div>
 
       <!-- Editing presets -->
-      <div class="pack tilt-3d" data-cat="edit">
+      <div class="pack" data-cat="edit" tabindex="0" role="button" aria-label="Retourner la carte">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
         <div class="pack-thumb c-edit"><span class="cat" data-fr="Montage" data-en="Editing">Montage</span><span class="price soon" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Editor's Toolkit" data-en="Editor's Toolkit">Editor's Toolkit</h3>
-          <p data-fr="Pack complet : presets, titres, transitions et templates de projet pour gagner du temps." data-en="Full pack: presets, titles, transitions and project templates to save time.">Pack complet presets, titres et templates.</p>
-          <div class="pack-meta"><span>Premiere</span><span data-fr="50+ presets" data-en="50+ presets">50+ presets</span></div>
-          <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
+            <div class="pack-body">
+              <h3 data-fr="Editor's Toolkit" data-en="Editor's Toolkit">Editor's Toolkit</h3>
+              <div class="pack-meta"><span>Premiere</span><span data-fr="50+ presets" data-en="50+ presets">50+ presets</span></div>
+              <span class="flip-hint"><span data-fr="Voir le détail" data-en="See details">Voir le détail</span><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg></span>
+            </div>
+          </div>
+          <div class="flip-face flip-back c-edit">
+            <h3 data-fr="Editor's Toolkit" data-en="Editor's Toolkit">Editor's Toolkit</h3>
+            <p data-fr="Pack complet : presets, titres, transitions et templates de projet pour gagner du temps." data-en="Full pack: presets, titles, transitions and project templates to save time.">Pack complet presets, titres et templates.</p>
+            <div class="pack-meta"><span>Premiere</span><span data-fr="50+ presets" data-en="50+ presets">50+ presets</span></div>
+            <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
+          </div>
         </div>
       </div>
 
       <!-- Sound packs -->
-      <div class="pack tilt-3d" data-cat="sound">
+      <div class="pack" data-cat="sound" tabindex="0" role="button" aria-label="Retourner la carte">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
         <div class="pack-thumb c-sound"><span class="cat" data-fr="Sons" data-en="Sound">Sons</span><span class="price soon" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15 9a4 4 0 010 6"/></svg></div>
-        <div class="pack-body">
-          <h3 data-fr="Cinematic Soundscapes" data-en="Cinematic Soundscapes">Cinematic Soundscapes</h3>
-          <p data-fr="Ambiances, drones et nappes cinématiques libres de droits pour habiller vos films." data-en="Royalty-free cinematic ambiences, drones and pads to score your films.">Ambiances & drones cinématiques libres de droits.</p>
-          <div class="pack-meta"><span>.wav</span><span data-fr="40 sons" data-en="40 sounds">40 sons</span></div>
-          <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
+            <div class="pack-body">
+              <h3 data-fr="Cinematic Soundscapes" data-en="Cinematic Soundscapes">Cinematic Soundscapes</h3>
+              <div class="pack-meta"><span>.wav</span><span data-fr="40 sons" data-en="40 sounds">40 sons</span></div>
+              <span class="flip-hint"><span data-fr="Voir le détail" data-en="See details">Voir le détail</span><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg></span>
+            </div>
+          </div>
+          <div class="flip-face flip-back c-sound">
+            <h3 data-fr="Cinematic Soundscapes" data-en="Cinematic Soundscapes">Cinematic Soundscapes</h3>
+            <p data-fr="Ambiances, drones et nappes cinématiques libres de droits pour habiller vos films." data-en="Royalty-free cinematic ambiences, drones and pads to score your films.">Ambiances & drones cinématiques libres de droits.</p>
+            <div class="pack-meta"><span>.wav</span><span data-fr="40 sons" data-en="40 sounds">40 sons</span></div>
+            <span class="btn btn-ghost" style="opacity:.6;pointer-events:none" data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</span>
+          </div>
         </div>
       </div>
 
@@ -385,6 +436,19 @@
       });
     },{threshold:.15,rootMargin:'0px 0px -50px 0px'});
     document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+  })();
+
+  // Flip cards: hover flips on desktop (CSS); tap toggles on touch devices; Enter/Space for keyboard.
+  (function(){
+    var canHover = window.matchMedia('(hover:hover)').matches;
+    document.querySelectorAll('.pack').forEach(function(card){
+      if(!canHover){
+        card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+      }
+      card.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); card.classList.toggle('flipped'); }
+      });
+    });
   })();
 
   // 3D Tilt effect on cards
