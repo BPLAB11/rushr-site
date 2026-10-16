@@ -119,6 +119,32 @@
   .pack-meta span{font-size:11px;color:var(--muted2);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
   .pack .btn{width:100%;justify-content:center;padding:11px}
 
+  /* SEARCH BAR (category suggestions on click) */
+  .asb{position:relative;max-width:560px;margin:0 auto 30px}
+  .asb-field{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:0 14px;min-height:52px;transition:border-color .2s ease,box-shadow .2s ease}
+  .asb-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(53,220,142,.12)}
+  .asb-field > svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2;flex:none}
+  .asb-input{flex:1;min-width:0;height:50px;background:transparent;border:0;outline:0;color:var(--text);font:inherit;font-size:15px}
+  .asb-input::placeholder{color:var(--muted2)}
+  .asb-tag{display:inline-flex;align-items:center;gap:6px;flex:none;font-size:12px;font-weight:700;color:var(--on-accent);background:var(--accent);border-radius:999px;padding:4px 6px 4px 11px;cursor:pointer;border:0;font-family:inherit}
+  .asb-tag i{font-style:normal;font-size:14px;line-height:1;opacity:.7}
+  .asb [hidden]{display:none!important}
+  .asb-clear{flex:none;background:transparent;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:4px 2px}
+  .asb-clear:hover{color:var(--text)}
+  .asb-menu{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:20;background:var(--surface2);border:1px solid var(--line2);border-radius:14px;padding:6px;box-shadow:0 24px 60px rgba(0,0,0,.55);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+  .asb.open .asb-menu{opacity:1;transform:none;pointer-events:auto}
+  .asb-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);padding:8px 10px 4px}
+  .asb-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;color:var(--text);font:inherit;font-size:14px;padding:10px;border-radius:10px;cursor:pointer}
+  .asb-opt:hover,.asb-opt.kb{background:rgba(53,220,142,.1)}
+  .asb-opt .dot{width:8px;height:8px;border-radius:50%;background:var(--muted2);flex:none}
+  .asb-opt.on{color:var(--accent2)}
+  .asb-opt.on .dot,.asb-opt:hover .dot{background:var(--accent)}
+  .asb-opt .n{margin-left:auto;font-size:12px;color:var(--muted2)}
+  .asb-none{padding:12px 10px;color:var(--muted);font-size:13px}
+  .pack.is-hidden{display:none}
+  .pack.pop{animation:packIn .35s ease both}
+  @keyframes packIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .no-results{grid-column:1/-1;text-align:center;color:var(--muted);padding:36px 0;font-size:15px}
   .ph-note{text-align:center;color:var(--muted2);font-size:13px;margin-top:30px;font-style:italic}
   .soon-banner{background:var(--surface);border:1px solid rgba(53,220,142,.35);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:32px}
   .soon-banner h3{font-size:18px;font-weight:800}
@@ -230,6 +256,17 @@
       <p data-fr="Les packs et presets Backpack Lab seront disponibles très prochainement." data-en="Backpack Lab packs and presets will be available very soon.">Les packs et presets Backpack Lab seront disponibles très prochainement.</p>
     </div>
 
+    <div class="asb" id="asb">
+      <div class="asb-field">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <button type="button" class="asb-tag" id="asb-tag" hidden></button>
+        <input class="asb-input" id="asb-input" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="asb-menu"
+               placeholder="Rechercher un pack, un preset…" data-fr-ph="Rechercher un pack, un preset…" data-en-ph="Search a pack or preset…" />
+        <button type="button" class="asb-clear" id="asb-clear" aria-label="Effacer" hidden>&times;</button>
+      </div>
+      <div class="asb-menu" id="asb-menu" role="listbox"></div>
+    </div>
+
     <div class="packs">
 
       <!-- LUTs -->
@@ -294,6 +331,8 @@
           </div>
         </div>
       </div>
+
+      <div class="no-results" id="asb-none" hidden data-fr="Aucun pack ne correspond à votre recherche." data-en="No pack matches your search.">Aucun pack ne correspond à votre recherche.</div>
 
     </div>
   </div>
@@ -436,6 +475,126 @@
       });
     },{threshold:.15,rootMargin:'0px 0px -50px 0px'});
     document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+  })();
+
+  // Search bar: categories are suggested on click, typing filters the cards (vanilla take on KokonutUI's action-search-bar).
+  (function(){
+    var root = document.getElementById('asb');
+    if(!root) return;
+    var input = document.getElementById('asb-input'), menu = document.getElementById('asb-menu'),
+        tag = document.getElementById('asb-tag'), clearBtn = document.getElementById('asb-clear'),
+        none = document.getElementById('asb-none');
+    var cards = [].slice.call(document.querySelectorAll('.pack'));
+    var cats = [], active = 'all', query = '', kb = -1;
+
+    function norm(t){ return (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+    function lang(){ return document.documentElement.lang === 'en' ? 'en' : 'fr'; }
+
+    cards.forEach(function(c){
+      var key = c.getAttribute('data-cat'), lab = c.querySelector('.cat');
+      var cat = cats.filter(function(x){ return x.key === key; })[0];
+      if(!cat){
+        cat = { key: key, fr: lab ? lab.getAttribute('data-fr') : key, en: lab ? lab.getAttribute('data-en') : key, count: 0 };
+        cats.push(cat);
+      }
+      cat.count++;
+      var hay = [c.textContent];
+      [].forEach.call(c.querySelectorAll('[data-fr]'), function(e){ hay.push(e.getAttribute('data-fr'), e.getAttribute('data-en')); });
+      c._hay = norm(hay.join(' '));
+    });
+
+    function label(cat){ return cat[lang()]; }
+
+    function option(key, fr, en, count){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'asb-opt' + (active === key ? ' on' : '');
+      b.setAttribute('role', 'option');
+      b.setAttribute('data-key', key);
+      var dot = document.createElement('span'); dot.className = 'dot';
+      var t = document.createElement('span');
+      t.setAttribute('data-fr', fr); t.setAttribute('data-en', en); t.textContent = lang() === 'en' ? en : fr;
+      b.appendChild(dot); b.appendChild(t);
+      if(count != null){ var n = document.createElement('span'); n.className = 'n'; n.textContent = count; b.appendChild(n); }
+      b.addEventListener('mousedown', function(e){ e.preventDefault(); });   // keep focus in the input
+      b.addEventListener('click', function(){ select(key); });
+      return b;
+    }
+
+    function buildMenu(){
+      menu.innerHTML = '';
+      var q = norm(query), shown = 0;
+      var title = document.createElement('div'); title.className = 'asb-title';
+      title.setAttribute('data-fr', 'Catégories'); title.setAttribute('data-en', 'Categories');
+      title.textContent = lang() === 'en' ? 'Categories' : 'Catégories';
+      menu.appendChild(title);
+      if(!q){
+        menu.appendChild(option('all', 'Toutes les catégories', 'All categories', cards.length)); shown++;
+      }
+      cats.forEach(function(cat){
+        if(q && norm(cat.fr + ' ' + cat.en).indexOf(q) === -1) return;
+        menu.appendChild(option(cat.key, cat.fr, cat.en, cat.count)); shown++;
+      });
+      if(!shown){
+        var e = document.createElement('div'); e.className = 'asb-none';
+        e.setAttribute('data-fr', 'Aucune catégorie ne correspond : la recherche filtre les packs.');
+        e.setAttribute('data-en', 'No matching category: your search filters the packs.');
+        e.textContent = lang() === 'en' ? 'No matching category: your search filters the packs.' : 'Aucune catégorie ne correspond : la recherche filtre les packs.';
+        menu.appendChild(e);
+      }
+      kb = -1;
+    }
+
+    function apply(){
+      var q = norm(query), visible = 0;
+      cards.forEach(function(c){
+        var ok = (active === 'all' || c.getAttribute('data-cat') === active) && (!q || c._hay.indexOf(q) !== -1);
+        var wasHidden = c.classList.contains('is-hidden');
+        c.classList.toggle('is-hidden', !ok);
+        if(ok){
+          visible++;
+          if(wasHidden){ c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); }
+        }
+      });
+      none.hidden = visible !== 0;
+      var cat = cats.filter(function(x){ return x.key === active; })[0];
+      tag.hidden = !cat;
+      if(cat){ tag.innerHTML = ''; tag.appendChild(document.createTextNode(label(cat) + ' ')); var x = document.createElement('i'); x.textContent = '\u00d7'; tag.appendChild(x); }
+      clearBtn.hidden = !(cat || query);
+    }
+
+    function open(){ buildMenu(); root.classList.add('open'); input.setAttribute('aria-expanded', 'true'); }
+    function close(){ root.classList.remove('open'); input.setAttribute('aria-expanded', 'false'); kb = -1; }
+
+    function select(key){
+      active = key === 'all' ? 'all' : key;
+      query = ''; input.value = '';
+      apply(); close();
+    }
+
+    input.addEventListener('focus', open);
+    input.addEventListener('click', open);
+    input.addEventListener('input', function(){ query = input.value; buildMenu(); root.classList.add('open'); apply(); });
+    input.addEventListener('keydown', function(e){
+      var opts = [].slice.call(menu.querySelectorAll('.asb-opt'));
+      if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+        e.preventDefault();
+        if(!root.classList.contains('open')) open();
+        opts = [].slice.call(menu.querySelectorAll('.asb-opt'));
+        if(!opts.length) return;
+        kb = e.key === 'ArrowDown' ? (kb + 1) % opts.length : (kb - 1 + opts.length) % opts.length;
+        opts.forEach(function(o, i){ o.classList.toggle('kb', i === kb); });
+      } else if(e.key === 'Enter'){
+        if(kb >= 0 && opts[kb]){ e.preventDefault(); select(opts[kb].getAttribute('data-key')); }
+        else close();
+      } else if(e.key === 'Escape'){ close(); input.blur(); }
+      else if(e.key === 'Backspace' && !input.value && active !== 'all'){ select('all'); }
+    });
+    tag.addEventListener('click', function(){ select('all'); input.focus(); });
+    clearBtn.addEventListener('click', function(){ select('all'); input.focus(); });
+    document.addEventListener('click', function(e){ if(!root.contains(e.target)) close(); });
+    [].forEach.call(document.querySelectorAll('#lfr,#len'), function(b){ b.addEventListener('click', function(){ setTimeout(apply, 0); }); });
+    apply();
   })();
 
   // Flip cards: hover flips on desktop (CSS); tap toggles on touch devices; Enter/Space for keyboard.
