@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
+<meta name="robots" content="noindex,nofollow" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Services — BACKPACK LAB</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/bp-favicon-32.png" />
@@ -85,13 +86,18 @@
   .msg.ok{color:var(--accent2)} .msg.err{color:var(--err)}
   .note{color:var(--muted2);font-size:12px;margin-top:12px}
 
+  body.gate header,body.gate main{display:none}
+  #soon{display:none;text-align:center;padding:120px 0}
+  body.gate #soon{display:block}
+  #soon p{color:var(--muted);margin-top:14px}
+  .preview-bar{background:var(--accent);color:var(--on-accent);text-align:center;font-size:13px;font-weight:600;padding:6px}
   footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:13px}
   .foot-in{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between}
   .foot-brand{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--text)}
   .foot-brand .mark{width:18px;height:18px}
 </style>
 </head>
-<body>
+<body class="gate">
 <nav>
   <div class="wrap nav-in">
     <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
@@ -100,7 +106,6 @@
         <a href="software" data-fr="Software" data-en="Software">Software</a>
         <a href="rushr" data-fr="Rushr" data-en="Rushr">Rushr</a>
         <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
-        <a href="services" class="on" data-fr="Services" data-en="Services">Services</a>
         <a href="/#contact" data-fr="Contact" data-en="Contact">Contact</a>
         <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
       </div>
@@ -115,11 +120,12 @@
     <a href="software" data-fr="Software" data-en="Software">Software</a>
     <a href="rushr" data-fr="Rushr" data-en="Rushr">Rushr</a>
     <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
-    <a href="services" data-fr="Services" data-en="Services">Services</a>
     <a href="/#contact" data-fr="Contact" data-en="Contact">Contact</a>
     <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
   </div>
 </nav>
+
+<div id="soon"><div class="wrap"><h1 data-fr="Bientôt disponible" data-en="Coming soon">Bientôt disponible</h1><p data-fr="Cette page ouvrira prochainement." data-en="This page will open soon.">Cette page ouvrira prochainement.</p></div></div>
 
 <header>
   <div class="hero-glow"></div>
@@ -250,7 +256,17 @@
   (function(){
     var l='fr'; try{l=localStorage.getItem('bpl_lang')||((navigator.language||'fr').slice(0,2)==='en'?'en':'fr');}catch(e){}
     LANG=l; if(l!=='fr') setLang(l);
-    loadServices();
+    // Page not public yet: only a signed-in admin sees it. Flip to true to launch.
+    var PUBLIC_LAUNCH=false;
+    if(PUBLIC_LAUNCH){ document.body.classList.remove('gate'); loadServices(); return; }
+    SB.auth.getSession().then(async function(r){
+      if(!r.data.session) return;
+      var ok=false; try{ ok=(await SB.rpc('is_admin')).data===true; }catch(e){}
+      if(!ok) return;
+      document.body.classList.remove('gate');
+      document.body.insertAdjacentHTML('afterbegin','<div class="preview-bar">Aperçu admin — page non publique</div>');
+      loadServices();
+    });
   })();
 </script>
 </body>
