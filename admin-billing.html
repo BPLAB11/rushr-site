@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Devis &amp; factures — BACKPACK LAB</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/bp-favicon-32.png" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;--muted:#9A9A9E;--on-accent:#04150C;--err:#FF6B6B;--warn:#F5B14C}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14.5px;line-height:1.5}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  .top{display:flex;align-items:center;justify-content:space-between;height:60px;border-bottom:1px solid var(--line)}
+  .top b{letter-spacing:.5px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border-radius:9px;font-weight:600;font-size:13.5px;padding:8px 14px;cursor:pointer;border:1px solid transparent;font-family:inherit;background:var(--surface2);color:var(--text)}
+  .btn:hover{border-color:var(--accent)}
+  .btn.p{background:var(--accent);color:var(--on-accent)} .btn.p:hover{background:var(--accent2)}
+  .btn.d{color:var(--err)} .btn.sm{padding:5px 10px;font-size:12.5px}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:20px 0}
+  .tabs button{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:999px;padding:7px 16px;font:inherit;font-weight:600;cursor:pointer}
+  .tabs button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}
+  .bar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+  h2{font-size:19px;font-weight:800}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2)}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td.r,th.r{text-align:right} .tbl{overflow-x:auto}
+  .badge{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+  .badge.paid,.badge.accepted{color:var(--accent2);border-color:rgba(53,220,142,.4)}
+  .badge.sent,.badge.new{color:var(--warn);border-color:rgba(245,177,76,.4)}
+  .badge.declined,.badge.cancelled{color:var(--err);border-color:rgba(255,107,107,.4)}
+  label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin:12px 0 5px}
+  input,select,textarea{width:100%;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;color:var(--text);padding:9px 11px;font:inherit}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  textarea{min-height:80px;resize:vertical}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px} .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:700px){.g2,.g3{grid-template-columns:1fr}}
+  .lines input{padding:7px 8px}
+  .muted{color:var(--muted)} .err{color:var(--err)} .ok{color:var(--accent2)}
+  .totals{margin-left:auto;max-width:300px;margin-top:14px}
+  .totals div{display:flex;justify-content:space-between;padding:3px 0}
+  .totals .big{font-weight:800;font-size:17px;border-top:1px solid var(--line2);margin-top:6px;padding-top:8px}
+  #g-load,#g-denied,#g-login{max-width:380px;margin:80px auto;text-align:center}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--line2);padding:10px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s}
+  .toast.show{opacity:1}
+  /* printable document */
+  #print{display:none}
+  @media print{
+    body{background:#fff;color:#111} .noprint{display:none!important}
+    #print{display:block;color:#111;font-size:12.5px}
+  }
+  #print h1{font-size:24px;margin-bottom:4px} #print table th{color:#555;border-bottom:1px solid #999}
+  #print td{border-bottom:1px solid #ddd} #print .box{display:flex;justify-content:space-between;gap:30px;margin:18px 0}
+  #print .legal{margin-top:26px;font-size:10.5px;color:#444;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="noprint">
+<div class="wrap">
+  <div class="top"><b>BACKPACK LAB · Devis &amp; factures</b><div><span class="muted" id="whoami"></span> <button class="btn sm" id="logoutBtn" style="display:none" onclick="logout()">Déconnexion</button></div></div>
+
+  <div id="g-load" class="muted">Chargement…</div>
+  <div id="g-login" style="display:none">
+    <h2>Connexion</h2>
+    <form onsubmit="return doLogin(event)">
+      <label>Email</label><input id="email" type="email" required autocomplete="username" />
+      <label>Mot de passe</label><input id="pass" type="password" required autocomplete="current-password" />
+      <p class="err" id="authMsg" style="margin-top:10px"></p>
+      <button class="btn p" style="margin-top:14px;width:100%;justify-content:center">Se connecter</button>
+    </form>
+  </div>
+  <div id="g-denied" style="display:none"><h2>Accès réservé</h2><p class="muted">Ce compte n'est pas administrateur.</p></div>
+
+  <div id="app" style="display:none">
+    <div class="tabs" id="tabs"></div>
+    <div id="view"></div>
+  </div>
+</div>
+</div>
+<div id="print"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SB=window.supabase.createClient("https://vztqykihtnkscwcodkyf.supabase.co","sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l");
+  var TAB='requests', DATA={requests:[],services:[],clients:[],docs:[],settings:{}}, EDIT=null;
+  var TABS=[['requests','Demandes'],['quote','Devis'],['invoice','Factures'],['clients','Clients'],['services','Services'],['settings','Paramètres']];
+  var DEFAULT_LEGAL="En cas de retard de paiement : pénalités au taux de 3 fois le taux d'intérêt légal et indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 du Code de commerce).\nPas d'escompte pour paiement anticipé.";
+
+  function $(i){return document.getElementById(i);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function r2(n){return Math.round((Number(n)||0)*100+Number.EPSILON)/100;}
+  function money(n){return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n||0);}
+  function fdate(d){return d?new Date(d+'T00:00:00').toLocaleDateString('fr-FR'):'—';}
+  function today(){return new Date().toISOString().slice(0,10);}
+  function toast(m){var t=$('toast');t.textContent=m;t.className='toast show';setTimeout(function(){t.className='toast';},2200);}
+  function show(id){['g-load','g-login','g-denied','app'].forEach(function(x){$(x).style.display=x===id?'block':'none';});}
+  function fail(e){toast('Erreur : '+((e&&e.message)||e));console.error(e);}
+  async function q(p){var r=await p;if(r.error)throw r.error;return r.data;}
+
+  async function doLogin(e){e.preventDefault();$('authMsg').textContent='';
+    var r=await SB.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
+    if(r.error)$('authMsg').textContent='Email ou mot de passe incorrect.';return false;}
+  async function logout(){await SB.auth.signOut();}
+  async function onSession(s){
+    if(!s){show('g-login');return;}
+    $('whoami').textContent=s.user.email;$('logoutBtn').style.display='inline-flex';
+    var ok=false;try{ok=await q(SB.rpc('is_admin'));}catch(e){}
+    if(!ok){show('g-denied');return;}
+    show('app');await loadAll();go('requests');
+  }
+  SB.auth.onAuthStateChange(function(_e,s){setTimeout(function(){onSession(s);},0);});
+  SB.auth.getSession().then(function(r){onSession(r.data.session);});
+
+  async function loadAll(){
+    try{
+      var r=await Promise.all([
+        q(SB.from('bl_quote_requests').select('*').order('created_at',{ascending:false})),
+        q(SB.from('bl_services').select('*').order('sort').order('created_at')),
+        q(SB.from('bl_clients').select('*').order('name')),
+        q(SB.from('bl_documents').select('*').order('created_at',{ascending:false})),
+        q(SB.from('bl_settings').select('data').eq('id',1).maybeSingle())
+      ]);
+      DATA.requests=r[0];DATA.services=r[1];DATA.clients=r[2];DATA.docs=r[3];DATA.settings=(r[4]&&r[4].data)||{};
+    }catch(e){fail(e);}
+  }
+  function go(t){TAB=t;EDIT=null;
+    $('tabs').innerHTML=TABS.map(function(x){var n=x[0]==='requests'?DATA.requests.filter(function(r){return r.status==='new';}).length:0;
+      return '<button class="'+(x[0]===t?'on':'')+'" onclick="go(\''+x[0]+'\')">'+x[1]+(n?' ('+n+')':'')+'</button>';}).join('');
+    var f={requests:vRequests,quote:function(){return vDocs('quote');},invoice:function(){return vDocs('invoice');},clients:vClients,services:vServices,settings:vSettings}[t];
+    $('view').innerHTML=f();
+  }
+  function clientName(id){var c=DATA.clients.find(function(x){return x.id===id;});return c?(c.company?c.company+' — ':'')+c.name:'—';}
+
+  /* ---------- Requests ---------- */
+  function vRequests(){
+    var rows=DATA.requests.map(function(r){var s=DATA.services.find(function(x){return x.id===r.service_id;});
+      return '<tr><td>'+fdate(r.created_at.slice(0,10))+'</td><td><b>'+esc(r.name)+'</b><br><span class="muted">'+esc(r.company||'')+'</span></td>'+
+      '<td><a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a><br><span class="muted">'+esc(r.phone||'')+'</span></td>'+
+      '<td>'+esc(s?s.title_fr:'Sur mesure')+'<br><span class="muted">'+esc(r.message)+'</span></td>'+
+      '<td><span class="badge '+r.status+'">'+r.status+'</span></td>'+
+      '<td class="r"><button class="btn sm p" onclick="quoteFromRequest(\''+r.id+'\')">Créer le devis</button> '+
+      '<button class="btn sm" onclick="setReq(\''+r.id+'\',\'archived\')">Archiver</button></td></tr>';}).join('');
+    return '<div class="panel"><div class="bar"><h2>Demandes de devis</h2></div><div class="tbl"><table><tr><th>Date</th><th>Contact</th><th></th><th>Demande</th><th>Statut</th><th></th></tr>'+(rows||'<tr><td colspan="6" class="muted">Aucune demande.</td></tr>')+'</table></div></div>';
+  }
+  async function setReq(id,st){try{await q(SB.from('bl_quote_requests').update({status:st}).eq('id',id));await loadAll();go(TAB);}catch(e){fail(e);}}
+  async function quoteFromRequest(id){
+    try{
+      var r=DATA.requests.find(function(x){return x.id===id;});
+      var c=DATA.clients.find(function(x){return x.email&&x.email.toLowerCase()===r.email;});
+      if(!c){c=(await q(SB.from('bl_clients').insert({name:r.name,company:r.company,email:r.email,phone:r.phone}).select()))[0];}
+      var s=DATA.services.find(function(x){return x.id===r.service_id;});
+      var lines=s?[{label:s.title_fr,qty:1,unit_price:s.price_ht||0,vat_rate:s.vat_rate}]:[{label:'',qty:1,unit_price:0,vat_rate:20}];
+      var d=(await q(SB.from('bl_documents').insert(Object.assign({kind:'quote',client_id:c.id,request_id:id,lines:lines,notes:r.message},calc(lines))).select()))[0];
+      await q(SB.from('bl_quote_requests').update({status:'handled'}).eq('id',id));
+      await loadAll();openDoc(d.id);
+    }catch(e){fail(e);}
+  }
+
+  /* ---------- Documents ---------- */
+  var STAT={draft:'Brouillon',sent:'Envoyé',accepted:'Accepté',declined:'Refusé',paid:'Payée',cancelled:'Annulé'};
+  function calc(lines){
+    var base={},ht=0;
+    lines.forEach(function(l){var v=r2((Number(l.qty)||0)*(Number(l.unit_price)||0));ht+=v;base[l.vat_rate]=(base[l.vat_rate]||0)+v;});
+    var vat=0;Object.keys(base).forEach(function(k){vat+=r2(base[k]*Number(k)/100);});
+    ht=r2(ht);vat=r2(vat);return{total_ht:ht,total_vat:vat,total_ttc:r2(ht+vat)};
+  }
+  function vDocs(kind){
+    if(EDIT)return vEditor();
+    var docs=DATA.docs.filter(function(d){return d.kind===kind;});
+    var rows=docs.map(function(d){return '<tr><td><a href="#" onclick="openDoc(\''+d.id+'\');return false"><b>'+esc(d.number||'Brouillon')+'</b></a></td><td>'+esc(clientName(d.client_id))+'</td><td>'+fdate(d.issue_date)+'</td>'+
+      '<td class="r">'+money(d.total_ttc)+'</td><td><span class="badge '+d.status+'">'+STAT[d.status]+'</span></td></tr>';}).join('');
+    return '<div class="panel"><div class="bar"><h2>'+(kind==='quote'?'Devis':'Factures')+'</h2><button class="btn p" onclick="newDoc(\''+kind+'\')">+ Nouveau</button></div>'+
+      '<div class="tbl"><table><tr><th>N°</th><th>Client</th><th>Date</th><th class="r">Total TTC</th><th>Statut</th></tr>'+(rows||'<tr><td colspan="5" class="muted">Rien pour l\'instant.</td></tr>')+'</table></div></div>';
+  }
+  function newDoc(kind){
+    EDIT={kind:kind,client_id:'',status:'draft',issue_date:today(),due_date:addDays(30),lines:[{label:'',qty:1,unit_price:0,vat_rate:20}],notes:''};
+    go2();
+  }
+  function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+  function openDoc(id){var d=DATA.docs.find(function(x){return x.id===id;});TAB=d.kind;EDIT=JSON.parse(JSON.stringify(d));go2();}
+  function go2(){var k=EDIT.kind;$('tabs').innerHTML=TABS.map(function(x){return '<button class="'+(x[0]===k?'on':'')+'" onclick="go(\''+x[0]+'\')">'+x[1]+'</button>';}).join('');$('view').innerHTML=vEditor();}
+  function vEditor(){
+    var d=EDIT,locked=!!d.number,t=calc(d.lines),dis=locked?' disabled':'';
+    var vatOpts=function(v){return [20,10,5.5,2.1,0].map(function(x){return '<option value="'+x+'"'+(Number(v)===x?' selected':'')+'>'+x+' %</option>';}).join('');};
+    var lines=d.lines.map(function(l,i){return '<tr><td><input value="'+esc(l.label)+'"'+dis+' oninput="EDIT.lines['+i+'].label=this.value"></td>'+
+      '<td style="width:80px"><input type="number" step="any" value="'+l.qty+'"'+dis+' oninput="EDIT.lines['+i+'].qty=this.value;recalc()"></td>'+
+      '<td style="width:120px"><input type="number" step="0.01" value="'+l.unit_price+'"'+dis+' oninput="EDIT.lines['+i+'].unit_price=this.value;recalc()"></td>'+
+      '<td style="width:100px"><select'+dis+' onchange="EDIT.lines['+i+'].vat_rate=Number(this.value);recalc()">'+vatOpts(l.vat_rate)+'</select></td>'+
+      '<td style="width:40px">'+(locked?'':'<button class="btn sm d" onclick="EDIT.lines.splice('+i+',1);rerender()">✕</button>')+'</td></tr>';}).join('');
+    var clients='<option value="">— Choisir —</option>'+DATA.clients.map(function(c){return '<option value="'+c.id+'"'+(c.id===d.client_id?' selected':'')+'>'+esc(clientName(c.id))+'</option>';}).join('');
+    var svc=DATA.services.map(function(s){return '<option value="'+s.id+'">'+esc(s.title_fr)+'</option>';}).join('');
+    var title=(d.kind==='quote'?'Devis':'Facture')+(d.number?' '+d.number:' (brouillon)');
+    return '<div class="panel"><div class="bar"><h2>'+title+'</h2><span class="badge '+d.status+'">'+STAT[d.status]+'</span></div>'+
+      '<div class="g3"><div><label>Client</label><select'+dis+' onchange="EDIT.client_id=this.value">'+clients+'</select></div>'+
+      '<div><label>Date d\'émission</label><input type="date" value="'+(d.issue_date||'')+'"'+dis+' onchange="EDIT.issue_date=this.value"></div>'+
+      '<div><label>'+(d.kind==='quote'?'Valable jusqu\'au':'Échéance')+'</label><input type="date" value="'+(d.due_date||'')+'" onchange="EDIT.due_date=this.value"></div></div>'+
+      '<div class="lines tbl" style="margin-top:14px"><table><tr><th>Description</th><th>Qté</th><th>PU HT</th><th>TVA</th><th></th></tr>'+lines+'</table></div>'+
+      (locked?'':'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn sm" onclick="EDIT.lines.push({label:\'\',qty:1,unit_price:0,vat_rate:20});rerender()">+ Ligne</button>'+
+        (svc?'<select style="width:auto" onchange="addSvc(this.value);this.value=\'\'"><option value="">+ Depuis un service…</option>'+svc+'</select>':'')+'</div>')+
+      '<div class="totals" id="tot">'+totalsHtml(t)+'</div>'+
+      '<label>Notes (visibles sur le document)</label><textarea oninput="EDIT.notes=this.value">'+esc(d.notes||'')+'</textarea>'+
+      '<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">'+
+      '<button class="btn p" onclick="saveDoc()">Enregistrer</button>'+
+      (!locked&&d.id?'<button class="btn" onclick="issueDoc()">Émettre (attribuer le n°)</button>':'')+
+      (d.number?'<button class="btn" onclick="printDoc()">Imprimer / PDF</button>':'')+
+      (d.kind==='quote'&&d.number?'<button class="btn" onclick="setStatus(\'accepted\')">Marquer accepté</button><button class="btn" onclick="setStatus(\'declined\')">Marquer refusé</button><button class="btn p" onclick="toInvoice()">Transformer en facture</button>':'')+
+      (d.kind==='invoice'&&d.number&&d.status!=='paid'?'<button class="btn p" onclick="markPaid()">Marquer payée</button>':'')+
+      (!locked&&d.id?'<button class="btn d" onclick="delDoc()">Supprimer</button>':'')+
+      '<button class="btn" onclick="go(\''+d.kind+'\')">Retour</button></div>'+
+      (locked?'<p class="muted" style="margin-top:10px">Document émis : les lignes et le client ne sont plus modifiables (conformité de la numérotation).</p>':'')+'</div>';
+  }
+  function totalsHtml(t){return '<div><span>Total HT</span><span>'+money(t.total_ht)+'</span></div><div><span>TVA</span><span>'+money(t.total_vat)+'</span></div><div class="big"><span>Total TTC</span><span>'+money(t.total_ttc)+'</span></div>';}
+  function recalc(){$('tot').innerHTML=totalsHtml(calc(EDIT.lines));}
+  function rerender(){$('view').innerHTML=vEditor();}
+  function addSvc(id){var s=DATA.services.find(function(x){return x.id===id;});if(!s)return;EDIT.lines.push({label:s.title_fr,qty:1,unit_price:s.price_ht||0,vat_rate:Number(s.vat_rate)});rerender();}
+  async function saveDoc(){
+    try{
+      if(!EDIT.client_id)throw new Error('Choisissez un client.');
+      var clean=EDIT.lines.filter(function(l){return l.label&&l.label.trim();}).map(function(l){return{label:l.label.trim(),qty:Number(l.qty)||0,unit_price:Number(l.unit_price)||0,vat_rate:Number(l.vat_rate)};});
+      if(!clean.length)throw new Error('Ajoutez au moins une ligne.');
+      var row=Object.assign({kind:EDIT.kind,client_id:EDIT.client_id,issue_date:EDIT.issue_date,due_date:EDIT.due_date,lines:clean,notes:EDIT.notes,status:EDIT.status},calc(clean));
+      var res=EDIT.id?await q(SB.from('bl_documents').update(row).eq('id',EDIT.id).select()):await q(SB.from('bl_documents').insert(row).select());
+      await loadAll();EDIT=res[0];toast('Enregistré');rerender();
+    }catch(e){fail(e);}
+  }
+  async function issueDoc(){
+    if(!confirm('Attribuer le numéro définitif ? Le document ne sera plus modifiable.'))return;
+    try{await saveDoc();await q(SB.rpc('bl_issue_document',{p_id:EDIT.id}));await loadAll();EDIT=DATA.docs.find(function(d){return d.id===EDIT.id;});toast('Émis');rerender();}catch(e){fail(e);}
+  }
+  async function setStatus(s){try{var r=await q(SB.from('bl_documents').update({status:s}).eq('id',EDIT.id).select());await loadAll();EDIT=r[0];rerender();}catch(e){fail(e);}}
+  async function markPaid(){
+    var m=prompt('Moyen de paiement (sumup, virement, especes, autre) :','virement');if(!m)return;
+    try{var r=await q(SB.from('bl_documents').update({status:'paid',paid_at:new Date().toISOString(),payment_method:m}).eq('id',EDIT.id).select());await loadAll();EDIT=r[0];rerender();}catch(e){fail(e);}
+  }
+  async function toInvoice(){
+    try{var d=EDIT;var r=await q(SB.from('bl_documents').insert({kind:'invoice',client_id:d.client_id,source_quote_id:d.id,lines:d.lines,notes:d.notes,total_ht:d.total_ht,total_vat:d.total_vat,total_ttc:d.total_ttc,due_date:addDays(30)}).select());
+      await setStatus('accepted').catch(function(){});await loadAll();TAB='invoice';openDoc(r[0].id);}catch(e){fail(e);}
+  }
+  async function delDoc(){if(!confirm('Supprimer ce brouillon ?'))return;try{await q(SB.from('bl_documents').delete().eq('id',EDIT.id));await loadAll();go(EDIT.kind);}catch(e){fail(e);}}
+
+  function printDoc(){
+    var d=EDIT,s=DATA.settings||{},c=DATA.clients.find(function(x){return x.id===d.client_id;})||{},t=calc(d.lines);
+    var byRate={};d.lines.forEach(function(l){var v=r2(l.qty*l.unit_price);byRate[l.vat_rate]=(byRate[l.vat_rate]||0)+v;});
+    var rows=d.lines.map(function(l){return '<tr><td>'+esc(l.label)+'</td><td class="r">'+l.qty+'</td><td class="r">'+money(l.unit_price)+'</td><td class="r">'+l.vat_rate+' %</td><td class="r">'+money(r2(l.qty*l.unit_price))+'</td></tr>';}).join('');
+    var vatRows=Object.keys(byRate).map(function(k){return '<div><span>TVA '+k+' % sur '+money(r2(byRate[k]))+'</span><span>'+money(r2(byRate[k]*k/100))+'</span></div>';}).join('');
+    var pay=(d.kind==='invoice'&&s.iban)?'<p style="margin-top:12px"><b>Règlement :</b> virement IBAN '+esc(s.iban)+(s.bic?' · BIC '+esc(s.bic):'')+'</p>':'';
+    $('print').innerHTML='<h1>'+(d.kind==='quote'?'DEVIS':'FACTURE')+' '+esc(d.number)+'</h1>'+
+      '<div>Date : '+fdate(d.issue_date)+' · '+(d.kind==='quote'?'Valable jusqu\'au ':'Échéance : ')+fdate(d.due_date)+'</div>'+
+      '<div class="box"><div><b>'+esc(s.name||'')+'</b><br>'+esc(s.address||'').replace(/\n/g,'<br>')+'<br>'+(s.siret?'SIRET : '+esc(s.siret)+'<br>':'')+(s.vat_number?'N° TVA : '+esc(s.vat_number)+'<br>':'')+esc(s.email||'')+(s.phone?' · '+esc(s.phone):'')+'</div>'+
+      '<div><b>'+esc(c.company||c.name||'')+'</b><br>'+(c.company?esc(c.name)+'<br>':'')+esc(c.address||'').replace(/\n/g,'<br>')+(c.vat_number?'<br>N° TVA : '+esc(c.vat_number):'')+'</div></div>'+
+      '<table><tr><th>Désignation</th><th class="r">Qté</th><th class="r">PU HT</th><th class="r">TVA</th><th class="r">Total HT</th></tr>'+rows+'</table>'+
+      '<div class="totals"><div><span>Total HT</span><span>'+money(t.total_ht)+'</span></div>'+vatRows+'<div class="big"><span>Total TTC</span><span>'+money(t.total_ttc)+'</span></div></div>'+
+      (d.notes?'<p style="margin-top:16px;white-space:pre-wrap">'+esc(d.notes)+'</p>':'')+pay+
+      (d.kind==='quote'?'<p style="margin-top:26px">Bon pour accord — date et signature :</p><div style="height:70px;border-bottom:1px solid #999;max-width:320px"></div>':'')+
+      '<div class="legal">'+esc(s.legal||DEFAULT_LEGAL)+'</div>';
+    window.print();
+  }
+
+  /* ---------- Clients ---------- */
+  function vClients(){
+    if(EDIT)return formClient();
+    var rows=DATA.clients.map(function(c){return '<tr><td><b>'+esc(c.name)+'</b><br><span class="muted">'+esc(c.company||'')+'</span></td><td>'+esc(c.email||'')+'<br><span class="muted">'+esc(c.phone||'')+'</span></td><td>'+esc(c.vat_number||'')+'</td><td class="r"><button class="btn sm" onclick="editClient(\''+c.id+'\')">Modifier</button></td></tr>';}).join('');
+    return '<div class="panel"><div class="bar"><h2>Clients</h2><button class="btn p" onclick="EDIT={};$(\'view\').innerHTML=formClient()">+ Nouveau</button></div><div class="tbl"><table><tr><th>Nom</th><th>Contact</th><th>N° TVA</th><th></th></tr>'+(rows||'<tr><td colspan="4" class="muted">Aucun client.</td></tr>')+'</table></div></div>';
+  }
+  function editClient(id){EDIT=JSON.parse(JSON.stringify(DATA.clients.find(function(c){return c.id===id;})));$('view').innerHTML=formClient();}
+  function fld(k,l,t){return '<div><label>'+l+'</label><input '+(t?'type="'+t+'" ':'')+'value="'+esc(EDIT[k]||'')+'" oninput="EDIT[\''+k+'\']=this.value"></div>';}
+  function formClient(){return '<div class="panel"><h2>'+(EDIT.id?'Modifier le client':'Nouveau client')+'</h2><div class="g2">'+fld('name','Nom *')+fld('company','Entreprise')+fld('email','Email','email')+fld('phone','Téléphone')+fld('vat_number','N° TVA intracom.')+'</div>'+
+    '<label>Adresse</label><textarea oninput="EDIT.address=this.value">'+esc(EDIT.address||'')+'</textarea><div style="margin-top:14px;display:flex;gap:8px"><button class="btn p" onclick="saveClient()">Enregistrer</button><button class="btn" onclick="go(\'clients\')">Annuler</button></div></div>';}
+  async function saveClient(){try{if(!EDIT.name)throw new Error('Nom requis.');var row={name:EDIT.name,company:EDIT.company||null,email:EDIT.email||null,phone:EDIT.phone||null,vat_number:EDIT.vat_number||null,address:EDIT.address||null};
+    await q(EDIT.id?SB.from('bl_clients').update(row).eq('id',EDIT.id):SB.from('bl_clients').insert(row));await loadAll();go('clients');}catch(e){fail(e);}}
+
+  /* ---------- Services ---------- */
+  function vServices(){
+    if(EDIT)return formService();
+    var rows=DATA.services.map(function(s){return '<tr><td><b>'+esc(s.title_fr)+'</b><br><span class="muted">'+esc(s.desc_fr||'')+'</span></td><td>'+(s.price_ht==null?'Sur devis':money(s.price_ht)+' / '+esc(s.unit))+'</td><td>'+s.vat_rate+' %</td><td>'+(s.active?'<span class="badge paid">Visible</span>':'<span class="badge">Masqué</span>')+'</td><td class="r"><button class="btn sm" onclick="editService(\''+s.id+'\')">Modifier</button></td></tr>';}).join('');
+    return '<div class="panel"><div class="bar"><h2>Services (page publique)</h2><button class="btn p" onclick="EDIT={unit:\'forfait\',vat_rate:20,active:true,sort:0};$(\'view\').innerHTML=formService()">+ Nouveau</button></div><div class="tbl"><table><tr><th>Service</th><th>Prix HT</th><th>TVA</th><th>Statut</th><th></th></tr>'+(rows||'<tr><td colspan="5" class="muted">Aucun service. La page publique affichera seulement le formulaire.</td></tr>')+'</table></div></div>';
+  }
+  function editService(id){EDIT=JSON.parse(JSON.stringify(DATA.services.find(function(s){return s.id===id;})));$('view').innerHTML=formService();}
+  function formService(){return '<div class="panel"><h2>'+(EDIT.id?'Modifier le service':'Nouveau service')+'</h2><div class="g2">'+fld('title_fr','Titre (FR) *')+fld('title_en','Titre (EN)')+'</div>'+
+    '<div class="g2"><div><label>Description (FR)</label><textarea oninput="EDIT.desc_fr=this.value">'+esc(EDIT.desc_fr||'')+'</textarea></div><div><label>Description (EN)</label><textarea oninput="EDIT.desc_en=this.value">'+esc(EDIT.desc_en||'')+'</textarea></div></div>'+
+    '<div class="g3">'+fld('price_ht','Prix HT (vide = sur devis)','number')+fld('unit','Unité (forfait, heure, jour…)')+
+    '<div><label>TVA</label><select onchange="EDIT.vat_rate=Number(this.value)">'+[20,10,5.5,2.1,0].map(function(v){return '<option value="'+v+'"'+(Number(EDIT.vat_rate)===v?' selected':'')+'>'+v+' %</option>';}).join('')+'</select></div></div>'+
+    '<div class="g2">'+fld('sort','Ordre d\'affichage','number')+'<div><label>Visible sur le site</label><select onchange="EDIT.active=this.value===\'1\'"><option value="1"'+(EDIT.active?' selected':'')+'>Oui</option><option value="0"'+(EDIT.active?'':' selected')+'>Non</option></select></div></div>'+
+    '<div style="margin-top:14px;display:flex;gap:8px"><button class="btn p" onclick="saveService()">Enregistrer</button><button class="btn" onclick="go(\'services\')">Annuler</button>'+(EDIT.id?'<button class="btn d" onclick="delService()">Supprimer</button>':'')+'</div></div>';}
+  async function saveService(){try{if(!EDIT.title_fr)throw new Error('Titre requis.');
+    var row={title_fr:EDIT.title_fr,title_en:EDIT.title_en||null,desc_fr:EDIT.desc_fr||null,desc_en:EDIT.desc_en||null,price_ht:EDIT.price_ht===''||EDIT.price_ht==null?null:Number(EDIT.price_ht),unit:EDIT.unit||'forfait',vat_rate:Number(EDIT.vat_rate),active:!!EDIT.active,sort:Number(EDIT.sort)||0};
+    await q(EDIT.id?SB.from('bl_services').update(row).eq('id',EDIT.id):SB.from('bl_services').insert(row));await loadAll();go('services');}catch(e){fail(e);}}
+  async function delService(){if(!confirm('Supprimer ce service ?'))return;try{await q(SB.from('bl_services').delete().eq('id',EDIT.id));await loadAll();go('services');}catch(e){fail(e);}}
+
+  /* ---------- Settings ---------- */
+  function vSettings(){
+    EDIT=Object.assign({legal:DEFAULT_LEGAL},DATA.settings);
+    return '<div class="panel"><h2>Mes informations (en-tête des documents)</h2><div class="g2">'+fld('name','Raison sociale / nom *')+fld('siret','SIRET')+fld('vat_number','N° TVA intracommunautaire')+fld('email','Email','email')+fld('phone','Téléphone')+fld('iban','IBAN')+fld('bic','BIC')+'</div>'+
+    '<label>Adresse</label><textarea oninput="EDIT.address=this.value">'+esc(EDIT.address||'')+'</textarea>'+
+    '<label>Mentions légales (bas de page)</label><textarea style="min-height:130px" oninput="EDIT.legal=this.value">'+esc(EDIT.legal)+'</textarea>'+
+    '<p class="muted" style="margin-top:8px">À vérifier avec votre comptable : forme juridique, capital, RCS, assurance pro, etc. selon votre statut.</p>'+
+    '<div style="margin-top:14px"><button class="btn p" onclick="saveSettings()">Enregistrer</button></div></div>';
+  }
+  async function saveSettings(){try{await q(SB.from('bl_settings').upsert({id:1,data:EDIT}));DATA.settings=EDIT;toast('Enregistré');}catch(e){fail(e);}}
+</script>
+</body>
+</html>
