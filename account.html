@@ -7,7 +7,7 @@
 <meta name="description" content="Ton compte BACKPACK LAB : tes licences, tes appareils et ton historique." />
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/png" href="assets/mark.png" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
 <style>
   :root{
     --bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);
@@ -93,6 +93,9 @@
   .ok-msg{color:var(--ok);font-size:13px;margin-top:10px;display:none}
   .err-msg{color:var(--danger);font-size:13px;margin-top:10px;min-height:0}
   .info-line{font-size:12.5px;color:var(--muted);margin-top:14px}
+  .cp-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:4px}
+  .consent-prompt{border-color:rgba(53,220,142,.35)}
+  .mail-status{color:var(--text);font-size:14px;margin-bottom:14px}
 
   .lic{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface2);margin-bottom:12px}
   .lic:last-child{margin-bottom:0}
@@ -166,6 +169,7 @@
       <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
       <button type="submit" id="sendBtn" class="btn btn-primary" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
     </form>
+    <p class="hint" style="color:#6E6E73;font-size:12.5px;margin-top:14px"><span data-fr="Ton email sert uniquement à t'envoyer le code de connexion et à gérer ton compte." data-en="Your email is only used to send you the sign-in code and manage your account.">Ton email sert uniquement à t'envoyer le code de connexion et à gérer ton compte.</span> <a href="privacy" data-fr="Politique de confidentialité" data-en="Privacy policy" style="text-decoration:underline">Politique de confidentialité</a></p>
   </div>
 
   <!-- STEP 2: code -->
@@ -206,6 +210,16 @@
 
     <!-- Vue d'ensemble -->
     <section class="view" id="v-overview">
+      <div class="card consent-prompt" id="consentPrompt" style="display:none">
+        <h2 data-fr="Restons en contact ?" data-en="Stay in touch?">Restons en contact ?</h2>
+        <p class="sub" data-fr="Tu t'es inscrit à la bêta de RUSHR avant que nous te demandions ton accord pour les emails d'information. Veux-tu continuer à recevoir nos nouvelles (nouvelles versions, actualités) ? Tu pourras changer d'avis à tout moment dans ton profil." data-en="You signed up for the RUSHR beta before we asked for your consent to information emails. Would you like to keep receiving our news (new releases, updates)? You can change your mind at any time in your profile.">Tu t'es inscrit à la bêta de RUSHR avant que nous te demandions ton accord pour les emails d'information. Veux-tu continuer à recevoir nos nouvelles (nouvelles versions, actualités) ? Tu pourras changer d'avis à tout moment dans ton profil.</p>
+        <div class="cp-actions">
+          <button type="button" class="btn btn-primary" onclick="setConsent(true,this)" data-fr="Oui, continuer" data-en="Yes, keep me posted">Oui, continuer</button>
+          <button type="button" class="btn btn-ghost" onclick="setConsent(false,this)" data-fr="Non merci" data-en="No thanks">Non merci</button>
+          <button type="button" class="linkbtn" onclick="consentLater()" data-fr="Plus tard" data-en="Later">Plus tard</button>
+        </div>
+        <div class="err-msg" id="cpErr"></div>
+      </div>
       <div class="tiles">
         <a class="tile" href="#licenses">
           <div class="tile-title"><svg viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 21 2M17 6l3 3M14 9l2 2"/></svg><span data-fr="Mes licences" data-en="My licenses">Mes licences</span></div>
@@ -275,16 +289,17 @@
           <div class="field"><label data-fr="Langue" data-en="Language">Langue</label>
             <select id="pLang" class="in"><option value="fr">Français</option><option value="en">English</option></select>
           </div>
-          <div class="checks">
-            <label><input type="checkbox" id="pReleases" /><span><span data-fr="Nouvelles versions" data-en="New releases">Nouvelles versions</span><small data-fr="Être prévenu quand une version de nos logiciels sort." data-en="Get notified when a new version of our software is out.">Être prévenu quand une version de nos logiciels sort.</small></span></label>
-            <label><input type="checkbox" id="pTips" /><span><span data-fr="Conseils et astuces" data-en="Tips &amp; tricks">Conseils et astuces</span><small data-fr="Des conseils pour mieux utiliser nos outils." data-en="Advice to get more out of our tools.">Des conseils pour mieux utiliser nos outils.</small></span></label>
-            <label><input type="checkbox" id="pOffers" /><span><span data-fr="Offres" data-en="Offers">Offres</span><small data-fr="Promotions et nouveautés commerciales." data-en="Promotions and commercial news.">Promotions et nouveautés commerciales.</small></span></label>
-          </div>
           <button type="submit" id="profileBtn" class="btn btn-primary" data-fr="Enregistrer" data-en="Save">Enregistrer</button>
           <div class="err-msg" id="profileErr"></div>
           <div class="ok-msg" id="profileOk" data-fr="✓ Enregistré." data-en="✓ Saved.">✓ Enregistré.</div>
         </form>
         <div class="info-line" id="profileInfo"></div>
+      </div>
+      <div class="card" id="mailCard" style="display:none">
+        <h2 data-fr="Emails d'information sur RUSHR" data-en="RUSHR information emails">Emails d'information sur RUSHR</h2>
+        <p class="mail-status" id="mailStatus"></p>
+        <div class="cp-actions" id="mailActions"></div>
+        <div class="err-msg" id="mailErr"></div>
       </div>
     </section>
 
@@ -315,9 +330,9 @@
 
 </div></main>
 
-<footer>© 2026 BACKPACK LAB</footer>
+<footer>© 2026 BACKPACK LAB · <a href="legal" data-fr="Mentions légales" data-en="Legal notice" style="text-decoration:underline">Mentions légales</a> · <a href="privacy" data-fr="Confidentialité" data-en="Privacy" style="text-decoration:underline">Confidentialité</a></footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/vendor/supabase.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -464,9 +479,6 @@
     document.getElementById('pEmail').value=ACCOUNT.user.email||'';
     document.getElementById('pName').value=p.full_name||'';
     document.getElementById('pLang').value=(p.language==='en')?'en':'fr';
-    document.getElementById('pReleases').checked=!!p.email_pref_releases;
-    document.getElementById('pTips').checked=!!p.email_pref_tips;
-    document.getElementById('pOffers').checked=!!p.email_pref_offers;
   }
 
   async function saveProfile(e){
@@ -476,15 +488,12 @@
     var patch={
       full_name:document.getElementById('pName').value.trim()||null,
       language:document.getElementById('pLang').value,
-      email_pref_releases:document.getElementById('pReleases').checked,
-      email_pref_tips:document.getElementById('pTips').checked,
-      email_pref_offers:document.getElementById('pOffers').checked,
       updated_at:new Date().toISOString()
     };
     try{
       var r=await SB.from('profiles').update(patch).eq('id',ACCOUNT.user.id);
       if(r.error) throw r.error;
-      ACCOUNT.profile=patch;
+      ACCOUNT.profile=Object.assign({},ACCOUNT.profile||{},patch);
       ok.style.display='block';
       if(patch.language!==document.documentElement.lang) setLang(patch.language); else renderAccount();
     }catch(ex){
@@ -497,6 +506,67 @@
   }
 
   /* ---------- rendu ---------- */
+  /* ---------- emails d'information (consentement) ---------- */
+  function consentState(){
+    var b=ACCOUNT&&ACCOUNT.beta_signup;
+    if(!b) return null;
+    if(b.unsubscribed_at) return 'unsub';
+    if(b.marketing_consent_at) return 'yes';
+    if(b.marketing_consent_source==='legacy') return 'legacy';
+    return 'none';
+  }
+  function consentLaterSet(){ try{return sessionStorage.getItem('bpl_consent_later')==='1';}catch(e){return false;} }
+  function consentLater(){
+    try{sessionStorage.setItem('bpl_consent_later','1');}catch(e){}
+    document.getElementById('consentPrompt').style.display='none';
+  }
+  async function setConsent(value,btn){
+    var errs=[document.getElementById('cpErr'),document.getElementById('mailErr')];
+    errs.forEach(function(e){e.textContent='';});
+    if(btn) btn.disabled=true;
+    try{
+      var r=await SB.rpc('set_my_marketing_consent',{p_consent:value});
+      if(r.error) throw r.error;
+      await fetchAccount();
+      renderAccount();
+    }catch(ex){
+      console.error('setConsent failed:',ex);
+      var msg=FR()?'Impossible d\'enregistrer ton choix, réessaie.':'Could not save your choice, please retry.';
+      errs.forEach(function(e){e.textContent=msg;});
+    }finally{
+      if(btn) btn.disabled=false;
+    }
+  }
+  function renderConsent(){
+    var fr=FR(), st=consentState(), b=ACCOUNT&&ACCOUNT.beta_signup;
+    // invitation (vue d'ensemble) : seulement pour les inscrits d'avant la case à cocher
+    document.getElementById('consentPrompt').style.display=(st==='legacy'&&!consentLaterSet())?'block':'none';
+    // carte du profil
+    var card=document.getElementById('mailCard');
+    if(!st){ card.style.display='none'; return; }
+    card.style.display='block';
+    var status, acts=[];
+    function btnHtml(label,val,primary){
+      return '<button type="button" class="btn '+(primary?'btn-primary':'btn-ghost')+'" onclick="setConsent('+val+',this)">'+label+'</button>';
+    }
+    if(st==='yes'){
+      status=(fr?'Tu reçois nos emails d\'information (accord donné le ':'You receive our information emails (consent given on ')+fmtDate(b.marketing_consent_at)+').';
+      acts.push(btnHtml(fr?'Ne plus recevoir':'Stop receiving',false,false));
+    }else if(st==='unsub'){
+      status=fr?'Tu es désabonné de nos emails d\'information.':'You are unsubscribed from our information emails.';
+      acts.push(btnHtml(fr?'Me réabonner':'Subscribe again',true,true));
+    }else if(st==='legacy'){
+      status=fr?'Ton accord pour les emails d\'information n\'est pas encore enregistré. Tu en reçois aujourd\'hui parce que tu t\'es inscrit à la bêta avant que nous le demandions.':'Your consent to information emails is not recorded yet. You currently receive them because you signed up for the beta before we asked.';
+      acts.push(btnHtml(fr?'Oui, continuer':'Yes, keep me posted',true,true));
+      acts.push(btnHtml(fr?'Non merci':'No thanks',false,false));
+    }else{
+      status=fr?'Tu n\'as pas demandé à recevoir nos emails d\'information. Les emails liés à ton accès (bienvenue, licence) continuent d\'être envoyés.':'You did not ask to receive our information emails. Emails about your access (welcome, license) are still sent.';
+      acts.push(btnHtml(fr?'Recevoir les nouveautés':'Receive the news',true,true));
+    }
+    document.getElementById('mailStatus').textContent=status;
+    document.getElementById('mailActions').innerHTML=acts.join('');
+  }
+
   function renderAccount(){
     if(!ACCOUNT) return;
     var fr=FR();
@@ -521,6 +591,7 @@
 
     renderLicenses();
     renderDevices();
+    renderConsent();
 
     // support : réservé aux comptes qui ont une licence
     var has=lics.length>0;

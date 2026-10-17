@@ -18,9 +18,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://thebackpacklab.com/assets/og-backpacklab.png" />
 <meta name="description" data-fr="Les logiciels de Backpack Lab pour vidéastes et monteurs : Rushr (dérushage) et d'autres outils à venir. Windows & macOS." data-en="Backpack Lab software for videographers and editors: Rushr (dérushage) and more tools coming. Windows & macOS." content="Les logiciels de Backpack Lab pour vidéastes et monteurs." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -172,19 +170,14 @@
   /* menu : libellés sur une ligne, bouton d'action masqué quand la place manque */
   .nav-links a,.nav-right .btn{white-space:nowrap}
   @media(max-width:1020px){.nav-right .btn-primary{display:none}.nav-links{gap:16px}}
+  /* liens légaux du pied de page */
+  .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;width:100%;font-size:12.5px;padding-top:6px}
+  .foot-links a{color:var(--muted)}
+  .foot-links a:hover{color:var(--text)}
 </style>
-<!-- Microsoft Clarity analytics -->
-<script type="text/javascript">
-  (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", "y7gx8q653a");
-</script>
+<script src="assets/consent.js" defer></script>
 <link rel="canonical" href="https://thebackpacklab.com/software" />
 <script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6278570054286282" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -278,10 +271,15 @@
     <div class="foot-brand"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</div>
     <div data-fr="© 2026 BACKPACK LAB · Éditeur de logiciels. Tous droits réservés." data-en="© 2026 BACKPACK LAB · Software publisher. All rights reserved.">© 2026 BACKPACK LAB</div>
     <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
+    <div class="foot-links">
+      <a href="legal" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a>
+      <a href="privacy" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+      <a href="#" onclick="window.BPLConsent&&window.BPLConsent.open();return false" data-fr="Gérer mes cookies" data-en="Manage my cookies">Gérer mes cookies</a>
+    </div>
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/vendor/supabase.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";

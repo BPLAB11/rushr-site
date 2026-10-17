@@ -16,9 +16,7 @@
 <meta property="og:image" content="https://thebackpacklab.com/assets/og-backpacklab.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="description" data-fr="Les services de Backpack Lab. Consultez nos prestations et demandez un devis gratuit." data-en="Backpack Lab services. Browse what we offer and request a free quote." content="Les services de Backpack Lab. Consultez nos prestations et demandez un devis gratuit." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -95,6 +93,10 @@
   .foot-in{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between}
   .foot-brand{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--text)}
   .foot-brand .mark{width:18px;height:18px}
+  /* liens légaux du pied de page */
+  .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;width:100%;font-size:12.5px;padding-top:6px}
+  .foot-links a{color:var(--muted)}
+  .foot-links a:hover{color:var(--text)}
 </style>
 </head>
 <body class="gate">
@@ -174,10 +176,14 @@
     <div class="foot-brand"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</div>
     <div data-fr="© 2026 BACKPACK LAB. Tous droits réservés." data-en="© 2026 BACKPACK LAB. All rights reserved.">© 2026 BACKPACK LAB. Tous droits réservés.</div>
     <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
+    <div class="foot-links">
+      <a href="legal" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a>
+      <a href="privacy" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    </div>
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/vendor/supabase.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";

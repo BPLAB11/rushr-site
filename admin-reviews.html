@@ -6,7 +6,7 @@
 <title>Admin — BACKPACK LAB</title>
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/png" href="assets/mark.png" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
 <style>
   :root{--bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C;--warn:#FFB454;--danger:#FF6B6B}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -413,7 +413,7 @@
 </div></main>
 <div id="toast" class="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/vendor/supabase.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -492,6 +492,9 @@
       EM_AUD=await rpc('admin_broadcast_audience');
       document.getElementById('emStats').innerHTML=
         '<div class="stat"><div class="n">'+EM_AUD.subscribed+'</div><div class="l">Recevront le message</div></div>'+
+        '<div class="stat"><div class="n">'+EM_AUD.consented+'</div><div class="l">Consentement coché</div></div>'+
+        '<div class="stat" title="Inscrits avant la case de consentement : pas de consentement explicite enregistré"><div class="n">'+EM_AUD.legacy+'</div><div class="l">Hérités (à reconfirmer)</div></div>'+
+        '<div class="stat" title="Inscrits depuis la case, sans l\'avoir cochée : exclus de l\'envoi"><div class="n">'+EM_AUD.no_consent+'</div><div class="l">Sans consentement (exclus)</div></div>'+
         '<div class="stat"><div class="n">'+EM_AUD.unsubscribed+'</div><div class="l">Désabonnés</div></div>'+
         '<div class="stat"><div class="n">'+EM_AUD.total+'</div><div class="l">Inscrits beta</div></div>';
     }catch(e){ toast('Erreur : '+(e.message||e),'err'); }
@@ -554,7 +557,7 @@
     var n=EM_AUD.subscribed;
     var tested=(EM_TESTED===emKey(f));
     document.getElementById('emConfirmText').textContent=
-      'Tu vas envoyer « '+f.subject+' » à '+n+' inscrit'+(n>1?'s':'')+' (désabonnés exclus). Cet envoi est définitif. '+
+      'Tu vas envoyer « '+f.subject+' » à '+n+' inscrit'+(n>1?'s':'')+' (désabonnés et inscrits sans consentement exclus'+(EM_AUD.legacy>0?' ; dont '+EM_AUD.legacy+' inscrit'+(EM_AUD.legacy>1?'s':'')+' d\'avant la case de consentement':'')+'). Cet envoi est définitif. '+
       (tested?'✓ Un test de ce message a déjà été envoyé.':'⚠ Aucun test de ce message n\'a encore été envoyé : clique d\'abord sur « M\'envoyer un test ».');
     document.getElementById('emConfirmInput').value='';
     document.getElementById('emConfirm').style.display='block';

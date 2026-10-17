@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow" />
 <title>Devis &amp; factures — BACKPACK LAB</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/bp-favicon-32.png" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
 <style>
   :root{--bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#fff;--muted:#9A9A9E;--on-accent:#04150C;--err:#FF6B6B;--warn:#F5B14C}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -84,7 +84,7 @@
 <div id="print"></div>
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/vendor/supabase.js"></script>
 <script>
   var SB=window.supabase.createClient("https://vztqykihtnkscwcodkyf.supabase.co","sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l");
   var TAB='requests', DATA={requests:[],services:[],clients:[],docs:[],settings:{}}, EDIT=null;
