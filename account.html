@@ -632,8 +632,8 @@
     var fr=FR(), list=ACCOUNT.licenses||[], el=document.getElementById('licList');
     if(!list.length){
       el.innerHTML='<p class="empty">'+(fr
-        ?'Aucune licence pour l\'instant. Ajoute une clé ci-dessous, ou <a href="claim">réclame une licence bêta gratuite</a>.'
-        :'No license yet. Add a key below, or <a href="claim">claim a free beta license</a>.')+'</p>';
+        ?'Aucune licence pour l\'instant. Ajoute une clé ci-dessous, ou <a href="claim">réclame une licence bêta offerte</a>.'
+        :'No license yet. Add a key below, or <a href="claim">claim a complimentary beta license</a>.')+'</p>';
       return;
     }
     el.innerHTML=list.map(function(l){

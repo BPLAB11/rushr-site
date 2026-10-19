@@ -1,10 +1,10 @@
-# Kit de lancement Rushr (beta gratuite)
+# Kit de lancement Rushr (beta sur préinscription)
 
 > Fichier de travail, NON commité (GitHub Pages le rendrait public). Tout ce qui est
 > affirmé ici vient du site : import multi-dossiers, aperçu intégré, tag au clavier
 > (touches 1 à 9, en lot), presets de structure, « Prepare », Offload (1 à 4 destinations,
 > vérification xxHash64, reprise auto, rapport PDF + MHL), 100 % local, Windows & macOS.
-> Beta gratuite uniquement : ne jamais écrire « gratuit » sans « beta ».
+> Ne jamais écrire « gratuit » : la beta est sur préinscription, avec une licence offerte aux préinscrits pendant la beta.
 
 ---
 
@@ -37,13 +37,13 @@ texte à l'écran. Sous-titres obligatoires (beaucoup regardent sans le son).
 | 10–22 s | Scrub d'un clip, appui sur les touches 1 à 9, compteur d'avancement | « J'aperçois, je tague d'une touche. B-roll, drone, reject. » |
 | 22–32 s | Choix du preset (Wedding), arborescence, clic sur « Prepare » | « Un preset, un clic : chaque prise va dans le bon dossier. » |
 | 32–40 s | Dossier final propre dans l'explorateur | « Prêt pour le montage. Avant même d'ouvrir Premiere / Resolve. » |
-| 40–45 s | Logo + URL | « Rushr — beta gratuite, Windows & macOS. thebackpacklab.com » |
+| 40–45 s | Logo + URL | « Rushr — beta sur préinscription, Windows & macOS. thebackpacklab.com » |
 
 **Vidéo n°2 (Offload, 30 s)** : carte → 2 disques en parallèle, barre de vérification,
 rapport PDF. Accroche : « Ta copie de carte est-elle vraiment identique ? Preuve fichier par fichier. »
 
 Légende type (TikTok/Reels/Shorts) :
-> Dérusher 200 clips sans ouvrir le logiciel de montage. Rushr est en beta gratuite (Windows & macOS), lien en bio.
+> Dérusher 200 clips sans ouvrir le logiciel de montage. Rushr est en beta sur préinscription (Windows & macOS), lien en bio.
 
 ---
 
@@ -52,7 +52,7 @@ Légende type (TikTok/Reels/Shorts) :
 Lis les règles de chaque sub (beaucoup interdisent l'auto-promo hors thread dédié).
 Publie en tant que développeur, pas en pub, et réponds à tous les commentaires.
 
-**Titre :** `I got tired of sorting rushes by hand, so I built a tool for it (free beta, looking for feedback)`
+**Titre :** `I got tired of sorting rushes by hand, so I built a tool for it (beta by pre-registration, looking for feedback)`
 
 **Corps :**
 > I'm a video editor, and the part of the job I hated most was the first hour: cards everywhere, opening each clip to see what's in it, rebuilding the same folder tree every project.
@@ -66,7 +66,7 @@ Publie en tant que développeur, pas en pub, et réponds à tous les commentaire
 >
 > Everything runs locally, nothing is uploaded, and originals are copied by default, not moved.
 >
-> It's in free beta right now. I'd really like honest feedback from people who actually do this daily: what's missing, what's annoying, what would make you drop it in your workflow?
+> It's in beta right now (by pre-registration). I'd really like honest feedback from people who actually do this daily: what's missing, what's annoying, what would make you drop it in your workflow?
 >
 > Link: https://thebackpacklab.com/rushr?utm_source=reddit&utm_medium=social&utm_campaign=lancement
 
@@ -87,7 +87,7 @@ Publie en tant que développeur, pas en pub, et réponds à tous les commentaire
 >
 > 100 % local : vos rushes ne quittent jamais votre machine.
 >
-> Rushr est en beta gratuite sur Windows et macOS. Je cherche des monteurs et vidéastes pour le tester et me dire franchement ce qui manque.
+> Rushr est en beta sur préinscription, sur Windows et macOS. Je cherche des monteurs et vidéastes pour le tester et me dire franchement ce qui manque.
 >
 > 👉 thebackpacklab.com/rushr?utm_source=linkedin&utm_medium=social&utm_campaign=lancement
 
@@ -99,7 +99,7 @@ Publie en tant que développeur, pas en pub, et réponds à tous les commentaire
 > perdez à trier vos rushes avant même de lancer le montage ?
 >
 > J'ai développé un petit outil pour ça (Rushr) et je cherche des vidéastes pour le
-> tester en beta gratuite, Windows & Mac. Preset « Wedding » inclus. Si ça vous tente,
+> tester en beta (sur préinscription), Windows & Mac. Preset « Wedding » inclus. Si ça vous tente,
 > dites-moi et je vous envoie le lien 🙂
 
 (Demande l'accord des admins du groupe avant de poster.)
@@ -110,7 +110,7 @@ Publie en tant que développeur, pas en pub, et réponds à tous les commentaire
 
 > Salut [Prénom], j'ai vu ton travail sur [projet/chaîne] : super boulot sur [détail précis].
 > Je développe Rushr, un outil qui trie et range les rushes avant le montage (tag au clavier,
-> presets de projet, copie de cartes vérifiée). Il est en beta gratuite et je cherche des
+> presets de projet, copie de cartes vérifiée). Il est en beta sur préinscription et je cherche des
 > retours de gens qui tournent beaucoup. Ça t'intéresserait de le tester ? Aucune
 > obligation, je te donne juste l'accès et je t'écoute.
 > https://thebackpacklab.com/rushr?utm_source=dm&utm_medium=direct&utm_campaign=outreach1
