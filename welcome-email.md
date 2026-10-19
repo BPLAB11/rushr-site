@@ -12,7 +12,7 @@ Tu as **deux versions** ci-dessous (FR et EN). Une automatisation MailerLite = *
 
 Salut,
 
-Merci pour ton intérêt pour **RUSHR** ! Tu fais partie des premiers à tester l'outil de dérushage pensé pour les vidéastes et les monteurs.
+Merci pour ton intérêt pour **RUSHR** ! Tu fais partie des premiers à tester l'outil de dérushage pensé pour les créateurs.
 
 👉 **Rejoins la communauté sur Discord : https://discord.gg/wtb3YUxuNN**
 Annonces de versions, support, et un espace pour partager tes idées et signaler des bugs.
@@ -28,7 +28,7 @@ Annonces de versions, support, et un espace pour partager tes idées et signaler
 
 Hi,
 
-Thanks for your interest in **RUSHR**! You're among the first to test the dérushage tool built for videographers and editors.
+Thanks for your interest in **RUSHR**! You're among the first to test the dérushage tool built for creators.
 
 👉 **Join the community on Discord: https://discord.gg/wtb3YUxuNN**
 Release announcements, support, and a place to share ideas and report bugs.
@@ -52,7 +52,7 @@ See you soon — the **BACKPACK LAB** team
 
 Salut,
 
-Merci pour ton intérêt pour **RUSHR** ! Tu fais désormais partie des premiers à tester l'outil de dérushage pensé pour les vidéastes et les monteurs.
+Merci pour ton intérêt pour **RUSHR** ! Tu fais désormais partie des premiers à tester l'outil de dérushage pensé pour les créateurs.
 
 👉 **Rejoins la communauté sur Discord : https://discord.gg/wtb3YUxuNN**
 Tu y trouveras les annonces de nouvelles versions, le support, et un espace pour partager tes idées et signaler des bugs.
@@ -73,7 +73,7 @@ L'équipe **BACKPACK LAB**
 
 Hi,
 
-Thanks for your interest in **RUSHR**! You're now among the first to test the dérushage tool built for videographers and editors.
+Thanks for your interest in **RUSHR**! You're now among the first to test the dérushage tool built for creators.
 
 👉 **Join the community on Discord: https://discord.gg/wtb3YUxuNN**
 You'll find release announcements, support, and a place to share ideas and report bugs.
