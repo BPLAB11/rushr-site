@@ -130,6 +130,33 @@
   .d-foot .btn{width:100%;justify-content:center;padding:12px}
   .d-msg{margin-top:12px;color:var(--accent2);font-size:13px;text-align:center}
   .d-msg[hidden]{display:none}
+  .d-msg.err{color:#ff8a7a}
+  .d-back{background:transparent;border:0;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;margin-bottom:10px;padding:0}
+  .d-back:hover{color:var(--text)}
+  .d-back[hidden]{display:none}
+
+  /* DRAWER VIEWS : cart -> address -> review */
+  .d-form,.d-review{display:none;flex:1;overflow-y:auto;padding:16px 22px}
+  .drawer:not([data-view="cart"]) .d-items{display:none}
+  .drawer[data-view="address"] .d-form{display:block}
+  .drawer[data-view="review"] .d-review{display:block}
+  .drawer[data-view="review"] .sum,.drawer[data-view="review"] .d-foot small{display:none}
+  .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+  .f.full{grid-column:1/-1}
+  .f input,.f select{background:var(--bg);border:1px solid var(--line2);border-radius:10px;color:var(--text);font:inherit;font-size:14px;padding:10px 12px;min-width:0;width:100%}
+  .f input:focus,.f select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(53,220,142,.12)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+  .consent input{margin-top:3px;accent-color:var(--accent);flex:none}
+  .consent a{color:var(--accent2);text-decoration:underline}
+  .rv-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin:4px 0 8px}
+  .rv-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .rv-row span:first-child{color:var(--muted)}
+  .rv-row.total{font-weight:800;font-size:16px;border-bottom:0}
+  .rv-row.total span:first-child{color:var(--text)}
+  .rv-addr{color:var(--muted);font-size:13.5px;line-height:1.6;margin:6px 0 18px}
+  .rv-lines{margin-bottom:18px}
 
   /* FOOTER */
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px;margin-top:24px}
@@ -227,16 +254,19 @@
 
 <!-- CART DRAWER -->
 <div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Panier">
+<aside class="drawer" id="drawer" data-view="cart" aria-hidden="true" aria-label="Panier">
   <div class="d-head">
-    <h2 data-fr="Votre panier" data-en="Your cart">Votre panier</h2>
+    <h2 id="dTitle">Votre panier</h2>
     <button class="d-close" id="drawerClose" aria-label="Fermer">&times;</button>
   </div>
   <div class="d-items" id="dItems"></div>
+  <form class="d-form" id="dForm" novalidate></form>
+  <div class="d-review" id="dReview"></div>
   <div class="d-foot">
+    <button type="button" class="d-back" id="dBack" hidden></button>
     <div class="sum"><span data-fr="Sous-total" data-en="Subtotal">Sous-total</span><span id="dTotal">0</span></div>
-    <small data-fr="Livraison et taxes calculées au paiement." data-en="Shipping and taxes calculated at checkout.">Livraison et taxes calculées au paiement.</small>
-    <button class="btn btn-primary" id="checkoutBtn" data-fr="Passer la commande" data-en="Checkout">Passer la commande</button>
+    <small data-fr="Livraison et taxes calculées avant le paiement." data-en="Shipping and taxes are calculated before payment.">Livraison et taxes calculées avant le paiement.</small>
+    <button type="button" class="btn btn-primary" id="checkoutBtn">Passer la commande</button>
     <p class="d-msg" id="dMsg" hidden></p>
   </div>
 </aside>
@@ -322,7 +352,10 @@
     {key:'11', label:'11 oz', price:19.99},
     {key:'15', label:'15 oz', price:22.99}
   ];
-  var CHECKOUT_ENDPOINT = null;                  // fonction Supabase « checkout » (a brancher)
+  var SHOP_LIVE = false;                         // passer a true une fois conditions de vente et mentions legales publiees
+  var CHECKOUT_ENABLED = SHOP_LIVE || /[?&]checkout=1(&|$)/.test(location.search);   // en attendant : ?checkout=1 pour tester
+  var SHOP_API = 'https://vztqykihtnkscwcodkyf.supabase.co/functions/v1';
+  var COUNTRIES = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
   var CATS = [
     {key:'edit',    fr:'Monteurs',  en:'Editors'},
     {key:'video',   fr:'Vidéastes', en:'Videographers'},
@@ -355,7 +388,7 @@
       fr:'Créativité en cours de chargement. Café requis.', en:'Creativity buffering. Coffee required.'}
   ];
 
-  var state = {cat:'all', sizes:{}, cart:[]};
+  var state = {cat:'all', sizes:{}, cart:[], view:'cart', quote:null, recipient:null, busy:false};
   PRODUCTS.forEach(function(p){ state.sizes[p.id] = '11'; });
   try{ state.cart = JSON.parse(localStorage.getItem('bpl_cart') || '[]'); if(!Array.isArray(state.cart)) state.cart = []; }catch(e){ state.cart = []; }
 
@@ -463,7 +496,7 @@
       box.appendChild(row);
     });
     document.getElementById('dTotal').textContent = money(cartTotal());
-    document.getElementById('checkoutBtn').disabled = !state.cart.length;
+    if(state.view === 'cart') renderView();
   }
   function openDrawer(){
     document.getElementById('drawer').classList.add('show'); document.getElementById('drawer').setAttribute('aria-hidden', 'false');
@@ -478,18 +511,146 @@
   document.getElementById('overlay').addEventListener('click', closeDrawer);
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeDrawer(); });
 
-  document.getElementById('checkoutBtn').addEventListener('click', function(){
-    var msg = document.getElementById('dMsg');
-    if(!CHECKOUT_ENDPOINT){
-      msg.textContent = L('Le paiement en ligne sera bientôt disponible. Votre panier est conservé.', 'Online checkout is coming soon. Your cart is saved.');
-      msg.hidden = false; return;
+  /* ---------- Commande : panier -> adresse -> recapitulatif -> paiement SumUp ---------- */
+  var FORM_FIELDS = [   // name, fr, en, type, autocomplete, maxlength, required, full width
+    ['firstName', 'Prénom', 'First name', 'text', 'given-name', 25, true, false],
+    ['lastName', 'Nom', 'Last name', 'text', 'family-name', 25, true, false],
+    ['email', 'E-mail', 'Email', 'email', 'email', 120, true, true],
+    ['phone', 'Téléphone (facultatif)', 'Phone (optional)', 'tel', 'tel', 25, false, true],
+    ['addressLine1', 'Adresse', 'Address', 'text', 'address-line1', 35, true, true],
+    ['addressLine2', 'Complément (facultatif)', 'Address line 2 (optional)', 'text', 'address-line2', 35, false, true],
+    ['postCode', 'Code postal', 'Postal code', 'text', 'postal-code', 15, true, false],
+    ['city', 'Ville', 'City', 'text', 'address-level2', 30, true, false]
+  ];
+  var ERRORS = {
+    country_not_supported: ['Nous ne livrons pas encore dans ce pays.', 'We do not ship to this country yet.'],
+    shipping_unavailable: ['Livraison indisponible pour cette adresse ou ce panier. Vérifiez l\'adresse.', 'Shipping is unavailable for this address or cart. Please check the address.'],
+    payment_unavailable: ['Le paiement est momentanément indisponible. Réessayez dans un instant.', 'Payment is temporarily unavailable. Please try again shortly.'],
+    invalid_input: ['Vérifiez les champs du formulaire (longueurs maximales incluses).', 'Please check the form fields (including maximum lengths).'],
+    invalid_cart: ['Votre panier n\'est pas valide. Rechargez la page.', 'Your cart is not valid. Please reload the page.']
+  };
+  function errText(code){
+    var e = ERRORS[code] || ['Une erreur est survenue. Réessayez dans un instant.', 'Something went wrong. Please try again shortly.'];
+    return L(e[0], e[1]);
+  }
+  function setMsg(text, isErr){
+    var m = document.getElementById('dMsg'); m.textContent = text || ''; m.hidden = !text; m.classList.toggle('err', !!isErr);
+  }
+  function setView(v){
+    state.view = v; document.getElementById('drawer').setAttribute('data-view', v);
+    setMsg(''); renderView();
+  }
+  function renderView(){
+    var v = state.view, btn = document.getElementById('checkoutBtn'), back = document.getElementById('dBack');
+    document.getElementById('dTitle').textContent = v === 'cart' ? L('Votre panier', 'Your cart') : v === 'address' ? L('Livraison', 'Delivery') : L('Récapitulatif', 'Order summary');
+    back.hidden = v === 'cart';
+    back.textContent = '← ' + (v === 'address' ? L('Retour au panier', 'Back to cart') : L('Modifier l\'adresse', 'Edit address'));
+    btn.textContent = v === 'cart' ? L('Passer la commande', 'Checkout')
+      : v === 'address' ? L('Calculer la livraison', 'Calculate shipping')
+      : L('Payer ', 'Pay ') + money(state.quote.total_cents / 100);
+    btn.disabled = state.busy || (v === 'cart' && !state.cart.length);
+    if(v === 'address') renderForm();
+    if(v === 'review') renderReview();
+  }
+  function readForm(){
+    var form = document.getElementById('dForm'), r = state.recipient || {};
+    [].forEach.call(form.elements, function(i){ if(i.name && i.type !== 'checkbox') r[i.name] = i.value.trim(); });
+    state.recipient = r; return r;
+  }
+  function renderForm(){
+    var form = document.getElementById('dForm'), r = state.recipient || {country:'FR'}, consent = form.querySelector('[name=consent]') && form.querySelector('[name=consent]').checked;
+    form.innerHTML = '';
+    var grid = el('div', 'f-grid');
+    function wrap(label, input, full){
+      var w = el('label', 'f' + (full ? ' full' : '')); w.appendChild(el('span', null, label)); w.appendChild(input); grid.appendChild(w);
     }
-    // a brancher : POST du panier vers la fonction « checkout » puis redirection vers la page de paiement
-  });
+    FORM_FIELDS.forEach(function(f){
+      var i = el('input'); i.name = f[0]; i.type = f[3]; i.autocomplete = f[4]; i.maxLength = f[5]; i.required = f[6]; i.value = r[f[0]] || '';
+      wrap(L(f[1], f[2]), i, f[7]);
+    });
+    var sel = el('select'); sel.name = 'country'; sel.autocomplete = 'country'; sel.required = true;
+    var names; try{ names = new Intl.DisplayNames([lang()], {type:'region'}); }catch(e){ names = null; }
+    COUNTRIES.map(function(c){ return [c, names ? names.of(c) : c]; })
+      .sort(function(a, b){ return a[1].localeCompare(b[1], lang()); })
+      .forEach(function(c){ var o = el('option', null, c[1]); o.value = c[0]; if(c[0] === (r.country || 'FR')) o.selected = true; sel.appendChild(o); });
+    wrap(L('Pays', 'Country'), sel, true);
+    var hp = el('input', 'hp'); hp.name = 'website'; hp.tabIndex = -1; hp.autocomplete = 'off'; hp.setAttribute('aria-hidden', 'true'); grid.appendChild(hp);
+    form.appendChild(grid);
+    var c = el('label', 'consent'), cb = el('input'); cb.type = 'checkbox'; cb.name = 'consent'; cb.required = true; cb.checked = !!consent;
+    var txt = el('span');
+    txt.innerHTML = lang() === 'en'
+      ? 'I have read the <a href="terms" target="_blank" rel="noopener">terms of sale</a> and the <a href="privacy" target="_blank" rel="noopener">privacy policy</a>. Made-to-order items are personalised.'
+      : 'J\'ai lu les <a href="terms" target="_blank" rel="noopener">conditions de vente</a> et la <a href="privacy" target="_blank" rel="noopener">politique de confidentialité</a>. Les articles fabriqués à la commande sont personnalisés.';
+    c.appendChild(cb); c.appendChild(txt); form.appendChild(c);
+  }
+  function renderReview(){
+    var box = document.getElementById('dReview'), r = state.recipient, q = state.quote; box.innerHTML = '';
+    var cn; try{ cn = new Intl.DisplayNames([lang()], {type:'region'}).of(r.country); }catch(e){ cn = r.country; }
+    box.appendChild(el('div', 'rv-title', L('Livraison à', 'Ship to')));
+    box.appendChild(el('div', 'rv-addr', [r.firstName + ' ' + r.lastName, r.addressLine1, r.addressLine2, r.postCode + ' ' + r.city, cn, r.email].filter(Boolean).join('\n')));
+    box.lastChild.style.whiteSpace = 'pre-line';
+    box.appendChild(el('div', 'rv-title', L('Articles', 'Items')));
+    var lines = el('div', 'rv-lines');
+    state.cart.forEach(function(l){
+      var p = prod(l.id), s = sizeOf(l.size), row = el('div', 'rv-row');
+      row.appendChild(el('span', null, l.qty + ' × ' + p.title + ' (' + s.label + ')'));
+      row.appendChild(el('span', null, money(s.price * l.qty)));
+      lines.appendChild(row);
+    });
+    box.appendChild(lines);
+    function row(a, b, cls){ var d = el('div', 'rv-row' + (cls ? ' ' + cls : '')); d.appendChild(el('span', null, a)); d.appendChild(el('span', null, b)); box.appendChild(d); }
+    row(L('Sous-total', 'Subtotal'), money(q.subtotal_cents / 100));
+    var days = q.delivery_days && q.delivery_days.max ? ' · ' + q.delivery_days.min + '–' + q.delivery_days.max + L(' jours', ' days') : '';
+    row(L('Livraison', 'Shipping') + ' (' + q.shipping_name + days + ')', money(q.shipping_cents / 100));
+    row(L('Total', 'Total'), money(q.total_cents / 100), 'total');
+  }
+  function callCheckout(quoteOnly){
+    state.busy = true; setMsg(''); renderViewButtonOnly();
+    var r = readFormSafe();
+    var payload = {
+      items: state.cart.map(function(l){ return {id:l.id, size:l.size, qty:l.qty}; }),
+      recipient: {firstName:r.firstName, lastName:r.lastName, email:r.email, phone:r.phone, addressLine1:r.addressLine1, addressLine2:r.addressLine2, postCode:r.postCode, city:r.city, country:r.country},
+      lang: lang(), quote_only: quoteOnly, website: r.website || ''
+    };
+    if(!quoteOnly) payload.expected_total_cents = state.quote.total_cents;
+    return fetch(SHOP_API + '/shop-checkout', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)})
+      .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(d){ if(!res.ok) throw d; return d; }); })
+      .then(function(d){ state.busy = false; return d; })
+      .catch(function(e){
+        state.busy = false;
+        if(e && e.error === 'total_changed'){ state.quote = e; renderView(); setMsg(L('Le total a changé : vérifiez-le avant de payer.', 'The total changed: please check it before paying.'), true); return null; }
+        renderView(); setMsg(errText(e && e.error), true); return null;
+      });
+  }
+  function readFormSafe(){ return state.view === 'address' ? readForm() : (state.recipient || {}); }
+  function renderViewButtonOnly(){ var b = document.getElementById('checkoutBtn'); b.disabled = true; }
+
+  function onMain(){
+    var v = state.view;
+    if(v === 'cart'){
+      if(!CHECKOUT_ENABLED){ setMsg(L('Le paiement en ligne sera bientôt disponible. Votre panier est conservé.', 'Online checkout is coming soon. Your cart is saved.')); return; }
+      setView('address');
+    } else if(v === 'address'){
+      var form = document.getElementById('dForm'); readForm();
+      if(!form.checkValidity()){ form.reportValidity(); return; }
+      callCheckout(true).then(function(q){ if(q){ state.quote = q; setView('review'); } });
+    } else {
+      callCheckout(false).then(function(res){
+        if(res && res.hosted_checkout_url){
+          if(window.bplTrack) window.bplTrack('begin_payment', res.reference);
+          state.busy = true; renderViewButtonOnly(); location.href = res.hosted_checkout_url;
+        }
+      });
+    }
+  }
+  document.getElementById('checkoutBtn').addEventListener('click', onMain);
+  document.getElementById('dForm').addEventListener('submit', function(e){ e.preventDefault(); onMain(); });
+  document.getElementById('dForm').addEventListener('input', function(){ readForm(); });
+  document.getElementById('dBack').addEventListener('click', function(){ setView(state.view === 'review' ? 'address' : 'cart'); });
 
   /* ---------- Langue ---------- */
   function renderAll(){
-    renderChips(); renderGrid(false); renderCart();
+    renderChips(); renderGrid(false); renderCart(); renderView();
     var msg = document.getElementById('dMsg'); msg.hidden = true;
   }
   function setLang(lng){

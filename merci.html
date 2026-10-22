@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Commande — BACKPACK LAB</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/bp-favicon-32.png" />
+<link rel="icon" type="image/x-icon" href="assets/bp-favicon.ico" />
+<link rel="apple-touch-icon" href="assets/bp-apple-touch-icon.png" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
+<style>
+  :root{--bg:#0B0B0B;--surface:#141417;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);--accent:#35DC8E;--accent2:#5FE8A8;--text:#FFF;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px;width:100%}
+  nav{border-bottom:1px solid var(--line);background:rgba(11,11,11,.8)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
+  .brand img{width:24px;height:24px}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:40px 32px;max-width:520px;width:100%;margin:0 auto;text-align:center}
+  .icon{width:56px;height:56px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;background:rgba(53,220,142,.12);border:1px solid rgba(53,220,142,.35)}
+  .icon svg{width:26px;height:26px;stroke:var(--accent2);fill:none;stroke-width:2.2}
+  .icon.warn{background:rgba(255,138,122,.1);border-color:rgba(255,138,122,.4)}
+  .icon.warn svg{stroke:#ff8a7a}
+  .spin{width:26px;height:26px;border:3px solid rgba(53,220,142,.25);border-top-color:var(--accent);border-radius:50%;animation:s 1s linear infinite}
+  @keyframes s{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px}
+  p{color:var(--muted);font-size:15px}
+  .ref{display:block;width:fit-content;margin:18px auto 0;font-family:ui-monospace,Consolas,monospace;font-size:14px;color:var(--text);background:var(--bg);border:1px solid var(--line2);border-radius:8px;padding:6px 12px}
+  .track{margin-top:16px;font-size:14px}
+  .track a{color:var(--accent2);text-decoration:underline}
+  .btn{display:flex;width:fit-content;margin:26px auto 0;border-radius:10px;font-weight:600;font-size:14px;padding:11px 20px;background:var(--accent);color:var(--on-accent)}
+  .btn:hover{background:var(--accent2)}
+  .small{margin-top:20px;font-size:12.5px;color:var(--muted2)}
+  .small a{text-decoration:underline}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="/"><img src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
+    <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+  </div>
+</nav>
+<main>
+  <div class="wrap">
+    <div class="card" id="card" aria-live="polite"></div>
+  </div>
+</main>
+<script>
+  var SHOP_API = 'https://vztqykihtnkscwcodkyf.supabase.co/functions/v1';
+  var REF = (new URLSearchParams(location.search).get('ref') || '').trim();
+  var LANG = 'fr', last = {kind:'loading'}, tries = 0, timer = null;
+  var ICON_OK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var ICON_WARN = '<svg viewBox="0 0 24 24"><path d="M12 7v6M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+
+  function L(fr, en){ return LANG === 'en' ? en : fr; }
+  function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+  function clearCart(){ try{ localStorage.removeItem('bpl_cart'); }catch(e){} }
+
+  function render(){
+    var c = document.getElementById('card'), k = last.kind; c.innerHTML = '';
+    var icon = el('div', 'icon' + (k === 'failed' || k === 'unknown' ? ' warn' : ''));
+    if(k === 'loading') icon.appendChild(el('div', 'spin'));
+    else icon.innerHTML = (k === 'failed' || k === 'unknown') ? ICON_WARN : ICON_OK;
+    c.appendChild(icon);
+    var T = {
+      loading: [L('Confirmation du paiement…', 'Confirming your payment…'), L('Un instant, nous vérifions votre paiement auprès de la banque.', 'One moment while we confirm your payment.')],
+      paid: [L('Merci pour votre commande !', 'Thank you for your order!'), L('Votre paiement est confirmé. Votre mug est envoyé en production, la fabrication prend quelques jours avant l\'expédition.', 'Your payment is confirmed. Your mug is going into production; allow a few days before it ships.')],
+      shipped: [L('Votre commande est expédiée', 'Your order has shipped'), L('Bonne nouvelle : votre colis est en route.', 'Good news: your parcel is on its way.')],
+      manual: [L('Paiement reçu', 'Payment received'), L('Votre paiement est bien enregistré. Votre commande demande une vérification de notre côté : nous revenons vers vous rapidement.', 'Your payment is recorded. Your order needs a quick check on our side: we will get back to you shortly.')],
+      failed: [L('Le paiement n\'a pas abouti', 'The payment did not go through'), L('Aucun montant n\'a été débité. Vous pouvez retourner à la boutique et réessayer.', 'You have not been charged. You can go back to the shop and try again.')],
+      pending: [L('Paiement en attente', 'Payment pending'), L('Nous n\'avons pas encore reçu la confirmation. Si vous avez payé, elle peut arriver dans quelques minutes : revenez sur cette page avec votre référence.', 'We have not received the confirmation yet. If you paid, it can take a few minutes: come back to this page with your reference.')],
+      unknown: [L('Commande introuvable', 'Order not found'), L('Nous ne retrouvons pas cette référence. Vérifiez le lien ou écrivez-nous.', 'We cannot find this reference. Check the link or email us.')]
+    };
+    var t = T[k] || T.loading;
+    c.appendChild(el('h1', null, t[0])); c.appendChild(el('p', null, t[1]));
+    if(REF && k !== 'unknown'){ c.appendChild(el('div', 'ref', REF)); }
+    if(last.tracking && last.tracking.length){
+      var tr = el('div', 'track');
+      last.tracking.forEach(function(x){
+        var a = el('a', null, L('Suivre le colis ', 'Track parcel ') + x.code); if(x.url && /^https?:\/\//.test(x.url)){ a.href = x.url; a.target = '_blank'; a.rel = 'noopener'; } tr.appendChild(a); tr.appendChild(el('br'));
+      });
+      c.appendChild(tr);
+    }
+    if(k !== 'loading'){ var b = el('a', 'btn', k === 'failed' ? L('Retour à la boutique', 'Back to the shop') : L('Continuer sur la boutique', 'Continue shopping')); b.href = 'shop'; c.appendChild(b); }
+    var s = el('div', 'small'); s.innerHTML = L('Une question ? <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>', 'Questions? <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>');
+    c.appendChild(s);
+  }
+
+  function poll(){
+    fetch(SHOP_API + '/shop-order-status?ref=' + encodeURIComponent(REF))
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(x){
+        if(!x.ok){ last = {kind:'unknown'}; render(); return; }
+        var st = x.d.status, tr = x.d.tracking || [];
+        if(st === 'shipped' || st === 'delivered'){ clearCart(); last = {kind:'shipped', tracking:tr}; }
+        else if(st === 'fulfilling' || st === 'submitted' || st === 'draft_submitted' || st === 'paid'){ clearCart(); last = {kind:'paid', tracking:tr}; }
+        else if(st === 'review' || st === 'fulfilment_error'){ clearCart(); last = {kind:'manual'}; }
+        else if(st === 'failed' || st === 'expired'){ last = {kind:'failed'}; }
+        else {
+          if(++tries > 20){ last = {kind:'pending'}; render(); return; }
+          last = {kind:'loading'}; render(); timer = setTimeout(poll, 3000); return;
+        }
+        render();
+      })
+      .catch(function(){ if(++tries > 20){ last = {kind:'pending'}; render(); } else { timer = setTimeout(poll, 4000); } });
+  }
+
+  function setLang(l){
+    LANG = l; document.documentElement.lang = l;
+    document.getElementById('lfr').classList.toggle('on', l === 'fr'); document.getElementById('len').classList.toggle('on', l === 'en');
+    try{ localStorage.setItem('bpl_lang', l); }catch(e){}
+    render();
+  }
+  (function(){
+    var saved = null; try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
+    LANG = saved || ((navigator.language || 'en').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en');
+    document.documentElement.lang = LANG;
+    document.getElementById('lfr').classList.toggle('on', LANG === 'fr'); document.getElementById('len').classList.toggle('on', LANG === 'en');
+    if(!/^BPL-[A-Z2-9]{10}$/.test(REF)){ last = {kind:'unknown'}; render(); return; }
+    render(); poll();
+  })();
+</script>
+</body>
+</html>
