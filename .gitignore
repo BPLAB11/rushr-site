@@ -3,3 +3,6 @@ backend/
 .env
 .env.*
 node_modules/
+
+# fichiers de travail mugs (copie auto, non publiee)
+/mugs/
