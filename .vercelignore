@@ -1,9 +1,9 @@
 # Ne pas publier : code serveur, SQL, e-mails, notes et fichiers de travail
-supabase
-sql
-backend
-emails
-mugs
+/supabase
+/sql
+/backend
+/emails
+/mugs
 .claude
 *.md
 CNAME
