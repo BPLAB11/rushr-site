@@ -5,7 +5,7 @@
 //   otherwise          -> creates a pending order + SumUp checkout, returns { hosted_checkout_url, reference }
 //
 // Secrets: SUMUP_API_KEY, SUMUP_MERCHANT_CODE, GELATO_API_KEY, GELATO_UID_MUG_11, GELATO_UID_MUG_15
-// Optional: SHOP_SITE_URL (default https://thebackpacklab.com), SHOP_FILE_BASE
+// Optional: SHOP_SITE_URL (default https://thebackpacklab.com), SHOP_FILE_BASE (default <site>/assets/mugs/print/, files in 11oz/ and 15oz/)
 // Deploy with verify_jwt = false (the browser sends the publishable key, which is not a JWT).
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -101,7 +101,11 @@ async function gelatoQuote(reference: string, items: any[], recipient: any) {
   const methods = (quotes[0].shipmentMethods ?? []).filter((m: any) => m.isPrivate !== false && m.currency === CURRENCY);
   const standard = methods.filter((m: any) => m.type === "normal" || m.type === "standard");
   const pool = standard.length ? standard : methods;
-  if (!pool.length) throw new HttpError(502, "shipping_unavailable");
+  if (!pool.length) {
+    console.error("gelato quote: no usable shipment method", JSON.stringify((quotes[0].shipmentMethods ?? []).map((m: any) =>
+      ({ name: m.name, type: m.type, price: m.price, currency: m.currency, isPrivate: m.isPrivate }))));
+    throw new HttpError(502, "shipping_unavailable");
+  }
   pool.sort((a: any, b: any) => a.price - b.price);
   return pool[0];
 }
@@ -128,7 +132,8 @@ Deno.serve(async (req) => {
       const [id, size] = k.split("|");
       const uid = Deno.env.get(`GELATO_UID_MUG_${size}`);
       if (!uid) throw new HttpError(500, "not_configured");
-      return { id, size, qty: Math.min(qty, 20), unit_cents: PRICES_CENTS[size], product_uid: uid, file_url: `${FILE_BASE}${FILES[id]}.png` };
+      // One print file per size: 11oz -> 2700x1296, 15oz -> 2700x1306 (the printable area of each mug).
+      return { id, size, qty: Math.min(qty, 20), unit_cents: PRICES_CENTS[size], product_uid: uid, file_url: `${FILE_BASE}${size}oz/${FILES[id]}.png` };
     });
     if (items.reduce((t, i) => t + i.qty, 0) > 30) throw new HttpError(400, "invalid_cart");
     const subtotal = items.reduce((t, i) => t + i.unit_cents * i.qty, 0);
