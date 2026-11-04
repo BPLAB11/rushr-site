@@ -425,7 +425,7 @@
     list.forEach(function(p){
       var card = el('article', 'card' + (animate ? ' pop' : ''));
       var th = el('div', 'thumb');
-      var img = el('img'); img.src = 'assets/mugs/' + p.img + '.webp?v=20261102'; img.alt = L('Mug « ' + p.title + ' »', 'Mug “' + p.title + '”'); img.loading = 'lazy'; img.width = 720; img.height = 720;
+      var img = el('img'); img.src = 'assets/mugs/' + p.img + '.webp?v=20261104'; img.alt = L('Mug « ' + p.title + ' »', 'Mug “' + p.title + '”'); img.loading = 'lazy'; img.width = 720; img.height = 720;
       th.appendChild(img); th.appendChild(el('span', 'cat ' + p.cat, catLabel(p.cat)));
       var body = el('div', 'body');
       body.appendChild(el('h3', null, p.title));
@@ -480,7 +480,7 @@
     state.cart.forEach(function(l, i){
       var p = prod(l.id), s = sizeOf(l.size);
       var row = el('div', 'line');
-      var img = el('img'); img.src = 'assets/mugs/' + p.img + '.webp?v=20261102'; img.alt = ''; row.appendChild(img);
+      var img = el('img'); img.src = 'assets/mugs/' + p.img + '.webp?v=20261104'; img.alt = ''; row.appendChild(img);
       var mid = el('div');
       mid.appendChild(el('h4', null, p.title));
       mid.appendChild(el('div', 'meta', s.label + ' · ' + money(s.price)));
