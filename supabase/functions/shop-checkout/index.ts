@@ -19,7 +19,8 @@ const SHIP_COUNTRIES = new Set([
 ]);
 
 // Source of truth for prices and print files. Keep in sync with shop.html (SIZES / PRODUCTS).
-const PRICES_CENTS: Record<string, number> = { "11": 1999, "15": 2299 };
+// 15 oz is not offered yet: to enable it add "15": 2299 here, in shop.html (SIZES) and set GELATO_UID_MUG_15.
+const PRICES_CENTS: Record<string, number> = { "11": 1999 };
 const FILES: Record<string, string> = {
   "01": "01_editor_final_v7",
   "02": "02_editor_ctrlz",

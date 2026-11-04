@@ -95,6 +95,7 @@
   .sizes{display:flex;gap:8px;margin:14px 0}
   .size{flex:1;background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:10px;padding:8px 0;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
   .size:hover{border-color:var(--accent);color:var(--text)}
+  span.size{text-align:center;cursor:default}
   .size.on{border-color:var(--accent);background:rgba(53,220,142,.12);color:var(--accent2)}
   .buy{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .price{font-size:20px;font-weight:800;letter-spacing:-.3px}
@@ -240,7 +241,7 @@
   <div class="wrap hero-in">
     <span class="pill"><span class="d"></span><span data-fr="Merch pour créateurs" data-en="Merch for creators">Merch pour créateurs</span></span>
     <h1 data-fr="Boutique" data-en="Shop">Boutique</h1>
-    <p class="sub" data-fr="Des mugs pour ceux qui montent, filment et publient. Imprimés à la demande, 11 oz ou 15 oz." data-en="Mugs for the ones who edit, shoot and post. Printed on demand, 11 oz or 15 oz.">Des mugs pour ceux qui montent, filment et publient.</p>
+    <p class="sub" data-fr="Des mugs pour ceux qui montent, filment et publient. Imprimés à la demande, en céramique 11 oz." data-en="Mugs for the ones who edit, shoot and post. Printed on demand, 11 oz ceramic.">Des mugs pour ceux qui montent, filment et publient.</p>
   </div>
 </header>
 
@@ -349,8 +350,8 @@
   /* ---------- Boutique : catalogue ---------- */
   var CURRENCY = 'EUR';                         // a confirmer avec SumUp / Gelato
   var SIZES = [                                  // prix de depart : a ajuster selon le cout Gelato
-    {key:'11', label:'11 oz', price:19.99},
-    {key:'15', label:'15 oz', price:22.99}
+    {key:'11', label:'11 oz', price:19.99}
+    // {key:'15', label:'15 oz', price:22.99}   // 15 oz : pas encore propose (reactiver aussi cote shop-checkout)
   ];
   var SHOP_LIVE = false;                         // passer a true une fois conditions de vente et mentions legales publiees
   var CHECKOUT_ENABLED = SHOP_LIVE || /[?&]checkout=1(&|$)/.test(location.search);   // en attendant : ?checkout=1 pour tester
@@ -391,6 +392,7 @@
   var state = {cat:'all', sizes:{}, cart:[], view:'cart', quote:null, recipient:null, busy:false};
   PRODUCTS.forEach(function(p){ state.sizes[p.id] = '11'; });
   try{ state.cart = JSON.parse(localStorage.getItem('bpl_cart') || '[]'); if(!Array.isArray(state.cart)) state.cart = []; }catch(e){ state.cart = []; }
+  state.cart = state.cart.filter(function(l){ return SIZES.some(function(s){ return s.key === l.size; }); });   // ignore les tailles retirees
 
   function lang(){ return document.documentElement.lang === 'en' ? 'en' : 'fr'; }
   function L(fr, en){ return lang() === 'en' ? en : fr; }
@@ -430,7 +432,8 @@
       body.appendChild(el('p', null, p[lang()]));
       var sizes = el('div', 'sizes'); sizes.setAttribute('role', 'group'); sizes.setAttribute('aria-label', L('Contenance', 'Size'));
       var price = el('span', 'price', money(sizeOf(state.sizes[p.id]).price));
-      SIZES.forEach(function(s){
+      if (SIZES.length === 1) sizes.appendChild(el('span', 'size on', SIZES[0].label + ' · 330 ml'));
+      else SIZES.forEach(function(s){
         var b = el('button', 'size' + (state.sizes[p.id] === s.key ? ' on' : ''), s.label);
         b.type = 'button'; b.setAttribute('aria-pressed', state.sizes[p.id] === s.key);
         b.addEventListener('click', function(){
