@@ -6,9 +6,17 @@ Dernière mise à jour : 4 novembre 2026.
 ## Architecture (résumé)
 `shop.html` (panier, adresse) -> `shop-checkout` (prix serveur, devis Gelato, page SumUp) -> `shop-sumup-webhook`
 (paiement confirmé -> commande Gelato) -> `shop-gelato-webhook` (statuts, suivi) -> `/merci?ref=BPL-...`.
-Mug 11 oz uniquement (15 oz désactivé, fichiers 15oz conservés). Les fichiers d'impression sont envoyés à Gelato
+Mug 11 oz uniquement (15 oz désactivé, fichiers 15oz supprimés). Les fichiers d'impression sont envoyés à Gelato
 par URL (`/assets/mugs/print/11oz/...`) : Gelato ne reprend PAS le design des produits de la boutique Gelato
 (testé : `files: []` / `designId: null`). Les mockups du site viennent de la boutique Gelato (`assets/mugs/*.webp`).
+
+## Fichiers d'impression (11 oz)
+`assets/mugs/print/11oz/NN_*.png` : 2409 x 1181 px, 300 dpi = 204 x 100 mm (zone de l'editeur Gelato avec 2 mm de debord,
+zone utile 200 x 96 mm). Fond blanc, un slogan centre sur chaque repere (3,8 cm et 16,6 cm = 446 px et 1960 px),
+centre en hauteur (590,5 px). Sources : `Downloads/11OZ/mug_print_layouts_11oz-N.jpg` (5400 x 2100, 600 dpi, N = id du motif).
+Variantes Gelato (`Design Option N`) : N=1 battery(09), 2 take47(10), 3 like(11), 4 content loading(12), 5 final_v7(01),
+6 ctrl+z(02), 7 fix in post(03), 8 rendering(04), 9 cut coffee(05), 10 export failed(06), 11 b-roll(07), 12 24fps(08).
+Le 15 oz n'est plus propose : ses anciens fichiers (fond noir) ont ete supprimes.
 
 ## Fait et vérifié
 - Devis Gelato réel : 19,99 EUR + 4,99 EUR (DPD) = 24,98 EUR, 5 à 7 jours. Coût Gelato du mug : 5,13 EUR.
