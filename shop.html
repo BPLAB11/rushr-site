@@ -279,6 +279,7 @@
     <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
     <div class="foot-links">
       <a href="legal" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a>
+      <a href="terms" data-fr="Conditions de vente" data-en="Terms of sale">Conditions de vente</a>
       <a href="privacy" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
       <a href="#" onclick="window.BPLConsent&&window.BPLConsent.open();return false" data-fr="Gérer mes cookies" data-en="Manage my cookies">Gérer mes cookies</a>
     </div>
@@ -582,8 +583,8 @@
     var c = el('label', 'consent'), cb = el('input'); cb.type = 'checkbox'; cb.name = 'consent'; cb.required = true; cb.checked = !!consent;
     var txt = el('span');
     txt.innerHTML = lang() === 'en'
-      ? 'I have read the <a href="terms" target="_blank" rel="noopener">terms of sale</a> and the <a href="privacy" target="_blank" rel="noopener">privacy policy</a>. Made-to-order items are personalised.'
-      : 'J\'ai lu les <a href="terms" target="_blank" rel="noopener">conditions de vente</a> et la <a href="privacy" target="_blank" rel="noopener">politique de confidentialité</a>. Les articles fabriqués à la commande sont personnalisés.';
+      ? 'I have read the <a href="terms" target="_blank" rel="noopener">terms of sale</a> and the <a href="privacy" target="_blank" rel="noopener">privacy policy</a>. Items are made to order.'
+      : 'J\'ai lu les <a href="terms" target="_blank" rel="noopener">conditions de vente</a> et la <a href="privacy" target="_blank" rel="noopener">politique de confidentialité</a>. Les articles sont fabriqués à la commande.';
     c.appendChild(cb); c.appendChild(txt); form.appendChild(c);
   }
   function renderReview(){
