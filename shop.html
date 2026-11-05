@@ -194,6 +194,29 @@
     .lang button{padding:4px 7px}
     .cart-btn{padding:7px 10px}
   }
+  /* ACCUEIL BOUTIQUE : deux bannieres cliquables */
+  [hidden]{display:none!important}
+  .home{padding:36px 0 56px}
+  .home .wrap{display:flex;flex-direction:column;gap:28px}
+  .tile{display:block;border-radius:22px;overflow:hidden;background:var(--surface);border:1px solid var(--line2);transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+  .tile:hover{transform:translateY(-6px)}
+  .tile-os{border-color:rgba(139,44,245,.45);box-shadow:0 24px 70px rgba(139,44,245,.18)}
+  .tile-os:hover{border-color:rgba(139,44,245,.85);box-shadow:0 30px 90px rgba(139,44,245,.38)}
+  .tile-mug{border-color:rgba(53,220,142,.4);box-shadow:0 24px 70px rgba(53,220,142,.12)}
+  .tile-mug:hover{border-color:rgba(53,220,142,.85);box-shadow:0 30px 90px rgba(53,220,142,.28)}
+  .tile-img{overflow:hidden;background:#0a0710}
+  .tile-img img{display:block;width:100%;height:auto;transition:transform .7s ease}
+  .tile:hover .tile-img img{transform:scale(1.035)}
+  .tile-cap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;background:linear-gradient(180deg,#121216,#0e0e11)}
+  .tile-cap h2{font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:-.6px;line-height:1.15}
+  .tile-cap p{color:var(--muted);font-size:14px;margin-top:2px}
+  .tile-go{flex:none;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;border-radius:999px;padding:10px 18px;transition:.2s}
+  .tile-os .tile-go{background:linear-gradient(135deg,#7a1fe6,#a24dff);color:#fff}
+  .tile-mug .tile-go{background:var(--accent);color:var(--on-accent)}
+  .tile:hover .tile-go{gap:12px;filter:brightness(1.1)}
+  .back{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;font-weight:600;margin-bottom:18px;transition:.15s}
+  .back:hover{color:var(--text);gap:10px}
+  @media(max-width:600px){.home .wrap{gap:20px}.tile-cap{flex-direction:column;align-items:flex-start;padding:14px 16px}.tile-go{align-self:stretch;justify-content:center}}
   /* HOODIES : collection OFFSCOPE (palette violette de la marque) */
   .os{--os:#8B2CF5;--os2:#B879FF;--os-glow:rgba(139,44,245,.38);position:relative;padding:32px 0 56px}
   .os::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 0%,rgba(139,44,245,.18),transparent 70%),radial-gradient(40% 30% at 100% 60%,rgba(139,44,245,.10),transparent 70%);pointer-events:none}
@@ -286,8 +309,34 @@
 
 <h1 class="sr-only" data-fr="Boutique" data-en="Shop">Boutique</h1>
 
-<section id="hoodies" class="os reveal">
+<section id="home" class="home">
   <div class="wrap">
+    <a class="tile tile-os" href="#hoodies">
+      <div class="tile-img"><picture>
+        <source media="(max-width:700px)" srcset="assets/hoodies/banner-sm.webp?v=20261105" />
+        <img src="assets/hoodies/banner.webp?v=20261105" width="1920" height="819" alt="OFFSCOPE, The Creative Department. Hoodie Series V1.0." fetchpriority="high" />
+      </picture></div>
+      <div class="tile-cap">
+        <div><h2>Hoodies OFFSCOPE</h2><p data-fr="Hoodie Series V1.0 · 4 designs" data-en="Hoodie Series V1.0 · 4 designs">Hoodie Series V1.0 · 4 designs</p></div>
+        <span class="tile-go" data-fr="Voir les hoodies &rarr;" data-en="See the hoodies &rarr;">Voir les hoodies &rarr;</span>
+      </div>
+    </a>
+    <a class="tile tile-mug" href="#mugs">
+      <div class="tile-img"><picture>
+        <source media="(max-width:700px)" srcset="assets/mugs/banner-sm.webp?v=20261105" />
+        <img src="assets/mugs/banner.webp?v=20261105" width="1920" height="819" alt="BACKPACK LAB, Mug Collection. Creative Lifestyle Series." />
+      </picture></div>
+      <div class="tile-cap">
+        <div><h2>Mugs BACKPACK LAB</h2><p data-fr="Céramique 11 oz · 12 designs" data-en="11 oz ceramic · 12 designs">Céramique 11 oz · 12 designs</p></div>
+        <span class="tile-go" data-fr="Voir les mugs &rarr;" data-en="See the mugs &rarr;">Voir les mugs &rarr;</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section id="hoodies" class="os" hidden>
+  <div class="wrap">
+    <a class="back" href="#home" data-fr="&larr; Retour à la boutique" data-en="&larr; Back to the shop">&larr; Retour à la boutique</a>
     <div class="os-banner">
       <picture>
         <source media="(max-width:700px)" srcset="assets/hoodies/banner-sm.webp?v=20261105" />
@@ -304,8 +353,9 @@
   </div>
 </section>
 
-<section id="mugs" class="reveal">
+<section id="mugs" hidden>
   <div class="wrap">
+    <a class="back" href="#home" data-fr="&larr; Retour à la boutique" data-en="&larr; Back to the shop">&larr; Retour à la boutique</a>
     <div class="mug-banner">
       <picture>
         <source media="(max-width:700px)" srcset="assets/mugs/banner-sm.webp?v=20261105" />
@@ -777,6 +827,17 @@
     try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
     setLang(saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en'));
   })();
+
+  /* ---------- Vues : accueil (2 bannieres) / hoodies / mugs, via #hoodies et #mugs ---------- */
+  var VIEWS = ['home', 'hoodies', 'mugs'], TITLES = {home:'Boutique', hoodies:'Hoodies OFFSCOPE', mugs:'Mugs'};
+  function route(){
+    var h = location.hash.replace('#', ''), v = VIEWS.indexOf(h) > 0 ? h : 'home';
+    VIEWS.forEach(function(id){ document.getElementById(id).hidden = id !== v; });
+    document.title = TITLES[v] + ' — BACKPACK LAB';
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  window.addEventListener('hashchange', route);
+  route();
 
   (function(){
     var obs = new IntersectionObserver(function(entries){
