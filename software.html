@@ -94,30 +94,37 @@
      on the logo drawn in the image (logo left edge = 7.3% of width, bottom = 29% of height).
      Sizes use container units so everything scales with the banner. */
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  .featured.rushr,.featured.rushr.tilt-3d{display:block;position:relative;padding:0;overflow:hidden;container-type:inline-size;aspect-ratio:1920/819;background:#0b0805}
-  .featured.rushr .rb-bg,.featured.rushr .rb-bg img{display:block;width:100%;height:100%}
-  .featured.rushr .rb-bg{position:absolute;inset:0}
-  .featured.rushr .rb-bg img{object-fit:cover}
-  .featured.rushr .rb-hit{position:absolute;inset:0;z-index:1}
-  .featured.rushr .tag{position:absolute;z-index:2;left:7.3%;top:7.5%;margin:0;font-size:max(10px,.95cqw);padding:.35cqw .9cqw;border-radius:.5cqw}
-  .featured.rushr .rb-copy{position:absolute;z-index:2;left:7.3%;top:31%;width:35%}
-  .featured.rushr p{margin:0;font-size:max(12px,1.2cqw);line-height:1.5}
-  .featured.rushr ul{margin:1.1cqw 0 1.4cqw;gap:.6cqw}
-  .featured.rushr li{font-size:max(12px,1.2cqw);gap:.8cqw;line-height:1.35}
-  .featured.rushr .rb-cta{display:flex;gap:.9cqw;flex-wrap:wrap;align-items:center}
-  .featured.rushr .rb-cta .btn{font-size:max(12px,1.2cqw);padding:.75cqw 1.5cqw;border-radius:.9cqw}
+  .featured.rb,.featured.rb.tilt-3d{display:block;position:relative;padding:0;overflow:hidden;container-type:inline-size;aspect-ratio:1920/819;background:#0b0805}
+  .featured.rb .rb-bg,.featured.rb .rb-bg img{display:block;width:100%;height:100%}
+  .featured.rb .rb-bg{position:absolute;inset:0}
+  .featured.rb .rb-bg img{object-fit:cover}
+  .featured.rb .rb-hit{position:absolute;inset:0;z-index:1}
+  .featured.rb .tag{position:absolute;z-index:2;left:var(--bl,7.3%);top:var(--bt,7.5%);margin:0;font-size:max(10px,.95cqw);padding:.35cqw .9cqw;border-radius:.5cqw}
+  .featured.rb .rb-copy{position:absolute;z-index:2;left:var(--bl,7.3%);top:var(--bc,31%);width:var(--bw,35%)}
+  .featured.rb p{margin:0;font-size:max(12px,1.2cqw);line-height:1.5}
+  .featured.rb ul{margin:1.1cqw 0 1.4cqw;gap:.6cqw}
+  .featured.rb li{font-size:max(12px,1.2cqw);gap:.8cqw;line-height:1.35}
+  .featured.rb .rb-cta{display:flex;gap:.9cqw;flex-wrap:wrap;align-items:center}
+  .featured.rb .rb-cta .btn{font-size:max(12px,1.2cqw);padding:.75cqw 1.5cqw;border-radius:.9cqw}
   @media(max-width:1000px){
-    .featured.rushr,.featured.rushr.tilt-3d{aspect-ratio:auto;padding:0 0 24px}
-    .featured.rushr .rb-bg{position:relative;aspect-ratio:1920/819;height:auto}
-    .featured.rushr .rb-hit{bottom:auto;aspect-ratio:1920/819}
-    .featured.rushr .tag{position:relative;left:auto;top:auto;display:table;margin:20px 22px 0;font-size:11px;padding:4px 10px;border-radius:6px}
-    .featured.rushr .rb-copy{position:relative;left:auto;top:auto;width:auto;padding:14px 22px 0}
-    .featured.rushr p{font-size:15px}
-    .featured.rushr ul{margin:16px 0 22px;gap:10px}
-    .featured.rushr li{font-size:14px;gap:10px}
-    .featured.rushr .rb-cta{gap:10px}
-    .featured.rushr .rb-cta .btn{font-size:14px;padding:10px 18px;border-radius:10px}
+    .featured.rb,.featured.rb.tilt-3d{aspect-ratio:auto;padding:0 0 24px}
+    .featured.rb .rb-bg{position:relative;aspect-ratio:1920/819;height:auto}
+    .featured.rb .rb-hit{bottom:auto;aspect-ratio:1920/819}
+    .featured.rb .tag{position:relative;left:auto;top:auto;display:table;margin:20px 22px 0;font-size:11px;padding:4px 10px;border-radius:6px}
+    .featured.rb .rb-copy{position:relative;left:auto;top:auto;width:auto;padding:14px 22px 0}
+    .featured.rb p{font-size:15px}
+    .featured.rb ul{margin:16px 0 22px;gap:10px}
+    .featured.rb li{font-size:14px;gap:10px}
+    .featured.rb .rb-cta{gap:10px}
+    .featured.rb .rb-cta .btn{font-size:14px;padding:10px 18px;border-radius:10px}
   }
+  /* SoundBox: same card, violet identity, text column squeezed between the logo and the wave */
+  .featured.sbx{--bl:5.1%;--bt:5%;--bc:23%;--bw:25.5%;border-color:rgba(176,43,255,.35)}
+  .featured.sbx:hover{border-color:rgba(176,43,255,.55);box-shadow:0 30px 60px rgba(176,43,255,.22)}
+  .featured.sbx .tag{text-transform:uppercase;letter-spacing:1px;color:#CC8CFF;background:rgba(176,43,255,.16);border-color:rgba(176,43,255,.5)}
+  .featured.sbx p{font-size:max(12px,1.3cqw);line-height:1.55;color:#C9C3D3}
+  @media(max-width:1000px){.featured.sbx p{font-size:15px}}
+  .soft.wide{margin-top:18px}
   .featured.rushr .m-logo .d{background:#FF6A00}
   .featured.rushr .m-nav.on{background:#FF6A00;color:#150A03}
   .featured.rushr .m-card.sel{border-color:#FF6A00}
@@ -249,7 +256,7 @@
   <div class="wrap">
 
     <!-- FEATURED: RUSHR -->
-    <div class="featured rushr tilt-3d">
+    <div class="featured rushr rb tilt-3d">
       <picture class="rb-bg">
         <source media="(max-width:700px)" srcset="assets/rushr-banner-sm.webp" />
         <img src="assets/rushr-banner.webp" width="1920" height="819" alt="Rushr : l'interface du logiciel de dérushage sur un ordinateur portable, dans une ambiance de salle de montage" />
@@ -276,13 +283,18 @@
       <div class="eyebrow" data-fr="La suite" data-en="What's next">La suite</div>
       <div class="h2c" data-fr="D'autres logiciels arrivent" data-en="More software is coming">D'autres logiciels arrivent</div>
       <p class="lead" data-fr="Backpack Lab développe en continu de nouveaux outils pour les créateurs. Voici un aperçu de ce qui se prépare." data-en="Backpack Lab keeps building new tools for creators. Here's a glimpse of what's in the works.">Backpack Lab développe en continu de nouveaux outils.</p>
-      <div class="soft-grid">
-        <div class="soft tilt-3d">
-          <div class="shot"><img src="assets/soundbox-app-shot.webp" width="2400" height="1500" loading="lazy" alt="Interface de SoundBox : bibliothèque de sons, fiche du son sélectionné et lecteur avec waveform" /></div>
-          <span class="tag" data-fr="Prochainement" data-en="Coming next">Prochainement</span>
-          <h3>SOUNDBOX</h3>
+      <div class="featured sbx rb tilt-3d" style="margin-top:40px">
+        <picture class="rb-bg">
+          <source media="(max-width:700px)" srcset="assets/soundbox-banner-sm.webp" />
+          <img src="assets/soundbox-banner.webp" width="1920" height="819" loading="lazy" alt="SoundBox : l'interface du soundboard sur un ordinateur portable, avec un casque et des ondes sonores violettes" />
+        </picture>
+        <h3 class="sr-only">SoundBox</h3>
+        <span class="tag" data-fr="Prochainement" data-en="Coming next">Prochainement</span>
+        <div class="rb-copy">
           <p data-fr="Un soundboard pour vidéastes et créateurs : jouez, organisez et exportez vos effets sonores et musiques en un clic, avec des packs de sons prêts à installer. On y travaille activement, la sortie arrive très vite." data-en="A soundboard for videographers and creators: play, organize and export your sound effects and music in one click, with ready-to-install sound packs. We're actively working on it — launch is coming very soon.">Un soundboard pour jouer, organiser et exporter vos effets sonores en un clic. Sortie très prochaine.</p>
         </div>
+      </div>
+      <div class="soft-grid" style="grid-template-columns:1fr;margin-top:18px">
         <div class="soft tilt-3d">
           <span class="tag" data-fr="Bientôt" data-en="Coming soon">Bientôt</span>
           <h3>RENAME</h3>
