@@ -218,36 +218,40 @@
   .back:hover{color:var(--text);gap:10px}
   @media(max-width:600px){.home .wrap{gap:20px}.tile-cap{flex-direction:column;align-items:flex-start;padding:14px 16px}.tile-go{align-self:stretch;justify-content:center}}
   /* HOODIES : collection OFFSCOPE (palette violette de la marque) */
-  .os{--os:#8B2CF5;--os2:#B879FF;--os-glow:rgba(139,44,245,.38);position:relative;padding:32px 0 56px}
-  .os::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 0%,rgba(139,44,245,.18),transparent 70%),radial-gradient(40% 30% at 100% 60%,rgba(139,44,245,.10),transparent 70%);pointer-events:none}
+  .os{--os:#8B2CF5;--os2:#B879FF;--os-rgb:139,44,245;--os-glow:rgba(139,44,245,.38);position:relative;padding:32px 0 56px}
+  .os-green{--os:#35DC8E;--os2:#5FE8A8;--os-rgb:53,220,142;--os-glow:rgba(53,220,142,.30)}
+  .os::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 0%,rgba(var(--os-rgb),.18),transparent 70%),radial-gradient(40% 30% at 100% 60%,rgba(var(--os-rgb),.10),transparent 70%);pointer-events:none}
   .os .wrap{position:relative}
   .hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
   .hero-links .btn{padding:10px 20px}
-  .btn-os{background:linear-gradient(135deg,#7a1fe6,#a24dff);color:#fff;box-shadow:0 8px 28px rgba(139,44,245,.35)}
+  .btn-os{background:linear-gradient(135deg,#7a1fe6,#a24dff);color:#fff;box-shadow:0 8px 28px rgba(var(--os-rgb),.35)}
   .btn-os:hover{filter:brightness(1.12);transform:translateY(-1px)}
-  .os-banner{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(139,44,245,.45);box-shadow:0 30px 80px rgba(139,44,245,.22),0 0 0 1px rgba(255,255,255,.04) inset;background:#0a0710}
+  .os-banner{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(var(--os-rgb),.45);box-shadow:0 30px 80px rgba(var(--os-rgb),.22),0 0 0 1px rgba(255,255,255,.04) inset;background:#0a0710}
   .os-banner img{display:block;width:100%;height:auto}
   .os-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 70%,rgba(11,11,11,.55));pointer-events:none}
   .os-head{text-align:center;margin:34px auto 28px;max-width:680px}
-  .os-tag{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--os2);border:1px solid rgba(139,44,245,.5);background:rgba(139,44,245,.1);border-radius:999px;padding:6px 14px}
+  .os-tag{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--os2);border:1px solid rgba(var(--os-rgb),.5);background:rgba(var(--os-rgb),.1);border-radius:999px;padding:6px 14px}
   .os-tag i{width:7px;height:7px;border-radius:50%;background:var(--os);box-shadow:0 0 10px var(--os)}
   .os-head h2{font-size:clamp(28px,4.6vw,44px);line-height:1.08;font-weight:800;letter-spacing:-1px;margin:16px 0 10px;font-style:italic}
   .os-head h2 em{color:var(--os);font-style:normal}
   .os-head p{color:var(--muted);font-size:clamp(14.5px,2vw,17px)}
+  .os-card .sizes{margin:12px 0 10px}
+  .os-card .buy{margin-top:auto}
+  .os-card .cat{left:auto;right:12px}
   .os-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .os-card{position:relative;background:linear-gradient(180deg,#15101f,#0f0d14);border:1px solid rgba(139,44,245,.22);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
-  .os-card:hover{transform:translateY(-8px);border-color:rgba(139,44,245,.7);box-shadow:0 26px 60px var(--os-glow)}
+  .os-card{position:relative;background:linear-gradient(180deg,#15101f,#0f0d14);border:1px solid rgba(var(--os-rgb),.22);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+  .os-card:hover{transform:translateY(-8px);border-color:rgba(var(--os-rgb),.7);box-shadow:0 26px 60px var(--os-glow)}
   .os-card.pop{animation:cardIn .4s ease both}
-  .os-thumb{position:relative;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(closest-side,rgba(139,44,245,.28),transparent 75%)}
+  .os-thumb{position:relative;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(closest-side,rgba(var(--os-rgb),.28),transparent 75%)}
   .os-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
   .os-card:hover .os-thumb img{transform:scale(1.06)}
-  .os-thumb::before,.os-thumb::after{content:"";position:absolute;width:20px;height:20px;border:2px solid rgba(139,44,245,.9);z-index:2;opacity:.0;transition:opacity .3s ease}
+  .os-thumb::before,.os-thumb::after{content:"";position:absolute;width:20px;height:20px;border:2px solid rgba(var(--os-rgb),.9);z-index:2;opacity:.0;transition:opacity .3s ease}
   .os-thumb::before{top:12px;left:12px;border-right:0;border-bottom:0}
   .os-thumb::after{bottom:12px;right:12px;border-left:0;border-top:0}
   .os-card:hover .os-thumb::before,.os-card:hover .os-thumb::after{opacity:1}
-  .os-no{position:absolute;top:12px;left:12px;z-index:3;font-size:10.5px;font-weight:800;letter-spacing:1.5px;color:#fff;background:rgba(10,7,16,.72);border:1px solid rgba(139,44,245,.6);border-radius:6px;padding:3px 9px;backdrop-filter:blur(4px)}
+  .os-no{position:absolute;top:12px;left:12px;z-index:3;font-size:10.5px;font-weight:800;letter-spacing:1.5px;color:#fff;background:rgba(10,7,16,.72);border:1px solid rgba(var(--os-rgb),.6);border-radius:6px;padding:3px 9px;backdrop-filter:blur(4px)}
   .os-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
-  .os-body h3{font-size:17px;font-weight:800;font-style:italic;letter-spacing:-.2px;line-height:1.25;margin-bottom:6px}
+  .os-body h3{overflow-wrap:anywhere;font-size:17px;font-weight:800;font-style:italic;letter-spacing:-.2px;line-height:1.25;margin-bottom:6px}
   .os-body p{color:var(--muted);font-size:13.3px;flex:1}
   .os-foot{display:flex;margin-top:14px}
   .os-foot .btn{width:100%;justify-content:center}
@@ -263,7 +267,7 @@
   .sec-head h2 span{color:var(--accent)}
   .sec-head p{color:var(--muted);font-size:15px;margin-top:4px}
   @media(max-width:1000px){.os-grid{grid-template-columns:1fr 1fr}}
-  @media(max-width:600px){.os-grid{gap:12px}.os-body{padding:12px 12px 14px}.os-body h3{font-size:15px}.os-body p{font-size:12.5px}.os-foot{flex-direction:column;align-items:stretch}.os-card .btn{justify-content:center}.os-soon{text-align:center}}
+  @media(max-width:600px){.os-card .cat{display:none}.os-card .buy{flex-direction:column;align-items:stretch}.os-card .buy .btn{justify-content:center}.os-card .price{text-align:center}.os-grid{gap:12px}.os-body{padding:12px 12px 14px}.os-body h3{font-size:15px}.os-body p{font-size:12.5px}.os-foot{flex-direction:column;align-items:stretch}.os-card .btn{justify-content:center}.os-soon{text-align:center}}
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
   .reveal.visible{opacity:1;transform:translateY(0)}
@@ -353,7 +357,7 @@
   </div>
 </section>
 
-<section id="mugs" hidden>
+<section id="mugs" class="os os-green" hidden>
   <div class="wrap">
     <a class="back" href="#home" data-fr="&larr; Retour à la boutique" data-en="&larr; Back to the shop">&larr; Retour à la boutique</a>
     <div class="mug-banner">
@@ -362,12 +366,13 @@
         <img src="assets/mugs/banner.webp?v=20261105" width="1920" height="819" alt="BACKPACK LAB, Mug Collection. Creative Lifestyle Series." loading="lazy" />
       </picture>
     </div>
-    <div class="sec-head">
-      <h2 data-fr="Les <span>mugs</span>" data-en="The <span>mugs</span>">Les <span>mugs</span></h2>
-      <p data-fr="Céramique 11 oz, 12 designs." data-en="11 oz ceramic, 12 designs.">Céramique 11 oz, 12 designs.</p>
+    <div class="os-head">
+      <span class="os-tag"><i></i><span data-fr="Mug Collection · 11 oz" data-en="Mug Collection · 11 oz">Mug Collection · 11 oz</span></span>
+      <h2 data-fr="Le café du <em>monteur</em>." data-en="Coffee for the <em>editor</em>.">Le café du <em>monteur</em>.</h2>
+      <p data-fr="Douze mugs en céramique, six pour les monteurs, trois pour les vidéastes et trois pour les créateurs." data-en="Twelve ceramic mugs: six for editors, three for videographers and three for creators.">Douze mugs en céramique.</p>
     </div>
     <div class="chips" id="chips" role="tablist"></div>
-    <div class="grid" id="grid"></div>
+    <div class="os-grid" id="grid"></div>
     <p class="note" data-fr="Chaque mug est fabriqué à la commande : prévoir quelques jours de production avant l'expédition. Frais de livraison calculés au paiement." data-en="Every mug is made to order: allow a few days of production before shipping. Shipping is calculated at checkout.">Chaque mug est fabriqué à la commande.</p>
   </div>
 </section>
@@ -571,11 +576,11 @@
     var list = PRODUCTS.filter(function(p){ return state.cat === 'all' || p.cat === state.cat; });
     if(!list.length){ grid.appendChild(el('div', 'no-results', L('Aucun produit dans cette catégorie.', 'No products in this category.'))); return; }
     list.forEach(function(p){
-      var card = el('article', 'card' + (animate ? ' pop' : ''));
-      var th = el('div', 'thumb');
+      var card = el('article', 'os-card' + (animate ? ' pop' : ''));
+      var th = el('div', 'os-thumb');
       var img = el('img'); img.src = 'assets/mugs/' + p.img + '.webp?v=20261104'; img.alt = L('Mug « ' + p.title + ' »', 'Mug “' + p.title + '”'); img.loading = 'lazy'; img.width = 720; img.height = 720;
-      th.appendChild(img); th.appendChild(el('span', 'cat ' + p.cat, catLabel(p.cat)));
-      var body = el('div', 'body');
+      th.appendChild(img); th.appendChild(el('span', 'os-no', 'MUG / ' + p.id)); th.appendChild(el('span', 'cat ' + p.cat, catLabel(p.cat)));
+      var body = el('div', 'os-body');
       body.appendChild(el('h3', null, p.title));
       body.appendChild(el('p', null, p[lang()]));
       var sizes = el('div', 'sizes'); sizes.setAttribute('role', 'group'); sizes.setAttribute('aria-label', L('Contenance', 'Size'));
