@@ -232,6 +232,9 @@
   .os-card .btn{padding:9px 14px;font-size:13px}
   .btn-os[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none}
   .os-note{text-align:center;color:var(--muted2);font-size:13px;margin-top:26px}
+  .mug-banner{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(53,220,142,.4);box-shadow:0 30px 80px rgba(53,220,142,.16),0 0 0 1px rgba(255,255,255,.04) inset;background:#06100b;margin-bottom:34px}
+  .mug-banner img{display:block;width:100%;height:auto}
+  .mug-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 70%,rgba(11,11,11,.55));pointer-events:none}
   .sec-head{text-align:center;margin:0 auto 26px}
   .sec-head h2{font-size:clamp(24px,3.6vw,34px);font-weight:800;letter-spacing:-.8px}
   .sec-head h2 span{color:var(--accent)}
@@ -303,6 +306,12 @@
 
 <section id="mugs" class="reveal">
   <div class="wrap">
+    <div class="mug-banner">
+      <picture>
+        <source media="(max-width:700px)" srcset="assets/mugs/banner-sm.webp?v=20261105" />
+        <img src="assets/mugs/banner.webp?v=20261105" width="1920" height="819" alt="BACKPACK LAB, Mug Collection. Creative Lifestyle Series." loading="lazy" />
+      </picture>
+    </div>
     <div class="sec-head">
       <h2 data-fr="Les <span>mugs</span>" data-en="The <span>mugs</span>">Les <span>mugs</span></h2>
       <p data-fr="Céramique 11 oz, 12 designs." data-en="11 oz ceramic, 12 designs.">Céramique 11 oz, 12 designs.</p>
