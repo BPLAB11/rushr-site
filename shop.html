@@ -11,7 +11,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="BACKPACK LAB" />
 <meta property="og:title" content="Boutique — BACKPACK LAB" />
-<meta property="og:description" content="Mugs pour monteurs, vidéastes et créateurs." />
+<meta property="og:description" content="Hoodies et mugs pour monteurs, vidéastes et créateurs." />
 <meta property="og:url" content="https://thebackpacklab.com/shop" />
 <meta property="og:image" content="https://thebackpacklab.com/assets/og-backpacklab.png" />
 <meta name="description" data-fr="Mugs Backpack Lab pour monteurs vidéo, vidéastes et créateurs de contenu. Imprimés à la demande." data-en="Backpack Lab mugs for video editors, videographers and content creators. Printed on demand." content="Mugs Backpack Lab pour monteurs vidéo, vidéastes et créateurs de contenu." />
@@ -194,6 +194,50 @@
     .lang button{padding:4px 7px}
     .cart-btn{padding:7px 10px}
   }
+  /* HOODIES : collection OFFSCOPE (palette violette de la marque) */
+  .os{--os:#8B2CF5;--os2:#B879FF;--os-glow:rgba(139,44,245,.38);position:relative;padding:36px 0 56px}
+  .os::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 0%,rgba(139,44,245,.18),transparent 70%),radial-gradient(40% 30% at 100% 60%,rgba(139,44,245,.10),transparent 70%);pointer-events:none}
+  .os .wrap{position:relative}
+  .hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
+  .hero-links .btn{padding:10px 20px}
+  .btn-os{background:linear-gradient(135deg,#7a1fe6,#a24dff);color:#fff;box-shadow:0 8px 28px rgba(139,44,245,.35)}
+  .btn-os:hover{filter:brightness(1.12);transform:translateY(-1px)}
+  .os-banner{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(139,44,245,.45);box-shadow:0 30px 80px rgba(139,44,245,.22),0 0 0 1px rgba(255,255,255,.04) inset;background:#0a0710}
+  .os-banner img{display:block;width:100%;height:auto}
+  .os-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 70%,rgba(11,11,11,.55));pointer-events:none}
+  .os-head{text-align:center;margin:34px auto 28px;max-width:680px}
+  .os-tag{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--os2);border:1px solid rgba(139,44,245,.5);background:rgba(139,44,245,.1);border-radius:999px;padding:6px 14px}
+  .os-tag i{width:7px;height:7px;border-radius:50%;background:var(--os);box-shadow:0 0 10px var(--os)}
+  .os-head h2{font-size:clamp(28px,4.6vw,44px);line-height:1.08;font-weight:800;letter-spacing:-1px;margin:16px 0 10px;font-style:italic}
+  .os-head h2 em{color:var(--os);font-style:normal}
+  .os-head p{color:var(--muted);font-size:clamp(14.5px,2vw,17px)}
+  .os-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .os-card{position:relative;background:linear-gradient(180deg,#15101f,#0f0d14);border:1px solid rgba(139,44,245,.22);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+  .os-card:hover{transform:translateY(-8px);border-color:rgba(139,44,245,.7);box-shadow:0 26px 60px var(--os-glow)}
+  .os-card.pop{animation:cardIn .4s ease both}
+  .os-thumb{position:relative;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(closest-side,rgba(139,44,245,.28),transparent 75%)}
+  .os-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+  .os-card:hover .os-thumb img{transform:scale(1.06)}
+  .os-thumb::before,.os-thumb::after{content:"";position:absolute;width:20px;height:20px;border:2px solid rgba(139,44,245,.9);z-index:2;opacity:.0;transition:opacity .3s ease}
+  .os-thumb::before{top:12px;left:12px;border-right:0;border-bottom:0}
+  .os-thumb::after{bottom:12px;right:12px;border-left:0;border-top:0}
+  .os-card:hover .os-thumb::before,.os-card:hover .os-thumb::after{opacity:1}
+  .os-no{position:absolute;top:12px;left:12px;z-index:3;font-size:10.5px;font-weight:800;letter-spacing:1.5px;color:#fff;background:rgba(10,7,16,.72);border:1px solid rgba(139,44,245,.6);border-radius:6px;padding:3px 9px;backdrop-filter:blur(4px)}
+  .os-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+  .os-body h3{font-size:17px;font-weight:800;font-style:italic;letter-spacing:-.2px;line-height:1.25;margin-bottom:6px}
+  .os-body p{color:var(--muted);font-size:13.3px;flex:1}
+  .os-foot{display:flex;margin-top:14px}
+  .os-foot .btn{width:100%;justify-content:center}
+  .os-soon{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--os2)}
+  .os-card .btn{padding:9px 14px;font-size:13px}
+  .btn-os[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none}
+  .os-note{text-align:center;color:var(--muted2);font-size:13px;margin-top:26px}
+  .sec-head{text-align:center;margin:0 auto 26px}
+  .sec-head h2{font-size:clamp(24px,3.6vw,34px);font-weight:800;letter-spacing:-.8px}
+  .sec-head h2 span{color:var(--accent)}
+  .sec-head p{color:var(--muted);font-size:15px;margin-top:4px}
+  @media(max-width:1000px){.os-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.os-grid{gap:12px}.os-body{padding:12px 12px 14px}.os-body h3{font-size:15px}.os-body p{font-size:12.5px}.os-foot{flex-direction:column;align-items:stretch}.os-card .btn{justify-content:center}.os-soon{text-align:center}}
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
   .reveal.visible{opacity:1;transform:translateY(0)}
 </style>
@@ -241,12 +285,38 @@
   <div class="wrap hero-in">
     <span class="pill"><span class="d"></span><span data-fr="Merch pour créateurs" data-en="Merch for creators">Merch pour créateurs</span></span>
     <h1 data-fr="Boutique" data-en="Shop">Boutique</h1>
-    <p class="sub" data-fr="Des mugs pour ceux qui montent, filment et publient. Imprimés à la demande, en céramique 11 oz." data-en="Mugs for the ones who edit, shoot and post. Printed on demand, 11 oz ceramic.">Des mugs pour ceux qui montent, filment et publient.</p>
+    <p class="sub" data-fr="Hoodies et mugs pour ceux qui montent, filment et publient. Imprimés à la demande." data-en="Hoodies and mugs for the ones who edit, shoot and post. Printed on demand.">Hoodies et mugs pour ceux qui montent, filment et publient.</p>
+    <div class="hero-links">
+      <a class="btn btn-os" href="#hoodies" data-fr="Hoodies OFFSCOPE" data-en="OFFSCOPE hoodies">Hoodies OFFSCOPE</a>
+      <a class="btn btn-ghost" href="#mugs" data-fr="Mugs" data-en="Mugs">Mugs</a>
+    </div>
   </div>
 </header>
 
+<section id="hoodies" class="os reveal">
+  <div class="wrap">
+    <div class="os-banner">
+      <picture>
+        <source media="(max-width:700px)" srcset="assets/hoodies/banner-sm.webp?v=20261105" />
+        <img src="assets/hoodies/banner.webp?v=20261105" width="1920" height="819" alt="OFFSCOPE, The Creative Department. Hoodie Series V1.0." fetchpriority="high" />
+      </picture>
+    </div>
+    <div class="os-head">
+      <span class="os-tag"><i></i><span data-fr="Hoodie Series · V1.0" data-en="Hoodie Series · V1.0">Hoodie Series · V1.0</span></span>
+      <h2 data-fr="Le merch du <em>département créatif</em>." data-en="Merch from the <em>creative department</em>.">Le merch du <em>département créatif</em>.</h2>
+      <p data-fr="Quatre hoodies blancs, un design imprimé dans le dos, pensés pour les monteurs, les vidéastes et les créateurs." data-en="Four white hoodies, one design printed on the back, made for editors, videographers and creators.">Quatre hoodies blancs, un design imprimé dans le dos.</p>
+    </div>
+    <div class="os-grid" id="osGrid"></div>
+    <p class="os-note" data-fr="Les hoodies sont fabriqués à la commande. Tailles, prix et ouverture des commandes : bientôt." data-en="Hoodies are made to order. Sizes, prices and ordering: coming soon.">Les hoodies sont fabriqués à la commande.</p>
+  </div>
+</section>
+
 <section id="mugs" class="reveal">
   <div class="wrap">
+    <div class="sec-head">
+      <h2 data-fr="Les <span>mugs</span>" data-en="The <span>mugs</span>">Les <span>mugs</span></h2>
+      <p data-fr="Céramique 11 oz, 12 designs." data-en="11 oz ceramic, 12 designs.">Céramique 11 oz, 12 designs.</p>
+    </div>
     <div class="chips" id="chips" role="tablist"></div>
     <div class="grid" id="grid"></div>
     <p class="note" data-fr="Chaque mug est fabriqué à la commande : prévoir quelques jours de production avant l'expédition. Frais de livraison calculés au paiement." data-en="Every mug is made to order: allow a few days of production before shipping. Shipping is calculated at checkout.">Chaque mug est fabriqué à la commande.</p>
@@ -389,6 +459,34 @@
     {id:'12', img:'12_creator_content_loading', cat:'creator', title:'Content Loading… Please Wait',
       fr:'Créativité en cours de chargement. Café requis.', en:'Creativity buffering. Coffee required.'}
   ];
+
+  /* Hoodies OFFSCOPE (Printful) : vitrine uniquement. Commande a brancher cote serveur (shop-checkout) avant d'ouvrir. */
+  var HOODIES_LIVE = false;
+  var HOODIES = [
+    {no:'01', img:'editors-flow', title:"Editor's Flow",
+      fr:'La timeline en grand dans le dos. Cut / Edit / Color / Mix.', en:'The timeline, full size on your back. Cut / Edit / Color / Mix.'},
+    {no:'02', img:'vfx', title:'VFX',
+      fr:'Le buste, le glitch et le coup de pinceau violet.', en:'The bust, the glitch and the purple brush stroke.'},
+    {no:'03', img:'interface', title:'Interface',
+      fr:'Le logiciel de montage, du menu au curseur de lecture.', en:'The editing suite, from the menu to the playhead.'},
+    {no:'04', img:'viewfinder', title:'Viewfinder',
+      fr:'Le viseur, la montagne et l\'orbite violette.', en:'The viewfinder, the mountain and the purple orbit.'}
+  ];
+  function renderHoodies(animate){
+    var grid = document.getElementById('osGrid'); grid.innerHTML = '';
+    HOODIES.forEach(function(h){
+      var card = el('article', 'os-card' + (animate ? ' pop' : ''));
+      var th = el('div', 'os-thumb');
+      var img = el('img'); img.src = 'assets/hoodies/' + h.img + '.webp?v=20261105'; img.alt = L('Hoodie blanc « ' + h.title + ' », vu de dos', 'White hoodie “' + h.title + '”, back view'); img.loading = 'lazy'; img.width = 1000; img.height = 1000;
+      th.appendChild(img); th.appendChild(el('span', 'os-no', 'OS / ' + h.no));
+      var body = el('div', 'os-body');
+      body.appendChild(el('h3', null, h.title)); body.appendChild(el('p', null, h[lang()]));
+      var foot = el('div', 'os-foot');
+      var b = el('button', 'btn btn-os', L('Bientôt disponible', 'Coming soon')); b.type = 'button'; b.disabled = true;
+      foot.appendChild(b);
+      body.appendChild(foot); card.appendChild(th); card.appendChild(body); grid.appendChild(card);
+    });
+  }
 
   var state = {cat:'all', sizes:{}, cart:[], view:'cart', quote:null, recipient:null, busy:false};
   PRODUCTS.forEach(function(p){ state.sizes[p.id] = '11'; });
@@ -654,7 +752,7 @@
 
   /* ---------- Langue ---------- */
   function renderAll(){
-    renderChips(); renderGrid(false); renderCart(); renderView();
+    renderChips(); renderGrid(false); renderHoodies(false); renderCart(); renderView();
     var msg = document.getElementById('dMsg'); msg.hidden = true;
   }
   function setLang(lng){
