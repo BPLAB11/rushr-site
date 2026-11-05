@@ -125,6 +125,13 @@
   .featured.sbx .tag{text-transform:uppercase;letter-spacing:1px;color:#CC8CFF;background:rgba(176,43,255,.16);border-color:rgba(176,43,255,.5)}
   .featured.sbx p{font-size:max(12px,1.3cqw);line-height:1.55;color:#C9C3D3}
   @media(max-width:1000px){.featured.sbx p{font-size:15px}}
+  /* SONIQ: blue identity; text column under the logo, left of the lamp and the plant */
+  .featured.sqx{--bl:6.5%;--bt:5%;--bc:39%;--bw:27%;border-color:rgba(47,140,255,.4)}
+  .featured.sqx:hover,.featured.sqx.tilt-3d:hover{border-color:rgba(47,140,255,.6);box-shadow:0 30px 60px rgba(47,140,255,.24)}
+  .featured.sqx .tag{text-transform:uppercase;letter-spacing:1px;color:#7DBAFF;background:rgba(47,140,255,.16);border-color:rgba(47,140,255,.5)}
+  .featured.sqx li .c{color:#4DA3FF}
+  .featured.sqx p{color:#C3CBD8}
+  .featured.sqx ul{margin-bottom:0}
   .soft.wide{margin-top:18px}
   .featured.rushr .m-logo .d{background:#FF6A00}
   .featured.rushr .m-nav.on{background:#FF6A00;color:#150A03}
@@ -249,7 +256,7 @@
   <div class="wrap hero-in">
     <span class="pill"><span class="d"></span><span data-fr="Logiciels Backpack Lab" data-en="Backpack Lab software">Logiciels Backpack Lab</span></span>
     <h1 data-fr="Nos logiciels" data-en="Our software">Nos logiciels</h1>
-    <p class="sub" data-fr="Des outils desktop pensés pour tourner sous Windows et macOS, sans compromis. Rushr ouvre le bal ; SoundBox et RENAME suivent déjà en coulisses." data-en="Desktop tools built to run on Windows and macOS, no compromises. Rushr opens the show; SoundBox and RENAME are already waiting in the wings.">Des outils desktop pensés pour Windows et macOS, sans compromis.</p>
+    <p class="sub" data-fr="Des outils desktop pensés pour tourner sous Windows et macOS, sans compromis. Rushr ouvre le bal ; SoundBox, SONIQ et RENAME suivent déjà en coulisses." data-en="Desktop tools built to run on Windows and macOS, no compromises. Rushr opens the show; SoundBox, SONIQ and RENAME are already waiting in the wings.">Des outils desktop pensés pour Windows et macOS, sans compromis.</p>
   </div>
 </header>
 
@@ -293,6 +300,22 @@
         <span class="tag" data-fr="Prochainement" data-en="Coming next">Prochainement</span>
         <div class="rb-copy">
           <p data-fr="Un soundboard pour vidéastes et créateurs : jouez, organisez et exportez vos effets sonores et musiques en un clic, avec des packs de sons prêts à installer. On y travaille activement, la sortie arrive très vite." data-en="A soundboard for videographers and creators: play, organize and export your sound effects and music in one click, with ready-to-install sound packs. We're actively working on it — launch is coming very soon.">Un soundboard pour jouer, organiser et exporter vos effets sonores en un clic. Sortie très prochaine.</p>
+        </div>
+      </div>
+      <div class="featured sqx rb tilt-3d" style="margin-top:18px">
+        <picture class="rb-bg">
+          <source media="(max-width:700px)" srcset="assets/soniq-banner-sm.webp" />
+          <img src="assets/soniq-banner.webp" width="1920" height="819" loading="lazy" alt="SONIQ : l'interface d'analyse de morceaux (BPM, tonalité, forme d'onde) sur un ordinateur portable dans un studio bleu" />
+        </picture>
+        <h3 class="sr-only">SONIQ</h3>
+        <span class="tag" data-fr="Prochainement" data-en="Coming next">Prochainement</span>
+        <div class="rb-copy">
+          <p data-fr="L'appli gratuite qui analyse vos morceaux : BPM, tonalité et grille de beats." data-en="The free app that analyzes your tracks: BPM, key and beat grid.">L'appli gratuite qui analyse vos morceaux : BPM, tonalité et grille de beats.</p>
+          <ul>
+            <li><span class="c">✓</span> <span data-fr="BPM au centième, tonalité et code Camelot" data-en="BPM to the hundredth, key and Camelot code">BPM au centième, tonalité et code Camelot</span></li>
+            <li><span class="c">✓</span> <span data-fr="Grille de beats éditable, écoute avec clic" data-en="Editable beat grid, playback with click">Grille de beats éditable, écoute avec clic</span></li>
+            <li><span class="c">✓</span> <span data-fr="Export CSV et XML Rekordbox" data-en="CSV and Rekordbox XML export">Export CSV et XML Rekordbox</span></li>
+          </ul>
         </div>
       </div>
       <div class="soft-grid" style="grid-template-columns:1fr;margin-top:18px">
