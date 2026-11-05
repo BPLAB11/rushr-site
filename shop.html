@@ -195,7 +195,7 @@
     .cart-btn{padding:7px 10px}
   }
   /* HOODIES : collection OFFSCOPE (palette violette de la marque) */
-  .os{--os:#8B2CF5;--os2:#B879FF;--os-glow:rgba(139,44,245,.38);position:relative;padding:36px 0 56px}
+  .os{--os:#8B2CF5;--os2:#B879FF;--os-glow:rgba(139,44,245,.38);position:relative;padding:32px 0 56px}
   .os::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 0%,rgba(139,44,245,.18),transparent 70%),radial-gradient(40% 30% at 100% 60%,rgba(139,44,245,.10),transparent 70%);pointer-events:none}
   .os .wrap{position:relative}
   .hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
@@ -238,6 +238,7 @@
   .sec-head p{color:var(--muted);font-size:15px;margin-top:4px}
   @media(max-width:1000px){.os-grid{grid-template-columns:1fr 1fr}}
   @media(max-width:600px){.os-grid{gap:12px}.os-body{padding:12px 12px 14px}.os-body h3{font-size:15px}.os-body p{font-size:12.5px}.os-foot{flex-direction:column;align-items:stretch}.os-card .btn{justify-content:center}.os-soon{text-align:center}}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
   .reveal.visible{opacity:1;transform:translateY(0)}
 </style>
@@ -280,18 +281,7 @@
   </div>
 </nav>
 
-<header>
-  <div class="hero-glow"></div>
-  <div class="wrap hero-in">
-    <span class="pill"><span class="d"></span><span data-fr="Merch pour créateurs" data-en="Merch for creators">Merch pour créateurs</span></span>
-    <h1 data-fr="Boutique" data-en="Shop">Boutique</h1>
-    <p class="sub" data-fr="Hoodies et mugs pour ceux qui montent, filment et publient. Imprimés à la demande." data-en="Hoodies and mugs for the ones who edit, shoot and post. Printed on demand.">Hoodies et mugs pour ceux qui montent, filment et publient.</p>
-    <div class="hero-links">
-      <a class="btn btn-os" href="#hoodies" data-fr="Hoodies OFFSCOPE" data-en="OFFSCOPE hoodies">Hoodies OFFSCOPE</a>
-      <a class="btn btn-ghost" href="#mugs" data-fr="Mugs" data-en="Mugs">Mugs</a>
-    </div>
-  </div>
-</header>
+<h1 class="sr-only" data-fr="Boutique" data-en="Shop">Boutique</h1>
 
 <section id="hoodies" class="os reveal">
   <div class="wrap">
