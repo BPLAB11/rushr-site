@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Télécharger Rushr — BACKPACK LAB</title>
+<meta name="description" content="Télécharge la beta de Rushr, l'outil de dérushage pour les créateurs." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/rushr-favicon-32.png" />
+<link rel="icon" type="image/x-icon" href="assets/rushr-favicon.ico" />
+<link rel="apple-touch-icon" href="assets/rushr-apple-touch-icon.png" />
+<link rel="canonical" href="https://thebackpacklab.com/download" />
+<link href="assets/fonts/inter.css" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);
+    --accent:#FF6A00;--accent2:#FF8A3D;--text:#fff;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#150A03;--danger:#FF6B6B;--ok:#35DC8E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:inherit;text-decoration:none}
+  [hidden]{display:none!important}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px;width:100%}
+  nav{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1340px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
+  .brand .mark{width:22px;height:22px;display:block;border-radius:6px}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--accent);color:var(--on-accent)}
+  main{flex:1;padding:36px 0 56px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;font-weight:700;font-size:14px;padding:11px 18px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
+  .btn-primary{background:var(--accent);color:var(--on-accent)}
+  .btn-primary:hover{background:var(--accent2)}
+  .btn-primary[disabled]{opacity:.5;cursor:not-allowed}
+  .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn-xl{font-size:17px;padding:16px 28px;border-radius:12px;box-shadow:0 10px 40px rgba(255,106,0,.35)}
+
+  /* HERO : the banner is the background */
+  .hero{position:relative;border:1px solid rgba(255,106,0,.3);border-radius:20px;overflow:hidden;background:#0b0805;min-height:260px}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right center}
+  .hero::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,6,4,.97) 0%,rgba(8,6,4,.93) 42%,rgba(8,6,4,.2) 100%)}
+  .hero-in{position:relative;z-index:2;padding:44px 40px;max-width:560px}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--accent2);background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.4);border-radius:6px;padding:4px 10px;margin-bottom:16px;text-transform:uppercase}
+  .hero h1{font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:800;letter-spacing:-1px}
+  .hero p{color:#CFCFD3;margin-top:12px;font-size:15.5px}
+
+  .panel{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px}
+  .panel h2{font-size:20px;font-weight:800;margin-bottom:6px}
+  .panel .lead{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+  .center{text-align:center}
+  .narrow{max-width:420px;margin-left:auto;margin-right:auto}
+  input[type=email],input[type=text]{width:100%;background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:#fff;padding:12px 14px;font-size:15px;font-family:inherit;margin-bottom:12px}
+  input:focus{outline:none;border-color:var(--accent)}
+  .err{color:var(--danger);font-size:13px;margin-bottom:12px;min-height:16px}
+  .err a{text-decoration:underline}
+  .hint{color:var(--muted2);font-size:12.5px;margin-top:14px}
+  .hint a{text-decoration:underline}
+  .link{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+
+  /* READY */
+  .dl-top{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+  .dl-main{flex:1;min-width:260px}
+  .ver{color:var(--muted);font-size:13.5px;margin-top:12px}
+  .ver b{color:var(--text)}
+  .plat{display:inline-flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden;margin-bottom:16px}
+  .plat button{background:transparent;border:0;color:var(--muted);font:inherit;font-weight:600;font-size:13px;padding:7px 14px;cursor:pointer}
+  .plat button.on{background:rgba(255,106,0,.16);color:var(--accent2)}
+  .plat button[disabled]{opacity:.4;cursor:not-allowed}
+  .steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;color:#D6D6D8;font-size:14.5px}
+  .steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.45);color:var(--accent2);font-weight:800;font-size:13px;display:grid;place-items:center}
+  .steps b{color:#fff}
+  .sep{height:1px;background:var(--line);margin:24px 0}
+  .key-box{display:flex;gap:10px;align-items:center;background:#0E0E11;border:1px solid rgba(255,106,0,.5);border-radius:10px;padding:10px 12px;margin-top:10px}
+  .key-box code{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:700;letter-spacing:.5px;color:var(--accent2);word-break:break-all}
+  .key-box .btn{padding:7px 12px;font-size:12.5px}
+  .who{color:var(--muted2);font-size:12.5px;margin-top:18px}
+
+  .soon{display:flex;gap:16px;align-items:center}
+  .soon .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex:none;animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,106,0,.55)}50%{box-shadow:0 0 0 12px rgba(255,106,0,0)}}
+
+  /* THANKS + COFFEE */
+  .thanks{border-color:rgba(255,106,0,.35);background:linear-gradient(135deg,#17100A,#121215);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .thanks-row{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .thanks-txt{flex:1;min-width:240px}
+  .thanks-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .cup{width:120px;height:120px;flex:none;margin:0 auto}
+  .cup .steam{stroke:var(--accent2);stroke-width:3;stroke-linecap:round;fill:none;opacity:0;animation:steam 2.4s ease-in-out infinite}
+  .cup .steam:nth-child(2){animation-delay:.5s}.cup .steam:nth-child(3){animation-delay:1s}
+  @keyframes steam{0%{opacity:0;transform:translateY(8px)}40%{opacity:.9}100%{opacity:0;transform:translateY(-12px)}}
+  .cup .body{animation:bob 3s ease-in-out infinite;transform-origin:50% 100%}
+  @keyframes bob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+  .coffee-note{color:var(--muted);font-size:13px;margin-top:10px}
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+
+  footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted2);font-size:12px;text-align:center}
+  @media(max-width:600px){
+    .hero-in{padding:28px 22px}.hero::before{background:linear-gradient(180deg,rgba(8,6,4,.9),rgba(8,6,4,.6))}
+    .panel{padding:22px}.btn-xl{width:100%}
+  }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB · Rushr</a>
+  <div class="lang"><button id="lfr" class="on" onclick="setLang('fr')">FR</button><button id="len" onclick="setLang('en')">EN</button></div>
+</div></nav>
+
+<main><div class="wrap">
+
+  <section class="hero">
+    <picture>
+      <source media="(max-width:700px)" srcset="assets/rushr-banner-sm.webp" />
+      <img src="assets/rushr-banner.webp" alt="" />
+    </picture>
+    <div class="hero-in">
+      <span class="tag" data-fr="Beta privée" data-en="Private beta">Beta privée</span>
+      <h1 data-fr="Télécharger Rushr" data-en="Download Rushr">Télécharger Rushr</h1>
+      <p data-fr="Triez vos rushes avant même d'ouvrir votre logiciel de montage. Gratuit pendant toute la beta." data-en="Sort your footage before you even open your editing software. Free for the whole beta.">Triez vos rushes avant même d'ouvrir votre logiciel de montage. Gratuit pendant toute la beta.</p>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <div id="s-load" class="panel center"><p class="lead" style="margin:0" data-fr="Chargement…" data-en="Loading…">Chargement…</p></div>
+
+  <!-- Sign in : email -->
+  <div id="s-email" class="panel center" hidden>
+    <div class="narrow">
+      <h2 data-fr="Connecte-toi pour télécharger" data-en="Sign in to download">Connecte-toi pour télécharger</h2>
+      <p class="lead" data-fr="Entre l'adresse e-mail de ton inscription à la beta. Un code de vérification t'est envoyé, sans mot de passe." data-en="Enter the email you used to sign up for the beta. We send you a verification code, no password needed.">Entre l'adresse e-mail de ton inscription à la beta. Un code de vérification t'est envoyé, sans mot de passe.</p>
+      <div class="err" id="emailErr"></div>
+      <form onsubmit="return sendCode(event)">
+        <input id="emailInput" type="email" required autocomplete="email" data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
+        <button type="submit" id="sendBtn" class="btn btn-primary" style="width:100%" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
+      </form>
+      <p class="hint"><span data-fr="Pas encore inscrit ?" data-en="Not signed up yet?">Pas encore inscrit ?</span> <a href="rushr#beta" data-fr="Rejoins la beta" data-en="Join the beta">Rejoins la beta</a></p>
+    </div>
+  </div>
+
+  <!-- Sign in : code -->
+  <div id="s-code" class="panel center" hidden>
+    <div class="narrow">
+      <h2 data-fr="Vérification" data-en="Verification">Vérification</h2>
+      <p class="lead" data-fr="Entre le code reçu par e-mail." data-en="Enter the code from the email.">Entre le code reçu par e-mail.</p>
+      <div class="err" id="codeErr"></div>
+      <form onsubmit="return verifyCode(event)">
+        <input id="codeInput" type="text" required autocomplete="one-time-code" maxlength="16" data-fr-ph="Code reçu par e-mail" data-en-ph="Code from the email" placeholder="Code reçu par e-mail" />
+        <button type="submit" id="verifyBtn" class="btn btn-primary" style="width:100%" data-fr="Continuer" data-en="Continue">Continuer</button>
+      </form>
+      <p style="margin-top:14px"><button class="link" onclick="backToEmail()" data-fr="← Changer d'e-mail" data-en="← Change email">← Changer d'e-mail</button></p>
+    </div>
+  </div>
+
+  <!-- Signed in, no license yet -->
+  <div id="s-nolic" class="panel center" hidden>
+    <div class="narrow">
+      <h2 data-fr="Récupère ta licence beta" data-en="Get your beta license">Récupère ta licence beta</h2>
+      <p class="lead" data-fr="Ton compte n'a pas encore de licence Rushr. Si tu t'es inscrit à la beta avec cette adresse, tu peux la réclamer maintenant." data-en="Your account has no Rushr license yet. If you signed up for the beta with this address, you can claim it now.">Ton compte n'a pas encore de licence Rushr. Si tu t'es inscrit à la beta avec cette adresse, tu peux la réclamer maintenant.</p>
+      <div class="err" id="claimErr"></div>
+      <button class="btn btn-primary" id="claimBtn" style="width:100%" onclick="claimKey()" data-fr="Réclamer ma licence" data-en="Claim my license">Réclamer ma licence</button>
+    </div>
+  </div>
+
+  <!-- Ready -->
+  <div id="s-ready" class="panel" hidden>
+    <div class="dl-top">
+      <div class="dl-main">
+        <div class="plat" id="plat">
+          <button id="pWin" onclick="pick('windows')">Windows</button>
+          <button id="pMac" onclick="pick('mac')">macOS</button>
+        </div>
+        <div><a id="dlBtn" class="btn btn-primary btn-xl" href="#" rel="noopener noreferrer" onclick="return onDownload(event)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span id="dlLabel"></span></a></div>
+        <p class="ver" id="verLine"></p>
+      </div>
+    </div>
+    <div class="sep"></div>
+    <ol class="steps">
+      <li><div><b data-fr="Télécharge" data-en="Download">Télécharge</b> <span data-fr="le fichier avec le bouton ci-dessus." data-en="the file with the button above.">le fichier avec le bouton ci-dessus.</span></div></li>
+      <li><div><b data-fr="Installe" data-en="Install">Installe</b> <span data-fr="Rushr : ouvre le fichier téléchargé et suis l'installation." data-en="Rushr: open the downloaded file and follow the installer.">Rushr : ouvre le fichier téléchargé et suis l'installation.</span></div></li>
+      <li><div><b data-fr="Active" data-en="Activate">Active</b> <span data-fr="l'app : saisis ton e-mail et colle ta clé de licence." data-en="the app: enter your email and paste your license key.">l'app : saisis ton e-mail et colle ta clé de licence.</span>
+        <div class="key-box"><code id="keyText">••••</code>
+          <button class="btn btn-ghost" id="eyeBtn" onclick="toggleKey()" data-fr="Afficher" data-en="Show">Afficher</button>
+          <button class="btn btn-ghost" id="copyBtn" onclick="copyKey()" data-fr="Copier" data-en="Copy">Copier</button></div></div></li>
+    </ol>
+    <p class="who"><span id="whoLine"></span> <button class="link" onclick="signOut()" data-fr="Se déconnecter" data-en="Sign out">Se déconnecter</button></p>
+  </div>
+
+  <!-- Ready but no build published yet -->
+  <div id="s-soon" class="panel" hidden>
+    <div class="soon"><span class="dot"></span><div>
+      <h2 data-fr="Le téléchargement arrive très bientôt" data-en="The download is coming very soon">Le téléchargement arrive très bientôt</h2>
+      <p class="lead" style="margin:0" data-fr="Ta licence est prête. Dès que la version est publiée, le bouton apparaît ici. Rejoins le Discord pour être prévenu en premier." data-en="Your license is ready. As soon as the build is published, the button shows up here. Join the Discord to be the first to know.">Ta licence est prête. Dès que la version est publiée, le bouton apparaît ici. Rejoins le Discord pour être prévenu en premier.</p>
+      <div style="margin-top:16px"><a class="btn btn-primary" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener noreferrer" data-fr="Rejoindre le Discord" data-en="Join the Discord">Rejoindre le Discord</a></div>
+    </div></div>
+  </div>
+
+  <!-- Thanks + coffee (shown after the download starts) -->
+  <div id="s-thanks" class="panel thanks" hidden>
+    <div class="thanks-row">
+      <svg class="cup" viewBox="0 0 120 120" aria-hidden="true">
+        <path class="steam" d="M44 38c-6-8 6-12 0-22"/><path class="steam" d="M60 38c-6-8 6-12 0-22"/><path class="steam" d="M76 38c-6-8 6-12 0-22"/>
+        <g class="body">
+          <path d="M28 48h64v26a26 26 0 0 1-26 26h-12a26 26 0 0 1-26-26z" fill="#FF6A00"/>
+          <path d="M92 56h6a10 10 0 0 1 0 22h-8" fill="none" stroke="#FF6A00" stroke-width="7" stroke-linecap="round"/>
+          <path d="M34 54h52" stroke="#150A03" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <ellipse cx="60" cy="108" rx="36" ry="5" fill="#fff" fill-opacity=".08"/>
+      </svg>
+      <div class="thanks-txt">
+        <h2 data-fr="C'est parti, merci d'essayer Rushr !" data-en="You're on your way, thanks for trying Rushr!">C'est parti, merci d'essayer Rushr !</h2>
+        <p class="lead" style="margin:0" data-fr="Le téléchargement a démarré. Tes retours façonnent directement l'outil : dis-nous ce qui marche, ce qui coince et ce qui manque." data-en="Your download has started. Your feedback directly shapes the tool: tell us what works, what breaks and what's missing.">Le téléchargement a démarré. Tes retours façonnent directement l'outil : dis-nous ce qui marche, ce qui coince et ce qui manque.</p>
+        <div class="thanks-btns">
+          <a class="btn btn-ghost" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener noreferrer" data-fr="Donner mon avis sur Discord" data-en="Give feedback on Discord">Donner mon avis sur Discord</a>
+          <a id="coffeeBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer" hidden data-fr="☕ Offrir un café" data-en="☕ Buy me a coffee">☕ Offrir un café</a>
+        </div>
+        <p class="coffee-note" id="coffeeNote" hidden data-fr="Rushr reste gratuit pendant la beta. Un café, c'est un petit coup de pouce, jamais une obligation." data-en="Rushr stays free during the beta. A coffee is a small boost, never an obligation.">Rushr reste gratuit pendant la beta. Un café, c'est un petit coup de pouce, jamais une obligation.</p>
+      </div>
+    </div>
+  </div>
+
+</div></main>
+<canvas id="confetti"></canvas>
+
+<footer>© 2026 BACKPACK LAB · <a href="legal" style="text-decoration:underline" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a> · <a href="privacy" style="text-decoration:underline" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a></footer>
+
+<script src="assets/vendor/supabase.js"></script>
+<script>
+  var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
+  var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
+  var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Lien « offrir un café » (Buy Me a Coffee, Ko-fi, PayPal.me...). Vide = le bouton reste caché.
+  var COFFEE_URL='';
+
+  var S={email:'',license:null,versions:[],platform:'windows',keyShown:false,url:''};
+  function $(id){return document.getElementById(id);}
+  function FR(){return (document.documentElement.lang||'fr')==='fr';}
+  function safeUrl(u){return /^https:\/\/[^\s"'<>]+$/.test(String(u||''))?u:'';}
+
+  function setLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.innerHTML=v;});
+    document.querySelectorAll('[data-fr-ph]').forEach(function(el){var v=el.getAttribute('data-'+lang+'-ph');if(v!==null)el.setAttribute('placeholder',v);});
+    $('lfr').classList.toggle('on',lang==='fr'); $('len').classList.toggle('on',lang==='en');
+    try{localStorage.setItem('bpl_lang',lang);}catch(e){}
+    if(!$('s-ready').hidden) renderReady();
+  }
+
+  var VIEWS=['s-load','s-email','s-code','s-nolic','s-ready','s-soon'];
+  function show(id){ VIEWS.forEach(function(v){ $(v).hidden=(v!==id); }); }
+
+  /* ---------- sign in (e-mail + code, same as /claim) ---------- */
+  async function sendCode(e){
+    e.preventDefault();
+    var btn=$('sendBtn'), err=$('emailErr'); err.textContent=''; btn.disabled=true;
+    var email=$('emailInput').value.trim().toLowerCase();
+    try{
+      var r=await SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true}});
+      if(r.error) throw r.error;
+      S.email=email; $('codeInput').value=''; $('codeErr').textContent=''; show('s-code'); $('codeInput').focus();
+    }catch(ex){ err.textContent=FR()?"Impossible d'envoyer le code, vérifie l'adresse et réessaie.":'Could not send the code, check the address and try again.'; }
+    finally{ btn.disabled=false; }
+    return false;
+  }
+  async function verifyCode(e){
+    e.preventDefault();
+    var btn=$('verifyBtn'), err=$('codeErr'); err.textContent=''; btn.disabled=true;
+    var code=$('codeInput').value.trim();
+    try{
+      var v=await SB.auth.verifyOtp({email:S.email, token:code, type:'email'});
+      if(v.error){ v=await SB.auth.verifyOtp({email:S.email, token:code, type:'signup'}); if(v.error) throw v.error; }
+    }catch(ex){ err.textContent=FR()?'Code invalide ou expiré.':'Invalid or expired code.'; btn.disabled=false; return false; }
+    btn.disabled=false;
+    await loadAccount();
+    return false;
+  }
+  function backToEmail(){ S.email=''; show('s-email'); }
+  async function signOut(){ try{ await SB.auth.signOut(); }catch(e){} S.license=null; show('s-email'); }
+
+  /* ---------- account + builds ---------- */
+  async function loadAccount(){
+    show('s-load');
+    try{
+      var r=await SB.rpc('get_my_account'); if(r.error) throw r.error;
+      var a=r.data||{}; S.email=(a.user&&a.user.email)||S.email;
+      var lics=(a.licenses||[]).filter(function(l){return String(l.status||'').toUpperCase()==='ACTIVE';});
+      var rushr=lics.filter(function(l){return String(l.product||'').toUpperCase()==='RUSHR';})[0];
+      S.license=rushr||lics[0]||null;
+      var b=a.beta_signup&&a.beta_signup.platform; if(b==='MAC') S.platform='mac'; else if(b==='WIN') S.platform='windows';
+      else { var ua=navigator.userAgent||''; S.platform=(/Mac/i.test(navigator.platform||ua)&&!/iPhone|iPad/.test(ua))?'mac':'windows'; }
+    }catch(ex){ show('s-email'); return; }
+    if(!S.license){ show('s-nolic'); return; }
+    try{
+      var v=await SB.from('app_versions').select('platform,latest_version,download_url');
+      S.versions=(!v.error&&v.data)?v.data:[];
+    }catch(e){ S.versions=[]; }
+    var hasAny=S.versions.some(function(x){return safeUrl(x.download_url);});
+    if(!hasAny){ show('s-soon'); return; }
+    var cur=urlFor(S.platform); if(!cur){ S.platform=(S.platform==='mac')?'windows':'mac'; }
+    show('s-ready'); renderReady();
+  }
+  async function claimKey(){
+    var btn=$('claimBtn'), err=$('claimErr'); err.textContent=''; btn.disabled=true;
+    try{
+      var r=await SB.rpc('claim_my_beta_key'); if(r.error) throw r.error;
+      await loadAccount();
+    }catch(ex){
+      var m=(ex&&ex.message)||'';
+      if(/NOT_REGISTERED/.test(m)) err.innerHTML=FR()?'Cette adresse n\'est pas inscrite à la beta. <a href="rushr#beta">Inscris-toi d\'abord</a>, puis reviens ici.':'This email is not signed up for the beta. <a href="rushr#beta">Sign up first</a>, then come back.';
+      else if(/NO_KEYS_LEFT/.test(m)) err.textContent=FR()?'Toutes les clés beta ont été distribuées. Contacte-nous.':'All beta keys have been claimed. Contact us.';
+      else err.textContent=FR()?'Une erreur est survenue, réessaie.':'Something went wrong, please try again.';
+    }finally{ btn.disabled=false; }
+  }
+
+  function row(p){ return S.versions.filter(function(x){return x.platform===p;})[0]; }
+  function urlFor(p){ var r=row(p); return r?safeUrl(r.download_url):''; }
+  function pick(p){ if(!urlFor(p)) return; S.platform=p; renderReady(); }
+
+  function renderReady(){
+    var r=row(S.platform), url=urlFor(S.platform); S.url=url;
+    ['windows','mac'].forEach(function(p){
+      var b=$(p==='mac'?'pMac':'pWin'); b.classList.toggle('on',p===S.platform); b.disabled=!urlFor(p);
+    });
+    var os=S.platform==='mac'?'macOS':'Windows';
+    $('dlLabel').textContent=(FR()?'Télécharger pour ':'Download for ')+os;
+    $('dlBtn').href=url||'#';
+    $('verLine').innerHTML=r?((FR()?'Version ':'Version ')+'<b>'+String(r.latest_version).replace(/[<>&]/g,'')+'</b> · beta'):'';
+    $('whoLine').textContent=(FR()?'Connecté en tant que ':'Signed in as ')+S.email+'.';
+    renderKey();
+    if(COFFEE_URL && safeUrl(COFFEE_URL)){ $('coffeeBtn').href=COFFEE_URL; $('coffeeBtn').hidden=false; $('coffeeNote').hidden=false; }
+  }
+  function renderKey(){
+    var k=(S.license&&S.license.license_key)||'';
+    var p=String(k).split('-');
+    var masked=p.length>=3?p.map(function(s,i){return (i===0||i===p.length-1)?s:'••••';}).join('-'):(k.length>8?k.slice(0,4)+'••••'+k.slice(-4):k);
+    $('keyText').textContent=S.keyShown?k:masked;
+    $('eyeBtn').textContent=S.keyShown?(FR()?'Masquer':'Hide'):(FR()?'Afficher':'Show');
+  }
+  function toggleKey(){ S.keyShown=!S.keyShown; renderKey(); }
+  function copyKey(){
+    var k=(S.license&&S.license.license_key)||''; var btn=$('copyBtn');
+    navigator.clipboard.writeText(k).then(function(){
+      btn.textContent=FR()?'✓ Copié':'✓ Copied';
+      setTimeout(function(){ btn.textContent=FR()?'Copier':'Copy'; },1800);
+    });
+  }
+
+  /* ---------- download click: start the file, then celebrate ---------- */
+  function onDownload(e){
+    if(!S.url){ e.preventDefault(); return false; }
+    // the link itself starts the download; we only add the animation and the thank-you panel
+    setTimeout(function(){
+      $('s-thanks').hidden=false;
+      $('s-thanks').scrollIntoView({behavior:'smooth',block:'center'});
+      confetti();
+    },500);
+    return true;
+  }
+  function confetti(){
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var c=$('confetti'), x=c.getContext('2d'), W=c.width=innerWidth, H=c.height=innerHeight;
+    var cols=['#FF6A00','#FF8A3D','#FFD2A8','#ffffff','#35DC8E'], P=[];
+    for(var i=0;i<110;i++) P.push({x:W/2+(Math.random()-.5)*160,y:H*.55,vx:(Math.random()-.5)*14,vy:-Math.random()*15-4,s:5+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[i%cols.length]});
+    var t0=performance.now();
+    (function f(t){
+      var dt=t-t0; x.clearRect(0,0,W,H);
+      P.forEach(function(p){ p.vy+=.45; p.x+=p.vx; p.y+=p.vy; p.vx*=.992; p.r+=p.vr; x.save(); x.translate(p.x,p.y); x.rotate(p.r); x.globalAlpha=Math.max(0,1-dt/2600); x.fillStyle=p.c; x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6); x.restore(); });
+      if(dt<2700) requestAnimationFrame(f); else x.clearRect(0,0,W,H);
+    })(t0);
+  }
+
+  (async function init(){
+    var saved=null; try{ saved=localStorage.getItem('bpl_lang'); }catch(e){}
+    setLang(saved||((navigator.language||'en').toLowerCase().indexOf('fr')===0?'fr':'en'));
+    var prefill=new URLSearchParams(location.search).get('email'); if(prefill) $('emailInput').value=prefill;
+    try{
+      var s=await SB.auth.getSession();
+      if(s&&s.data&&s.data.session){ await loadAccount(); return; }
+    }catch(e){}
+    show('s-email');
+  })();
+</script>
+</body>
+</html>
