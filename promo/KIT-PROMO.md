@@ -105,7 +105,7 @@ Dans la description YouTube, le lien du site est cliquable : utilise le lien de 
 - 04 : `On cherche des monteurs pour tester Rushr. Licence offerte pendant la beta, lien en bio. #montagevideo #beta #videaste`
 
 **À savoir**
-- La dernière image de chaque clip indique « Windows · macOS (Apple Silicon) », alors que ta vidéo `rushr-00` dit « Windows & macOS ». Si tu veux être cohérent, dis-le-moi et je modifie le texte de l'un ou de l'autre.
+- Tous les clips Rushr disent maintenant « Windows & macOS (Apple Silicon) ». Dans `rushr-00-motion-25s.mp4`, la ligne de l'écran final a été remplacée (le fichier d'origine reste dans Téléchargements, inchangé). Le site affiche la même précision sur la page d'accueil, la page de téléchargement et les formulaires d'inscription.
 - Les images du logiciel viennent des captures du site (projets d'exemple « Dupont_Wedding », etc.) : aucune donnée réelle n'apparaît.
 
 ---
@@ -188,4 +188,4 @@ Règle d'or : parle du problème, pas de ton produit. Lis les règles d'autoprom
 - [ ] Bing Webmaster Tools : importer le site depuis Search Console.
 - [ ] Bios et liens de suivi sur TikTok, Instagram, YouTube, Behance, Vimeo.
 - [ ] Musique et accords des artistes vérifiés.
-- [ ] Décider : Mac Intel non pris en charge (build Apple Silicon uniquement), à préciser sur le site avant l'afflux de visiteurs.
+- [x] Mac Intel non pris en charge (build Apple Silicon uniquement) : précisé dans les clips et sur le site.
