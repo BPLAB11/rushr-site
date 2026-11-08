@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>Rushr — scènes des clips verticaux</title>
+<!-- Gabarit utilisé par promo/make-rushr-clips.sh : chaque scène est affichée via #nom-de-scene
+     puis capturée en image (1080x1920). Les textes se modifient dans l'objet SCENES plus bas. -->
+<style>
+@font-face{font-family:'Inter';font-weight:100 900;src:url(../assets/fonts/inter-latin.woff2) format('woff2')}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#090604;color:#fff;font-family:'Inter',sans-serif}
+body{position:relative;background:
+  radial-gradient(75% 38% at 50% -4%,rgba(255,106,0,.34),transparent 70%),
+  radial-gradient(60% 30% at 50% 108%,rgba(255,106,0,.16),transparent 70%),#090604}
+body::before{content:"";position:absolute;inset:0;opacity:.05;background:repeating-linear-gradient(115deg,#fff 0 2px,transparent 2px 46px)}
+.o{color:#FF7A1A}
+.brand{position:absolute;left:70px;top:84px;display:flex;align-items:center;gap:16px;font-weight:800;font-size:38px;letter-spacing:5px}
+.brand img{width:62px;height:62px}
+.foot{display:none;position:absolute;left:0;right:0;top:1500px;text-align:center;font-size:34px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,.55)}
+#scene{position:absolute;inset:0}
+/* titres */
+.title{position:absolute;left:70px;right:70px;top:600px;font-size:112px;font-weight:800;line-height:1.04;letter-spacing:-3px}
+.sub{position:absolute;left:70px;right:90px;font-size:46px;line-height:1.35;color:#C9BFB5;font-weight:500}
+/* capture d'écran */
+.step{position:absolute;left:70px;top:200px}
+.step .n{font-size:30px;font-weight:800;letter-spacing:6px;color:#FF7A1A;border:2px solid rgba(255,122,26,.55);border-radius:12px;padding:8px 18px;display:inline-block;background:rgba(255,106,0,.12)}
+.step h2{margin-top:26px;font-size:84px;font-weight:800;line-height:1.05;letter-spacing:-2px;max-width:940px}
+.card{position:absolute;left:60px;overflow:hidden;border-radius:30px;border:2px solid rgba(255,122,26,.4);box-shadow:0 0 120px rgba(255,106,0,.28),0 40px 80px rgba(0,0,0,.6);background:#0b0b0d}
+.card img{position:absolute;max-width:none}
+/* touches */
+.keys{position:absolute;left:70px;top:620px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;width:940px}
+.key{height:220px;border-radius:34px;background:linear-gradient(180deg,#201914,#14100c);border:2px solid rgba(255,255,255,.12);box-shadow:0 10px 0 #0b0806,0 0 0 1px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;font-size:120px;font-weight:800}
+.key.on{border-color:#FF7A1A;color:#FF7A1A;box-shadow:0 10px 0 #5a2600,0 0 60px rgba(255,106,0,.4)}
+.chips{position:absolute;left:70px;display:flex;flex-wrap:wrap;gap:18px;width:940px}
+.chip{display:flex;align-items:center;gap:14px;font-size:38px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:2px solid rgba(255,255,255,.14);background:#14110e;border-radius:22px;padding:18px 28px}
+.chip i{width:20px;height:20px;border-radius:50%;display:block}
+.btn{position:absolute;left:150px;width:780px;height:170px;border-radius:44px;background:linear-gradient(90deg,#FF9A3D,#FF5A00);font-size:76px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 120px rgba(255,106,0,.55)}
+.pill{display:inline-block;font-size:34px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF8A3D;border:2px solid rgba(255,122,26,.55);background:rgba(255,106,0,.12);border-radius:999px;padding:14px 34px}
+.green{color:#35DC8E}
+.list{position:absolute;left:70px;right:70px;display:flex;flex-direction:column;gap:44px}
+.list div{display:flex;gap:30px;align-items:center;font-size:64px;font-weight:700;line-height:1.15;letter-spacing:-1px}
+.list svg{flex:0 0 76px;width:76px;height:76px}
+/* fin */
+.cta{position:absolute;left:0;right:0;top:380px;text-align:center}
+.cta img{width:200px;height:200px}
+.cta .name{font-size:150px;font-weight:800;letter-spacing:6px;margin-top:14px}
+.cta .pill{margin-top:46px}
+.cta .lic{font-size:56px;font-weight:700;margin-top:44px;line-height:1.2}
+.cta .go{display:inline-block;margin-top:60px;font-size:60px;font-weight:800;background:linear-gradient(90deg,#FF9A3D,#FF5A00);border-radius:40px;padding:32px 76px;box-shadow:0 0 100px rgba(255,106,0,.5)}
+.cta .url{font-size:50px;font-weight:700;margin-top:60px}
+.cta .hd{font-size:38px;color:#B9AEA3;margin-top:14px;font-weight:600}
+.cta .os{font-size:32px;color:#8E857C;margin-top:44px;font-weight:600}
+</style></head><body>
+<div class="brand"><img src="../assets/rushr-favicon-512.png" alt=""><span>RUSHR</span></div>
+<div id="scene"></div>
+<div class="foot" id="foot">thebackpacklab.com</div>
+<script>
+var IMG={app:'../assets/rushr-app-shot.png',struct:'../assets/rushr-structure-shot.png',dash:'../assets/rushr-dashboard-shot.png'};
+var CHECK='<svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="36" fill="rgba(255,106,0,.16)" stroke="#FF7A1A" stroke-width="3"/><path d="M22 39l11 11 21-23" fill="none" stroke="#FF7A1A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+/* capture recadrée : image, zone (x,y,l,h en pixels de l'image d'origine), largeur affichée, position verticale */
+function shot(n,title,img,x,y,w,h,boxW,top){
+  var s=boxW/w,boxH=Math.round(h*s),left=Math.round((1080-boxW)/2);
+  return '<div class="step"><span class="n">'+n+'</span><h2>'+title+'</h2></div>'+
+  '<div class="card" style="left:'+left+'px;top:'+top+'px;width:'+boxW+'px;height:'+boxH+'px"><img src="'+IMG[img]+'" style="width:'+Math.round(2400*s)+'px;left:'+(-Math.round(x*s))+'px;top:'+(-Math.round(y*s))+'px"></div>';
+}
+function cta(){return '<div class="cta"><img src="../assets/rushr-favicon-512.png" alt=""><div class="name">RUSHR</div><div class="pill">Beta sur préinscription</div><div class="lic">Licence offerte<br>pendant la beta</div><div class="go">Je me préinscris</div><div class="url">thebackpacklab.com</div><div class="hd">@bpack.lab</div><div class="os">Windows · macOS (Apple Silicon)</div></div>';}
+var SCENES={
+ /* CLIP 1 : trier ses rushes */
+ 'r1-1':'<div class="title">Tu perds combien de temps à <span class="o">trier tes rushes</span> ?</div>',
+ 'r1-2':shot('01','Importe tes dossiers de prises','app',170,232,1415,1368,960,560),
+ 'r1-3':shot('02','Prévisualise et tague','app',1605,235,770,900,800,540),
+ 'r1-4':'<div class="step"><span class="n">03</span><h2>Tague au clavier</h2></div><div class="keys"><div class="key">1</div><div class="key">2</div><div class="key on">3</div><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div><div class="key">9</div></div><div class="sub" style="top:1380px">Touches 1 à 9, sélection multiple, tag en lot.</div>',
+ 'r1-5':'<div class="step"><span class="n">04</span><h2>Un clic, tout est rangé</h2></div><div class="btn" style="top:640px">Prepare</div><div class="sub" style="top:900px;text-align:center;left:90px">Chaque prise taguée file dans le bon dossier, <b class="o">prête pour ton logiciel de montage.</b></div>',
+ 'r1-6':cta(),
+ /* CLIP 2 : données privées */
+ 'r2-1':'<div class="title">Tes rushes <span class="o">ne quittent jamais</span> ton ordinateur.</div>',
+ 'r2-2':'<div class="title" style="top:640px">100&nbsp;% <span class="o">en local.</span></div><div class="sub" style="top:960px">Import, tri, tags, rangement : tout se passe sur ton disque. Rien n’est envoyé en ligne.</div>',
+ 'r2-3':'<div class="step"><span class="n">PAR DÉFAUT</span><h2>Tes originaux restent intacts</h2></div><div class="chips" style="top:640px"><div class="chip" style="color:#35DC8E;border-color:rgba(53,220,142,.4)">Mode : Copy</div></div><div class="sub" style="top:800px">Rushr copie tes prises vers le projet : rien n’est modifié ni déplacé. Un mode Déplacement existe si tu préfères.</div>',
+ 'r2-4':cta(),
+ /* CLIP 3 : presets */
+ 'r3-1':'<div class="title">Chaque projet commence <span class="o">propre.</span></div>',
+ 'r3-2':shot('01','Choisis un preset','struct',935,280,765,600,960,540),
+ 'r3-3':'<div class="step"><span class="n">02</span><h2>Des presets prêts à l’emploi</h2></div><div class="chips" style="top:640px"><div class="chip"><i style="background:#FF6A00"></i>Event</div><div class="chip"><i style="background:#2F8CFF"></i>Music video</div><div class="chip"><i style="background:#35DC8E"></i>Wedding</div><div class="chip"><i style="background:#FF4D8D"></i>Documentary</div><div class="chip"><i style="background:#9B6BFF"></i>FPV</div><div class="chip"><i style="background:#F2C230"></i>Social content</div></div><div class="sub" style="top:1100px">Réutilisables et éditables : crée les tiens en quelques secondes.</div>',
+ 'r3-4':'<div class="step"><span class="n">03</span><h2>Une arborescence propre en un clic</h2></div><div class="btn" style="top:760px;font-size:70px">Create project</div><div class="sub" style="top:1000px;text-align:center;left:90px">Dossiers de rushes, audio, export, fichiers projet : <b class="o">tout est prêt avant le premier clip.</b></div>',
+ 'r3-5':cta(),
+ /* CLIP 4 : appel aux testeurs */
+ 'r4-1':'<div class="title">On cherche des <span class="o">monteurs</span> pour tester Rushr.</div>',
+ 'r4-2':'<div class="step"><span class="n">BETA</span><h2>Ce que tu y gagnes</h2></div><div class="list" style="top:560px"><div>'+CHECK+'<span>Licence offerte pendant la beta</span></div><div>'+CHECK+'<span>Fonctionne hors ligne</span></div><div>'+CHECK+'<span>Tes retours façonnent la V1</span></div></div>',
+ 'r4-3':cta()
+};
+var id=(location.hash||'#r1-1').slice(1);
+document.getElementById('scene').innerHTML=SCENES[id]||'';
+if(/-(6|4|5|3)$/.test(id)&&SCENES[id].indexOf('class="cta"')>-1){document.getElementById('foot').style.display='none';document.querySelector('.brand').style.display='none'}
+</script></body></html>

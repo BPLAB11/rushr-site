@@ -6,3 +6,6 @@ node_modules/
 
 # fichiers de travail mugs (copie auto, non publiee)
 /mugs/
+
+# clips video de promotion (lourds, regenerables avec promo/make-clips.sh)
+promo/clips/
