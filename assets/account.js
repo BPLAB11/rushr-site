@@ -15,10 +15,19 @@ var PRODUCTS={
 /* ===================== Traductions ===================== */
 var I18N={
 fr:{
- auth_title:'Mon compte',auth_lead:'Un seul compte BACKPACK LAB pour tes licences, tes appareils et ton historique. Pas encore de compte ? Il sera créé automatiquement.',
- auth_google:'Continuer avec Google',auth_microsoft:'Continuer avec Microsoft',err_oauth:'Connexion impossible, réessaie ou utilise ton email.',auth_or:'ou par email',err_google:'Connexion avec Google impossible, réessaie ou utilise ton email.',
- email:'Email',email_ph:'ton@email.com',auth_send:'Recevoir un code',auth_privacy:"Ton email sert uniquement à t'envoyer le code de connexion et à gérer ton compte.",privacy_policy:'Politique de confidentialité',
- code_title:'Vérifie ta boîte mail',code_lead:'Nous avons envoyé un code à',code_label:'Code de connexion',code_verify:'Se connecter',code_resend:'Renvoyer le code',code_resend_in:'Renvoyer dans {s} s',code_change:"← Changer d'email",
+ auth_title:'Mon compte',auth_lead:'Un seul compte BACKPACK LAB pour tes licences, tes appareils et ton historique.',
+ su_title:'Créer un compte',su_lead:'Un seul compte BACKPACK LAB pour tes licences, tes appareils et ton historique. Nous t\'enverrons un code pour confirmer ton email.',fg_title:'Mot de passe oublié',fg_lead:'Entre ton email : nous t\'envoyons un code pour choisir un nouveau mot de passe.',
+ auth_login:'Se connecter',auth_signup:'Créer mon compte',fg_send:'Recevoir un code',mode_login:'Connexion',mode_signup:'Créer un compte',
+ pw:'Mot de passe',pw_ph:'Ton mot de passe',pw_hint:'10 caractères minimum.',pw_show:'Afficher',pw_hide:'Masquer',forgot:'Mot de passe oublié ?',back_login:'← Retour à la connexion',
+ err_pw_empty:'Entre ton mot de passe.',err_pw_short:'Le mot de passe doit contenir au moins 10 caractères.',err_login:'Email ou mot de passe incorrect.',err_exists:'Un compte existe déjà avec cet email : connecte-toi, ou utilise « Mot de passe oublié ? ».',
+ login_help:"Tu t'étais inscrit à la beta, ou connecté avec un code ou Google ? Ton compte n'a peut-être pas encore de mot de passe.",login_help_btn:'Créer mon mot de passe',
+ fp_q:'Déjà inscrit à la beta ou connecté avec un code ?',fp_link:'Crée ton mot de passe',fp_title:'Crée ton mot de passe',fp_lead:"Entre ton email : nous t'envoyons un code pour choisir ton mot de passe.",fp_note:'Ton adresse est déjà enregistrée (inscription à la beta ou connexion par code). Choisis ton mot de passe avec le code que nous t\'envoyons par email.',
+ pwb_t:'Crée un mot de passe',pwb_d:"Ton compte se connecte pour l'instant sans mot de passe. Crée-en un pour sécuriser ton accès.",pwb_btn:'Créer un mot de passe',pwb_later:'Plus tard',
+ rc_title:'Nouveau mot de passe',newpw_label:'Nouveau mot de passe',code_verify_signup:'Confirmer mon compte',rc_verify:'Changer le mot de passe',
+ code_help:'Pas de code ? Regarde dans tes spams. Si tu as déjà un compte, utilise « Mot de passe oublié ? ».',pw_changed:'Mot de passe mis à jour',
+ auth_google:'Continuer avec Google',auth_microsoft:'Continuer avec Microsoft',err_oauth:'Connexion impossible, réessaie ou utilise ton email.',auth_or:'ou avec ton email',err_google:'Connexion avec Google impossible, réessaie ou utilise ton email.',
+ email:'Email',email_ph:'ton@email.com',auth_send:'Recevoir un code',auth_privacy:"Ton email sert uniquement à gérer ton compte et à t'envoyer les codes de vérification.",privacy_policy:'Politique de confidentialité',
+ code_title:'Vérifie ta boîte mail',code_lead:'Nous avons envoyé un code à',code_label:'Code reçu par email',code_verify:'Se connecter',code_resend:'Renvoyer le code',code_resend_in:'Renvoyer dans {s} s',code_change:"← Changer d'email",
  err_email:'Entre une adresse email valide.',err_send:"Impossible d'envoyer le code, réessaie.",err_code:'Code invalide ou expiré.',err_code_empty:'Entre le code reçu par email.',err_load:'Connecté, mais impossible de charger ton compte. Recharge la page.',err_session:'Impossible de charger ton compte, reconnecte-toi.',
  code_sent:'Code envoyé',code_sent_d:'Vérifie ta boîte mail.',signed_out:'Tu es déconnecté.',
  legal:'Mentions légales',privacy:'Confidentialité',
@@ -46,7 +55,16 @@ fr:{
  key_ok:'Licence ajoutée',key_ok_d:'Elle est maintenant liée à ton compte.',key_err_nf:'Clé introuvable. Vérifie qu\'elle est correcte.',key_err_claimed:'Cette clé est déjà liée à un autre compte.',key_err:"Impossible d'ajouter la clé, réessaie.",key_err_empty:'Entre une clé de licence.',
  cancel:'Annuler',close:'Fermer',save:'Enregistrer',saved:'Enregistré',
  pur_t:'Aucun achat pour le moment',pur_d:'Tes commandes et tes factures apparaîtront ici.',soon:'Bientôt',
- pf_title:'Profil',pf_d:'Ces informations sont visibles uniquement par toi.',pf_name:'Nom',pf_name_ph:'Ton nom',pf_email:'Email',pf_email_hint:"L'adresse de connexion ne peut pas être modifiée ici.",pf_lang:'Langue',pf_dirty:'Modifications non enregistrées',pf_clean:'Tout est à jour',pf_ok:'Profil enregistré',pf_err:"Impossible d'enregistrer, réessaie.",verified:'Vérifié',
+ pf_title:'Profil',pf_d:'Ces informations sont visibles uniquement par toi.',pf_name:'Nom',pf_name_ph:'Ton nom',pf_email:'Email',pf_email_hint:"Pour changer d'adresse, utilise la carte Sécurité.",
+ pf_phone:'Téléphone',pf_phone_ph:'+33 6 12 34 56 78',pf_company:'Société / activité',pf_company_ph:'Ta société ou ta chaîne',pf_phone_err:'Numéro invalide : chiffres, espaces et + ( ) . - uniquement.',
+ su_2fa:'Activer la double authentification par e-mail (recommandé)',
+ tf_title:'Vérification en deux étapes',tf_lead:'Pour protéger ton compte, nous avons envoyé un code à',tf_verify:'Vérifier',tf_cancel:'Se déconnecter',tf_limit:'Trop de codes demandés. Réessaie dans un moment.',tf_expired:'Code expiré : demande un nouveau code.',tf_locked:'Trop d\'essais : demande un nouveau code.',tf_none:'Aucun code valide : demande un nouveau code.',
+ sec_title:'Sécurité',sec_d:'Adresse e-mail, mot de passe et double authentification.',sec_email:'Adresse e-mail',sec_pw:'Mot de passe',sec_modify:'Modifier',sec_change:'Changer',
+ tf_toggle:'Double authentification par e-mail',tf_toggle_on:'Un code reçu par e-mail est demandé à chaque connexion par mot de passe.',tf_toggle_off:'Ajoute une étape de vérification par e-mail après ton mot de passe.',tf_on_toast:'Double authentification activée',tf_off_toast:'Double authentification désactivée',tf_err:'Impossible de modifier ce réglage, réessaie.',tf_off_title:'Désactiver la double authentification ?',tf_off_d:'Ton compte ne sera plus protégé que par ton mot de passe.',tf_off_confirm:'Désactiver',
+ cp_current:'Mot de passe actuel',cp_current_hint:"Laisse vide si tu n'as pas encore de mot de passe (compte créé avec Google ou avec un code).",cp_err_current:'Mot de passe actuel incorrect ou manquant.',
+ cp_title:'Changer le mot de passe',cp_d:'Pour confirmer que c\'est bien toi, nous envoyons un code à {e}.',cp_send:'Envoyer le code',cp_err_send:"Impossible d'envoyer le code, réessaie.",cp_title2:'Nouveau mot de passe',cp_d2:'Saisis le code reçu par e-mail, puis choisis ton nouveau mot de passe.',cp_save:'Changer le mot de passe',cp_err:'Impossible de changer le mot de passe, réessaie.',
+ ce_title:"Changer d'adresse e-mail",ce_d:"Entre ta nouvelle adresse. Nous envoyons un code à l'ancienne ET à la nouvelle adresse pour confirmer le changement.",ce_new:'Nouvelle adresse e-mail',ce_send:'Envoyer les codes',ce_same:"C'est déjà ton adresse actuelle.",ce_taken:'Cette adresse est déjà utilisée par un autre compte.',ce_err:"Impossible de changer l'adresse, réessaie.",ce_title2:'Confirme le changement',ce_d2:'Saisis les deux codes reçus : un sur ton ancienne adresse, un sur la nouvelle.',ce_code_for:'Code reçu sur {e}',ce_confirm:"Confirmer l'adresse",ce_ok:'Adresse e-mail mise à jour',
+pf_lang:'Langue',pf_dirty:'Modifications non enregistrées',pf_clean:'Tout est à jour',pf_ok:'Profil enregistré',pf_err:"Impossible d'enregistrer, réessaie.",verified:'Vérifié',
  ml_title:"Emails d'information",ml_d:'Nouvelles versions et actualités de RUSHR et BACKPACK LAB.',ml_on:"Tu reçois nos emails d'information (accord donné le {d}).",ml_off:"Tu ne reçois pas nos emails d'information.",ml_unsub:"Tu es désabonné de nos emails d'information.",ml_none:"Tu n'as pas demandé à recevoir nos emails d'information. Les emails liés à ton accès (bienvenue, licence) continuent d'être envoyés.",
  ml_legacy_t:'Restons en contact ?',ml_legacy_d:"Tu t'es inscrit à la bêta de RUSHR avant que nous te demandions ton accord pour les emails d'information. Veux-tu continuer à recevoir nos nouvelles (nouvelles versions, actualités) ? Tu pourras changer d'avis à tout moment dans ton profil.",ml_yes:'Oui, continuer',ml_no:'Non merci',ml_later:'Plus tard',ml_on_toast:"Emails d'information activés",ml_off_toast:'Emails d\'information désactivés',ml_err:"Impossible d'enregistrer ton choix, réessaie.",ml_toggle:"Recevoir les emails d'information",
  ac_title:'Compte',ac_created:'Compte créé le',ac_beta:'Inscrit à la bêta RUSHR',
@@ -59,10 +77,19 @@ fr:{
  platform_windows:'Windows',platform_mac:'macOS'
 },
 en:{
- auth_title:'My account',auth_lead:'One BACKPACK LAB account for your licenses, devices and history. No account yet? It will be created automatically.',
- auth_google:'Continue with Google',auth_microsoft:'Continue with Microsoft',err_oauth:'Sign-in failed, try again or use your email.',auth_or:'or by email',err_google:'Google sign-in failed, try again or use your email.',
- email:'Email',email_ph:'you@email.com',auth_send:'Send me a code',auth_privacy:'Your email is only used to send you the sign-in code and manage your account.',privacy_policy:'Privacy policy',
- code_title:'Check your inbox',code_lead:'We sent a code to',code_label:'Sign-in code',code_verify:'Sign in',code_resend:'Resend code',code_resend_in:'Resend in {s}s',code_change:'← Change email',
+ auth_title:'My account',auth_lead:'One BACKPACK LAB account for your licenses, devices and history.',
+ su_title:'Create an account',su_lead:'One BACKPACK LAB account for your licenses, devices and history. We will email you a code to confirm your address.',fg_title:'Forgot password',fg_lead:'Enter your email: we will send you a code to choose a new password.',
+ auth_login:'Sign in',auth_signup:'Create my account',fg_send:'Send me a code',mode_login:'Sign in',mode_signup:'Create an account',
+ pw:'Password',pw_ph:'Your password',pw_hint:'At least 10 characters.',pw_show:'Show',pw_hide:'Hide',forgot:'Forgot password?',back_login:'← Back to sign in',
+ err_pw_empty:'Enter your password.',err_pw_short:'The password must be at least 10 characters long.',err_login:'Incorrect email or password.',err_exists:'An account already exists with this email: sign in, or use “Forgot password?”.',
+ login_help:'Did you sign up for the beta, or sign in with a code or Google? Your account may not have a password yet.',login_help_btn:'Create my password',
+ fp_q:'Already signed up for the beta or signed in with a code?',fp_link:'Create your password',fp_title:'Create your password',fp_lead:'Enter your email: we send you a code to choose your password.',fp_note:'Your address is already registered (beta sign-up or code sign-in). Choose your password with the code we email you.',
+ pwb_t:'Create a password',pwb_d:'Your account currently signs in without a password. Create one to secure your access.',pwb_btn:'Create a password',pwb_later:'Later',
+ rc_title:'New password',newpw_label:'New password',code_verify_signup:'Confirm my account',rc_verify:'Change password',
+ code_help:'No code? Check your spam folder. If you already have an account, use “Forgot password?”.',pw_changed:'Password updated',
+ auth_google:'Continue with Google',auth_microsoft:'Continue with Microsoft',err_oauth:'Sign-in failed, try again or use your email.',auth_or:'or with your email',err_google:'Google sign-in failed, try again or use your email.',
+ email:'Email',email_ph:'you@email.com',auth_send:'Send me a code',auth_privacy:'Your email is only used to manage your account and send you verification codes.',privacy_policy:'Privacy policy',
+ code_title:'Check your inbox',code_lead:'We sent a code to',code_label:'Code from the email',code_verify:'Sign in',code_resend:'Resend code',code_resend_in:'Resend in {s}s',code_change:'← Change email',
  err_email:'Enter a valid email address.',err_send:'Could not send the code, please retry.',err_code:'Invalid or expired code.',err_code_empty:'Enter the code you received by email.',err_load:'Signed in, but your account could not be loaded. Please reload the page.',err_session:'Could not load your account, please sign in again.',
  code_sent:'Code sent',code_sent_d:'Check your inbox.',signed_out:'You have been signed out.',
  legal:'Legal notice',privacy:'Privacy',
@@ -90,7 +117,16 @@ en:{
  key_ok:'License added',key_ok_d:'It is now linked to your account.',key_err_nf:'Key not found. Please check it.',key_err_claimed:'This key is already linked to another account.',key_err:'Could not add the key, please retry.',key_err_empty:'Enter a license key.',
  cancel:'Cancel',close:'Close',save:'Save',saved:'Saved',
  pur_t:'No purchase yet',pur_d:'Your orders and invoices will show up here.',soon:'Soon',
- pf_title:'Profile',pf_d:'This information is only visible to you.',pf_name:'Name',pf_name_ph:'Your name',pf_email:'Email',pf_email_hint:'The sign-in address cannot be changed here.',pf_lang:'Language',pf_dirty:'Unsaved changes',pf_clean:'Everything is up to date',pf_ok:'Profile saved',pf_err:'Could not save, please retry.',verified:'Verified',
+ pf_title:'Profile',pf_d:'This information is only visible to you.',pf_name:'Name',pf_name_ph:'Your name',pf_email:'Email',pf_email_hint:'To change your address, use the Security card.',
+ pf_phone:'Phone',pf_phone_ph:'+33 6 12 34 56 78',pf_company:'Company / activity',pf_company_ph:'Your company or channel',pf_phone_err:'Invalid number: digits, spaces and + ( ) . - only.',
+ su_2fa:'Enable email two-step verification (recommended)',
+ tf_title:'Two-step verification',tf_lead:'To protect your account, we sent a code to',tf_verify:'Verify',tf_cancel:'Sign out',tf_limit:'Too many codes requested. Try again in a moment.',tf_expired:'Code expired: request a new one.',tf_locked:'Too many attempts: request a new code.',tf_none:'No valid code: request a new one.',
+ sec_title:'Security',sec_d:'Email address, password and two-step verification.',sec_email:'Email address',sec_pw:'Password',sec_modify:'Change',sec_change:'Change',
+ tf_toggle:'Email two-step verification',tf_toggle_on:'A code sent by email is required at every password sign-in.',tf_toggle_off:'Adds an email verification step after your password.',tf_on_toast:'Two-step verification enabled',tf_off_toast:'Two-step verification disabled',tf_err:'Could not change this setting, please retry.',tf_off_title:'Disable two-step verification?',tf_off_d:'Your account will only be protected by your password.',tf_off_confirm:'Disable',
+ cp_current:'Current password',cp_current_hint:"Leave empty if you don't have a password yet (account created with Google or with a code).",cp_err_current:'Current password incorrect or missing.',
+ cp_title:'Change password',cp_d:'To confirm it is you, we send a code to {e}.',cp_send:'Send code',cp_err_send:'Could not send the code, please retry.',cp_title2:'New password',cp_d2:'Enter the code from the email, then choose your new password.',cp_save:'Change password',cp_err:'Could not change the password, please retry.',
+ ce_title:'Change email address',ce_d:'Enter your new address. We send a code to the old AND the new address to confirm the change.',ce_new:'New email address',ce_send:'Send codes',ce_same:'This is already your current address.',ce_taken:'This address is already used by another account.',ce_err:'Could not change the address, please retry.',ce_title2:'Confirm the change',ce_d2:'Enter both codes: one received at your old address, one at the new address.',ce_code_for:'Code received at {e}',ce_confirm:'Confirm address',ce_ok:'Email address updated',
+pf_lang:'Language',pf_dirty:'Unsaved changes',pf_clean:'Everything is up to date',pf_ok:'Profile saved',pf_err:'Could not save, please retry.',verified:'Verified',
  ml_title:'Information emails',ml_d:'New releases and news about RUSHR and BACKPACK LAB.',ml_on:'You receive our information emails (consent given on {d}).',ml_off:'You do not receive our information emails.',ml_unsub:'You are unsubscribed from our information emails.',ml_none:'You did not ask to receive our information emails. Emails about your access (welcome, license) are still sent.',
  ml_legacy_t:'Stay in touch?',ml_legacy_d:'You signed up for the RUSHR beta before we asked for your consent to information emails. Would you like to keep receiving our news (new releases, updates)? You can change your mind at any time in your profile.',ml_yes:'Yes, keep me posted',ml_no:'No thanks',ml_later:'Later',ml_on_toast:'Information emails enabled',ml_off_toast:'Information emails disabled',ml_err:'Could not save your choice, please retry.',ml_toggle:'Receive information emails',
  ac_title:'Account',ac_created:'Account created on',ac_beta:'Signed up for the RUSHR beta',
@@ -465,6 +501,11 @@ async function setConsent(value){
 async function saveProfile(btn){
   var d=profileDraft(); setBusy(btn,true);
   var patch={full_name:d.name.trim()||null,language:d.lang,updated_at:new Date().toISOString()};
+  if(profileExtra()){
+    var ph=String(d.phone||'').trim();
+    if(!/^[0-9+()./ -]{0,32}$/.test(ph)){ setBusy(btn,false); toast('error',t('pf_phone_err')); return; }
+    patch.phone=ph||null; patch.company=String(d.company||'').trim()||null;
+  }
   try{
     var r=await SB.from('profiles').update(patch).eq('id',S.account.user.id);
     if(r.error) throw r.error;
@@ -510,6 +551,18 @@ function skeletonView(){
 }
 
 /* ---- Vue d'ensemble ---- */
+async function loadHasPassword(){
+  try{
+    var r=await SB.rpc('sec_has_password');
+    if(!r.error&&typeof r.data==='boolean'){ S.hasPw=r.data; if(S.account&&(S.route==='overview'||S.route==='profile')) renderView(false); }
+  }catch(e){}
+}
+function pwAlert(){
+  if(S.hasPw!==false) return '';            // inconnu (SQL absent) ou mot de passe déjà créé
+  try{ if(sessionStorage.getItem('bpl_pw_later')==='1') return ''; }catch(e){}
+  return '<div class="alert" style="margin-bottom:16px">'+icon('shield')+'<div><div class="alert-title">'+esc(t('pwb_t'))+'</div><div class="alert-desc">'+esc(t('pwb_d'))+'</div>'
+    +'<div class="alert-actions"><button type="button" class="btn btn-primary btn-sm" data-action="change-password">'+esc(t('pwb_btn'))+'</button><button type="button" class="btn btn-ghost btn-sm" data-action="pw-later">'+esc(t('pwb_later'))+'</button></div></div></div>';
+}
 function consentAlert(){
   if(consentState()!=='legacy'||laterSet()) return '';
   return '<div class="alert" style="margin-bottom:16px">'+icon('mail')+'<div><div class="alert-title">'+esc(t('ml_legacy_t'))+'</div><div class="alert-desc">'+esc(t('ml_legacy_d'))+'</div>'
@@ -550,7 +603,7 @@ function renderOverview(){
   var side=downloadCard(lics)
     +'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('help_title'))+'</div><div class="card-description">'+esc(t('help_d'))+'</div></div></div><div class="card-content"><a class="btn btn-outline btn-block" href="#support">'+icon('life')+'<span>'+esc(t('help_btn'))+'</span></a></div></div>';
 
-  return consentAlert()
+  return pwAlert()+consentAlert()
     +pageHead(t('hello',{name:firstName()}),t('overview_sub'),addKeyBtn())
     +'<div class="stats">'+stats+'</div>'
     +'<div class="grid-2"><div class="stack">'+licCard+devCard+'</div><div class="stack">'+side+'</div></div>';
@@ -627,22 +680,46 @@ function renderPurchases(){
 }
 
 /* ---- Profil ---- */
+function profileExtra(){ var p=(S.account&&S.account.profile)||{}; return ('phone' in p); }   // colonnes telephone / societe disponibles ?
 function profileDraft(){
   var p=S.account.profile||{};
-  return S.draft||{name:p.full_name||'',lang:(p.language==='en')?'en':'fr'};
+  return S.draft||{name:p.full_name||'',lang:(p.language==='en')?'en':'fr',phone:p.phone||'',company:p.company||''};
+}
+function readProfileDraft(){
+  var d={name:$('#pName').value,lang:$('#pLang').value};
+  d.phone=$('#pPhone')?$('#pPhone').value:((S.account.profile||{}).phone||'');
+  d.company=$('#pCompany')?$('#pCompany').value:((S.account.profile||{}).company||'');
+  return d;
 }
 function profileDirty(){
   var p=S.account.profile||{}, d=profileDraft();
-  return d.name.trim()!==String(p.full_name||'').trim()||d.lang!==((p.language==='en')?'en':'fr');
+  var dirty=d.name.trim()!==String(p.full_name||'').trim()||d.lang!==((p.language==='en')?'en':'fr');
+  if(profileExtra()) dirty=dirty||String(d.phone||'').trim()!==String(p.phone||'').trim()||String(d.company||'').trim()!==String(p.company||'').trim();
+  return dirty;
 }
 function renderProfile(){
-  var a=S.account, d=profileDraft(), st=consentState(), b=a.beta_signup, dirty=profileDirty();
+  var a=S.account, d=profileDraft(), st=consentState(), b=a.beta_signup, dirty=profileDirty(), extra=profileExtra();
+  var extraFields=extra
+    ?'<div class="field"><label class="label" for="pPhone">'+esc(t('pf_phone'))+'</label><input id="pPhone" name="phone" class="input" type="tel" inputmode="tel" maxlength="32" autocomplete="tel" value="'+esc(d.phone||'')+'" placeholder="'+esc(t('pf_phone_ph'))+'"/></div>'
+     +'<div class="field"><label class="label" for="pCompany">'+esc(t('pf_company'))+'</label><input id="pCompany" name="company" class="input" type="text" maxlength="120" autocomplete="organization" value="'+esc(d.company||'')+'" placeholder="'+esc(t('pf_company_ph'))+'"/></div>'
+    :'';
   var profileCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('pf_title'))+'</div><div class="card-description">'+esc(t('pf_d'))+'</div></div></div><form id="profileForm" novalidate><div class="card-content">'
     +'<div class="row" style="margin-bottom:18px"><span class="avatar avatar-lg">'+esc(initials(d.name||a.user.email))+'</span><div style="min-width:0"><div style="font-weight:600">'+esc(d.name||String(a.user.email).split("@")[0])+'</div><div class="muted" style="font-size:13px;overflow:hidden;text-overflow:ellipsis">'+esc(a.user.email)+'</div></div></div>'
     +'<div class="field"><label class="label" for="pName">'+esc(t('pf_name'))+'</label><input id="pName" name="name" class="input" type="text" maxlength="80" autocomplete="name" value="'+esc(d.name)+'" placeholder="'+esc(t('pf_name_ph'))+'"/></div>'
     +'<div class="field"><label class="label" for="pEmail">'+esc(t('pf_email'))+' <span class="badge badge-success" style="margin-left:6px;height:18px;font-size:10.5px">'+esc(t('verified'))+'</span></label><input id="pEmail" class="input" type="email" readonly value="'+esc(a.user.email)+'"/><div class="hint">'+esc(t('pf_email_hint'))+'</div></div>'
+    +extraFields
     +'<div class="field"><label class="label" for="pLang">'+esc(t('pf_lang'))+'</label><select id="pLang" name="lang" class="select"><option value="fr"'+(d.lang==='fr'?' selected':'')+'>Français</option><option value="en"'+(d.lang==='en'?' selected':'')+'>English</option></select></div>'
     +'</div><div class="card-footer"><span class="hint" id="pfHint">'+esc(dirty?t('pf_dirty'):t('pf_clean'))+'</span><button type="submit" id="pfSave" class="btn btn-primary"'+(dirty?'':' disabled')+'>'+esc(t('save'))+'</button></div></form></div>';
+
+  var tfRow='';
+  if(S.sec&&S.sec.supported){
+    var tfOn=!!S.sec.email_2fa;
+    tfRow='<div class="sec-row"><div class="setting" style="width:100%"><div><label class="label" id="tfLbl">'+esc(t('tf_toggle'))+'</label><p>'+esc(t(tfOn?'tf_toggle_on':'tf_toggle_off'))+'</p></div><button type="button" role="switch" class="switch" aria-labelledby="tfLbl" aria-checked="'+tfOn+'" data-action="toggle-2fa"></button></div></div>';
+  }
+  var secCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('sec_title'))+'</div><div class="card-description">'+esc(t('sec_d'))+'</div></div>'+icon('shield')+'</div><div class="card-content">'
+    +'<div class="sec-row"><div class="sec-main"><div class="label">'+esc(t('sec_email'))+'</div><div class="sec-val">'+esc(a.user.email)+'</div></div><button type="button" class="btn btn-outline btn-sm" data-action="change-email">'+esc(t('sec_modify'))+'</button></div>'
+    +'<div class="sec-row"><div class="sec-main"><div class="label">'+esc(t('sec_pw'))+'</div><div class="sec-val">••••••••••</div></div><button type="button" class="btn btn-outline btn-sm" data-action="change-password">'+esc(t('sec_change'))+'</button></div>'
+    +tfRow+'</div></div>';
 
   var mailBody='';
   if(st==='legacy'){
@@ -658,7 +735,7 @@ function renderProfile(){
   var accCard='<div class="card"><div class="card-header"><div class="card-title">'+esc(t('ac_title'))+'</div></div><div class="card-content"><div class="info-rows"><div><span>'+esc(t('ac_created'))+'</span><span>'+esc(fmtDate(a.user.created_at))+'</span></div>'+(b?'<div><span>'+esc(t('ac_beta'))+'</span><span>'+esc(fmtDate(b.created_at))+' · '+plat+'</span></div>':'')+'</div></div></div>';
   var mailto='mailto:contact@thebackpacklab.com?subject='+encodeURIComponent(t('dp_subject'));
   var dpCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dp_title'))+'</div><div class="card-description">'+esc(t('dp_d'))+'</div></div>'+icon('shield')+'</div><div class="card-content row" style="flex-wrap:wrap"><a class="btn btn-outline btn-sm" href="'+mailto+'">'+icon('mail')+'<span>'+esc(t('dp_rights'))+'</span></a><a class="btn btn-ghost btn-sm" href="privacy">'+esc(t('dp_policy'))+'</a></div></div>';
-  return pageHead(t('nav_profile'),t('page_profile_d'))+'<div class="grid-eq"><div class="stack">'+profileCard+'</div><div class="stack">'+mailCard+accCard+dpCard+'</div></div>';
+  return pageHead(t('nav_profile'),t('page_profile_d'))+pwAlert()+'<div class="grid-eq"><div class="stack">'+profileCard+secCard+'</div><div class="stack">'+mailCard+accCard+dpCard+'</div></div>';
 }
 
 /* ---- Support ---- */
@@ -763,8 +840,8 @@ async function loadTickets(){
 /* ===================== Authentification ===================== */
 function showAuth(step){
   $('#app').hidden=true; $('#auth').hidden=false;
-  $('#step-email').hidden=(step==='code'); $('#step-code').hidden=(step!=='code');
-  var f=(step==='code')?$('#codeInput'):$('#emailInput'); if(f) setTimeout(function(){f.focus();},40);
+  $('#step-email').hidden=(step!=='email'); $('#step-code').hidden=(step!=='code'); $('#step-2fa').hidden=(step!=='2fa');
+  var f=(step==='code')?$('#codeInput'):(step==='2fa')?$('#tfCode'):$('#emailInput'); if(f) setTimeout(function(){f.focus();},40);
 }
 function showApp(){
   $('#auth').hidden=true; $('#app').hidden=false;
@@ -780,23 +857,269 @@ function startResendTimer(){
   }
   tick(); S.resendTimer=setInterval(tick,1000);
 }
-async function sendCode(email,isResend){
-  var btn=isResend?$('#resendBtn'):$('#sendBtn'), err=$('#emailErr');
-  err.textContent=''; $('#emailInput').classList.remove('invalid');
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent=t('err_email'); $('#emailInput').classList.add('invalid'); return false; }
+/* ---- Email + mot de passe ---- */
+var EMAIL_RE=/^[^@\s]+@[^@\s]+\.[^@\s]+$/, NEXT_OK=['claim','download'];
+function nextPage(){ try{ var n=new URLSearchParams(location.search).get('next'); return NEXT_OK.indexOf(n)>=0?n:null; }catch(e){ return null; } }
+async function afterLogin(){
+  if(!(await gate2fa())) return;            // une étape « code » est affichée : on reprendra après validation
+  await applyPendingPrefs();
+  var nx=nextPage(); if(nx){ location.replace('/'+nx); return; }
+  await enterApp();
+}
+
+/* ---- Double authentification par e-mail ---- */
+async function gate2fa(){
+  var r; try{ r=await SB.rpc('sec_status'); }catch(e){ return true; }
+  if(!r||r.error||!r.data){ S.sec={supported:false}; return true; }   // fonctions absentes : aucun blocage
+  S.sec=Object.assign({supported:true},r.data);
+  if(r.data.needs_second_factor){ await startTwoFactorStep(); return false; }
+  return true;
+}
+async function startTwoFactorStep(){
+  var email=S.pendingEmail||'';
+  try{ var u=(await SB.auth.getUser()).data.user; if(u&&u.email) email=u.email; }catch(e){}
+  $('#tfEmail').textContent=email; $('#tfCode').value=''; $('#tfErr').textContent='';
+  showAuth('2fa');
+  await sendTwoFactorCode(false);
+}
+function startTfTimer(){
+  var btn=$('#tfResend'); clearInterval(S.tfTimer); S.tfAt=Date.now()+30000;
+  function tick(){
+    var left=Math.ceil((S.tfAt-Date.now())/1000);
+    if(left<=0){ clearInterval(S.tfTimer); S.tfTimer=null; btn.disabled=false; btn.textContent=t('code_resend'); }
+    else { btn.disabled=true; btn.textContent=t('code_resend_in',{s:left}); }
+  }
+  tick(); S.tfTimer=setInterval(tick,1000);
+}
+async function sendTwoFactorCode(isResend){
+  var btn=$('#tfResend'); setBusy(btn,true); $('#tfErr').textContent='';
+  try{
+    var r=await SB.rpc('sec_send_login_code'); if(r.error) throw r.error;
+    var st=r.data&&r.data.status;
+    if(st==='sent'){ if(isResend) toast('success',t('code_sent'),t('code_sent_d')); }
+    else if(st==='limit'){ $('#tfErr').textContent=t('tf_limit'); }
+    else if(st==='not_needed'){ await afterLogin(); return; }
+    startTfTimer();
+  }catch(ex){ console.error('send 2fa code failed:',ex); $('#tfErr').textContent=t('err_send'); }
+  finally{ btn.classList.remove('loading'); if(!S.tfTimer) btn.disabled=false; }
+}
+async function verifyTwoFactor(){
+  var btn=$('#tfVerify'), err=$('#tfErr'), code=$('#tfCode').value.trim();
+  err.textContent=''; $('#tfCode').classList.remove('invalid');
+  if(!code){ err.textContent=t('err_code_empty'); return; }
   setBusy(btn,true);
   try{
-    var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signInWithOtp({email:email,options:{shouldCreateUser:true,captchaToken:ct}}); });
-    if(r.error) throw r.error;
-    S.pendingEmail=email; $('#codeEmail').textContent=email; $('#codeInput').value=''; $('#codeErr').textContent='';
-    showAuth('code'); startResendTimer();
-    if(isResend) toast('success',t('code_sent'),t('code_sent_d'));
-    return true;
+    var r=await SB.rpc('sec_verify_login_code',{p_code:code}); if(r.error) throw r.error;
+    var st=r.data&&r.data.status;
+    if(st==='ok'){ clearInterval(S.tfTimer); S.tfTimer=null; await afterLogin(); return; }
+    err.textContent=(st==='expired')?t('tf_expired'):(st==='locked')?t('tf_locked'):(st==='none')?t('tf_none'):t('err_code');
+    $('#tfCode').classList.add('invalid'); $('#tfCode').select();
+  }catch(ex){ console.error('verify 2fa failed:',ex); err.textContent=t('err_send'); }
+  finally{ setBusy(btn,false); }
+}
+// Activation demandée à la création du compte (case cochée) : appliquée à la première connexion validée
+async function applyPendingPrefs(){
+  try{
+    if(!S.sec||!S.sec.supported) return;
+    var u=(await SB.auth.getUser()).data.user;
+    if(u&&u.user_metadata&&u.user_metadata.want_2fa){
+      var r=await SB.rpc('sec_set_email_2fa',{p_enabled:true});
+      if(!r.error){ S.sec=Object.assign({supported:true},r.data); await SB.auth.updateUser({data:{want_2fa:null}}); }
+    }
+  }catch(e){ console.error('pending prefs failed:',e); }
+}
+async function set2fa(value){
+  try{
+    var r=await SB.rpc('sec_set_email_2fa',{p_enabled:value}); if(r.error) throw r.error;
+    S.sec=Object.assign({supported:true},r.data); renderView(false);
+    toast('success',t(value?'tf_on_toast':'tf_off_toast'));
+  }catch(ex){ console.error('set2fa failed:',ex); toast('error',t('tf_err')); }
+}
+function toggle2fa(){
+  var on=!!(S.sec&&S.sec.email_2fa);
+  if(!on){ set2fa(true); return; }
+  openDialog({title:t('tf_off_title'),desc:t('tf_off_d'),focus:'.dialog-foot .btn-outline',
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+             {label:t('tf_off_confirm'),cls:'btn-destructive',onClick:async function(api,btn){ api.busy(true,btn); await set2fa(false); api.busy(false,btn); api.close(true); }}]});
+}
+
+/* ---- Changement de mot de passe et d'adresse e-mail ---- */
+function changePasswordDialog(){
+  openDialog({title:t('cp_title'),desc:t('cp_d',{e:S.account.user.email}),
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('cp_send'),cls:'btn-primary',onClick:async function(api,btn){
+        api.busy(true,btn);
+        try{
+          var r=await SB.auth.reauthenticate(); if(r.error) throw r.error;
+          api.busy(false,btn); api.close(true); changePasswordStep2();
+        }catch(ex){ console.error('reauthenticate failed:',ex); api.busy(false,btn); api.close(false); toast('error',t('cp_err_send')); }
+      }}]});
+}
+function changePasswordStep2(){
+  openDialog({title:t('cp_title2'),desc:t('cp_d2'),
+    body:'<form novalidate><div class="field"><label class="label" for="cpCode">'+esc(t('code_label'))+'</label><input id="cpCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8"/></div>'
+      +'<div class="field"><label class="label" for="cpCur">'+esc(t('cp_current'))+'</label><input id="cpCur" class="input" type="password" autocomplete="current-password"/><div class="hint">'+esc(t('cp_current_hint'))+'</div></div>'
+      +'<div class="field"><label class="label" for="cpNew">'+esc(t('newpw_label'))+'</label><input id="cpNew" class="input" type="password" autocomplete="new-password"/><div class="hint">'+esc(t('pw_hint'))+'</div><div class="field-error" role="alert"></div></div></form>',
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('cp_save'),cls:'btn-primary',onClick:async function(api,btn){
+        var code=$('#cpCode',api.el).value.trim(), np=$('#cpNew',api.el).value;
+        if(!code){ api.error(t('err_code_empty')); return; }
+        if(np.length<10){ api.error(t('err_pw_short')); return; }
+        api.error(''); api.busy(true,btn);
+        try{
+          var cur=$('#cpCur',api.el).value;
+          var attrs={password:np,nonce:code}; if(cur) attrs.current_password=cur;   // exigé si « Require current password » est actif
+          var r=await SB.auth.updateUser(attrs); if(r.error) throw r.error;
+          api.busy(false,btn); api.close(true); S.hasPw=true; renderView(false); toast('success',t('pw_changed'));
+        }catch(ex){
+          console.error('password change failed:',ex); api.busy(false,btn);
+          var m=(ex&&ex.message)||'';
+          api.error(/current.?password/i.test(m)?t('cp_err_current'):(/nonce|reauth|invalid|expired/i.test(m)?t('err_code'):(/password/i.test(m)?t('err_pw_short'):t('cp_err'))));
+        }
+      }}]});
+}
+function changeEmailDialog(){
+  openDialog({title:t('ce_title'),desc:t('ce_d'),
+    body:'<form novalidate><div class="field"><label class="label" for="ceNew">'+esc(t('ce_new'))+'</label><input id="ceNew" class="input" type="email" inputmode="email" autocomplete="email"/><div class="field-error" role="alert"></div></div></form>',
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('ce_send'),cls:'btn-primary',onClick:async function(api,btn){
+        var ne=$('#ceNew',api.el).value.trim().toLowerCase();
+        if(!EMAIL_RE.test(ne)){ api.error(t('err_email')); return; }
+        if(ne===String(S.account.user.email).toLowerCase()){ api.error(t('ce_same')); return; }
+        api.error(''); api.busy(true,btn);
+        try{
+          var r=await SB.auth.updateUser({email:ne}); if(r.error) throw r.error;
+          api.busy(false,btn); api.close(true); changeEmailStep2(ne);
+        }catch(ex){
+          console.error('email change failed:',ex); api.busy(false,btn);
+          api.error(/already|registered|exists/i.test((ex&&ex.message)||'')?t('ce_taken'):t('ce_err'));
+        }
+      }}]});
+}
+function changeEmailStep2(newEmail){
+  var oldEmail=S.account.user.email, doneOld=false;
+  async function verifyAny(token,emails){
+    var last=null;
+    for(var i=0;i<emails.length;i++){
+      var r=await SB.auth.verifyOtp({email:emails[i],token:token,type:'email_change'});
+      if(!r.error) return r;
+      last=r.error;
+    }
+    throw last;
+  }
+  openDialog({title:t('ce_title2'),desc:t('ce_d2'),
+    body:'<form novalidate><div class="field"><label class="label" for="ceOld">'+esc(t('ce_code_for',{e:oldEmail}))+'</label><input id="ceOld" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/></div>'
+      +'<div class="field"><label class="label" for="ceNewCode">'+esc(t('ce_code_for',{e:newEmail}))+'</label><input id="ceNewCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/><div class="field-error" role="alert"></div></div></form>',
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('ce_confirm'),cls:'btn-primary',onClick:async function(api,btn){
+        var c1=$('#ceOld',api.el).value.trim(), c2=$('#ceNewCode',api.el).value.trim();
+        if((!doneOld&&!c1)||!c2){ api.error(t('err_code_empty')); return; }
+        api.error(''); api.busy(true,btn);
+        try{
+          if(!doneOld){ await verifyAny(c1,[oldEmail,newEmail]); doneOld=true; $('#ceOld',api.el).disabled=true; }
+          await verifyAny(c2,[newEmail,oldEmail]);
+          try{ await SB.auth.refreshSession(); }catch(e2){}
+          await refreshAccount();
+          api.busy(false,btn); api.close(true); toast('success',t('ce_ok'));
+        }catch(ex){ console.error('email change verify failed:',ex); api.busy(false,btn); api.error(t('err_code')); }
+      }}]});
+}
+
+
+function setMode(m,note){
+  S.mode=m;
+  var fg=(m==='forgot'||m==='password');
+  var k={login:['auth_title','auth_lead','auth_login'],signup:['su_title','su_lead','auth_signup'],forgot:['fg_title','fg_lead','fg_send'],password:['fp_title','fp_lead','fg_send']}[m];
+  $('#authTitle').setAttribute('data-t',k[0]); $('#authLead').setAttribute('data-t',k[1]); $('#sendBtn').setAttribute('data-t',k[2]);
+  $('#oauthBox').hidden=fg; $('#modeTabs').hidden=fg; $('#pwField').hidden=fg;
+  $('#forgotRow').hidden=(m!=='login'); $('#firstPwRow').hidden=(m!=='login'); $('#want2faRow').hidden=(m!=='signup'); $('#pwHint').hidden=(m!=='signup'); $('#backLoginRow').hidden=!fg;
+  $('#modeLogin').setAttribute('aria-pressed',String(m==='login')); $('#modeSignup').setAttribute('aria-pressed',String(m==='signup'));
+  $('#pwInput').setAttribute('autocomplete',m==='signup'?'new-password':'current-password');
+  $('#emailErr').textContent=''; $('#pwErr').textContent=''; $('#loginHelp').hidden=true;
+  $('#authNote').hidden=!note; $('#authNote').textContent=note||'';
+  $('#emailInput').classList.remove('invalid'); $('#pwInput').classList.remove('invalid');
+  applyStatic();
+}
+function showLoginHelp(){
+  var h=$('#loginHelp');
+  h.innerHTML=esc(t('login_help'))+' <button type="button" class="link-btn" id="loginHelpBtn">'+esc(t('login_help_btn'))+'</button>';
+  h.hidden=false;
+  $('#loginHelpBtn').addEventListener('click',function(){ setMode('password'); });
+}
+function togglePw(){
+  var i=$('#pwInput'), show=(i.type==='password'); i.type=show?'text':'password';
+  $('#pwToggle').setAttribute('data-t',show?'pw_hide':'pw_show'); $('#pwToggle').textContent=t(show?'pw_hide':'pw_show');
+}
+async function submitEmailForm(){
+  var email=$('#emailInput').value.trim().toLowerCase(), pw=$('#pwInput').value, btn=$('#sendBtn');
+  setMode(S.mode);   // efface les anciens messages
+  if(!EMAIL_RE.test(email)){ $('#emailErr').textContent=t('err_email'); $('#emailInput').classList.add('invalid'); return; }
+  if(S.mode==='login'||S.mode==='signup'){
+    if(!pw){ $('#pwErr').textContent=t('err_pw_empty'); $('#pwInput').classList.add('invalid'); return; }
+    if(S.mode==='signup'&&pw.length<10){ $('#pwErr').textContent=t('err_pw_short'); $('#pwInput').classList.add('invalid'); return; }
+  }
+  setBusy(btn,true);
+  try{
+    if(S.mode==='login') await doLogin(email,pw);
+    else if(S.mode==='signup') await doSignup(email,pw);
+    else await doForgot(email);
   }catch(ex){
-    console.error('sendCode failed:',ex);
-    if(isResend) toast('error',t('err_send')); else { err.textContent=t('err_send'); }
-    return false;
-  }finally{ if(!isResend||!S.resendTimer) setBusy(btn,false); else btn.classList.remove('loading'); }
+    console.error('auth failed:',ex); $('#emailErr').textContent=t('err_send');
+  }finally{ setBusy(btn,false); }
+}
+async function doLogin(email,pw){
+  var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signInWithPassword({email:email,password:pw,options:{captchaToken:ct}}); });
+  if(r.error){
+    var m=r.error.message||'';
+    if(/not confirmed/i.test(m)){ await startCodeStep(email,'signup',true); return; }
+    if(/invalid login/i.test(m)){ $('#pwErr').textContent=t('err_login'); $('#pwInput').classList.add('invalid'); showLoginHelp(); return; }
+    throw r.error;
+  }
+  try{ await afterLogin(); }catch(ex){ console.error('enterApp failed:',ex); $('#emailErr').textContent=t('err_load'); }
+}
+async function doSignup(email,pw){
+  var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signUp({email:email,password:pw,options:{captchaToken:ct,data:($('#want2fa').checked?{want_2fa:true}:undefined)}}); });
+  if(r.error){
+    var m=r.error.message||'';
+    if(/password/i.test(m)&&/(short|least|weak|characters|pwned|easy)/i.test(m)){ $('#pwErr').textContent=t('err_pw_short'); $('#pwInput').classList.add('invalid'); return; }
+    if(/already|registered/i.test(m)){ $('#emailErr').textContent=t('err_exists'); return; }
+    throw r.error;
+  }
+  if(r.data&&r.data.session){ try{ await afterLogin(); }catch(ex){ console.error('enterApp failed:',ex); $('#emailErr').textContent=t('err_load'); } return; }
+  // Supabase renvoie un utilisateur sans identités quand l'adresse a déjà un compte : on bascule vers « créer mon mot de passe »
+  if(r.data&&r.data.user&&Array.isArray(r.data.user.identities)&&r.data.user.identities.length===0){ setMode('password',t('fp_note')); return; }
+  await startCodeStep(email,'signup',false);
+}
+async function doForgot(email){
+  var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.resetPasswordForEmail(email,{captchaToken:ct}); });
+  if(r.error) throw r.error;
+  await startCodeStep(email,'recovery',false);
+}
+function sendFlowCode(email,flow){
+  return BPLCaptcha.withToken(function(ct){
+    return flow==='recovery'
+      ? SB.auth.resetPasswordForEmail(email,{captchaToken:ct})
+      : SB.auth.resend({type:'signup',email:email,options:{captchaToken:ct}});
+  });
+}
+async function startCodeStep(email,flow,needSend){
+  if(needSend){ var r=await sendFlowCode(email,flow); if(r&&r.error) throw r.error; }
+  S.pendingEmail=email; S.codeFlow=flow;
+  $('#codeEmail').textContent=email; $('#codeInput').value=''; $('#newPwInput').value=''; $('#codeErr').textContent='';
+  $('#codeTitle').setAttribute('data-t',flow==='recovery'?'rc_title':'code_title');
+  $('#verifyBtn').setAttribute('data-t',flow==='recovery'?'rc_verify':'code_verify_signup');
+  $('#newPwField').hidden=(flow!=='recovery');
+  applyStatic(); showAuth('code'); startResendTimer();
+}
+async function resendCode(){
+  var btn=$('#resendBtn');
+  if(!S.pendingEmail) return;
+  setBusy(btn,true);
+  try{
+    var r=await sendFlowCode(S.pendingEmail,S.codeFlow); if(r&&r.error) throw r.error;
+    toast('success',t('code_sent'),t('code_sent_d'));
+  }catch(ex){ console.error('resend failed:',ex); toast('error',t('err_send')); }
+  finally{ btn.classList.remove('loading'); startResendTimer(); }
 }
 async function signInMicrosoft(){
   var btn=$('#msBtn'), err=$('#emailErr');
@@ -826,30 +1149,36 @@ function initGoogleButton(){
   BPLGoogle.init({
     sb:SB, holder:$('#googleHolder'), fallback:$('#googleBtn'), lang:function(){return S.lang;},
     onSuccess:async function(){
-      try{ await enterApp(); }
+      try{ await afterLogin(); }
       catch(ex){ console.error('enterApp failed:',ex); showAuth('email'); $('#emailErr').textContent=t('err_load'); }
     },
     onError:function(){ $('#emailErr').textContent=t('err_google'); }
   });
 }
 async function verifyCode(){
-  var btn=$('#verifyBtn'), err=$('#codeErr'), code=$('#codeInput').value.trim();
-  err.textContent=''; $('#codeInput').classList.remove('invalid');
+  var btn=$('#verifyBtn'), err=$('#codeErr'), code=$('#codeInput').value.trim(), flow=S.codeFlow||'signup', np=$('#newPwInput').value;
+  err.textContent=''; $('#codeInput').classList.remove('invalid'); $('#newPwInput').classList.remove('invalid');
   if(!code){ err.textContent=t('err_code_empty'); return; }
+  if(flow==='recovery'&&np.length<10){ err.textContent=t('err_pw_short'); $('#newPwInput').classList.add('invalid'); return; }
   setBusy(btn,true);
   try{
-    var r=await SB.auth.verifyOtp({email:S.pendingEmail,token:code,type:'email'});
-    if(r.error){
-      // Une adresse jamais confirmée reçoit son code en type "signup" plutôt que "email".
-      r=await SB.auth.verifyOtp({email:S.pendingEmail,token:code,type:'signup'});
-      if(r.error) throw r.error;
-    }
+    var r=await SB.auth.verifyOtp({email:S.pendingEmail,token:code,type:flow==='recovery'?'recovery':'signup'});
+    if(r.error&&flow!=='recovery'){ r=await SB.auth.verifyOtp({email:S.pendingEmail,token:code,type:'email'}); }
+    if(r.error) throw r.error;
   }catch(ex){
     console.error('verifyOtp failed:',ex);
     err.textContent=t('err_code'); $('#codeInput').classList.add('invalid'); setBusy(btn,false); $('#codeInput').select(); return;
   }
+  if(flow==='recovery'){
+    try{
+      var u=await SB.auth.updateUser({password:np}); if(u.error) throw u.error;
+    }catch(ex){
+      console.error('updateUser failed:',ex);
+      err.textContent=/password/i.test(ex.message||'')?t('err_pw_short'):t('err_send'); $('#newPwInput').classList.add('invalid'); setBusy(btn,false); return;
+    }
+  }
   try{
-    await enterApp();
+    await afterLogin(); if(flow==='recovery') toast('success',t('pw_changed'));
   }catch(ex){
     console.error('enterApp failed:',ex); err.textContent=t('err_load');
   }finally{ setBusy(btn,false); }
@@ -862,14 +1191,14 @@ async function enterApp(){
   var pl=S.account.profile&&S.account.profile.language;
   if(!saved&&(pl==='fr'||pl==='en')&&pl!==S.lang) setLang(pl);
   updateChrome(); renderView(false);
-  loadVersions(); loadTickets();
+  loadVersions(); loadTickets(); loadHasPassword();
 }
 async function signOut(){
   try{ await SB.auth.signOut(); }catch(e){}
   S.account=null; S.tickets=null; S.draft=null; S.revealed={};
   closeSheet(); while(closeTopOverlay()){}
-  $('#emailInput').value=''; $('#codeInput').value='';
-  showAuth('email'); toast('info',t('signed_out'));
+  $('#emailInput').value=''; $('#pwInput').value=''; $('#codeInput').value=''; $('#newPwInput').value='';
+  setMode('login'); showAuth('email'); toast('info',t('signed_out'));
 }
 
 /* ===================== Événements ===================== */
@@ -878,7 +1207,11 @@ document.addEventListener('click',function(e){
   var el=e.target.closest('[data-action]'); if(!el) return;
   var id=el.getAttribute('data-id');
   switch(el.getAttribute('data-action')){
-    case 'track-dl': trackDownload(el); break;   // le lien s'ouvre normalement
+    case 'track-dl': trackDownload(el); break;
+    case 'change-email': changeEmailDialog(); break;
+    case 'change-password': changePasswordDialog(); break;
+    case 'toggle-2fa': toggle2fa(); break;
+    case 'pw-later': try{ sessionStorage.setItem('bpl_pw_later','1'); }catch(x){} renderView(false); break;   // le lien s'ouvre normalement
     case 'add-key': addKeyDialog(); break;
     case 'copy-key': copyKey(id,el.classList.contains('btn-secondary')?el:null); break;
     case 'toggle-key': S.revealed[id]=!S.revealed[id]; renderView(false); { var nb=$('[data-action="toggle-key"][data-id="'+id+'"]'); if(nb) nb.focus(); } break;
@@ -892,20 +1225,21 @@ document.addEventListener('click',function(e){
 document.addEventListener('input',function(e){
   var t0=e.target;
   if(t0.closest&&t0.closest('#profileForm')){
-    S.draft={name:$('#pName').value,lang:$('#pLang').value};
+    S.draft=readProfileDraft();
     var dirty=profileDirty(); $('#pfSave').disabled=!dirty; $('#pfHint').textContent=dirty?t('pf_dirty'):t('pf_clean');
   }
   if(t0.id==='tMessage'){ $('#tCount').textContent=t('sp_chars',{n:t0.value.length}); }
 });
 document.addEventListener('change',function(e){
-  if(e.target.id==='pLang'&&$('#profileForm')){ S.draft={name:$('#pName').value,lang:$('#pLang').value}; var d=profileDirty(); $('#pfSave').disabled=!d; $('#pfHint').textContent=d?t('pf_dirty'):t('pf_clean'); }
+  if(e.target.id==='pLang'&&$('#profileForm')){ S.draft=readProfileDraft(); var d=profileDirty(); $('#pfSave').disabled=!d; $('#pfHint').textContent=d?t('pf_dirty'):t('pf_clean'); }
 });
 document.addEventListener('submit',function(e){
   var f=e.target;
   if(f.id==='profileForm'){ e.preventDefault(); if(profileDirty()) saveProfile($('#pfSave')); }
   else if(f.id==='ticketForm'){ e.preventDefault(); sendTicket(f); }
-  else if(f.id==='step-email'){ e.preventDefault(); sendCode($('#emailInput').value.trim().toLowerCase(),false); }
+  else if(f.id==='step-email'){ e.preventDefault(); submitEmailForm(); }
   else if(f.id==='step-code'){ e.preventDefault(); verifyCode(); }
+  else if(f.id==='step-2fa'){ e.preventDefault(); verifyTwoFactor(); }
 });
 document.addEventListener('keydown',function(e){
   var mod=e.ctrlKey||e.metaKey;
@@ -921,7 +1255,15 @@ $('#cmdBtn').addEventListener('click',openPalette);
 $('#googleBtn').addEventListener('click',signInGoogle);
 $('#msBtn').addEventListener('click',signInMicrosoft);
 $('#backBtn').addEventListener('click',function(){ clearInterval(S.resendTimer); S.resendTimer=null; showAuth('email'); });
-$('#resendBtn').addEventListener('click',function(){ if(S.pendingEmail) sendCode(S.pendingEmail,true); });
+$('#resendBtn').addEventListener('click',resendCode);
+$('#tfResend').addEventListener('click',function(){ sendTwoFactorCode(true); });
+$('#tfCancel').addEventListener('click',function(){ clearInterval(S.tfTimer); S.tfTimer=null; signOut(); });
+$('#modeLogin').addEventListener('click',function(){ setMode('login'); });
+$('#modeSignup').addEventListener('click',function(){ setMode('signup'); });
+$('#forgotLink').addEventListener('click',function(){ setMode('forgot'); });
+$('#firstPwLink').addEventListener('click',function(){ setMode('password'); });
+$('#backToLogin').addEventListener('click',function(){ setMode('login'); });
+$('#pwToggle').addEventListener('click',togglePw);
 $('#userBtn').addEventListener('click',function(){
   var name=displayName(), mail=S.account?S.account.user.email:'';
   var html='<div class="menu-label"><b>'+esc(name)+'</b>'+esc(mail)+'</div><div class="menu-sep"></div>'
@@ -945,9 +1287,12 @@ SB.auth.onAuthStateChange(function(ev){
   hydrateIcons(document); applyStatic();
   var session=null; try{ session=(await SB.auth.getSession()).data.session; }catch(e){}
   if(session){
-    try{ await enterApp(); }
+    try{ await afterLogin(); }
     catch(ex){ console.error('enterApp failed:',ex); showAuth('email'); $('#emailErr').textContent=t('err_session'); }
   }else{
+    var qs=new URLSearchParams(location.search), qm=qs.get('mode');
+    setMode(qm==='signup'?'signup':(qm==='password'?'password':'login'));
+    var qe=qs.get('email'); if(qe&&EMAIL_RE.test(qe)) $('#emailInput').value=qe;
     showAuth('email');
     BPLCaptcha.mount($('#captchaBox'));
     initGoogleButton();
