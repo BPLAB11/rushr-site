@@ -1462,8 +1462,8 @@ SB.auth.onAuthStateChange(function(ev){
    dialogue existant (deleteAccountDialog : code e-mail + mot de confirmation), inchangé.
    Mobile : chaque tap fait glisser le bouton et retire MAG_TAP de résistance.
    Clavier (Tab + Entrée, e.detail===0) : passe toujours. prefers-reduced-motion : effet désactivé. */
-var MAG_FORCE=5200, MAG_RETURN=0.03, MAG_REACH_X=46, MAG_REACH_Y=22, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=150, MAG_TAP=0.22, MAG_MAXA=1.6;
-var MAG={r:1,tired:false,btn:null,zone:null,x:0,y:0,vx:0,vy:0,rot:0,mx:null,my:null,raf:0,t:0};
+var MAG_FORCE=30000, MAG_RETURN=0.03, MAG_REACH_X=60, MAG_REACH_Y=28, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=150, MAG_TAP=0.22, MAG_MAXA=3, MAG_LEAD=7, MAG_SOFT=40, MAG_SLIP=1.2, MAG_SHRINK=0.16;
+var MAG={r:1,tired:false,btn:null,zone:null,x:0,y:0,vx:0,vy:0,rot:0,mx:null,my:null,raf:0,t:0,pmx:null,pmy:null,cvx:0,cvy:0,side:1,prox:0};
 function magReduced(){ try{ return !!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
 function magStart(){ if(!MAG.raf){ MAG.t=performance.now(); MAG.raf=requestAnimationFrame(magTick); } }
 function magStop(){ if(MAG.raf){ cancelAnimationFrame(MAG.raf); MAG.raf=0; } }
@@ -1489,11 +1489,26 @@ function magTick(){
   var cx=z.left+z.width/2+MAG.x, cy=z.top+z.height/2+MAG.y;
   var ax=0, ay=0;
   if(!MAG.tired&&MAG.mx!=null){
-    var dx=cx-MAG.mx, dy=cy-MAG.my, d=Math.max(14,Math.sqrt(dx*dx+dy*dy));
-    var f=Math.min(MAG_MAXA,MAG_FORCE/(d*d)*MAG.r);        // répulsion en 1/d², affaiblie par l'usure
+    // vitesse du curseur (lissée) : le bouton anticipe l'arrivée du pointeur
+    if(MAG.pmx==null){ MAG.pmx=MAG.mx; MAG.pmy=MAG.my; }
+    var cvx=(MAG.mx-MAG.pmx)/k, cvy=(MAG.my-MAG.pmy)/k; MAG.pmx=MAG.mx; MAG.pmy=MAG.my;
+    MAG.cvx+=(cvx-MAG.cvx)*0.35; MAG.cvy+=(cvy-MAG.cvy)*0.35;
+    var qx=MAG.mx+MAG.cvx*MAG_LEAD, qy=MAG.my+MAG.cvy*MAG_LEAD;           // position anticipée du curseur
+    var dx=cx-qx, dy=cy-qy, d=Math.max(1,Math.sqrt(dx*dx+dy*dy));
+    // distance du curseur au BORD du bouton (et non à son centre) : le champ commence avant d'arriver dessus
+    var ex=Math.max(0,Math.abs(dx)-bw/2), ey=Math.max(0,Math.abs(dy)-bh/2), de=Math.sqrt(ex*ex+ey*ey);
+    var f=Math.min(MAG_MAXA,MAG_FORCE/Math.pow(de+MAG_SOFT,2)*MAG.r);    // répulsion en 1/d², affaiblie par l'usure
     ax+=dx/d*f; ay+=dy/d*f;
-    if(d<MAG_RADIUS) MAG.r-=MAG_WEAR*k*(0.35+(1-d/MAG_RADIUS)); // insister près du bouton use sa résistance
-  }
+    // dérobade latérale : le bouton glisse de côté par rapport à la trajectoire du curseur
+    var sv=Math.sqrt(MAG.cvx*MAG.cvx+MAG.cvy*MAG.cvy);
+    if(sv>0.4){
+      var ux=MAG.cvx/sv, uy=MAG.cvy/sv, lat=(cy-MAG.my)*ux-(cx-MAG.mx)*uy;
+      if(Math.abs(lat)>10) MAG.side=lat>0?1:-1;               // côté de la dérobade mémorisé (évite de clignoter quand le curseur vise pile le centre)
+      ax+=-uy*MAG.side*f*MAG_SLIP; ay+=ux*MAG.side*f*MAG_SLIP;
+    }
+    MAG.prox=Math.max(0,1-de/MAG_RADIUS);
+    if(de<MAG_RADIUS) MAG.r-=MAG_WEAR*k*(0.35+(1-de/MAG_RADIUS));         // insister près du bouton use sa résistance
+  } else { MAG.prox=0; if(MAG.mx==null){ MAG.pmx=null; MAG.cvx=MAG.cvy=0; } }
   // Élastique : rappel vers le centre, qui se raidit quand il est tendu (en = 0 au repos, 1 = tendu au maximum)
   var en=Math.sqrt(Math.pow(MAG.x/MAG_REACH_X,2)+Math.pow(MAG.y/MAG_REACH_Y,2)), sp=MAG_RETURN*(1+2*en*en);
   ax-=sp*MAG.x; ay-=sp*MAG.y;
@@ -1502,10 +1517,10 @@ function magTick(){
   MAG.x+=MAG.vx*k; MAG.y+=MAG.vy*k;
   // Course limitée par l'élastique (ellipse), et jamais hors de la zone
   var lx=Math.max(0,Math.min(MAG_REACH_X,(z.width-bw)/2-8)), ly=Math.max(0,Math.min(MAG_REACH_Y,(z.height-bh)/2-6));
-  var nx=lx?MAG.x/lx:0, ny=ly?MAG.y/ly:0, nn=Math.sqrt(nx*nx+ny*ny);
-  if(nn>1){ MAG.x/=nn; MAG.y/=nn; MAG.vx*=0.3; MAG.vy*=0.3; }
+  if(MAG.x>lx){ MAG.x=lx; MAG.vx*=0.3; } else if(MAG.x<-lx){ MAG.x=-lx; MAG.vx*=0.3; }
+  if(MAG.y>ly){ MAG.y=ly; MAG.vy*=0.3; } else if(MAG.y<-ly){ MAG.y=-ly; MAG.vy*=0.3; }
   var tr=Math.max(-9,Math.min(9,MAG.vx*1.1)); MAG.rot+=(tr-MAG.rot)*0.2;   // légère rotation selon la vitesse
-  b.style.transform='translate('+MAG.x.toFixed(2)+'px,'+MAG.y.toFixed(2)+'px) rotate('+MAG.rot.toFixed(2)+'deg)';
+  b.style.transform='translate('+MAG.x.toFixed(2)+'px,'+MAG.y.toFixed(2)+'px) rotate('+MAG.rot.toFixed(2)+'deg) scale('+(1-MAG_SHRINK*MAG.prox).toFixed(3)+')';   // il se rétrécit quand le curseur approche : cible plus petite
   if(!MAG.tired&&MAG.r<MAG_GIVEUP) magTire();
   if(MAG.tired&&Math.abs(MAG.x)<0.2&&Math.abs(MAG.y)<0.2&&Math.abs(MAG.vx)<0.05&&Math.abs(MAG.vy)<0.05){ b.style.transform=''; return; }   // au repos : on arrête la boucle
   MAG.raf=requestAnimationFrame(magTick);
