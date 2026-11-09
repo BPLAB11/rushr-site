@@ -17,8 +17,11 @@
   .wrap{max-width:1140px;margin:0 auto;padding:0 24px;width:100%}
   nav{border-bottom:1px solid var(--line);background:rgba(11,11,11,.8)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
-  .brand img{width:24px;height:24px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.5px;font-size:20px}
+  .brand img{width:42px;height:42px}
+  @media(max-width:600px){.brand{font-size:17px;gap:10px}.brand img{width:36px;height:36px}}
+  @media(max-width:380px){.brand{font-size:15px;gap:8px}.brand img{width:32px;height:32px}}
+  @media(max-width:340px){.brand{font-size:14px;gap:6px}.brand img{width:30px;height:30px}}
   .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
   .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
   .lang button.on{background:var(--accent);color:var(--on-accent)}

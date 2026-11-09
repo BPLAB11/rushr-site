@@ -38,8 +38,11 @@
   /* NAV */
   nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
-  .brand .mark{width:24px;height:24px;display:block}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.5px;font-size:20px}
+  .brand .mark{width:42px;height:42px;display:block}
+  @media(max-width:600px){.brand{font-size:17px;gap:10px}.brand .mark{width:36px;height:36px}}
+  @media(max-width:380px){.brand{font-size:15px;gap:8px}.brand .mark{width:32px;height:32px}}
+  @media(max-width:340px){.brand{font-size:14px;gap:6px}.brand .mark{width:30px;height:30px}}
   .nav-right{display:flex;align-items:center;gap:18px}
   .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
   .nav-links a:hover{color:var(--text)}
@@ -189,8 +192,8 @@
     .wrap{padding:0 18px}
     .grid{grid-template-columns:1fr}
     .nav-right{gap:10px}
-    .brand{font-size:14px;gap:7px}
-    .brand .mark{width:20px;height:20px}
+    .brand{font-size:17px;gap:10px}
+    .brand .mark{width:36px;height:36px}
     .lang button{padding:4px 7px}
     .cart-btn{padding:7px 10px}
   }
