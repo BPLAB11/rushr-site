@@ -786,7 +786,7 @@ async function sendCode(email,isResend){
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent=t('err_email'); $('#emailInput').classList.add('invalid'); return false; }
   setBusy(btn,true);
   try{
-    var r=await SB.auth.signInWithOtp({email:email,options:{shouldCreateUser:true}});
+    var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signInWithOtp({email:email,options:{shouldCreateUser:true,captchaToken:ct}}); });
     if(r.error) throw r.error;
     S.pendingEmail=email; $('#codeEmail').textContent=email; $('#codeInput').value=''; $('#codeErr').textContent='';
     showAuth('code'); startResendTimer();
@@ -949,6 +949,7 @@ SB.auth.onAuthStateChange(function(ev){
     catch(ex){ console.error('enterApp failed:',ex); showAuth('email'); $('#emailErr').textContent=t('err_session'); }
   }else{
     showAuth('email');
+    BPLCaptcha.mount($('#captchaBox'));
     initGoogleButton();
     // retour d'un fournisseur (Google, Microsoft) en erreur, ex. refus de l'utilisateur : message + détail technique
     if(/[?&#](error|error_description)=/.test(location.search+location.hash)){

@@ -151,6 +151,7 @@
       <p class="hint" style="text-align:center;margin:14px 0" data-fr="ou par e-mail" data-en="or by email">ou par e-mail</p>
       <form onsubmit="return sendCode(event)">
         <input id="emailInput" type="email" required autocomplete="email" data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
+        <div id="captchaBox" style="display:flex;justify-content:center;margin:2px 0 10px"></div>
         <button type="submit" id="sendBtn" class="btn btn-primary" style="width:100%" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
       </form>
       <p class="hint"><span data-fr="Pas encore inscrit ?" data-en="Not signed up yet?">Pas encore inscrit ?</span> <a href="rushr#beta" data-fr="Rejoins la beta" data-en="Join the beta">Rejoins la beta</a></p>
@@ -247,6 +248,7 @@
 
 <script src="assets/vendor/supabase.js"></script>
 <script src="assets/google-signin.js?v=20261109"></script>
+<script src="assets/turnstile.js?v=20261109"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -278,7 +280,7 @@
     var btn=$('sendBtn'), err=$('emailErr'); err.textContent=''; btn.disabled=true;
     var email=$('emailInput').value.trim().toLowerCase();
     try{
-      var r=await SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true}});
+      var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true, captchaToken:ct}}); });
       if(r.error) throw r.error;
       S.email=email; $('codeInput').value=''; $('codeErr').textContent=''; show('s-code'); $('codeInput').focus();
     }catch(ex){ err.textContent=FR()?"Impossible d'envoyer le code, vérifie l'adresse et réessaie.":'Could not send the code, check the address and try again.'; }
@@ -430,6 +432,7 @@
       if(s&&s.data&&s.data.session){ await loadAccount(); return; }
     }catch(e){}
     show('s-email');
+    BPLCaptcha.mount($('captchaBox'));
     if(window.BPLGoogle) BPLGoogle.init({
       sb:SB, holder:$('googleHolder'), fallback:$('googleBtn'), lang:function(){return document.documentElement.lang||'fr';},
       onSuccess:function(){ loadAccount(); },

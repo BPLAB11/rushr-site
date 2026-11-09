@@ -90,7 +90,8 @@
     <p style="text-align:center;color:#6E6E73;font-size:12.5px;margin:14px 0" data-fr="ou par email" data-en="or by email">ou par email</p>
     <form onsubmit="return sendCode(event)">
       <input id="emailInput" type="email" required data-fr-ph="ton@email.com" data-en-ph="you@email.com" placeholder="ton@email.com" />
-      <button type="submit" id="claimBtn" class="btn btn-primary" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
+      <div id="captchaBox" style="display:flex;justify-content:center;margin:2px 0 10px"></div>
+    <button type="submit" id="claimBtn" class="btn btn-primary" data-fr="Recevoir un code" data-en="Send me a code">Recevoir un code</button>
     </form>
     <p class="hint" style="color:#6E6E73;font-size:12.5px;margin-top:14px"><span data-fr="Ton email sert uniquement à t'envoyer le code et ta licence." data-en="Your email is only used to send you the code and your license.">Ton email sert uniquement à t'envoyer le code et ta licence.</span> <a href="privacy" data-fr="Politique de confidentialité" data-en="Privacy policy" style="text-decoration:underline">Politique de confidentialité</a></p>
   </div>
@@ -124,6 +125,7 @@
 
 <script src="assets/vendor/supabase.js"></script>
 <script src="assets/google-signin.js?v=20261109"></script>
+<script src="assets/turnstile.js?v=20261109"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -154,7 +156,7 @@
     var email=document.getElementById('emailInput').value.trim().toLowerCase();
     err.textContent=''; btn.disabled=true;
     try{
-      var r=await SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true}});
+      var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signInWithOtp({email:email, options:{shouldCreateUser:true, captchaToken:ct}}); });
       if(r.error) throw r.error;
       pendingEmail=email;
       document.getElementById('codeInput').value='';
@@ -272,6 +274,7 @@
       }catch(e){}
     }
 
+    BPLCaptcha.mount(document.getElementById('captchaBox'));
     if(window.BPLGoogle) BPLGoogle.init({
       sb:SB, holder:document.getElementById('googleHolder'), fallback:document.getElementById('googleBtn'),
       lang:function(){return document.documentElement.lang||'fr';},

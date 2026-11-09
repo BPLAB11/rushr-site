@@ -49,6 +49,7 @@
             <input id="emailInput" class="input" type="email" inputmode="email" autocomplete="email" required data-t-ph="email_ph" placeholder="ton@email.com" />
             <div class="field-error" id="emailErr" role="alert"></div>
           </div>
+          <div id="captchaBox" style="display:flex;justify-content:center;margin:2px 0 10px"></div>
           <button type="submit" id="sendBtn" class="btn btn-primary btn-block" data-t="auth_send">Recevoir un code</button>
           <p class="hint" style="margin-top:14px"><span data-t="auth_privacy">Ton email sert uniquement à t'envoyer le code de connexion et à gérer ton compte.</span> <a class="link" href="privacy" data-t="privacy_policy">Politique de confidentialité</a></p>
         </form>
@@ -146,6 +147,7 @@
 
 <script src="assets/vendor/supabase.js"></script>
 <script src="assets/google-signin.js?v=20261109"></script>
-<script src="assets/account.js?v=20261109d"></script>
+<script src="assets/turnstile.js?v=20261109"></script>
+<script src="assets/account.js?v=20261109f"></script>
 </body>
 </html>

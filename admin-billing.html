@@ -75,6 +75,7 @@
       <label>Email</label><input id="email" type="email" required autocomplete="username" />
       <label>Mot de passe</label><input id="pass" type="password" required autocomplete="current-password" />
       <p class="err" id="authMsg" style="margin-top:10px"></p>
+      <div id="captchaBox" style="display:flex;justify-content:center;margin:2px 0 10px"></div>
       <button class="btn p" style="margin-top:14px;width:100%;justify-content:center">Se connecter</button>
     </form>
   </div>
@@ -90,6 +91,7 @@
 <div class="toast" id="toast"></div>
 
 <script src="assets/vendor/supabase.js"></script>
+<script src="assets/turnstile.js?v=20261109"></script>
 <script>
   var SB=window.supabase.createClient("https://vztqykihtnkscwcodkyf.supabase.co","sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l");
   var TAB='requests', DATA={requests:[],services:[],clients:[],docs:[],settings:{}}, EDIT=null;
@@ -108,7 +110,7 @@
   async function q(p){var r=await p;if(r.error)throw r.error;return r.data;}
 
   async function doLogin(e){e.preventDefault();$('authMsg').textContent='';
-    var r=await SB.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
+    var r;try{r=await BPLCaptcha.withToken(function(ct){return SB.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value,options:{captchaToken:ct}});});}catch(x){r={error:x};}
     if(r.error)$('authMsg').textContent='Email ou mot de passe incorrect.';return false;}
   async function logout(){await SB.auth.signOut();}
   async function onSession(s){
@@ -118,6 +120,7 @@
     if(!ok){show('g-denied');return;}
     show('app');await loadAll();go('requests');
   }
+  BPLCaptcha.mount($('captchaBox'));
   SB.auth.onAuthStateChange(function(_e,s){setTimeout(function(){onSession(s);},0);});
   SB.auth.getSession().then(function(r){onSession(r.data.session);});
 

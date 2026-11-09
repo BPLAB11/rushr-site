@@ -211,6 +211,7 @@
     <form onsubmit="return doAuth(event)">
       <div class="field"><label>Email</label><input id="email" class="in" type="email" required placeholder="vous@email.com" /></div>
       <div class="field"><label>Mot de passe</label><input id="pass" class="in" type="password" required minlength="6" placeholder="••••••••" /></div>
+      <div id="captchaBox" style="display:flex;justify-content:center;margin:2px 0 10px"></div>
       <button type="submit" class="btn btn-primary" id="authBtn">Se connecter</button>
     </form>
   </div>
@@ -381,6 +382,7 @@
 <div id="toast" class="toast"></div>
 
 <script src="assets/vendor/supabase.js"></script>
+<script src="assets/turnstile.js?v=20261109"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
@@ -404,8 +406,8 @@
     var email=document.getElementById('email').value.trim(), pass=document.getElementById('pass').value;
     var msg=document.getElementById('authMsg'); msg.className='msg'; msg.textContent='…';
     try{
-      if(mode==='up'){ var r=await SB.auth.signUp({email:email,password:pass}); if(r.error) throw r.error; if(!r.data.session){ msg.className='msg ok'; msg.textContent='Compte créé. Si une confirmation email est demandée, valide-la puis connecte-toi.'; return false; } }
-      else { var r2=await SB.auth.signInWithPassword({email:email,password:pass}); if(r2.error) throw r2.error; }
+      if(mode==='up'){ var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signUp({email:email,password:pass,options:{captchaToken:ct}}); }); if(r.error) throw r.error; if(!r.data.session){ msg.className='msg ok'; msg.textContent='Compte créé. Si une confirmation email est demandée, valide-la puis connecte-toi.'; return false; } }
+      else { var r2=await BPLCaptcha.withToken(function(ct){ return SB.auth.signInWithPassword({email:email,password:pass,options:{captchaToken:ct}}); }); if(r2.error) throw r2.error; }
       msg.textContent='';
     }catch(err){ msg.className='msg err'; var m=err.message||''; msg.textContent=/Invalid login/i.test(m)?'Email ou mot de passe incorrect.':m; }
     return false;
@@ -825,6 +827,7 @@
     catch(e){ toast('Erreur : '+e.message,'err'); }
   }
 
+  BPLCaptcha.mount(document.getElementById('captchaBox'));
   SB.auth.onAuthStateChange(function(_e,s){ onSession(s); });
   SB.auth.getSession().then(function(r){ onSession(r.data.session); });
 </script>
