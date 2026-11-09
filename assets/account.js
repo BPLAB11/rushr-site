@@ -1462,7 +1462,7 @@ SB.auth.onAuthStateChange(function(ev){
    dialogue existant (deleteAccountDialog : code e-mail + mot de confirmation), inchangé.
    Mobile : chaque tap fait glisser le bouton et retire MAG_TAP de résistance.
    Clavier (Tab + Entrée, e.detail===0) : passe toujours. prefers-reduced-motion : effet désactivé. */
-var MAG_FORCE=22000, MAG_RETURN=0.03, MAG_REACH_X=60, MAG_REACH_Y=28, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=150, MAG_TAP=0.22, MAG_MAXA=2.2, MAG_LEAD=7, MAG_SOFT=48, MAG_SLIP=1, MAG_SHRINK=0.16, MAG_VMAX=7;
+var MAG_FORCE=30000, MAG_RETURN=0.03, MAG_REACH_X=60, MAG_REACH_Y=28, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=100, MAG_FIELD=95, MAG_TAP=0.22, MAG_MAXA=2.2, MAG_LEAD=7, MAG_SOFT=48, MAG_SLIP=1, MAG_SHRINK=0.16, MAG_VMAX=7;
 var MAG={r:1,tired:false,btn:null,zone:null,x:0,y:0,vx:0,vy:0,rot:0,mx:null,my:null,raf:0,t:0,pmx:null,pmy:null,cvx:0,cvy:0,side:1,prox:0,ps:0,fx:0,fy:0};
 function magReduced(){ try{ return !!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
 function magStart(){ if(!MAG.raf){ MAG.t=performance.now(); MAG.raf=requestAnimationFrame(magTick); } }
@@ -1497,7 +1497,8 @@ function magTick(){
     var dx=cx-qx, dy=cy-qy, d=Math.max(1,Math.sqrt(dx*dx+dy*dy));
     // distance du curseur au BORD du bouton (et non à son centre) : le champ commence avant d'arriver dessus
     var ex=Math.max(0,Math.abs(dx)-bw/2), ey=Math.max(0,Math.abs(dy)-bh/2), de=Math.sqrt(ex*ex+ey*ey);
-    var f=Math.min(MAG_MAXA,MAG_FORCE/Math.pow(de+MAG_SOFT,2)*MAG.r);    // répulsion en 1/d², affaiblie par l'usure
+    var fw=Math.max(0,1-de/MAG_FIELD); fw*=fw;                          // le champ s'éteint en douceur à MAG_FIELD px du bord : aucune action de loin
+    var f=Math.min(MAG_MAXA,MAG_FORCE/Math.pow(de+MAG_SOFT,2)*MAG.r)*fw;    // répulsion en 1/d², affaiblie par l'usure
     ax+=dx/d*f; ay+=dy/d*f;
     // dérobade latérale : le bouton glisse de côté par rapport à la trajectoire du curseur
     var sv=Math.sqrt(MAG.cvx*MAG.cvx+MAG.cvy*MAG.cvy);
