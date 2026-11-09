@@ -62,6 +62,7 @@ fr:{
  sec_title:'Sécurité',sec_d:'Adresse e-mail, mot de passe et double authentification.',sec_email:'Adresse e-mail',sec_pw:'Mot de passe',sec_modify:'Modifier',sec_change:'Changer',
  tf_toggle:'Double authentification par e-mail',tf_toggle_on:'Un code reçu par e-mail est demandé à chaque connexion par mot de passe.',tf_toggle_off:'Ajoute une étape de vérification par e-mail après ton mot de passe.',tf_on_toast:'Double authentification activée',tf_off_toast:'Double authentification désactivée',tf_err:'Impossible de modifier ce réglage, réessaie.',tf_off_title:'Désactiver la double authentification ?',tf_off_d:'Ton compte ne sera plus protégé que par ton mot de passe.',tf_off_confirm:'Désactiver',
  cp_current:'Mot de passe actuel',cp_current_hint:"Laisse vide si tu n'as pas encore de mot de passe (compte créé avec Google ou avec un code).",cp_err_current:'Mot de passe actuel incorrect ou manquant.',
+ sp_title:'Crée ton mot de passe',sp_lead:'Pour sécuriser ton compte, un mot de passe est désormais obligatoire. Choisis-le maintenant : tu pourras ensuite accéder à ton espace.',sp_save:'Créer mon mot de passe',sp_code_hint:"Pour confirmer que c'est bien toi, nous t'avons envoyé un code par e-mail.",
  pend_hint:'Tu peux quitter cette page pour récupérer ton code : cette fenêtre te sera proposée à ton retour.',
  del_card_t:'Supprimer mon compte',del_card_d:'Suppression définitive de ton compte et de tes données personnelles.',del_btn:'Supprimer mon compte…',
  del_title:'Supprimer définitivement ton compte ?',del_d:"Cette action est irréversible. Pour confirmer, nous t'envoyons un code par e-mail.",
@@ -130,6 +131,7 @@ en:{
  sec_title:'Security',sec_d:'Email address, password and two-step verification.',sec_email:'Email address',sec_pw:'Password',sec_modify:'Change',sec_change:'Change',
  tf_toggle:'Email two-step verification',tf_toggle_on:'A code sent by email is required at every password sign-in.',tf_toggle_off:'Adds an email verification step after your password.',tf_on_toast:'Two-step verification enabled',tf_off_toast:'Two-step verification disabled',tf_err:'Could not change this setting, please retry.',tf_off_title:'Disable two-step verification?',tf_off_d:'Your account will only be protected by your password.',tf_off_confirm:'Disable',
  cp_current:'Current password',cp_current_hint:"Leave empty if you don't have a password yet (account created with Google or with a code).",cp_err_current:'Current password incorrect or missing.',
+ sp_title:'Create your password',sp_lead:'To secure your account, a password is now required. Choose it now: you will then access your account area.',sp_save:'Create my password',sp_code_hint:'To confirm it is you, we emailed you a code.',
  pend_hint:'You can leave this page to get your code: this window will be offered again when you come back.',
  del_card_t:'Delete my account',del_card_d:'Permanently delete your account and your personal data.',del_btn:'Delete my account…',
  del_title:'Permanently delete your account?',del_d:'This action cannot be undone. To confirm, we email you a code.',
@@ -563,18 +565,6 @@ function skeletonView(){
 }
 
 /* ---- Vue d'ensemble ---- */
-async function loadHasPassword(){
-  try{
-    var r=await SB.rpc('sec_has_password');
-    if(!r.error&&typeof r.data==='boolean'){ S.hasPw=r.data; if(S.account&&(S.route==='overview'||S.route==='profile')) renderView(false); }
-  }catch(e){}
-}
-function pwAlert(){
-  if(S.hasPw!==false) return '';            // inconnu (SQL absent) ou mot de passe déjà créé
-  try{ if(sessionStorage.getItem('bpl_pw_later')==='1') return ''; }catch(e){}
-  return '<div class="alert" style="margin-bottom:16px">'+icon('shield')+'<div><div class="alert-title">'+esc(t('pwb_t'))+'</div><div class="alert-desc">'+esc(t('pwb_d'))+'</div>'
-    +'<div class="alert-actions"><button type="button" class="btn btn-primary btn-sm" data-action="change-password">'+esc(t('pwb_btn'))+'</button><button type="button" class="btn btn-ghost btn-sm" data-action="pw-later">'+esc(t('pwb_later'))+'</button></div></div></div>';
-}
 function consentAlert(){
   if(consentState()!=='legacy'||laterSet()) return '';
   return '<div class="alert" style="margin-bottom:16px">'+icon('mail')+'<div><div class="alert-title">'+esc(t('ml_legacy_t'))+'</div><div class="alert-desc">'+esc(t('ml_legacy_d'))+'</div>'
@@ -615,7 +605,7 @@ function renderOverview(){
   var side=downloadCard(lics)
     +'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('help_title'))+'</div><div class="card-description">'+esc(t('help_d'))+'</div></div></div><div class="card-content"><a class="btn btn-outline btn-block" href="#support">'+icon('life')+'<span>'+esc(t('help_btn'))+'</span></a></div></div>';
 
-  return pwAlert()+consentAlert()
+  return consentAlert()
     +pageHead(t('hello',{name:firstName()}),t('overview_sub'),addKeyBtn())
     +'<div class="stats">'+stats+'</div>'
     +'<div class="grid-2"><div class="stack">'+licCard+devCard+'</div><div class="stack">'+side+'</div></div>';
@@ -750,7 +740,7 @@ function renderProfile(){
   var delCard=(S.sec&&S.sec.supported&&S.sec.can_delete)
     ?'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('del_card_t'))+'</div><div class="card-description">'+esc(t('del_card_d'))+'</div></div>'+icon('alert')+'</div><div class="card-content"><button type="button" class="btn btn-destructive btn-sm" data-action="delete-account">'+esc(t('del_btn'))+'</button></div></div>'
     :'';
-  return pageHead(t('nav_profile'),t('page_profile_d'))+pwAlert()+'<div class="grid-eq"><div class="stack">'+profileCard+secCard+'</div><div class="stack">'+mailCard+accCard+dpCard+delCard+'</div></div>';
+  return pageHead(t('nav_profile'),t('page_profile_d'))+'<div class="grid-eq"><div class="stack">'+profileCard+secCard+'</div><div class="stack">'+mailCard+accCard+dpCard+delCard+'</div></div>';
 }
 
 /* ---- Support ---- */
@@ -855,8 +845,8 @@ async function loadTickets(){
 /* ===================== Authentification ===================== */
 function showAuth(step){
   $('#app').hidden=true; $('#auth').hidden=false;
-  $('#step-email').hidden=(step!=='email'); $('#step-code').hidden=(step!=='code'); $('#step-2fa').hidden=(step!=='2fa');
-  var f=(step==='code')?$('#codeInput'):(step==='2fa')?$('#tfCode'):$('#emailInput'); if(f) setTimeout(function(){f.focus();},40);
+  $('#step-email').hidden=(step!=='email'); $('#step-code').hidden=(step!=='code'); $('#step-2fa').hidden=(step!=='2fa'); $('#step-setpw').hidden=(step!=='setpw');
+  var f=(step==='code')?$('#codeInput'):(step==='2fa')?$('#tfCode'):(step==='setpw')?$('#spNew'):$('#emailInput'); if(f) setTimeout(function(){f.focus();},40);
 }
 function showApp(){
   $('#auth').hidden=true; $('#app').hidden=false;
@@ -877,9 +867,47 @@ var EMAIL_RE=/^[^@\s]+@[^@\s]+\.[^@\s]+$/, NEXT_OK=['claim','download'];
 function nextPage(){ try{ var n=new URLSearchParams(location.search).get('next'); return NEXT_OK.indexOf(n)>=0?n:null; }catch(e){ return null; } }
 async function afterLogin(){
   if(!(await gate2fa())) return;            // une étape « code » est affichée : on reprendra après validation
+  if(!(await gatePassword())) return;       // mot de passe obligatoire : étape affichée tant qu'il n'est pas créé
   await applyPendingPrefs();
   var nx=nextPage(); if(nx){ location.replace('/'+nx); return; }
   await enterApp();
+}
+
+/* ---- Mot de passe obligatoire avant l'acces a l'espace compte ---- */
+async function gatePassword(){
+  var r; try{ r=await SB.rpc('sec_has_password'); }catch(e){ return true; }
+  if(!r||r.error||typeof r.data!=='boolean') return true;      // fonction absente (SQL pas appliqué) : pas de blocage
+  S.hasPw=r.data;
+  if(r.data) return true;
+  S.spNeedCode=false; $('#spNew').value=''; $('#spCode').value=''; $('#spErr').textContent=''; $('#spCodeField').hidden=true;
+  $('#spNew').type='password'; $('#spToggle').textContent=t('pw_show');
+  showAuth('setpw');
+  return false;
+}
+async function saveFirstPassword(){
+  var btn=$('#spSave'), err=$('#spErr'), np=$('#spNew').value, code=$('#spCode').value.trim();
+  err.textContent=''; $('#spNew').classList.remove('invalid');
+  if(np.length<10){ err.textContent=t('err_pw_short'); $('#spNew').classList.add('invalid'); return; }
+  if(S.spNeedCode&&!code){ err.textContent=t('err_code_empty'); return; }
+  setBusy(btn,true);
+  try{
+    var attrs={password:np}; if(S.spNeedCode) attrs.nonce=code;
+    var r=await SB.auth.updateUser(attrs); if(r.error) throw r.error;
+    S.hasPw=true; await afterLogin(); return;
+  }catch(ex){
+    console.error('first password failed:',ex);
+    var m=(ex&&ex.message)||'';
+    if(!S.spNeedCode&&/reauth|nonce/i.test(m)){
+      // session ancienne : confirmation par un code envoyé par e-mail
+      try{
+        var q=await SB.auth.reauthenticate(); if(q.error) throw q.error;
+        S.spNeedCode=true; $('#spCodeField').hidden=false; $('#spCode').focus();
+      }catch(e2){ console.error('reauthenticate failed:',e2); err.textContent=t('cp_err_send'); }
+    }
+    else if(/nonce|reauth|invalid|expired/i.test(m)) err.textContent=t('err_code');
+    else if(/password/i.test(m)) err.textContent=t('err_pw_short');
+    else err.textContent=t('cp_err');
+  }finally{ setBusy(btn,false); }
 }
 
 /* ---- Double authentification par e-mail ---- */
@@ -1271,7 +1299,7 @@ async function enterApp(){
   var pl=S.account.profile&&S.account.profile.language;
   if(!saved&&(pl==='fr'||pl==='en')&&pl!==S.lang) setLang(pl);
   updateChrome(); renderView(false);
-  loadVersions(); loadTickets(); loadHasPassword();
+  loadVersions(); loadTickets();
   setTimeout(resumePending,350);
 }
 async function signOut(){
@@ -1293,7 +1321,6 @@ document.addEventListener('click',function(e){
     case 'change-password': changePasswordDialog(); break;
     case 'toggle-2fa': toggle2fa(); break;
     case 'delete-account': deleteAccountDialog(); break;
-    case 'pw-later': try{ sessionStorage.setItem('bpl_pw_later','1'); }catch(x){} renderView(false); break;   // le lien s'ouvre normalement
     case 'add-key': addKeyDialog(); break;
     case 'copy-key': copyKey(id,el.classList.contains('btn-secondary')?el:null); break;
     case 'toggle-key': S.revealed[id]=!S.revealed[id]; renderView(false); { var nb=$('[data-action="toggle-key"][data-id="'+id+'"]'); if(nb) nb.focus(); } break;
@@ -1322,6 +1349,7 @@ document.addEventListener('submit',function(e){
   else if(f.id==='step-email'){ e.preventDefault(); submitEmailForm(); }
   else if(f.id==='step-code'){ e.preventDefault(); verifyCode(); }
   else if(f.id==='step-2fa'){ e.preventDefault(); verifyTwoFactor(); }
+  else if(f.id==='step-setpw'){ e.preventDefault(); saveFirstPassword(); }
 });
 document.addEventListener('keydown',function(e){
   var mod=e.ctrlKey||e.metaKey;
@@ -1339,6 +1367,8 @@ $('#msBtn').addEventListener('click',signInMicrosoft);
 $('#backBtn').addEventListener('click',function(){ clearInterval(S.resendTimer); S.resendTimer=null; showAuth('email'); });
 $('#resendBtn').addEventListener('click',resendCode);
 $('#tfResend').addEventListener('click',function(){ sendTwoFactorCode(true); });
+$('#spCancel').addEventListener('click',function(){ signOut(); });
+$('#spToggle').addEventListener('click',function(){ var i=$('#spNew'), show=(i.type==='password'); i.type=show?'text':'password'; $('#spToggle').textContent=t(show?'pw_hide':'pw_show'); });
 $('#tfCancel').addEventListener('click',function(){ clearInterval(S.tfTimer); S.tfTimer=null; signOut(); });
 $('#modeLogin').addEventListener('click',function(){ setMode('login'); });
 $('#modeSignup').addEventListener('click',function(){ setMode('signup'); });

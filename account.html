@@ -114,6 +114,31 @@
             <button type="button" id="tfCancel" class="btn btn-ghost btn-sm" data-t="tf_cancel">Se déconnecter</button>
           </div>
         </form>
+
+        <!-- étape obligatoire : création du mot de passe (comptes qui n'en ont pas encore) -->
+        <form id="step-setpw" class="auth-step" hidden novalidate>
+          <h1 data-t="sp_title">Crée ton mot de passe</h1>
+          <p class="lead" data-t="sp_lead">Pour sécuriser ton compte, un mot de passe est désormais obligatoire. Choisis-le maintenant : tu pourras ensuite accéder à ton espace.</p>
+          <div class="field">
+            <label class="label" for="spNew" data-t="newpw_label">Nouveau mot de passe</label>
+            <div class="pw-wrap">
+              <input id="spNew" class="input" type="password" autocomplete="new-password" />
+              <button type="button" id="spToggle" class="pw-toggle" data-t="pw_show">Afficher</button>
+            </div>
+            <div class="hint" data-t="pw_hint">10 caractères minimum.</div>
+          </div>
+          <div class="field" id="spCodeField" hidden>
+            <label class="label" for="spCode" data-t="code_label">Code reçu par email</label>
+            <input id="spCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" />
+            <div class="hint" data-t="sp_code_hint">Pour confirmer que c'est bien toi, nous t'avons envoyé un code par e-mail.</div>
+          </div>
+          <div class="field-error" id="spErr" role="alert"></div>
+          <button type="submit" id="spSave" class="btn btn-primary btn-block" data-t="sp_save">Créer mon mot de passe</button>
+          <div class="row-between" style="margin-top:14px">
+            <span></span>
+            <button type="button" id="spCancel" class="btn btn-ghost btn-sm" data-t="tf_cancel">Se déconnecter</button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -193,6 +218,6 @@
 <script src="assets/vendor/supabase.js"></script>
 <script src="assets/google-signin.js?v=20261109"></script>
 <script src="assets/turnstile.js?v=20261109"></script>
-<script src="assets/account.js?v=20261109l"></script>
+<script src="assets/account.js?v=20261109m"></script>
 </body>
 </html>
