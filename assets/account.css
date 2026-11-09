@@ -137,6 +137,9 @@ svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .auth-center{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 0}
 .auth-card{width:100%;max-width:370px}
 .auth-card h1{font-size:24px;font-weight:700;letter-spacing:-.5px;line-height:1.2}
+.btn-google{gap:10px}
+.auth-or{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:12px;color:var(--muted-foreground)}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:var(--border)}
 .auth-card .lead{color:var(--muted-foreground);margin:8px 0 22px;font-size:14px}
 .auth-step{animation:enter .28s var(--ease) both}
 .auth-foot{font-size:12.5px;color:#71717a;text-align:center}
