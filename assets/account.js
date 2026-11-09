@@ -16,7 +16,7 @@ var PRODUCTS={
 var I18N={
 fr:{
  auth_title:'Mon compte',auth_lead:'Un seul compte BACKPACK LAB pour tes licences, tes appareils et ton historique. Pas encore de compte ? Il sera créé automatiquement.',
- auth_google:'Continuer avec Google',auth_or:'ou par email',err_google:'Connexion avec Google impossible, réessaie ou utilise ton email.',
+ auth_google:'Continuer avec Google',auth_microsoft:'Continuer avec Microsoft',err_oauth:'Connexion impossible, réessaie ou utilise ton email.',auth_or:'ou par email',err_google:'Connexion avec Google impossible, réessaie ou utilise ton email.',
  email:'Email',email_ph:'ton@email.com',auth_send:'Recevoir un code',auth_privacy:"Ton email sert uniquement à t'envoyer le code de connexion et à gérer ton compte.",privacy_policy:'Politique de confidentialité',
  code_title:'Vérifie ta boîte mail',code_lead:'Nous avons envoyé un code à',code_label:'Code de connexion',code_verify:'Se connecter',code_resend:'Renvoyer le code',code_resend_in:'Renvoyer dans {s} s',code_change:"← Changer d'email",
  err_email:'Entre une adresse email valide.',err_send:"Impossible d'envoyer le code, réessaie.",err_code:'Code invalide ou expiré.',err_code_empty:'Entre le code reçu par email.',err_load:'Connecté, mais impossible de charger ton compte. Recharge la page.',err_session:'Impossible de charger ton compte, reconnecte-toi.',
@@ -60,7 +60,7 @@ fr:{
 },
 en:{
  auth_title:'My account',auth_lead:'One BACKPACK LAB account for your licenses, devices and history. No account yet? It will be created automatically.',
- auth_google:'Continue with Google',auth_or:'or by email',err_google:'Google sign-in failed, try again or use your email.',
+ auth_google:'Continue with Google',auth_microsoft:'Continue with Microsoft',err_oauth:'Sign-in failed, try again or use your email.',auth_or:'or by email',err_google:'Google sign-in failed, try again or use your email.',
  email:'Email',email_ph:'you@email.com',auth_send:'Send me a code',auth_privacy:'Your email is only used to send you the sign-in code and manage your account.',privacy_policy:'Privacy policy',
  code_title:'Check your inbox',code_lead:'We sent a code to',code_label:'Sign-in code',code_verify:'Sign in',code_resend:'Resend code',code_resend_in:'Resend in {s}s',code_change:'← Change email',
  err_email:'Enter a valid email address.',err_send:'Could not send the code, please retry.',err_code:'Invalid or expired code.',err_code_empty:'Enter the code you received by email.',err_load:'Signed in, but your account could not be loaded. Please reload the page.',err_session:'Could not load your account, please sign in again.',
@@ -798,6 +798,17 @@ async function sendCode(email,isResend){
     return false;
   }finally{ if(!isResend||!S.resendTimer) setBusy(btn,false); else btn.classList.remove('loading'); }
 }
+async function signInMicrosoft(){
+  var btn=$('#msBtn'), err=$('#emailErr');
+  err.textContent=''; setBusy(btn,true);
+  try{
+    var r=await SB.auth.signInWithOAuth({provider:'azure',options:{redirectTo:location.origin+'/account',scopes:'email'}});
+    if(r.error) throw r.error;
+  }catch(ex){
+    console.error('microsoft sign-in failed:',ex);
+    err.textContent=t('err_oauth'); setBusy(btn,false);
+  }
+}
 async function signInGoogle(){
   var btn=$('#googleBtn'), err=$('#emailErr');
   err.textContent=''; setBusy(btn,true);
@@ -908,6 +919,7 @@ $('#sbToggle').addEventListener('click',toggleSidebar);
 $('#scrim').addEventListener('click',closeSheet);
 $('#cmdBtn').addEventListener('click',openPalette);
 $('#googleBtn').addEventListener('click',signInGoogle);
+$('#msBtn').addEventListener('click',signInMicrosoft);
 $('#backBtn').addEventListener('click',function(){ clearInterval(S.resendTimer); S.resendTimer=null; showAuth('email'); });
 $('#resendBtn').addEventListener('click',function(){ if(S.pendingEmail) sendCode(S.pendingEmail,true); });
 $('#userBtn').addEventListener('click',function(){
@@ -940,7 +952,7 @@ SB.auth.onAuthStateChange(function(ev){
     initGoogleButton();
     // retour de Google en erreur (ex. refus de l'utilisateur) : message discret
     if(/[?&#](error|error_description)=/.test(location.search+location.hash)){
-      $('#emailErr').textContent=t('err_google');
+      $('#emailErr').textContent=t('err_oauth');
       try{ history.replaceState(null,'',location.pathname); }catch(e){}
     }
   }
