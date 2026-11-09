@@ -174,26 +174,6 @@
     #view-downloads .toolbar .in,#view-downloads .toolbar select.in{max-width:none}
   }
 
-  /* emailing */
-  .em-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
-  .em-prev{display:block;width:100%;height:560px;border:1px solid var(--line2);border-radius:10px;background:#0B0B0B}
-  .em-hint{font-size:11.5px;color:var(--muted2);margin-top:5px;line-height:1.5}
-  .em-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-  .em-confirm{display:none;margin-top:16px;border:1px solid rgba(255,107,107,.5);background:rgba(255,107,107,.06);border-radius:11px;padding:16px}
-  .em-confirm p{font-size:13.5px;margin-bottom:12px;line-height:1.5}
-  .btn-danger{background:var(--danger);color:#150303;border:1px solid transparent}
-  .btn-danger:hover{filter:brightness(1.08)}
-  .btn[disabled]{opacity:.5;cursor:not-allowed}
-  .st{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-radius:5px;padding:3px 7px;white-space:nowrap}
-  .st-ok{color:#04150C;background:var(--accent)}
-  .st-pending{color:#150A03;background:var(--warn)}
-  .st-error{color:#fff;background:#8a2f2f}
-  .st-unknown{color:var(--muted);background:var(--surface2);border:1px solid var(--line2)}
-  @media(max-width:860px){.em-grid{grid-template-columns:1fr}.em-prev{height:420px}}
-  @media(max-width:640px){
-    #view-email th:nth-child(3),#view-email td:nth-child(3){display:none}
-    #view-email th,#view-email td{padding:10px 8px;font-size:12.5px}
-  }
   @media(max-width:640px){
     #view-beta th:nth-child(4),#view-beta td:nth-child(4){display:none}
     #view-beta .toolbar{flex-direction:column;align-items:stretch}
@@ -248,7 +228,6 @@
       <button id="mtabAnalytics" onclick="switchView('analytics')">Analytics</button>
       <button id="mtabDownloads" onclick="switchView('downloads')">Téléchargements</button>
       <button id="mtabVersions" onclick="switchView('versions')">Mises à jour</button>
-      <button id="mtabEmail" onclick="switchView('email')">Emailing</button>
     </div>
 
     <div id="view-reviews">
@@ -393,66 +372,6 @@
       </div>
     </div>
 
-    <div id="view-email" style="display:none">
-      <div class="stats" id="emStats"></div>
-      <div class="em-grid">
-        <div class="card">
-          <h3>Nouveau message</h3>
-          <div class="field"><label>Objet</label><input id="emSubject" class="in" maxlength="150" placeholder="Ex : RUSHR a une nouvelle version" /></div>
-          <div class="field"><label>Message</label>
-            <textarea id="emBody" class="in" rows="10" style="resize:vertical" placeholder="Salut {{name}},&#10;&#10;Voici les nouveautés…"></textarea>
-            <div class="em-hint">{{name}} est remplacé par le nom de chaque inscrit. Une ligne vide crée un nouveau paragraphe. Le texte est affiché tel quel, sans HTML.</div>
-          </div>
-          <div class="frow">
-            <div class="fg" style="flex:1;min-width:150px"><label>Bouton (optionnel) : texte</label><input id="emCtaLabel" class="in" maxlength="40" placeholder="Ex : Voir les nouveautés" style="width:100%"></div>
-            <div class="fg" style="flex:2;min-width:200px"><label>Bouton : lien (https://…)</label><input id="emCtaUrl" class="in" placeholder="https://…" style="width:100%"></div>
-          </div>
-          <div class="em-actions">
-            <button class="btn btn-ghost" id="emPreviewBtn" onclick="emPreview()">Aperçu</button>
-            <button class="btn btn-ghost" id="emTestBtn" onclick="emSend(true)">M'envoyer un test</button>
-            <button class="btn btn-primary" id="emSendBtn" onclick="emAskConfirm()">Envoyer à tous…</button>
-          </div>
-          <div class="em-confirm" id="emConfirm">
-            <p id="emConfirmText"></p>
-            <div class="frow">
-              <div class="fg" style="flex:1;min-width:160px"><label>Tape ENVOYER pour confirmer</label><input id="emConfirmInput" class="in" autocomplete="off" oninput="emCheckConfirm()" style="width:100%"></div>
-              <button class="btn btn-danger" id="emConfirmBtn" disabled onclick="emSend(false)">Confirmer l'envoi</button>
-              <button class="btn btn-ghost" id="emCancelBtn" onclick="emCancelConfirm()">Annuler</button>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Aperçu</h3>
-          <iframe id="emPrev" class="em-prev" sandbox="" title="Aperçu du mail"></iframe>
-          <div class="em-hint">Dans l'aperçu et le test, {{name}} est remplacé par ton nom (modifiable dans Mon compte, rubrique Profil). Le lien « Se désabonner » y est inactif ; dans l'envoi réel, chaque inscrit a son propre nom et son propre lien.</div>
-        </div>
-      </div>
-      <div class="card" style="margin-top:14px">
-        <h3>Accès beta : licence + téléchargement</h3>
-        <div class="em-hint" style="margin:0 0 12px">Chaque inscrit reçoit un mail avec le lien de téléchargement de <b>sa plateforme</b> (Windows ou macOS, choisie à l'inscription) et un bouton vers son compte, où se trouve sa clé de licence. Une clé libre lui est attribuée à l'envoi. Les inscrits déjà servis et les désabonnés sont exclus : un second envoi ne renvoie rien à ceux qui l'ont déjà reçu.</div>
-        <div class="stats" id="baStats"></div>
-        <div class="em-actions">
-          <button class="btn btn-ghost" id="baTestBtn" onclick="baSend(true)">M'envoyer un test (Windows + Mac)</button>
-          <button class="btn btn-primary" id="baSendBtn" onclick="baAskConfirm()">Envoyer aux inscrits…</button>
-        </div>
-        <div class="em-confirm" id="baConfirm">
-          <p id="baConfirmText"></p>
-          <div class="frow">
-            <div class="fg" style="flex:1;min-width:160px"><label>Tape ENVOYER pour confirmer</label><input id="baConfirmInput" class="in" autocomplete="off" oninput="baCheckConfirm()" style="width:100%"></div>
-            <button class="btn btn-danger" id="baConfirmBtn" disabled onclick="baSend(false)">Confirmer l'envoi</button>
-            <button class="btn btn-ghost" id="baCancelBtn" onclick="baCancelConfirm()">Annuler</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:0;margin-top:14px">
-        <table>
-          <thead><tr><th>Date</th><th>Objet</th><th>Type</th><th>Inscrits</th><th>Statut</th></tr></thead>
-          <tbody id="emHist"></tbody>
-        </table>
-        <div class="empty" id="emHistEmpty" style="display:none">Aucun envoi pour le moment.</div>
-      </div>
-    </div>
   </div>
 
 </div></main>
@@ -507,17 +426,14 @@
     document.getElementById('mtabAnalytics').classList.toggle('on', v==='analytics');
     document.getElementById('mtabDownloads').classList.toggle('on', v==='downloads');
     document.getElementById('mtabVersions').classList.toggle('on', v==='versions');
-    document.getElementById('mtabEmail').classList.toggle('on', v==='email');
     document.getElementById('view-reviews').style.display=(v==='reviews')?'block':'none';
     document.getElementById('view-beta').style.display=(v==='beta')?'block':'none';
     document.getElementById('view-analytics').style.display=(v==='analytics')?'block':'none';
     document.getElementById('view-downloads').style.display=(v==='downloads')?'block':'none';
     document.getElementById('view-versions').style.display=(v==='versions')?'block':'none';
-    document.getElementById('view-email').style.display=(v==='email')?'block':'none';
     if(v==='beta' && !signupsLoaded) loadSignups();
     if(v==='versions' && !versionsLoaded) loadVersions();
     if(v==='downloads') loadDownloads();
-    if(v==='email') loadEmailing();
     if(v==='analytics'){
       if(!analyticsLoaded) loadAnalytics();
       loadLiveNow();
@@ -585,174 +501,6 @@
     a.href=URL.createObjectURL(new Blob(['﻿'+out.join('\n')],{type:'text/csv;charset=utf-8'}));
     a.download='telechargements'+(DL_FILTER?'-'+DL_FILTER.toLowerCase():'')+'-'+new Date().toISOString().slice(0,10)+'.csv';
     document.body.appendChild(a); a.click(); a.remove();
-  }
-
-  /* ---------- Emailing : message à tous les inscrits beta ---------- */
-  var EM_AUD=null, EM_TESTED=null, emPollTimer=null, emPollCount=0;
-
-  function fmtDT(iso){ if(!iso) return '—'; try{ return new Date(iso).toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }catch(e){ return iso; } }
-
-  async function loadEmailing(){
-    await Promise.all([loadAudience(), loadBetaAccess(), loadBroadcasts(true)]);
-  }
-  async function loadAudience(){
-    try{
-      EM_AUD=await rpc('admin_broadcast_audience');
-      document.getElementById('emStats').innerHTML=
-        '<div class="stat"><div class="n">'+EM_AUD.subscribed+'</div><div class="l">Recevront le message</div></div>'+
-        '<div class="stat"><div class="n">'+EM_AUD.consented+'</div><div class="l">Consentement coché</div></div>'+
-        '<div class="stat" title="Inscrits avant la case de consentement : pas de consentement explicite enregistré"><div class="n">'+EM_AUD.legacy+'</div><div class="l">Hérités (à reconfirmer)</div></div>'+
-        '<div class="stat" title="Inscrits depuis la case, sans l\'avoir cochée : exclus de l\'envoi"><div class="n">'+EM_AUD.no_consent+'</div><div class="l">Sans consentement (exclus)</div></div>'+
-        '<div class="stat"><div class="n">'+EM_AUD.unsubscribed+'</div><div class="l">Désabonnés</div></div>'+
-        '<div class="stat"><div class="n">'+EM_AUD.total+'</div><div class="l">Inscrits beta</div></div>';
-    }catch(e){ toast('Erreur : '+(e.message||e),'err'); }
-  }
-  var EM_STATUS={ok:['st-ok','Accepté','Accepté par Resend : pris en charge pour livraison'],pending:['st-pending','En cours…','En attente de la réponse de Resend'],error:['st-error','Erreur',''],unknown:['st-unknown','Inconnu','Statut non retrouvé (réponse trop ancienne)']};
-  async function loadBroadcasts(reset){
-    if(reset) emPollCount=0;
-    var list=[];
-    try{ list=await rpc('admin_list_broadcasts'); }catch(e){ toast('Erreur : '+(e.message||e),'err'); }
-    document.getElementById('emHistEmpty').style.display=list.length?'none':'block';
-    document.getElementById('emHist').innerHTML=list.map(function(b){
-      var st=EM_STATUS[b.status]||EM_STATUS.unknown;
-      return '<tr><td>'+esc(fmtDT(b.created_at))+'</td><td>'+esc(b.subject)+'</td>'+
-        '<td>'+(b.kind==='test'?'Test':'Envoi')+'</td><td>'+b.recipients+'</td>'+
-        '<td><span class="st '+st[0]+'" title="'+esc(b.error_detail||st[2]||'')+'">'+st[1]+'</span></td></tr>';
-    }).join('');
-    // un envoi vient de partir : on revérifie son statut quelques fois
-    if(list.some(function(b){return b.status==='pending';}) && !emPollTimer && emPollCount<6){
-      emPollTimer=setTimeout(function(){ emPollTimer=null; emPollCount++; if(curView==='email') loadBroadcasts(false); },3000);
-    }
-  }
-
-  function emFields(){
-    var f={subject:document.getElementById('emSubject').value.trim(),
-           body:document.getElementById('emBody').value.trim(),
-           label:document.getElementById('emCtaLabel').value.trim(),
-           url:document.getElementById('emCtaUrl').value.trim()};
-    if(!f.subject){ toast('Ajoute un objet','err'); return null; }
-    if(!f.body){ toast('Écris le message','err'); return null; }
-    if(!!f.label!==!!f.url){ toast('Le bouton a besoin d\'un texte ET d\'un lien (ou aucun des deux)','err'); return null; }
-    if(f.url && !/^https:\/\/\S+$/.test(f.url)){ toast('Le lien du bouton doit commencer par https://','err'); return null; }
-    return f;
-  }
-  function emKey(f){ return [f.subject,f.body,f.label,f.url].join('\u0001'); }
-  function emErr(e){
-    var m=(e&&e.message)||String(e);
-    var map={NOT_ADMIN:'Accès réservé aux admins',INVALID_SUBJECT:'Objet invalide (1 à 150 caractères)',INVALID_BODY:'Message vide ou trop long',
-      CTA_INCOMPLETE:'Le bouton a besoin d\'un texte ET d\'un lien',INVALID_URL:'Le lien du bouton doit commencer par https://',INVALID_CTA:'Texte du bouton trop long (40 caractères max)',
-      DUPLICATE_RECENT:'Ce message vient déjà d\'être envoyé (moins de 5 min). Rien n\'a été renvoyé.',NO_RECIPIENTS:'Aucun inscrit abonné à qui envoyer',
-      TOO_MANY_RECIPIENTS:'Plus de 100 destinataires : envoi bloqué par sécurité (limite à lever avant)',NO_KEYS_LEFT:'Pas assez de clés de licence libres : rien n\'a été envoyé et personne n\'a été marqué comme servi. Crée des clés (onglet licences) puis réessaie.',NO_EMAIL_KEY:'Clé d\'envoi Resend introuvable dans Supabase',NO_ADMIN_EMAIL:'Ton compte n\'a pas d\'adresse email'};
-    for(var k in map){ if(m.indexOf(k)>=0) return map[k]; }
-    return 'Erreur : '+m;
-  }
-  function setEmBusy(b){ ['emPreviewBtn','emTestBtn','emSendBtn','emConfirmBtn','emCancelBtn'].forEach(function(id){ var el=document.getElementById(id); if(el) el.disabled=b; }); if(!b) emCheckConfirm(); }
-
-  async function emPreview(){
-    var f=emFields(); if(!f) return;
-    setEmBusy(true);
-    try{
-      var html=await rpc('admin_preview_broadcast',{p_body:f.body,p_cta_label:f.label||null,p_cta_url:f.url||null});
-      document.getElementById('emPrev').srcdoc=html;
-    }catch(e){ toast(emErr(e),'err'); }
-    finally{ setEmBusy(false); }
-  }
-
-  function emAskConfirm(){
-    var f=emFields(); if(!f) return;
-    if(!EM_AUD){ toast('Audience non chargée, réessaie','err'); return; }
-    if(EM_AUD.subscribed<1){ toast('Aucun inscrit abonné à qui envoyer','err'); return; }
-    var n=EM_AUD.subscribed;
-    var tested=(EM_TESTED===emKey(f));
-    document.getElementById('emConfirmText').textContent=
-      'Tu vas envoyer « '+f.subject+' » à '+n+' inscrit'+(n>1?'s':'')+' (désabonnés et inscrits sans consentement exclus'+(EM_AUD.legacy>0?' ; dont '+EM_AUD.legacy+' inscrit'+(EM_AUD.legacy>1?'s':'')+' d\'avant la case de consentement':'')+'). Cet envoi est définitif. '+
-      (tested?'✓ Un test de ce message a déjà été envoyé.':'⚠ Aucun test de ce message n\'a encore été envoyé : clique d\'abord sur « M\'envoyer un test ».');
-    document.getElementById('emConfirmInput').value='';
-    document.getElementById('emConfirm').style.display='block';
-    emCheckConfirm();
-    document.getElementById('emConfirmInput').focus();
-  }
-  function emCheckConfirm(){
-    var ok=document.getElementById('emConfirmInput').value.trim()==='ENVOYER';
-    document.getElementById('emConfirmBtn').disabled=!ok;
-  }
-  function emCancelConfirm(){
-    document.getElementById('emConfirm').style.display='none';
-    document.getElementById('emConfirmInput').value='';
-    emCheckConfirm();
-  }
-
-  async function emSend(isTest){
-    var f=emFields(); if(!f) return;
-    if(!isTest && document.getElementById('emConfirmInput').value.trim()!=='ENVOYER'){ toast('Tape ENVOYER pour confirmer','err'); return; }
-    setEmBusy(true);
-    try{
-      var r=await rpc('admin_send_broadcast',{p_subject:f.subject,p_body:f.body,p_cta_label:f.label||null,p_cta_url:f.url||null,p_test:isTest});
-      if(isTest){
-        EM_TESTED=emKey(f);
-        toast('Test envoyé à '+(ME&&ME.email||'ton adresse')+' ✓','ok');
-      }else{
-        toast('Envoyé à '+r.recipients+' inscrit'+(r.recipients>1?'s':'')+' ✓','ok');
-        ['emSubject','emBody','emCtaLabel','emCtaUrl'].forEach(function(id){ document.getElementById(id).value=''; });
-        document.getElementById('emPrev').srcdoc='';
-        EM_TESTED=null;
-        emCancelConfirm();
-        loadAudience();
-      }
-      await loadBroadcasts(true);
-    }catch(e){ toast(emErr(e),'err'); }
-    finally{ setEmBusy(false); }
-  }
-
-  /* ---------- Accès beta : licence + lien de téléchargement par plateforme ---------- */
-  var BA_AUD=null;
-  async function loadBetaAccess(){
-    try{
-      BA_AUD=await rpc('admin_beta_access_audience');
-      document.getElementById('baStats').innerHTML=
-        '<div class="stat"><div class="n">'+BA_AUD.to_send+'</div><div class="l">À servir</div></div>'+
-        '<div class="stat"><div class="n">'+BA_AUD.to_send_win+'</div><div class="l">dont Windows</div></div>'+
-        '<div class="stat"><div class="n">'+BA_AUD.to_send_mac+'</div><div class="l">dont macOS</div></div>'+
-        '<div class="stat"><div class="n">'+BA_AUD.already_sent+'</div><div class="l">Déjà servis</div></div>'+
-        '<div class="stat"><div class="n">'+BA_AUD.free_keys+'</div><div class="l">Clés libres</div></div>';
-    }catch(e){ BA_AUD=null; toast(emErr(e),'err'); }
-  }
-  function setBaBusy(b){ ['baTestBtn','baSendBtn','baConfirmBtn','baCancelBtn'].forEach(function(id){ var el=document.getElementById(id); if(el) el.disabled=b; }); if(!b) baCheckConfirm(); }
-  function baAskConfirm(){
-    if(!BA_AUD){ toast('Audience non chargée, réessaie','err'); return; }
-    if(BA_AUD.to_send<1){ toast('Personne à servir : tous les inscrits abonnés ont déjà reçu leur accès','err'); return; }
-    var n=BA_AUD.to_send;
-    document.getElementById('baConfirmText').textContent=
-      'Tu vas envoyer l\'accès beta (licence + téléchargement) à '+n+' inscrit'+(n>1?'s':'')+' : '+BA_AUD.to_send_win+' Windows, '+BA_AUD.to_send_mac+' macOS. '+
-      'Une clé libre sera attribuée à chacun ('+BA_AUD.free_keys+' disponible'+(BA_AUD.free_keys>1?'s':'')+'). Cet envoi est définitif. Si tu n\'as pas encore cliqué sur « M\'envoyer un test », fais-le d\'abord.';
-    document.getElementById('baConfirmInput').value='';
-    document.getElementById('baConfirm').style.display='block';
-    baCheckConfirm();
-    document.getElementById('baConfirmInput').focus();
-  }
-  function baCheckConfirm(){
-    var ok=document.getElementById('baConfirmInput').value.trim()==='ENVOYER';
-    document.getElementById('baConfirmBtn').disabled=!ok;
-  }
-  function baCancelConfirm(){
-    document.getElementById('baConfirm').style.display='none';
-    document.getElementById('baConfirmInput').value='';
-    baCheckConfirm();
-  }
-  async function baSend(isTest){
-    if(!isTest && document.getElementById('baConfirmInput').value.trim()!=='ENVOYER'){ toast('Tape ENVOYER pour confirmer','err'); return; }
-    setBaBusy(true);
-    try{
-      var r=await rpc('admin_send_beta_access',{p_test:isTest});
-      if(isTest){
-        toast('2 tests envoyés (Windows + macOS) à '+(ME&&ME.email||'ton adresse')+' ✓','ok');
-      }else{
-        toast('Accès envoyé à '+r.recipients+' inscrit'+(r.recipients>1?'s':'')+' ✓','ok');
-        baCancelConfirm();
-      }
-      await Promise.all([loadBetaAccess(), loadBroadcasts(true)]);
-    }catch(e){ toast(emErr(e),'err'); }
-    finally{ setBaBusy(false); }
   }
 
   async function loadLiveNow(){
