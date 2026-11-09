@@ -62,6 +62,11 @@ fr:{
  sec_title:'Sécurité',sec_d:'Adresse e-mail, mot de passe et double authentification.',sec_email:'Adresse e-mail',sec_pw:'Mot de passe',sec_modify:'Modifier',sec_change:'Changer',
  tf_toggle:'Double authentification par e-mail',tf_toggle_on:'Un code reçu par e-mail est demandé à chaque connexion par mot de passe.',tf_toggle_off:'Ajoute une étape de vérification par e-mail après ton mot de passe.',tf_on_toast:'Double authentification activée',tf_off_toast:'Double authentification désactivée',tf_err:'Impossible de modifier ce réglage, réessaie.',tf_off_title:'Désactiver la double authentification ?',tf_off_d:'Ton compte ne sera plus protégé que par ton mot de passe.',tf_off_confirm:'Désactiver',
  cp_current:'Mot de passe actuel',cp_current_hint:"Laisse vide si tu n'as pas encore de mot de passe (compte créé avec Google ou avec un code).",cp_err_current:'Mot de passe actuel incorrect ou manquant.',
+ del_card_t:'Supprimer mon compte',del_card_d:'Suppression définitive de ton compte et de tes données personnelles.',del_btn:'Supprimer mon compte…',
+ del_title:'Supprimer définitivement ton compte ?',del_d:"Cette action est irréversible. Pour confirmer, nous t'envoyons un code par e-mail.",
+ del_l1:'Ton compte, ton profil et tes réglages de sécurité sont supprimés.',del_l2:'Tes tickets de support et ton inscription à la beta sont supprimés.',del_l3:'Tes licences sont détachées de ton adresse : elles ne pourront plus être récupérées avec ce compte.',del_l4:'Les commandes de la boutique sont conservées pour des raisons comptables.',del_note:'Tu recevras un e-mail de confirmation après la suppression.',
+ del_send:'Envoyer le code',del_err_send:"Impossible d'envoyer le code, réessaie.",del_admin:'Un compte administrateur ne peut pas être supprimé ici.',
+ del_title2:'Confirme la suppression',del_d2:'Saisis le code reçu à {e} et écris le mot demandé pour confirmer.',del_word:'SUPPRIMER',del_type:'Écris « {w} » pour confirmer',del_err_word:'Écris exactement le mot demandé.',del_confirm:'Supprimer définitivement',del_err:'Suppression impossible, réessaie.',del_done:'Compte supprimé',del_done_d:"Ton compte et tes données ont été supprimés. Merci d'avoir utilisé BACKPACK LAB.",
  cp_title:'Changer le mot de passe',cp_d:'Pour confirmer que c\'est bien toi, nous envoyons un code à {e}.',cp_send:'Envoyer le code',cp_err_send:"Impossible d'envoyer le code, réessaie.",cp_title2:'Nouveau mot de passe',cp_d2:'Saisis le code reçu par e-mail, puis choisis ton nouveau mot de passe.',cp_save:'Changer le mot de passe',cp_err:'Impossible de changer le mot de passe, réessaie.',
  ce_title:"Changer d'adresse e-mail",ce_d:"Entre ta nouvelle adresse. Nous envoyons un code à l'ancienne ET à la nouvelle adresse pour confirmer le changement.",ce_new:'Nouvelle adresse e-mail',ce_send:'Envoyer les codes',ce_same:"C'est déjà ton adresse actuelle.",ce_taken:'Cette adresse est déjà utilisée par un autre compte.',ce_err:"Impossible de changer l'adresse, réessaie.",ce_title2:'Confirme le changement',ce_d2:'Saisis les deux codes reçus : un sur ton ancienne adresse, un sur la nouvelle.',ce_code_for:'Code reçu sur {e}',ce_confirm:"Confirmer l'adresse",ce_ok:'Adresse e-mail mise à jour',
 pf_lang:'Langue',pf_dirty:'Modifications non enregistrées',pf_clean:'Tout est à jour',pf_ok:'Profil enregistré',pf_err:"Impossible d'enregistrer, réessaie.",verified:'Vérifié',
@@ -124,6 +129,11 @@ en:{
  sec_title:'Security',sec_d:'Email address, password and two-step verification.',sec_email:'Email address',sec_pw:'Password',sec_modify:'Change',sec_change:'Change',
  tf_toggle:'Email two-step verification',tf_toggle_on:'A code sent by email is required at every password sign-in.',tf_toggle_off:'Adds an email verification step after your password.',tf_on_toast:'Two-step verification enabled',tf_off_toast:'Two-step verification disabled',tf_err:'Could not change this setting, please retry.',tf_off_title:'Disable two-step verification?',tf_off_d:'Your account will only be protected by your password.',tf_off_confirm:'Disable',
  cp_current:'Current password',cp_current_hint:"Leave empty if you don't have a password yet (account created with Google or with a code).",cp_err_current:'Current password incorrect or missing.',
+ del_card_t:'Delete my account',del_card_d:'Permanently delete your account and your personal data.',del_btn:'Delete my account…',
+ del_title:'Permanently delete your account?',del_d:'This action cannot be undone. To confirm, we email you a code.',
+ del_l1:'Your account, profile and security settings are deleted.',del_l2:'Your support tickets and beta sign-up are deleted.',del_l3:'Your licenses are detached from your address: they can no longer be recovered with this account.',del_l4:'Shop orders are kept for accounting reasons.',del_note:'You will receive a confirmation email after the deletion.',
+ del_send:'Send code',del_err_send:'Could not send the code, please retry.',del_admin:'An administrator account cannot be deleted here.',
+ del_title2:'Confirm the deletion',del_d2:'Enter the code received at {e} and type the requested word to confirm.',del_word:'DELETE',del_type:'Type “{w}” to confirm',del_err_word:'Type exactly the requested word.',del_confirm:'Delete permanently',del_err:'Could not delete the account, please retry.',del_done:'Account deleted',del_done_d:'Your account and data were deleted. Thank you for using BACKPACK LAB.',
  cp_title:'Change password',cp_d:'To confirm it is you, we send a code to {e}.',cp_send:'Send code',cp_err_send:'Could not send the code, please retry.',cp_title2:'New password',cp_d2:'Enter the code from the email, then choose your new password.',cp_save:'Change password',cp_err:'Could not change the password, please retry.',
  ce_title:'Change email address',ce_d:'Enter your new address. We send a code to the old AND the new address to confirm the change.',ce_new:'New email address',ce_send:'Send codes',ce_same:'This is already your current address.',ce_taken:'This address is already used by another account.',ce_err:'Could not change the address, please retry.',ce_title2:'Confirm the change',ce_d2:'Enter both codes: one received at your old address, one at the new address.',ce_code_for:'Code received at {e}',ce_confirm:'Confirm address',ce_ok:'Email address updated',
 pf_lang:'Language',pf_dirty:'Unsaved changes',pf_clean:'Everything is up to date',pf_ok:'Profile saved',pf_err:'Could not save, please retry.',verified:'Verified',
@@ -735,7 +745,10 @@ function renderProfile(){
   var accCard='<div class="card"><div class="card-header"><div class="card-title">'+esc(t('ac_title'))+'</div></div><div class="card-content"><div class="info-rows"><div><span>'+esc(t('ac_created'))+'</span><span>'+esc(fmtDate(a.user.created_at))+'</span></div>'+(b?'<div><span>'+esc(t('ac_beta'))+'</span><span>'+esc(fmtDate(b.created_at))+' · '+plat+'</span></div>':'')+'</div></div></div>';
   var mailto='mailto:contact@thebackpacklab.com?subject='+encodeURIComponent(t('dp_subject'));
   var dpCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dp_title'))+'</div><div class="card-description">'+esc(t('dp_d'))+'</div></div>'+icon('shield')+'</div><div class="card-content row" style="flex-wrap:wrap"><a class="btn btn-outline btn-sm" href="'+mailto+'">'+icon('mail')+'<span>'+esc(t('dp_rights'))+'</span></a><a class="btn btn-ghost btn-sm" href="privacy">'+esc(t('dp_policy'))+'</a></div></div>';
-  return pageHead(t('nav_profile'),t('page_profile_d'))+pwAlert()+'<div class="grid-eq"><div class="stack">'+profileCard+secCard+'</div><div class="stack">'+mailCard+accCard+dpCard+'</div></div>';
+  var delCard=(S.sec&&S.sec.supported&&S.sec.can_delete)
+    ?'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('del_card_t'))+'</div><div class="card-description">'+esc(t('del_card_d'))+'</div></div>'+icon('alert')+'</div><div class="card-content"><button type="button" class="btn btn-destructive btn-sm" data-action="delete-account">'+esc(t('del_btn'))+'</button></div></div>'
+    :'';
+  return pageHead(t('nav_profile'),t('page_profile_d'))+pwAlert()+'<div class="grid-eq"><div class="stack">'+profileCard+secCard+'</div><div class="stack">'+mailCard+accCard+dpCard+delCard+'</div></div>';
 }
 
 /* ---- Support ---- */
@@ -941,6 +954,51 @@ function toggle2fa(){
   openDialog({title:t('tf_off_title'),desc:t('tf_off_d'),focus:'.dialog-foot .btn-outline',
     actions:[{label:t('cancel'),cls:'btn-outline',value:false},
              {label:t('tf_off_confirm'),cls:'btn-destructive',onClick:async function(api,btn){ api.busy(true,btn); await set2fa(false); api.busy(false,btn); api.close(true); }}]});
+}
+
+/* ---- Suppression definitive du compte ---- */
+function deleteAccountDialog(){
+  var items=['del_l1','del_l2','del_l3','del_l4'].map(function(k){ return '<li>'+esc(t(k))+'</li>'; }).join('');
+  openDialog({title:t('del_title'),desc:t('del_d'),focus:'.dialog-foot .btn-outline',
+    body:'<ul class="del-list">'+items+'</ul><p class="hint">'+esc(t('del_note'))+'</p>',
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('del_send'),cls:'btn-destructive',onClick:async function(api,btn){
+        api.busy(true,btn);
+        try{
+          var r=await SB.rpc('sec_send_delete_code'); if(r.error) throw r.error;
+          var st=r.data&&r.data.status;
+          api.busy(false,btn); api.close(true);
+          if(st==='admin'){ toast('error',t('del_admin')); return; }
+          deleteAccountStep2();
+        }catch(ex){ console.error('send delete code failed:',ex); api.busy(false,btn); api.close(false); toast('error',t('del_err_send')); }
+      }}]});
+}
+function deleteAccountStep2(){
+  var word=t('del_word');
+  openDialog({title:t('del_title2'),desc:t('del_d2',{e:S.account.user.email}),
+    body:'<form novalidate><div class="field"><label class="label" for="delCode">'+esc(t('code_label'))+'</label><input id="delCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/></div>'
+      +'<div class="field"><label class="label" for="delWord">'+esc(t('del_type',{w:word}))+'</label><input id="delWord" class="input" type="text" autocomplete="off" spellcheck="false" placeholder="'+esc(word)+'"/><div class="field-error" role="alert"></div></div></form>',
+    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('del_confirm'),cls:'btn-destructive',onClick:async function(api,btn){
+        var code=$('#delCode',api.el).value.trim(), typed=$('#delWord',api.el).value.trim();
+        if(!code){ api.error(t('err_code_empty')); return; }
+        if(typed.toUpperCase()!==String(word).toUpperCase()){ api.error(t('del_err_word')); return; }
+        api.error(''); api.busy(true,btn);
+        try{
+          var r=await SB.rpc('delete_my_account',{p_code:code}); if(r.error) throw r.error;
+          var st=r.data&&r.data.status;
+          if(st==='ok'){ api.busy(false,btn); api.close(true); await afterDeletion(); return; }
+          api.busy(false,btn);
+          api.error(st==='expired'?t('tf_expired'):(st==='locked'?t('tf_locked'):(st==='admin'?t('del_admin'):(st==='none'?t('tf_none'):t('err_code')))));
+        }catch(ex){ console.error('delete account failed:',ex); api.busy(false,btn); api.error(t('del_err')); }
+      }}]});
+}
+async function afterDeletion(){
+  try{ await SB.auth.signOut({scope:'local'}); }catch(e){}
+  S.account=null; S.tickets=null; S.draft=null; S.revealed={}; S.sec=null; S.hasPw=undefined;
+  closeSheet(); while(closeTopOverlay()){}
+  $('#emailInput').value=''; $('#pwInput').value='';
+  setMode('login'); showAuth('email'); toast('success',t('del_done'),t('del_done_d'));
 }
 
 /* ---- Changement de mot de passe et d'adresse e-mail ---- */
@@ -1211,6 +1269,7 @@ document.addEventListener('click',function(e){
     case 'change-email': changeEmailDialog(); break;
     case 'change-password': changePasswordDialog(); break;
     case 'toggle-2fa': toggle2fa(); break;
+    case 'delete-account': deleteAccountDialog(); break;
     case 'pw-later': try{ sessionStorage.setItem('bpl_pw_later','1'); }catch(x){} renderView(false); break;   // le lien s'ouvre normalement
     case 'add-key': addKeyDialog(); break;
     case 'copy-key': copyKey(id,el.classList.contains('btn-secondary')?el:null); break;
