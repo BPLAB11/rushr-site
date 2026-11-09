@@ -372,8 +372,17 @@
   }
 
   /* ---------- download click: start the file, then celebrate ---------- */
+  // Logiciel compté : la table app_versions n'a pas (encore) de colonne « product » -> RUSHR par défaut.
+  var DL_PRODUCT='RUSHR';
+  function trackDownload(){
+    try{
+      var r=row(S.platform);
+      SB.rpc('track_download',{p_product:(r&&r.product)||DL_PRODUCT, p_platform:S.platform, p_version:r?String(r.latest_version||''):''}).then(function(){},function(){});
+    }catch(e){}
+  }
   function onDownload(e){
     if(!S.url){ e.preventDefault(); return false; }
+    trackDownload();
     // the link itself starts the download; we only add the animation and the thank-you panel
     setTimeout(function(){
       $('s-thanks').hidden=false;

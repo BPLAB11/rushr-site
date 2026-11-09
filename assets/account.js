@@ -559,6 +559,11 @@ function latestVersion(){
   var v=S.versions; if(!v||!v.length) return null;
   var p=detectPlatform(); return v.filter(function(x){return x.platform===p;})[0]||v[0];
 }
+// Comptage des téléchargements par logiciel (table app_versions sans colonne « product » pour l'instant -> RUSHR).
+function dlAttrs(v){ return 'data-action="track-dl" data-product="'+esc((v&&v.product)||'RUSHR')+'" data-platform="'+esc(v.platform)+'" data-version="'+esc(v.latest_version)+'"'; }
+function trackDownload(el){
+  try{ SB.rpc('track_download',{p_product:el.getAttribute('data-product'),p_platform:el.getAttribute('data-platform'),p_version:el.getAttribute('data-version')}).then(function(){},function(){}); }catch(e){}
+}
 function downloadCard(lics){
   var v=S.versions; if(!lics.length||!v||!v.length) return '';
   var p=detectPlatform(), cur=v.filter(function(x){return x.platform===p;})[0]||v[0], other=v.filter(function(x){return x.platform!==cur.platform;})[0];
@@ -566,8 +571,8 @@ function downloadCard(lics){
   var url=safeUrl(cur.download_url);
   var otherUrl=other&&safeUrl(other.download_url);
   return '<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dl_title'))+'</div><div class="card-description">v'+esc(cur.latest_version)+' · '+esc(t('dl_beta'))+'</div></div><span class="ico-box rushr">'+icon('download')+'</span></div><div class="card-content">'
-    +(url?'<a class="btn btn-primary btn-block" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+icon('download')+'<span>'+esc(t('dl_for',{os:os(cur.platform)}))+'</span></a>':'')
-    +(otherUrl?'<a class="hint link" style="display:inline-block;margin-top:10px" href="'+esc(otherUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(t('dl_other',{os:os(other.platform)}))+'</a>':'')
+    +(url?'<a class="btn btn-primary btn-block" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(cur)+'>'+icon('download')+'<span>'+esc(t('dl_for',{os:os(cur.platform)}))+'</span></a>':'')
+    +(otherUrl?'<a class="hint link" style="display:inline-block;margin-top:10px" href="'+esc(otherUrl)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(other)+'>'+esc(t('dl_other',{os:os(other.platform)}))+'</a>':'')
     +(cur.changelog?'<details class="notes"><summary>'+icon('chevron','chev')+'<span>'+esc(t('dl_notes'))+'</span></summary><pre>'+esc(cur.changelog)+'</pre></details>':'')
     +'</div></div>';
 }
@@ -862,6 +867,7 @@ document.addEventListener('click',function(e){
   var el=e.target.closest('[data-action]'); if(!el) return;
   var id=el.getAttribute('data-id');
   switch(el.getAttribute('data-action')){
+    case 'track-dl': trackDownload(el); break;   // le lien s'ouvre normalement
     case 'add-key': addKeyDialog(); break;
     case 'copy-key': copyKey(id,el.classList.contains('btn-secondary')?el:null); break;
     case 'toggle-key': S.revealed[id]=!S.revealed[id]; renderView(false); { var nb=$('[data-action="toggle-key"][data-id="'+id+'"]'); if(nb) nb.focus(); } break;
