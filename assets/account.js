@@ -62,6 +62,7 @@ fr:{
  sec_title:'Sécurité',sec_d:'Adresse e-mail, mot de passe et double authentification.',sec_email:'Adresse e-mail',sec_pw:'Mot de passe',sec_modify:'Modifier',sec_change:'Changer',
  tf_toggle:'Double authentification par e-mail',tf_toggle_on:'Un code reçu par e-mail est demandé à chaque connexion par mot de passe.',tf_toggle_off:'Ajoute une étape de vérification par e-mail après ton mot de passe.',tf_on_toast:'Double authentification activée',tf_off_toast:'Double authentification désactivée',tf_err:'Impossible de modifier ce réglage, réessaie.',tf_off_title:'Désactiver la double authentification ?',tf_off_d:'Ton compte ne sera plus protégé que par ton mot de passe.',tf_off_confirm:'Désactiver',
  cp_current:'Mot de passe actuel',cp_current_hint:"Laisse vide si tu n'as pas encore de mot de passe (compte créé avec Google ou avec un code).",cp_err_current:'Mot de passe actuel incorrect ou manquant.',
+ pend_hint:'Tu peux quitter cette page pour récupérer ton code : cette fenêtre te sera proposée à ton retour.',
  del_card_t:'Supprimer mon compte',del_card_d:'Suppression définitive de ton compte et de tes données personnelles.',del_btn:'Supprimer mon compte…',
  del_title:'Supprimer définitivement ton compte ?',del_d:"Cette action est irréversible. Pour confirmer, nous t'envoyons un code par e-mail.",
  del_l1:'Ton compte, ton profil et tes réglages de sécurité sont supprimés.',del_l2:'Tes tickets de support et ton inscription à la beta sont supprimés.',del_l3:'Tes licences sont détachées de ton adresse : elles ne pourront plus être récupérées avec ce compte.',del_l4:'Les commandes de la boutique sont conservées pour des raisons comptables.',del_note:'Tu recevras un e-mail de confirmation après la suppression.',
@@ -129,6 +130,7 @@ en:{
  sec_title:'Security',sec_d:'Email address, password and two-step verification.',sec_email:'Email address',sec_pw:'Password',sec_modify:'Change',sec_change:'Change',
  tf_toggle:'Email two-step verification',tf_toggle_on:'A code sent by email is required at every password sign-in.',tf_toggle_off:'Adds an email verification step after your password.',tf_on_toast:'Two-step verification enabled',tf_off_toast:'Two-step verification disabled',tf_err:'Could not change this setting, please retry.',tf_off_title:'Disable two-step verification?',tf_off_d:'Your account will only be protected by your password.',tf_off_confirm:'Disable',
  cp_current:'Current password',cp_current_hint:"Leave empty if you don't have a password yet (account created with Google or with a code).",cp_err_current:'Current password incorrect or missing.',
+ pend_hint:'You can leave this page to get your code: this window will be offered again when you come back.',
  del_card_t:'Delete my account',del_card_d:'Permanently delete your account and your personal data.',del_btn:'Delete my account…',
  del_title:'Permanently delete your account?',del_d:'This action cannot be undone. To confirm, we email you a code.',
  del_l1:'Your account, profile and security settings are deleted.',del_l2:'Your support tickets and beta sign-up are deleted.',del_l3:'Your licenses are detached from your address: they can no longer be recovered with this account.',del_l4:'Shop orders are kept for accounting reasons.',del_note:'You will receive a confirmation email after the deletion.',
@@ -315,14 +317,14 @@ function openDialog(o){
     busy:function(b,btn){ busy=!!b; $$('.dialog-foot .btn',ov).forEach(function(x){ if(btn&&x===btn) setBusy(x,b); else x.disabled=!!b&&x!==btn; }); },
     error:function(m){ var e=$('.field-error',ov); if(e) e.textContent=m||''; var inp=$('.input',ov); if(inp) inp.classList.toggle('invalid',!!m); }
   };
-  var rec={close:function(){ if(!busy) api.close(); }};
+  var rec={close:function(){ if(!busy) api.close(); },persistent:!!o.persistent};
   OVERLAYS.push(rec);
   function onKey(e){
     if(OVERLAYS[OVERLAYS.length-1]!==rec) return;
     if(e.key==='Tab') trapFocus(dlg,e);
   }
   document.addEventListener('keydown',onKey,true);
-  ov.addEventListener('mousedown',function(e){ if(e.target===ov&&!busy&&o.dismissible!==false) api.close(); });
+  ov.addEventListener('mousedown',function(e){ if(e.target===ov&&!busy&&o.dismissible!==false&&!o.persistent) api.close(); });
   $$('.dialog-foot .btn',ov).forEach(function(b){ b.addEventListener('click',function(){ var a=o.actions[+b.getAttribute('data-i')]; if(a&&a.onClick) a.onClick(api,b); else api.close(a&&a.value); }); });
   var form=$('form',ov); if(form) form.addEventListener('submit',function(e){ e.preventDefault(); var p=$('.dialog-foot .btn-primary,.dialog-foot .btn-destructive',ov); if(p) p.click(); });
   hydrateIcons(ov);
@@ -956,6 +958,26 @@ function toggle2fa(){
              {label:t('tf_off_confirm'),cls:'btn-destructive',onClick:async function(api,btn){ api.busy(true,btn); await set2fa(false); api.busy(false,btn); api.close(true); }}]});
 }
 
+/* ---- Operations a code en attente (suppression, mot de passe, adresse) : reprises au retour sur la page ---- */
+var PEND_KEY='bpl_pending', PEND_TTL=15*60*1000;
+function setPending(type,data){
+  try{ localStorage.setItem(PEND_KEY,JSON.stringify({type:type,data:data||{},at:Date.now(),uid:(S.account&&S.account.user&&S.account.user.id)||null})); }catch(e){}
+}
+function clearPending(){ try{ localStorage.removeItem(PEND_KEY); }catch(e){} }
+function getPending(){
+  try{
+    var p=JSON.parse(localStorage.getItem(PEND_KEY)||'null'); if(!p) return null;
+    if(Date.now()-p.at>PEND_TTL||!S.account||p.uid!==S.account.user.id){ clearPending(); return null; }
+    return p;
+  }catch(e){ return null; }
+}
+function resumePending(){
+  var p=getPending(); if(!p||document.querySelector('.overlay')) return;
+  if(p.type==='delete'&&S.sec&&S.sec.can_delete) deleteAccountStep2();
+  else if(p.type==='password') changePasswordStep2();
+  else if(p.type==='email'&&p.data&&p.data.newEmail) changeEmailStep2(p.data.newEmail);
+}
+
 /* ---- Suppression definitive du compte ---- */
 function deleteAccountDialog(){
   var items=['del_l1','del_l2','del_l3','del_l4'].map(function(k){ return '<li>'+esc(t(k))+'</li>'; }).join('');
@@ -969,16 +991,16 @@ function deleteAccountDialog(){
           var st=r.data&&r.data.status;
           api.busy(false,btn); api.close(true);
           if(st==='admin'){ toast('error',t('del_admin')); return; }
-          deleteAccountStep2();
+          setPending('delete'); deleteAccountStep2();
         }catch(ex){ console.error('send delete code failed:',ex); api.busy(false,btn); api.close(false); toast('error',t('del_err_send')); }
       }}]});
 }
 function deleteAccountStep2(){
   var word=t('del_word');
-  openDialog({title:t('del_title2'),desc:t('del_d2',{e:S.account.user.email}),
-    body:'<form novalidate><div class="field"><label class="label" for="delCode">'+esc(t('code_label'))+'</label><input id="delCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/></div>'
+  openDialog({persistent:true,title:t('del_title2'),desc:t('del_d2',{e:S.account.user.email}),
+    body:'<p class="hint" style="margin-bottom:12px">'+esc(t('pend_hint'))+'</p><form novalidate><div class="field"><label class="label" for="delCode">'+esc(t('code_label'))+'</label><input id="delCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/></div>'
       +'<div class="field"><label class="label" for="delWord">'+esc(t('del_type',{w:word}))+'</label><input id="delWord" class="input" type="text" autocomplete="off" spellcheck="false" placeholder="'+esc(word)+'"/><div class="field-error" role="alert"></div></div></form>',
-    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+    actions:[{label:t('cancel'),cls:'btn-outline',onClick:function(api){ clearPending(); api.close(false); }},
       {label:t('del_confirm'),cls:'btn-destructive',onClick:async function(api,btn){
         var code=$('#delCode',api.el).value.trim(), typed=$('#delWord',api.el).value.trim();
         if(!code){ api.error(t('err_code_empty')); return; }
@@ -987,7 +1009,7 @@ function deleteAccountStep2(){
         try{
           var r=await SB.rpc('delete_my_account',{p_code:code}); if(r.error) throw r.error;
           var st=r.data&&r.data.status;
-          if(st==='ok'){ api.busy(false,btn); api.close(true); await afterDeletion(); return; }
+          if(st==='ok'){ clearPending(); api.busy(false,btn); api.close(true); await afterDeletion(); return; }
           api.busy(false,btn);
           api.error(st==='expired'?t('tf_expired'):(st==='locked'?t('tf_locked'):(st==='admin'?t('del_admin'):(st==='none'?t('tf_none'):t('err_code')))));
         }catch(ex){ console.error('delete account failed:',ex); api.busy(false,btn); api.error(t('del_err')); }
@@ -1009,16 +1031,16 @@ function changePasswordDialog(){
         api.busy(true,btn);
         try{
           var r=await SB.auth.reauthenticate(); if(r.error) throw r.error;
-          api.busy(false,btn); api.close(true); changePasswordStep2();
+          api.busy(false,btn); api.close(true); setPending('password'); changePasswordStep2();
         }catch(ex){ console.error('reauthenticate failed:',ex); api.busy(false,btn); api.close(false); toast('error',t('cp_err_send')); }
       }}]});
 }
 function changePasswordStep2(){
-  openDialog({title:t('cp_title2'),desc:t('cp_d2'),
-    body:'<form novalidate><div class="field"><label class="label" for="cpCode">'+esc(t('code_label'))+'</label><input id="cpCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8"/></div>'
+  openDialog({persistent:true,title:t('cp_title2'),desc:t('cp_d2'),
+    body:'<p class="hint" style="margin-bottom:12px">'+esc(t('pend_hint'))+'</p><form novalidate><div class="field"><label class="label" for="cpCode">'+esc(t('code_label'))+'</label><input id="cpCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8"/></div>'
       +'<div class="field"><label class="label" for="cpCur">'+esc(t('cp_current'))+'</label><input id="cpCur" class="input" type="password" autocomplete="current-password"/><div class="hint">'+esc(t('cp_current_hint'))+'</div></div>'
       +'<div class="field"><label class="label" for="cpNew">'+esc(t('newpw_label'))+'</label><input id="cpNew" class="input" type="password" autocomplete="new-password"/><div class="hint">'+esc(t('pw_hint'))+'</div><div class="field-error" role="alert"></div></div></form>',
-    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+    actions:[{label:t('cancel'),cls:'btn-outline',onClick:function(api){ clearPending(); api.close(false); }},
       {label:t('cp_save'),cls:'btn-primary',onClick:async function(api,btn){
         var code=$('#cpCode',api.el).value.trim(), np=$('#cpNew',api.el).value;
         if(!code){ api.error(t('err_code_empty')); return; }
@@ -1028,7 +1050,7 @@ function changePasswordStep2(){
           var cur=$('#cpCur',api.el).value;
           var attrs={password:np,nonce:code}; if(cur) attrs.current_password=cur;   // exigé si « Require current password » est actif
           var r=await SB.auth.updateUser(attrs); if(r.error) throw r.error;
-          api.busy(false,btn); api.close(true); S.hasPw=true; renderView(false); toast('success',t('pw_changed'));
+          clearPending(); api.busy(false,btn); api.close(true); S.hasPw=true; renderView(false); toast('success',t('pw_changed'));
         }catch(ex){
           console.error('password change failed:',ex); api.busy(false,btn);
           var m=(ex&&ex.message)||'';
@@ -1047,7 +1069,7 @@ function changeEmailDialog(){
         api.error(''); api.busy(true,btn);
         try{
           var r=await SB.auth.updateUser({email:ne}); if(r.error) throw r.error;
-          api.busy(false,btn); api.close(true); changeEmailStep2(ne);
+          api.busy(false,btn); api.close(true); setPending('email',{newEmail:ne}); changeEmailStep2(ne);
         }catch(ex){
           console.error('email change failed:',ex); api.busy(false,btn);
           api.error(/already|registered|exists/i.test((ex&&ex.message)||'')?t('ce_taken'):t('ce_err'));
@@ -1065,10 +1087,10 @@ function changeEmailStep2(newEmail){
     }
     throw last;
   }
-  openDialog({title:t('ce_title2'),desc:t('ce_d2'),
-    body:'<form novalidate><div class="field"><label class="label" for="ceOld">'+esc(t('ce_code_for',{e:oldEmail}))+'</label><input id="ceOld" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/></div>'
+  openDialog({persistent:true,title:t('ce_title2'),desc:t('ce_d2'),
+    body:'<p class="hint" style="margin-bottom:12px">'+esc(t('pend_hint'))+'</p><form novalidate><div class="field"><label class="label" for="ceOld">'+esc(t('ce_code_for',{e:oldEmail}))+'</label><input id="ceOld" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/></div>'
       +'<div class="field"><label class="label" for="ceNewCode">'+esc(t('ce_code_for',{e:newEmail}))+'</label><input id="ceNewCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="off" maxlength="8"/><div class="field-error" role="alert"></div></div></form>',
-    actions:[{label:t('cancel'),cls:'btn-outline',value:false},
+    actions:[{label:t('cancel'),cls:'btn-outline',onClick:function(api){ clearPending(); api.close(false); }},
       {label:t('ce_confirm'),cls:'btn-primary',onClick:async function(api,btn){
         var c1=$('#ceOld',api.el).value.trim(), c2=$('#ceNewCode',api.el).value.trim();
         if((!doneOld&&!c1)||!c2){ api.error(t('err_code_empty')); return; }
@@ -1078,7 +1100,7 @@ function changeEmailStep2(newEmail){
           await verifyAny(c2,[newEmail,oldEmail]);
           try{ await SB.auth.refreshSession(); }catch(e2){}
           await refreshAccount();
-          api.busy(false,btn); api.close(true); toast('success',t('ce_ok'));
+          clearPending(); api.busy(false,btn); api.close(true); toast('success',t('ce_ok'));
         }catch(ex){ console.error('email change verify failed:',ex); api.busy(false,btn); api.error(t('err_code')); }
       }}]});
 }
@@ -1250,6 +1272,7 @@ async function enterApp(){
   if(!saved&&(pl==='fr'||pl==='en')&&pl!==S.lang) setLang(pl);
   updateChrome(); renderView(false);
   loadVersions(); loadTickets(); loadHasPassword();
+  setTimeout(resumePending,350);
 }
 async function signOut(){
   try{ await SB.auth.signOut(); }catch(e){}
@@ -1304,7 +1327,7 @@ document.addEventListener('keydown',function(e){
   var mod=e.ctrlKey||e.metaKey;
   if(mod&&(e.key==='k'||e.key==='K')){ if(!S.account) return; e.preventDefault(); if($('.cmd')) closeTopOverlay(); else openPalette(); return; }
   if(mod&&(e.key==='b'||e.key==='B')){ if(!S.account) return; e.preventDefault(); toggleSidebar(); return; }
-  if(e.key==='Escape'){ if(closeTopOverlay()) return; if($('#app')&&$('#app').classList.contains('sheet-open')) closeSheet(); }
+  if(e.key==='Escape'){ var topOv=OVERLAYS[OVERLAYS.length-1]; if(topOv&&topOv.persistent) return; if(closeTopOverlay()) return; if($('#app')&&$('#app').classList.contains('sheet-open')) closeSheet(); }
 });
 window.addEventListener('hashchange',function(){ if(S.account||!$('#app').hidden) onRoute(); });
 window.addEventListener('resize',function(){ if(!isMobile()) closeSheet(); });
