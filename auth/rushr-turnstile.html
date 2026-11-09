@@ -15,7 +15,7 @@
       overflow: hidden;
     }
   </style>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=turnstileReady" async defer></script>
 </head>
 <body>
   <div id="captcha"></div>
@@ -28,6 +28,7 @@
     }
 
     function renderWidget() {
+      if (widgetId !== null) return;   // evite un second rendu si l'app appelle turnstileReady()
       widgetId = turnstile.render('#captcha', {
         sitekey: SITEKEY,
         theme: 'dark',
