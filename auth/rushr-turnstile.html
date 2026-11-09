@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 4px 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 65px;
+      overflow: hidden;
+    }
+  </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+</head>
+<body>
+  <div id="captcha"></div>
+  <script>
+    const SITEKEY = '0x4AAAAAAF6SnMcgZRoez52X';
+    let widgetId = null;
+
+    function emit(obj) {
+      try { invokeCSharpAction(JSON.stringify(obj)); } catch (e) { }
+    }
+
+    function renderWidget() {
+      widgetId = turnstile.render('#captcha', {
+        sitekey: SITEKEY,
+        theme: 'dark',
+        callback: function (t) { emit({ type: 'token', token: t }); },
+        'expired-callback': function () { emit({ type: 'expired' }); },
+        'error-callback': function () { emit({ type: 'error' }); }
+      });
+    }
+
+    window.resetTurnstile = function () {
+      if (widgetId !== null) turnstile.reset(widgetId);
+    };
+
+    window.turnstileReady = renderWidget;
+    if (window.turnstile) renderWidget();
+    else window.onloadTurnstileCallback = renderWidget;
+  </script>
+</body>
+</html>
