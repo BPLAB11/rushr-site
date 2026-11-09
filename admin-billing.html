@@ -15,6 +15,11 @@
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
   .top{display:flex;align-items:center;justify-content:space-between;height:60px;border-bottom:1px solid var(--line)}
   .top b{letter-spacing:.5px}
+  .toplinks{display:flex;gap:4px;margin:0 auto 0 18px}
+  .toplinks a{font-size:13px;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:8px;border:1px solid transparent}
+  .toplinks a:hover{color:var(--accent2);border-color:var(--line2)}
+  .toplinks a.on{color:var(--text);background:var(--surface2);border-color:var(--line2)}
+  @media(max-width:700px){.top b{display:none}.toplinks{margin-left:0}#whoami{display:none}}
   .btn{display:inline-flex;align-items:center;gap:6px;border-radius:9px;font-weight:600;font-size:13.5px;padding:8px 14px;cursor:pointer;border:1px solid transparent;font-family:inherit;background:var(--surface2);color:var(--text)}
   .btn:hover{border-color:var(--accent)}
   .btn.p{background:var(--accent);color:var(--on-accent)} .btn.p:hover{background:var(--accent2)}
@@ -61,7 +66,7 @@
 <body>
 <div class="noprint">
 <div class="wrap">
-  <div class="top"><b>BACKPACK LAB · Devis &amp; factures</b><div><span class="muted" id="whoami"></span> <button class="btn sm" id="logoutBtn" style="display:none" onclick="logout()">Déconnexion</button></div></div>
+  <div class="top"><b>BACKPACK LAB · Devis &amp; factures</b><div class="toplinks"><a href="admin-reviews">Espace admin</a><a class="on" href="admin-billing">Devis &amp; factures</a></div><div><span class="muted" id="whoami"></span> <button class="btn sm" id="logoutBtn" style="display:none" onclick="logout()">Déconnexion</button></div></div>
 
   <div id="g-load" class="muted">Chargement…</div>
   <div id="g-login" style="display:none">

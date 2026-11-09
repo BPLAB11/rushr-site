@@ -19,6 +19,11 @@
   .brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.5px;font-size:14px}
   .brand .mark{width:22px;height:22px;display:block}
   .brand .tag{font-size:10px;font-weight:800;letter-spacing:1px;color:var(--accent2);border:1px solid rgba(53,220,142,.4);border-radius:5px;padding:1px 6px}
+  .nav-links{display:flex;gap:4px;margin:0 auto 0 22px}
+  .nav-links a{font-size:13px;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:8px;border:1px solid transparent}
+  .nav-links a:hover{color:var(--accent2);border-color:var(--line2)}
+  .nav-links a.on{color:var(--text);background:var(--surface2);border-color:var(--line2)}
+  @media(max-width:700px){.nav-links{margin-left:10px}.nav-links a{padding:5px 8px;font-size:12px}#whoami{display:none}.brand .tag{display:none}}
   .nav-right{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
   main{flex:1;width:100%;padding:24px 0 60px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
@@ -153,6 +158,22 @@
   .funnel-rate .n{font-size:20px;font-weight:800;color:var(--accent2)}
   .funnel-rate .l{font-size:11px;color:var(--muted2)}
 
+  /* telechargements */
+  .dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-bottom:14px}
+  .dl-grid .card{margin-top:0}
+  .dl-grid .stats{margin-bottom:12px}
+  .dl-grid .stat{flex:1;min-width:0;padding:12px 14px}
+  .dl-card{cursor:pointer;transition:.15s}
+  .dl-card:hover,.dl-card.on{border-color:var(--accent)}
+  .dl-meta{font-size:12px;color:var(--muted2);margin-top:10px;line-height:1.7}
+  .dl-meta b{color:#D6D6D8;font-weight:600}
+  .toolbar select.in{max-width:220px}
+  @media(max-width:640px){
+    #view-downloads th:nth-child(5),#view-downloads td:nth-child(5),#view-downloads th:nth-child(6),#view-downloads td:nth-child(6){display:none}
+    #view-downloads .toolbar{flex-direction:column;align-items:stretch}
+    #view-downloads .toolbar .in,#view-downloads .toolbar select.in{max-width:none}
+  }
+
   /* emailing */
   .em-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
   .em-prev{display:block;width:100%;height:560px;border:1px solid var(--line2);border-radius:10px;background:#0B0B0B}
@@ -189,6 +210,7 @@
 <body>
 <nav><div class="wrap nav-in">
   <a class="brand" href="/"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB<span class="tag">ADMIN</span></a>
+  <div class="nav-links"><a class="on" href="admin-reviews">Espace admin</a><a href="admin-billing">Devis &amp; factures</a></div>
   <div class="nav-right"><span id="whoami"></span><button id="logoutBtn" class="logout-btn" style="display:none" onclick="logout()">Déconnexion</button></div>
 </div></nav>
 
@@ -224,6 +246,7 @@
       <button id="mtabReviews" class="on" onclick="switchView('reviews')">Reviews</button>
       <button id="mtabBeta" onclick="switchView('beta')">Beta signups</button>
       <button id="mtabAnalytics" onclick="switchView('analytics')">Analytics</button>
+      <button id="mtabDownloads" onclick="switchView('downloads')">Téléchargements</button>
       <button id="mtabVersions" onclick="switchView('versions')">Mises à jour</button>
       <button id="mtabEmail" onclick="switchView('email')">Emailing</button>
     </div>
@@ -318,6 +341,28 @@
           <div id="aReferrer" class="a-list"></div>
         </div>
       </div>
+    </div>
+
+    <div id="view-downloads" style="display:none">
+      <div class="toolbar">
+        <button class="btn btn-ghost" onclick="loadDownloads()">Rafraîchir</button>
+        <button class="btn btn-ghost" onclick="exportDownloadsCsv()">Exporter CSV</button>
+        <span class="empty-mini" id="dlSince"></span>
+      </div>
+      <div class="dl-grid" id="dlCards"></div>
+      <div class="card">
+        <h3>Détail par utilisateur</h3>
+        <div class="toolbar">
+          <select id="dlProduct" class="in" onchange="renderDlUsers()"></select>
+          <input id="dlSearch" class="in" placeholder="Rechercher un e-mail…" oninput="renderDlUsers()" />
+        </div>
+        <p class="empty-mini" id="dlInfo"></p>
+        <table>
+          <thead><tr><th>Utilisateur</th><th>Logiciel</th><th>Téléchargements</th><th>Plateformes</th><th>Versions</th><th>Premier</th><th>Dernier</th></tr></thead>
+          <tbody id="dlBody"></tbody>
+        </table>
+      </div>
+      <p class="empty-mini" style="margin-top:12px">« Total » compte chaque téléchargement ; « Utilisateurs uniques » compte chaque compte une seule fois, même s'il télécharge plusieurs fois. Un double clic dans la minute est compté une seule fois. Seuls les téléchargements faits depuis le site (utilisateur connecté), à partir de la mise en place du comptage, sont enregistrés. Un nouveau logiciel apparaît ici dès que le site envoie son code.</p>
     </div>
 
     <div id="view-versions" style="display:none">
@@ -422,6 +467,7 @@
   var SIGNUPS=[], signupsLoaded=false, curView='reviews';
   var analyticsLoaded=false, rangeDays=30, liveInterval=null;
   var VERSIONS=[], versionsLoaded=false;
+  var DL_STATS=[], DL_PLATFORMS=[], DL_USERS=[], DL_FILTER='';
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function fmt(iso){if(!iso)return '—';try{return new Date(iso).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'});}catch(e){return iso;}}
@@ -459,15 +505,18 @@
     document.getElementById('mtabReviews').classList.toggle('on', v==='reviews');
     document.getElementById('mtabBeta').classList.toggle('on', v==='beta');
     document.getElementById('mtabAnalytics').classList.toggle('on', v==='analytics');
+    document.getElementById('mtabDownloads').classList.toggle('on', v==='downloads');
     document.getElementById('mtabVersions').classList.toggle('on', v==='versions');
     document.getElementById('mtabEmail').classList.toggle('on', v==='email');
     document.getElementById('view-reviews').style.display=(v==='reviews')?'block':'none';
     document.getElementById('view-beta').style.display=(v==='beta')?'block':'none';
     document.getElementById('view-analytics').style.display=(v==='analytics')?'block':'none';
+    document.getElementById('view-downloads').style.display=(v==='downloads')?'block':'none';
     document.getElementById('view-versions').style.display=(v==='versions')?'block':'none';
     document.getElementById('view-email').style.display=(v==='email')?'block':'none';
     if(v==='beta' && !signupsLoaded) loadSignups();
     if(v==='versions' && !versionsLoaded) loadVersions();
+    if(v==='downloads') loadDownloads();
     if(v==='email') loadEmailing();
     if(v==='analytics'){
       if(!analyticsLoaded) loadAnalytics();
@@ -477,6 +526,65 @@
     } else if(liveInterval){
       clearInterval(liveInterval); liveInterval=null;
     }
+  }
+
+  /* ---------- Téléchargements par logiciel (total + utilisateurs uniques) ---------- */
+  function fnum(v){ return new Intl.NumberFormat('fr-FR').format(Number(v)||0); }
+  function fdt(iso){ if(!iso) return '—'; try{ return new Date(iso).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return iso; } }
+  async function loadDownloads(){
+    try{
+      var r=await Promise.all([ rpc('admin_download_stats'), rpc('admin_download_by_platform'), rpc('admin_download_users',{p_product:null}) ]);
+      DL_STATS=r[0]||[]; DL_PLATFORMS=r[1]||[]; DL_USERS=r[2]||[];
+      renderDlFilter(); renderDlCards(); renderDlUsers();
+    }catch(e){ toast('Erreur : '+(e.message||e),'err'); }
+  }
+  function renderDlCards(){
+    var first=DL_STATS.reduce(function(m,s){return (!m||s.first_at<m)?s.first_at:m;},null);
+    document.getElementById('dlSince').textContent=first?('Premier téléchargement enregistré : '+fdt(first)):'';
+    var box=document.getElementById('dlCards');
+    if(!DL_STATS.length){ box.innerHTML='<div class="card" style="grid-column:1/-1"><div class="empty">Aucun téléchargement enregistré pour l\'instant. Les compteurs apparaîtront ici dès le premier téléchargement depuis le site.</div></div>'; return; }
+    box.innerHTML=DL_STATS.map(function(s){
+      var plats=DL_PLATFORMS.filter(function(p){return p.product===s.product;}).map(function(p){
+        return '<div class="a-row"><span class="lbl">'+platformLabel(String(p.platform))+'</span><span class="n">'+fnum(p.total)+' · '+fnum(p.unique_users)+' unique(s)</span></div>'; }).join('');
+      return '<div class="card dl-card'+(DL_FILTER===s.product?' on':'')+'" onclick="setDlFilter(\''+esc(s.product)+'\')" title="Voir le détail par utilisateur">'
+        +'<h3>'+esc(s.product)+'</h3>'
+        +'<div class="stats"><div class="stat"><div class="n">'+fnum(s.total)+'</div><div class="l">Téléchargements</div></div>'
+        +'<div class="stat"><div class="n">'+fnum(s.unique_users)+'</div><div class="l">Utilisateurs uniques</div></div></div>'
+        +'<div class="a-list">'+plats+'</div>'
+        +'<div class="dl-meta">7 jours : <b>'+fnum(s.total_7d)+'</b> · 30 jours : <b>'+fnum(s.total_30d)+'</b> ('+fnum(s.unique_30d)+' uniques)<br>Dernier téléchargement : <b>'+fdt(s.last_at)+'</b></div>'
+        +'</div>';
+    }).join('');
+  }
+  function renderDlFilter(){
+    var sel=document.getElementById('dlProduct');
+    sel.innerHTML='<option value="">Tous les logiciels</option>'+DL_STATS.map(function(s){return '<option value="'+esc(s.product)+'">'+esc(s.product)+'</option>';}).join('');
+    sel.value=DL_STATS.some(function(s){return s.product===DL_FILTER;})?DL_FILTER:''; DL_FILTER=sel.value;
+  }
+  function setDlFilter(p){ DL_FILTER=(DL_FILTER===p)?'':p; document.getElementById('dlProduct').value=DL_FILTER; renderDlCards(); renderDlUsers(); }
+  function dlRows(){
+    DL_FILTER=document.getElementById('dlProduct').value;
+    var term=(document.getElementById('dlSearch').value||'').trim().toLowerCase();
+    return DL_USERS.filter(function(u){ return (!DL_FILTER||u.product===DL_FILTER)&&(!term||String(u.email).toLowerCase().indexOf(term)>=0); });
+  }
+  function renderDlUsers(){
+    var rows=dlRows();
+    var total=rows.reduce(function(a,u){return a+Number(u.downloads||0);},0), uniq={};
+    rows.forEach(function(u){ uniq[u.user_id||u.email]=1; });
+    document.getElementById('dlInfo').textContent=rows.length?(fnum(rows.length)+' ligne(s) · '+fnum(total)+' téléchargement(s) · '+fnum(Object.keys(uniq).length)+' utilisateur(s) unique(s)'+(DL_USERS.length>=1000?' · liste limitée aux 1000 plus récents':'')):'';
+    document.getElementById('dlBody').innerHTML=rows.length?rows.map(function(u){
+      return '<tr><td>'+esc(u.email)+'</td><td><span class="vtype">'+esc(u.product)+'</span></td><td><b>'+fnum(u.downloads)+'</b></td><td>'+esc(u.platforms)+'</td><td class="mono">'+esc(u.versions||'—')+'</td><td>'+fmt(u.first_at)+'</td><td>'+fdt(u.last_at)+'</td></tr>';
+    }).join(''):'<tr><td colspan="7" class="empty-mini" style="text-align:center">Aucun résultat.</td></tr>';
+    renderDlCards();
+  }
+  function exportDownloadsCsv(){
+    var rows=dlRows(); if(!rows.length){ toast('Rien à exporter','err'); return; }
+    function c(v){ v=String(v==null?'':v); return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+    var out=['E-mail;Logiciel;Téléchargements;Plateformes;Versions;Premier;Dernier'].concat(rows.map(function(u){
+      return [u.email,u.product,u.downloads,u.platforms,u.versions||'',u.first_at||'',u.last_at||''].map(c).join(';'); }));
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob(['﻿'+out.join('\n')],{type:'text/csv;charset=utf-8'}));
+    a.download='telechargements'+(DL_FILTER?'-'+DL_FILTER.toLowerCase():'')+'-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a); a.click(); a.remove();
   }
 
   /* ---------- Emailing : message à tous les inscrits beta ---------- */
