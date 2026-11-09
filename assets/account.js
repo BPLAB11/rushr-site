@@ -66,6 +66,7 @@ fr:{
  cp_current:'Mot de passe actuel',cp_current_hint:"Laisse vide si tu n'as pas encore de mot de passe (compte créé avec Google ou avec un code).",cp_err_current:'Mot de passe actuel incorrect ou manquant.',
  sp_title:'Crée ton mot de passe',sp_lead:'Pour sécuriser ton compte, un mot de passe est désormais obligatoire. Choisis-le maintenant : tu pourras ensuite accéder à ton espace.',sp_save:'Créer mon mot de passe',sp_code_hint:"Pour confirmer que c'est bien toi, nous t'avons envoyé un code par e-mail.",
  pend_hint:'Tu peux quitter cette page pour récupérer ton code : cette fenêtre te sera proposée à ton retour.',
+ del_mag_ok:"Bon, d'accord…",
  del_card_t:'Supprimer mon compte',del_card_d:'Suppression définitive de ton compte et de tes données personnelles.',del_btn:'Supprimer mon compte…',
  del_title:'Supprimer définitivement ton compte ?',del_d:"Cette action est irréversible. Pour confirmer, nous t'envoyons un code par e-mail.",
  del_l1:'Ton compte, ton profil et tes réglages de sécurité sont supprimés.',del_l2:'Tes tickets de support et ton inscription à la beta sont supprimés.',del_l3:'Tes licences sont détachées de ton adresse : elles ne pourront plus être récupérées avec ce compte.',del_l4:'Les commandes de la boutique sont conservées pour des raisons comptables.',del_note:'Tu recevras un e-mail de confirmation après la suppression.',
@@ -137,6 +138,7 @@ en:{
  cp_current:'Current password',cp_current_hint:"Leave empty if you don't have a password yet (account created with Google or with a code).",cp_err_current:'Current password incorrect or missing.',
  sp_title:'Create your password',sp_lead:'To secure your account, a password is now required. Choose it now: you will then access your account area.',sp_save:'Create my password',sp_code_hint:'To confirm it is you, we emailed you a code.',
  pend_hint:'You can leave this page to get your code: this window will be offered again when you come back.',
+ del_mag_ok:'Fine, go ahead…',
  del_card_t:'Delete my account',del_card_d:'Permanently delete your account and your personal data.',del_btn:'Delete my account…',
  del_title:'Permanently delete your account?',del_d:'This action cannot be undone. To confirm, we email you a code.',
  del_l1:'Your account, profile and security settings are deleted.',del_l2:'Your support tickets and beta sign-up are deleted.',del_l3:'Your licenses are detached from your address: they can no longer be recovered with this account.',del_l4:'Shop orders are kept for accounting reasons.',del_note:'You will receive a confirmation email after the deletion.',
@@ -742,7 +744,7 @@ function renderProfile(){
   var mailto='mailto:contact@thebackpacklab.com?subject='+encodeURIComponent(t('dp_subject'));
   var dpCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dp_title'))+'</div><div class="card-description">'+esc(t('dp_d'))+'</div></div>'+icon('shield')+'</div><div class="card-content row" style="flex-wrap:wrap"><a class="btn btn-outline btn-sm" href="'+mailto+'">'+icon('mail')+'<span>'+esc(t('dp_rights'))+'</span></a><a class="btn btn-ghost btn-sm" href="privacy">'+esc(t('dp_policy'))+'</a></div></div>';
   var delCard=(S.sec&&S.sec.supported&&S.sec.can_delete)
-    ?'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('del_card_t'))+'</div><div class="card-description">'+esc(t('del_card_d'))+'</div></div>'+icon('alert')+'</div><div class="card-content"><button type="button" class="btn btn-destructive btn-sm" data-action="delete-account">'+esc(t('del_btn'))+'</button></div></div>'
+    ?'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('del_card_t'))+'</div><div class="card-description">'+esc(t('del_card_d'))+'</div></div>'+icon('alert')+'</div><div class="card-content del-zone"><button type="button" class="btn btn-destructive btn-sm" data-action="delete-account">'+esc(t('del_btn'))+'</button></div></div>'
     :'';
   return pageHead(t('nav_profile'),t('page_profile_d'))+'<div class="grid-eq"><div class="stack">'+profileCard+secCard+'</div><div class="stack">'+mailCard+accCard+dpCard+delCard+'</div></div>';
 }
@@ -1450,4 +1452,81 @@ SB.auth.onAuthStateChange(function(ev){
       try{ history.replaceState(null,'',location.pathname); }catch(e){}
     }
   }
+})();
+
+
+/* ===================== Bouton « Supprimer mon compte » magnétique =====================
+   Le curseur et le bouton se repoussent comme deux aimants (force en 1/d², inertie + amortissement, légère
+   rotation selon la vitesse, rappel vers le centre). À force d'insister près du bouton, sa résistance s'use ;
+   sous MAG_GIVEUP il passe en rouge vif, affiche « Bon, d'accord… » et se laisse cliquer. Le clic ouvre le
+   dialogue existant (deleteAccountDialog : code e-mail + mot de confirmation), inchangé.
+   Mobile : chaque tap fait glisser le bouton et retire MAG_TAP de résistance.
+   Clavier (Tab + Entrée, e.detail===0) : passe toujours. prefers-reduced-motion : effet désactivé. */
+var MAG_FORCE=9000, MAG_RETURN=0.006, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=150, MAG_TAP=0.22, MAG_MAXA=2.6;
+var MAG={r:1,tired:false,btn:null,zone:null,x:0,y:0,vx:0,vy:0,rot:0,mx:null,my:null,raf:0,t:0};
+function magReduced(){ try{ return !!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
+function magStart(){ if(!MAG.raf){ MAG.t=performance.now(); MAG.raf=requestAnimationFrame(magTick); } }
+function magStop(){ if(MAG.raf){ cancelAnimationFrame(MAG.raf); MAG.raf=0; } }
+function magTire(){
+  MAG.tired=true;
+  if(MAG.btn){ MAG.btn.classList.add('mag-tired'); MAG.btn.textContent=t('del_mag_ok'); }
+}
+function magAttach(){
+  var b=document.querySelector('[data-action="delete-account"]');
+  if(!b||!b.closest('.del-zone')){ magStop(); MAG.btn=null; return; }
+  if(MAG.btn===b) return;
+  MAG.btn=b; MAG.zone=b.closest('.del-zone');
+  MAG.x=MAG.y=MAG.vx=MAG.vy=MAG.rot=0;
+  if(MAG.tired) magTire();                    // la résistance usée est conservée d'un rendu à l'autre
+  else if(!magReduced()) magStart();
+}
+function magTick(){
+  MAG.raf=0;
+  var b=MAG.btn;
+  if(!b||!b.isConnected){ MAG.btn=null; return; }
+  var now=performance.now(), k=Math.min(3,Math.max(0.2,(now-MAG.t)/16.667)); MAG.t=now;   // simulation en temps reel : identique a 60 ou 144 Hz
+  var z=MAG.zone.getBoundingClientRect(), bw=b.offsetWidth, bh=b.offsetHeight;
+  var cx=z.left+z.width/2+MAG.x, cy=z.top+z.height/2+MAG.y;
+  var ax=0, ay=0;
+  if(!MAG.tired&&MAG.mx!=null){
+    var dx=cx-MAG.mx, dy=cy-MAG.my, d=Math.max(14,Math.sqrt(dx*dx+dy*dy));
+    var f=Math.min(MAG_MAXA,MAG_FORCE/(d*d)*MAG.r);        // répulsion en 1/d², affaiblie par l'usure
+    ax+=dx/d*f; ay+=dy/d*f;
+    if(d<MAG_RADIUS) MAG.r-=MAG_WEAR*k*(0.35+(1-d/MAG_RADIUS)); // insister près du bouton use sa résistance
+  }
+  ax-=MAG_RETURN*MAG.x; ay-=MAG_RETURN*MAG.y;                 // rappel vers le centre
+  var fr=Math.pow(MAG_FRICTION,k);
+  MAG.vx=(MAG.vx+ax*k)*fr; MAG.vy=(MAG.vy+ay*k)*fr;
+  MAG.x+=MAG.vx*k; MAG.y+=MAG.vy*k;
+  var lx=Math.max(0,(z.width-bw)/2-8), ly=Math.max(0,(z.height-bh)/2-6);   // le bouton reste dans sa zone
+  if(MAG.x>lx){ MAG.x=lx; MAG.vx*=-0.4; } else if(MAG.x<-lx){ MAG.x=-lx; MAG.vx*=-0.4; }
+  if(MAG.y>ly){ MAG.y=ly; MAG.vy*=-0.4; } else if(MAG.y<-ly){ MAG.y=-ly; MAG.vy*=-0.4; }
+  var tr=Math.max(-14,Math.min(14,MAG.vx*1.6)); MAG.rot+=(tr-MAG.rot)*0.2;   // légère rotation selon la vitesse
+  b.style.transform='translate('+MAG.x.toFixed(2)+'px,'+MAG.y.toFixed(2)+'px) rotate('+MAG.rot.toFixed(2)+'deg)';
+  if(!MAG.tired&&MAG.r<MAG_GIVEUP) magTire();
+  if(MAG.tired&&Math.abs(MAG.x)<0.2&&Math.abs(MAG.y)<0.2&&Math.abs(MAG.vx)<0.05&&Math.abs(MAG.vy)<0.05){ b.style.transform=''; return; }   // au repos : on arrête la boucle
+  MAG.raf=requestAnimationFrame(magTick);
+}
+document.addEventListener('pointermove',function(e){ if(e.pointerType==='mouse'){ MAG.mx=e.clientX; MAG.my=e.clientY; } },{passive:true});
+document.documentElement.addEventListener('mouseleave',function(){ MAG.mx=null; MAG.my=null; });
+// Tap (mobile) : le bouton glisse et sa résistance baisse
+document.addEventListener('pointerdown',function(e){
+  if(e.pointerType==='mouse'||!MAG.btn||MAG.tired||magReduced()) return;
+  var zone=e.target.closest&&e.target.closest('.del-zone'); if(!zone||zone!==MAG.zone) return;
+  var br=MAG.btn.getBoundingClientRect(), dx=br.left+br.width/2-e.clientX, dy=br.top+br.height/2-e.clientY, d=Math.max(1,Math.sqrt(dx*dx+dy*dy));
+  MAG.vx+=dx/d*14; MAG.vy+=dy/d*8; MAG.r-=MAG_TAP;
+  if(MAG.r<MAG_GIVEUP) magTire();
+  magStart();
+},true);
+// Tant que le bouton résiste, le clic est bloqué (phase de capture, avant le gestionnaire existant)
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('[data-action="delete-account"]');
+  if(!b||MAG.tired||magReduced()) return;
+  if(e.detail===0) return;                     // clavier (Tab + Entrée) ou appel programmatique : toujours autorisé
+  e.preventDefault(); e.stopImmediatePropagation();
+},true);
+// S'attache après chaque rendu de la vue
+(function(){
+  var v=$('#view'); if(v&&window.MutationObserver) new MutationObserver(magAttach).observe(v,{childList:true,subtree:true});
+  magAttach();
 })();
