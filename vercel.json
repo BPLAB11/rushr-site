@@ -3,8 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/beta", "destination": "/account", "permanent": true },
-    { "source": "/account", "destination": "/maintenance", "permanent": false }
+    { "source": "/beta", "destination": "/account", "permanent": true }
   ],
   "headers": [
     {
