@@ -23,18 +23,37 @@
     const SITEKEY = '0x4AAAAAAF6SnMcgZRoez52X';
     let widgetId = null;
 
-    function emit(obj) {
-      try { invokeCSharpAction(JSON.stringify(obj)); } catch (e) { }
+    function rushrEmitToApp(obj) {
+      var payload = JSON.stringify(obj);
+      try {
+        if (typeof invokeCSharpAction === 'function') {
+          invokeCSharpAction(payload);
+          return;
+        }
+      } catch (e) { }
+      try {
+        if (window.chrome && window.chrome.webview && window.chrome.webview.postMessage) {
+          window.chrome.webview.postMessage(payload);
+          return;
+        }
+      } catch (e) { }
+      try {
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.webmessage) {
+          window.webkit.messageHandlers.webmessage.postMessage(payload);
+          return;
+        }
+      } catch (e) { }
     }
+    window.emit = rushrEmitToApp;   // alias de la version precedente de la page
 
     function renderWidget() {
-      if (widgetId !== null) return;   // evite un second rendu si l'app appelle turnstileReady()
+      if (widgetId !== null) return;   // evite un second rendu si l'app appelle turnstileReady() / renderWidget()
       widgetId = turnstile.render('#captcha', {
         sitekey: SITEKEY,
         theme: 'dark',
-        callback: function (t) { emit({ type: 'token', token: t }); },
-        'expired-callback': function () { emit({ type: 'expired' }); },
-        'error-callback': function () { emit({ type: 'error' }); }
+        callback: function (t) { rushrEmitToApp({ type: 'token', token: t }); },
+        'expired-callback': function () { rushrEmitToApp({ type: 'expired' }); },
+        'error-callback': function () { rushrEmitToApp({ type: 'error' }); }
       });
     }
 
