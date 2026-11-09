@@ -805,6 +805,17 @@ async function signInGoogle(){
     err.textContent=t('err_google'); setBusy(btn,false);
   }
 }
+function initGoogleButton(){
+  if(!window.BPLGoogle) return;
+  BPLGoogle.init({
+    sb:SB, holder:$('#googleHolder'), fallback:$('#googleBtn'), lang:function(){return S.lang;},
+    onSuccess:async function(){
+      try{ await enterApp(); }
+      catch(ex){ console.error('enterApp failed:',ex); showAuth('email'); $('#emailErr').textContent=t('err_load'); }
+    },
+    onError:function(){ $('#emailErr').textContent=t('err_google'); }
+  });
+}
 async function verifyCode(){
   var btn=$('#verifyBtn'), err=$('#codeErr'), code=$('#codeInput').value.trim();
   err.textContent=''; $('#codeInput').classList.remove('invalid');
@@ -920,6 +931,7 @@ SB.auth.onAuthStateChange(function(ev){
     catch(ex){ console.error('enterApp failed:',ex); showAuth('email'); $('#emailErr').textContent=t('err_session'); }
   }else{
     showAuth('email');
+    initGoogleButton();
     // retour de Google en erreur (ex. refus de l'utilisateur) : message discret
     if(/[?&#](error|error_description)=/.test(location.search+location.hash)){
       $('#emailErr').textContent=t('err_google');
