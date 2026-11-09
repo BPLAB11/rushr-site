@@ -950,9 +950,14 @@ SB.auth.onAuthStateChange(function(ev){
   }else{
     showAuth('email');
     initGoogleButton();
-    // retour de Google en erreur (ex. refus de l'utilisateur) : message discret
+    // retour d'un fournisseur (Google, Microsoft) en erreur, ex. refus de l'utilisateur : message + détail technique
     if(/[?&#](error|error_description)=/.test(location.search+location.hash)){
-      $('#emailErr').textContent=t('err_oauth');
+      var detail='';
+      try{
+        var qp=new URLSearchParams((location.hash||'').replace(/^#/,'')||location.search);
+        detail=(qp.get('error_description')||qp.get('error')||'').slice(0,160);
+      }catch(e){}
+      $('#emailErr').textContent=t('err_oauth')+(detail?' ('+detail+')':'');
       try{ history.replaceState(null,'',location.pathname); }catch(e){}
     }
   }
