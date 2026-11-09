@@ -1462,7 +1462,7 @@ SB.auth.onAuthStateChange(function(ev){
    dialogue existant (deleteAccountDialog : code e-mail + mot de confirmation), inchangé.
    Mobile : chaque tap fait glisser le bouton et retire MAG_TAP de résistance.
    Clavier (Tab + Entrée, e.detail===0) : passe toujours. prefers-reduced-motion : effet désactivé. */
-var MAG_FORCE=9000, MAG_RETURN=0.006, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=150, MAG_TAP=0.22, MAG_MAXA=2.6;
+var MAG_FORCE=5200, MAG_RETURN=0.006, MAG_FRICTION=0.86, MAG_WEAR=0.0035, MAG_GIVEUP=0.15, MAG_RADIUS=150, MAG_TAP=0.22, MAG_MAXA=1.6;
 var MAG={r:1,tired:false,btn:null,zone:null,x:0,y:0,vx:0,vy:0,rot:0,mx:null,my:null,raf:0,t:0};
 function magReduced(){ try{ return !!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
 function magStart(){ if(!MAG.raf){ MAG.t=performance.now(); MAG.raf=requestAnimationFrame(magTick); } }
@@ -1501,7 +1501,7 @@ function magTick(){
   var lx=Math.max(0,(z.width-bw)/2-8), ly=Math.max(0,(z.height-bh)/2-6);   // le bouton reste dans sa zone
   if(MAG.x>lx){ MAG.x=lx; MAG.vx*=-0.4; } else if(MAG.x<-lx){ MAG.x=-lx; MAG.vx*=-0.4; }
   if(MAG.y>ly){ MAG.y=ly; MAG.vy*=-0.4; } else if(MAG.y<-ly){ MAG.y=-ly; MAG.vy*=-0.4; }
-  var tr=Math.max(-14,Math.min(14,MAG.vx*1.6)); MAG.rot+=(tr-MAG.rot)*0.2;   // légère rotation selon la vitesse
+  var tr=Math.max(-9,Math.min(9,MAG.vx*1.1)); MAG.rot+=(tr-MAG.rot)*0.2;   // légère rotation selon la vitesse
   b.style.transform='translate('+MAG.x.toFixed(2)+'px,'+MAG.y.toFixed(2)+'px) rotate('+MAG.rot.toFixed(2)+'deg)';
   if(!MAG.tired&&MAG.r<MAG_GIVEUP) magTire();
   if(MAG.tired&&Math.abs(MAG.x)<0.2&&Math.abs(MAG.y)<0.2&&Math.abs(MAG.vx)<0.05&&Math.abs(MAG.vy)<0.05){ b.style.transform=''; return; }   // au repos : on arrête la boucle
@@ -1514,7 +1514,7 @@ document.addEventListener('pointerdown',function(e){
   if(e.pointerType==='mouse'||!MAG.btn||MAG.tired||magReduced()) return;
   var zone=e.target.closest&&e.target.closest('.del-zone'); if(!zone||zone!==MAG.zone) return;
   var br=MAG.btn.getBoundingClientRect(), dx=br.left+br.width/2-e.clientX, dy=br.top+br.height/2-e.clientY, d=Math.max(1,Math.sqrt(dx*dx+dy*dy));
-  MAG.vx+=dx/d*14; MAG.vy+=dy/d*8; MAG.r-=MAG_TAP;
+  MAG.vx+=dx/d*10; MAG.vy+=dy/d*6; MAG.r-=MAG_TAP;
   if(MAG.r<MAG_GIVEUP) magTire();
   magStart();
 },true);
