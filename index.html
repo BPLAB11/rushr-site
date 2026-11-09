@@ -145,10 +145,6 @@
   .lineup-more .alt:hover{color:var(--accent)}
 
   /* ANNOUNCE BAR */
-  .announce{display:block;background:linear-gradient(90deg,rgba(53,220,142,.16),rgba(53,220,142,.05));border-bottom:1px solid rgba(53,220,142,.25);text-align:center;font-size:13px;padding:9px 16px;color:var(--text)}
-  .announce b{color:var(--accent2)}
-  .announce .go{color:var(--accent2);font-weight:600;margin-left:8px;white-space:nowrap}
-  .announce:hover .go{color:var(--accent)}
   .nav-links a .new,.mobile-menu a .new{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--on-accent);background:var(--accent);border-radius:5px;padding:2px 6px;vertical-align:2px}
 
   /* HERO extras */
@@ -163,21 +159,6 @@
   .tr span{color:var(--muted);font-size:13.5px;line-height:1.5}
 
   /* BETA */
-  .beta{text-align:center}
-  .beta-card{max-width:560px;margin:36px auto 0;background:var(--surface);border:1px solid rgba(53,220,142,.3);border-radius:18px;padding:36px;box-shadow:0 20px 60px rgba(53,220,142,.08)}
-  .beta-form{display:flex;flex-direction:column;gap:12px;text-align:left}
-  .beta-form input[type=text],.beta-form input[type=email]{background:#0E0E11;border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:13px 16px;font-size:15px;font-family:inherit;width:100%}
-  .beta-form input:focus{outline:none;border-color:var(--accent)}
-  .beta-platform{display:flex;gap:20px;padding:2px 2px 4px}
-  .beta-platform label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);cursor:pointer}
-  .beta-platform input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
-  .beta-note{font-size:12.5px;color:var(--muted2);margin-top:14px;text-align:center}
-  .beta-consent{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.45;color:var(--muted);cursor:pointer;padding:2px 2px 4px}
-  .beta-consent input{width:16px;height:16px;margin-top:2px;flex:none;accent-color:var(--accent);cursor:pointer}
-  .beta-note a{color:var(--accent2);text-decoration:underline}
-  .beta-msg{font-size:13px;text-align:center;min-height:16px}
-  .beta-msg.ok{color:var(--accent2)}
-  .beta-msg.err{color:#FF6B6B}
 
   /* CONTACT */
   .contact{text-align:center}
@@ -214,7 +195,6 @@
   }
   @media(max-width:600px){
     .trust{grid-template-columns:1fr}
-    .beta-card{padding:22px}
     .wrap{padding:0 18px}
     header{padding:48px 0 36px}
     section{padding:46px 0}
@@ -256,7 +236,6 @@
 </head>
 <body>
 
-<a class="announce" href="#beta"><b data-fr="Nouveau" data-en="New">Nouveau</b> · <span data-fr="Rushr, l'outil de dérushage, est en beta sur préinscription" data-en="Rushr, the dérushage tool, is in beta by pre-registration">Rushr, l'outil de dérushage, est en beta sur préinscription</span><span class="go" data-fr="Rejoindre →" data-en="Join →">Rejoindre →</span></a>
 
 <nav>
   <div class="wrap nav-in">
@@ -320,7 +299,7 @@
           <li><span class="c">✓</span> <span data-fr="Bouton Prepare : rangement en un clic avant le montage" data-en="Prepare button: one-click sorting before editing">Bouton Prepare : rangement en un clic avant le montage</span></li>
         </ul>
         <div class="rb-cta">
-          <a href="#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
+          <a href="rushr#beta" class="btn btn-primary" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</a>
           <a href="rushr" class="btn btn-ghost" data-fr="Découvrir Rushr" data-en="Discover Rushr">Découvrir Rushr</a>
         </div>
       </div>
@@ -414,31 +393,8 @@
   </div>
 </section>
 
-<!-- BETA SIGNUP -->
-<section id="beta" class="beta reveal">
-  <div class="wrap">
-    <div class="eyebrow" data-fr="Programme beta" data-en="Beta program">Programme beta</div>
-    <div class="h2" data-fr="Rejoignez les premiers testeurs de Rushr" data-en="Join the first Rushr testers">Rejoignez les premiers testeurs de Rushr</div>
-    <p class="lead" data-fr="Licence offerte aux préinscrits pendant toute la beta, places limitées. Vos retours façonnent directement l'outil." data-en="License offered to pre-registered testers throughout the beta, limited spots. Your feedback directly shapes the tool.">Licence offerte aux préinscrits pendant toute la beta, places limitées. Vos retours façonnent directement l'outil.</p>
-    <div class="beta-card">
-      <form id="betaForm" class="beta-form" onsubmit="return submitBeta(event)">
-        <input id="bfName" type="text" required autocomplete="name" data-fr-ph="Votre nom" data-en-ph="Your name" placeholder="Votre nom" />
-        <input id="bfEmail" type="email" required autocomplete="email" data-fr-ph="vous@email.com" data-en-ph="you@email.com" placeholder="vous@email.com" />
-        <div class="beta-platform">
-          <label><input type="radio" name="bfPlatform" value="WIN" checked /> Windows</label>
-          <label><input type="radio" name="bfPlatform" value="MAC" /> macOS (Apple Silicon)</label>
-        </div>
-        <label class="beta-consent"><input type="checkbox" id="bfConsent" /><span data-fr="J'accepte de recevoir des nouvelles de RUSHR par email (nouvelles versions, actualités). Désabonnement possible à tout moment." data-en="I agree to receive news about RUSHR by email (new releases, updates). You can unsubscribe at any time.">J'accepte de recevoir des nouvelles de RUSHR par email (nouvelles versions, actualités). Désabonnement possible à tout moment.</span></label>
-        <button type="submit" class="btn btn-primary" id="bfSubmit" style="justify-content:center;padding:13px" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</button>
-        <p class="beta-msg" id="bfMsg"></p>
-      </form>
-      <p class="beta-note" data-fr="Vous recevez un email de bienvenue avec l'invitation à notre Discord. Vos données (nom, email, système) servent à vous donner accès à la beta : voir la &lt;a href=&quot;privacy&quot;&gt;politique de confidentialité&lt;/a&gt;." data-en="You'll get a welcome email with the invitation to our Discord. Your data (name, email, system) is used to give you access to the beta: see our &lt;a href=&quot;privacy&quot;&gt;privacy policy&lt;/a&gt;.">Vous recevez un email de bienvenue avec l'invitation à notre Discord. Vos données (nom, email, système) servent à vous donner accès à la beta : voir la <a href="privacy">politique de confidentialité</a>.</p>
-    </div>
-  </div>
-</section>
-
 <!-- CONTACT -->
-<section id="contact" class="contact reveal" style="background:#0E0E11">
+<section id="contact" class="contact reveal">
   <div class="wrap">
     <div class="eyebrow" data-fr="Contact" data-en="Contact">Contact</div>
     <div class="h2" data-fr="Parlons de votre projet" data-en="Let's talk about your project">Parlons de votre projet</div>
@@ -569,32 +525,6 @@
     var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
     setLang(lang);
   })();
-
-  // Inscription à la beta Rushr (même fonction que sur la page Rushr)
-  async function submitBeta(e){
-    e.preventDefault();
-    var btn=document.getElementById('bfSubmit'), msg=document.getElementById('bfMsg');
-    var name=document.getElementById('bfName').value.trim();
-    var email=document.getElementById('bfEmail').value.trim();
-    var platform=(document.querySelector('input[name="bfPlatform"]:checked')||{}).value;
-    var lang=document.documentElement.lang==='en'?'en':'fr';
-    var L={
-      fr:{sending:'Inscription…',ok:'Merci ! Tu es inscrit à la beta ✓ Regarde tes emails.',err:'Une erreur est survenue, réessaie.'},
-      en:{sending:'Signing up…',ok:'Thanks! You\'re on the beta list ✓ Check your inbox.',err:'Something went wrong, please try again.'}
-    }[lang];
-    btn.disabled=true; msg.className='beta-msg'; msg.textContent=L.sending;
-    try{
-      var r=await SB.rpc('beta_signup_create',{p_name:name,p_email:email,p_platform:platform,p_session_id:window.BPL_SID||null,p_marketing_consent:document.getElementById('bfConsent').checked});
-      if(r.error) throw r.error;
-      msg.className='beta-msg ok'; msg.textContent=L.ok;
-      document.getElementById('betaForm').reset();
-    }catch(err){
-      msg.className='beta-msg err'; msg.textContent=L.err;
-    }finally{
-      btn.disabled=false;
-    }
-    return false;
-  }
 
   // Showreel VFX : charge la vidéo à l'approche, lecture en boucle seulement quand elle est visible
   (function(){
