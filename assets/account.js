@@ -18,6 +18,8 @@ fr:{
  auth_title:'Mon compte',auth_lead:'Un seul compte BACKPACK LAB pour tes licences, tes appareils et ton historique.',
  su_title:'Créer un compte',su_lead:'Un seul compte BACKPACK LAB pour tes licences, tes appareils et ton historique. Nous t\'enverrons un code pour confirmer ton email.',fg_title:'Mot de passe oublié',fg_lead:'Entre ton email : nous t\'envoyons un code pour choisir un nouveau mot de passe.',
  auth_login:'Se connecter',auth_signup:'Créer mon compte',fg_send:'Recevoir un code',mode_login:'Connexion',mode_signup:'Créer un compte',
+ pwr_len:'10 caractères minimum',pwr_case:'Une minuscule et une majuscule',pwr_digit:'Un chiffre',pwr_symbol:'Un symbole (! @ # $ % …)',
+ err_pw_rules:'Le mot de passe ne respecte pas encore toutes les règles ci-dessous.',err_pw_chars:'Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un symbole (ex. ! @ # $ %).',err_pw_pwned:'Ce mot de passe est trop courant ou a déjà fuité : choisis-en un autre.',err_pw_same:"Choisis un mot de passe différent de l'ancien.",err_pw_weak:'Mot de passe refusé : choisis-en un plus solide.',
  pw:'Mot de passe',pw_ph:'Ton mot de passe',pw_hint:'10 caractères minimum.',pw_show:'Afficher',pw_hide:'Masquer',forgot:'Mot de passe oublié ?',back_login:'← Retour à la connexion',
  err_pw_empty:'Entre ton mot de passe.',err_pw_short:'Le mot de passe doit contenir au moins 10 caractères.',err_login:'Email ou mot de passe incorrect.',err_exists:'Un compte existe déjà avec cet email : connecte-toi, ou utilise « Mot de passe oublié ? ».',
  login_help:"Tu t'étais inscrit à la beta, ou connecté avec un code ou Google ? Ton compte n'a peut-être pas encore de mot de passe.",login_help_btn:'Créer mon mot de passe',
@@ -87,6 +89,8 @@ en:{
  auth_title:'My account',auth_lead:'One BACKPACK LAB account for your licenses, devices and history.',
  su_title:'Create an account',su_lead:'One BACKPACK LAB account for your licenses, devices and history. We will email you a code to confirm your address.',fg_title:'Forgot password',fg_lead:'Enter your email: we will send you a code to choose a new password.',
  auth_login:'Sign in',auth_signup:'Create my account',fg_send:'Send me a code',mode_login:'Sign in',mode_signup:'Create an account',
+ pwr_len:'At least 10 characters',pwr_case:'A lowercase and an uppercase letter',pwr_digit:'A digit',pwr_symbol:'A symbol (! @ # $ % …)',
+ err_pw_rules:'The password does not meet all the rules below yet.',err_pw_chars:'The password must contain a lowercase letter, an uppercase letter, a digit and a symbol (e.g. ! @ # $ %).',err_pw_pwned:'This password is too common or has leaked: choose another one.',err_pw_same:'Choose a password different from the old one.',err_pw_weak:'Password rejected: choose a stronger one.',
  pw:'Password',pw_ph:'Your password',pw_hint:'At least 10 characters.',pw_show:'Show',pw_hide:'Hide',forgot:'Forgot password?',back_login:'← Back to sign in',
  err_pw_empty:'Enter your password.',err_pw_short:'The password must be at least 10 characters long.',err_login:'Incorrect email or password.',err_exists:'An account already exists with this email: sign in, or use “Forgot password?”.',
  login_help:'Did you sign up for the beta, or sign in with a code or Google? Your account may not have a password yet.',login_help_btn:'Create my password',
@@ -873,6 +877,33 @@ async function afterLogin(){
   await enterApp();
 }
 
+/* ---- Regles du mot de passe (identiques aux exigences Supabase : 10 car. + minuscule, majuscule, chiffre, symbole) ---- */
+var PW_SYMBOL=/[!@#$%^&*()_+\-=\[\]{};':"\\|<>?,.\/`~]/;
+function pwRules(p){
+  p=String(p||'');
+  var r={len:p.length>=10,case:/[a-z]/.test(p)&&/[A-Z]/.test(p),digit:/[0-9]/.test(p),symbol:PW_SYMBOL.test(p)};
+  r.ok=r.len&&r.case&&r.digit&&r.symbol; return r;
+}
+function pwRulesHtml(){
+  return '<ul class="pw-rules"><li data-rule="len">'+esc(t('pwr_len'))+'</li><li data-rule="case">'+esc(t('pwr_case'))+'</li><li data-rule="digit">'+esc(t('pwr_digit'))+'</li><li data-rule="symbol">'+esc(t('pwr_symbol'))+'</li></ul>';
+}
+function updatePwRules(input){
+  var f=input.closest('.field'); if(!f) return;
+  var ul=f.querySelector('.pw-rules'); if(!ul) return;
+  var r=pwRules(input.value);
+  [].forEach.call(ul.querySelectorAll('li'),function(li){ li.classList.toggle('ok',!!r[li.getAttribute('data-rule')]); });
+}
+// Message precis selon l'erreur renvoyee par Supabase (au lieu de toujours « 10 caracteres »)
+function pwErrText(ex){
+  var m=String((ex&&ex.message)||''), rs=(ex&&(ex.reasons||(ex.weak_password&&ex.weak_password.reasons)))||[];
+  if(rs.indexOf('characters')>=0||/at least one character of each|abcdefghijklmnopqrstuvwxyz/i.test(m)) return t('err_pw_chars');
+  if(rs.indexOf('pwned')>=0||/pwned|leaked|compromised|known to be/i.test(m)) return t('err_pw_pwned');
+  if(rs.indexOf('length')>=0||/at least \d+ characters|too short/i.test(m)) return t('err_pw_short');
+  if(/different from the old|same as the old|same password/i.test(m)) return t('err_pw_same');
+  return t('err_pw_weak');
+}
+document.addEventListener('input',function(e){ if(e.target&&e.target.type==='password') updatePwRules(e.target); });
+
 /* ---- Mot de passe obligatoire avant l'acces a l'espace compte ---- */
 async function gatePassword(){
   var r; try{ r=await SB.rpc('sec_has_password'); }catch(e){ return true; }
@@ -887,7 +918,7 @@ async function gatePassword(){
 async function saveFirstPassword(){
   var btn=$('#spSave'), err=$('#spErr'), np=$('#spNew').value, code=$('#spCode').value.trim();
   err.textContent=''; $('#spNew').classList.remove('invalid');
-  if(np.length<10){ err.textContent=t('err_pw_short'); $('#spNew').classList.add('invalid'); return; }
+  if(!pwRules(np).ok){ err.textContent=t('err_pw_rules'); $('#spNew').classList.add('invalid'); return; }
   if(S.spNeedCode&&!code){ err.textContent=t('err_code_empty'); return; }
   setBusy(btn,true);
   try{
@@ -905,7 +936,7 @@ async function saveFirstPassword(){
       }catch(e2){ console.error('reauthenticate failed:',e2); err.textContent=t('cp_err_send'); }
     }
     else if(/nonce|reauth|invalid|expired/i.test(m)) err.textContent=t('err_code');
-    else if(/password/i.test(m)) err.textContent=t('err_pw_short');
+    else if(/password/i.test(m)) err.textContent=pwErrText(ex);
     else err.textContent=t('cp_err');
   }finally{ setBusy(btn,false); }
 }
@@ -1067,12 +1098,12 @@ function changePasswordStep2(){
   openDialog({persistent:true,title:t('cp_title2'),desc:t('cp_d2'),
     body:'<p class="hint" style="margin-bottom:12px">'+esc(t('pend_hint'))+'</p><form novalidate><div class="field"><label class="label" for="cpCode">'+esc(t('code_label'))+'</label><input id="cpCode" class="input input-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8"/></div>'
       +'<div class="field"><label class="label" for="cpCur">'+esc(t('cp_current'))+'</label><input id="cpCur" class="input" type="password" autocomplete="current-password"/><div class="hint">'+esc(t('cp_current_hint'))+'</div></div>'
-      +'<div class="field"><label class="label" for="cpNew">'+esc(t('newpw_label'))+'</label><input id="cpNew" class="input" type="password" autocomplete="new-password"/><div class="hint">'+esc(t('pw_hint'))+'</div><div class="field-error" role="alert"></div></div></form>',
+      +'<div class="field"><label class="label" for="cpNew">'+esc(t('newpw_label'))+'</label><input id="cpNew" class="input" type="password" autocomplete="new-password"/>'+pwRulesHtml()+'<div class="field-error" role="alert"></div></div></form>',
     actions:[{label:t('cancel'),cls:'btn-outline',onClick:function(api){ clearPending(); api.close(false); }},
       {label:t('cp_save'),cls:'btn-primary',onClick:async function(api,btn){
         var code=$('#cpCode',api.el).value.trim(), np=$('#cpNew',api.el).value;
         if(!code){ api.error(t('err_code_empty')); return; }
-        if(np.length<10){ api.error(t('err_pw_short')); return; }
+        if(!pwRules(np).ok){ api.error(t('err_pw_rules')); return; }
         api.error(''); api.busy(true,btn);
         try{
           var cur=$('#cpCur',api.el).value;
@@ -1082,7 +1113,7 @@ function changePasswordStep2(){
         }catch(ex){
           console.error('password change failed:',ex); api.busy(false,btn);
           var m=(ex&&ex.message)||'';
-          api.error(/current.?password/i.test(m)?t('cp_err_current'):(/nonce|reauth|invalid|expired/i.test(m)?t('err_code'):(/password/i.test(m)?t('err_pw_short'):t('cp_err'))));
+          api.error(/current.?password/i.test(m)?t('cp_err_current'):(/nonce|reauth|invalid|expired/i.test(m)?t('err_code'):(/password/i.test(m)?pwErrText(ex):t('cp_err'))));
         }
       }}]});
 }
@@ -1164,7 +1195,7 @@ async function submitEmailForm(){
   if(!EMAIL_RE.test(email)){ $('#emailErr').textContent=t('err_email'); $('#emailInput').classList.add('invalid'); return; }
   if(S.mode==='login'||S.mode==='signup'){
     if(!pw){ $('#pwErr').textContent=t('err_pw_empty'); $('#pwInput').classList.add('invalid'); return; }
-    if(S.mode==='signup'&&pw.length<10){ $('#pwErr').textContent=t('err_pw_short'); $('#pwInput').classList.add('invalid'); return; }
+    if(S.mode==='signup'&&!pwRules(pw).ok){ $('#pwErr').textContent=t('err_pw_rules'); $('#pwInput').classList.add('invalid'); return; }
   }
   setBusy(btn,true);
   try{
@@ -1189,7 +1220,7 @@ async function doSignup(email,pw){
   var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.signUp({email:email,password:pw,options:{captchaToken:ct,data:($('#want2fa').checked?{want_2fa:true}:undefined)}}); });
   if(r.error){
     var m=r.error.message||'';
-    if(/password/i.test(m)&&/(short|least|weak|characters|pwned|easy)/i.test(m)){ $('#pwErr').textContent=t('err_pw_short'); $('#pwInput').classList.add('invalid'); return; }
+    if(/password/i.test(m)&&/(short|least|weak|characters|pwned|easy|should)/i.test(m)){ $('#pwErr').textContent=pwErrText(r.error); $('#pwInput').classList.add('invalid'); return; }
     if(/already|registered/i.test(m)){ $('#emailErr').textContent=t('err_exists'); return; }
     throw r.error;
   }
@@ -1267,7 +1298,7 @@ async function verifyCode(){
   var btn=$('#verifyBtn'), err=$('#codeErr'), code=$('#codeInput').value.trim(), flow=S.codeFlow||'signup', np=$('#newPwInput').value;
   err.textContent=''; $('#codeInput').classList.remove('invalid'); $('#newPwInput').classList.remove('invalid');
   if(!code){ err.textContent=t('err_code_empty'); return; }
-  if(flow==='recovery'&&np.length<10){ err.textContent=t('err_pw_short'); $('#newPwInput').classList.add('invalid'); return; }
+  if(flow==='recovery'&&!pwRules(np).ok){ err.textContent=t('err_pw_rules'); $('#newPwInput').classList.add('invalid'); return; }
   setBusy(btn,true);
   try{
     var r=await SB.auth.verifyOtp({email:S.pendingEmail,token:code,type:flow==='recovery'?'recovery':'signup'});
@@ -1282,7 +1313,7 @@ async function verifyCode(){
       var u=await SB.auth.updateUser({password:np}); if(u.error) throw u.error;
     }catch(ex){
       console.error('updateUser failed:',ex);
-      err.textContent=/password/i.test(ex.message||'')?t('err_pw_short'):t('err_send'); $('#newPwInput').classList.add('invalid'); setBusy(btn,false); return;
+      err.textContent=/password/i.test(ex.message||'')?pwErrText(ex):t('err_send'); $('#newPwInput').classList.add('invalid'); setBusy(btn,false); return;
     }
   }
   try{

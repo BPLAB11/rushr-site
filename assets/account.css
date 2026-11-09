@@ -81,6 +81,11 @@ svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .link-btn{background:none;border:0;padding:0;color:var(--primary);font-size:12.5px;font-weight:500;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .authnote{padding:10px 12px;border:1px solid rgba(53,220,142,.35);border-radius:8px;background:rgba(53,220,142,.08);font-size:13px;line-height:1.5;margin:0 0 14px}
 .del-list{margin:0 0 12px 18px;font-size:13px;color:var(--muted-foreground);line-height:1.7}
+.pw-rules{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px;font-size:12.5px;color:var(--muted-foreground)}
+.pw-rules li{display:flex;align-items:center;gap:8px}
+.pw-rules li::before{content:"";width:14px;height:14px;border-radius:50%;border:1px solid var(--input);flex:none;box-sizing:border-box}
+.pw-rules li.ok{color:var(--foreground)}
+.pw-rules li.ok::before{background:var(--primary);border-color:var(--primary);box-shadow:inset 0 0 0 3px var(--background)}
 .check-row{display:flex;gap:10px;align-items:flex-start;margin:2px 0 14px;font-size:13px;line-height:1.45;color:var(--muted-foreground);cursor:pointer}
 .check-row input{margin-top:2px;accent-color:var(--primary);flex:none}
 .sec-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--border)}

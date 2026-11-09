@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/png" href="assets/mark.png" />
 <link href="assets/fonts/inter.css" rel="stylesheet" />
-<link href="assets/account.css?v=20261109i" rel="stylesheet" />
+<link href="assets/account.css?v=20261109j" rel="stylesheet" />
 <link rel="canonical" href="https://thebackpacklab.com/account" />
 <script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
 </head>
@@ -62,7 +62,7 @@
               <input id="pwInput" class="input" type="password" autocomplete="current-password" data-t-ph="pw_ph" placeholder="••••••••••" />
               <button type="button" id="pwToggle" class="pw-toggle" data-t="pw_show">Afficher</button>
             </div>
-            <div class="hint" id="pwHint" hidden data-t="pw_hint">10 caractères minimum.</div>
+            <ul class="pw-rules" id="pwHint" hidden><li data-rule="len" data-t="pwr_len">10 caractères minimum</li><li data-rule="case" data-t="pwr_case">Une minuscule et une majuscule</li><li data-rule="digit" data-t="pwr_digit">Un chiffre</li><li data-rule="symbol" data-t="pwr_symbol">Un symbole (! @ # $ % …)</li></ul>
             <div class="field-error" id="pwErr" role="alert"></div>
             <div class="hint" id="loginHelp" hidden></div>
           </div>
@@ -89,7 +89,7 @@
             <div class="pw-wrap">
               <input id="newPwInput" class="input" type="password" autocomplete="new-password" data-t-ph="pw_ph" placeholder="••••••••••" />
             </div>
-            <div class="hint" data-t="pw_hint">10 caractères minimum.</div>
+            <ul class="pw-rules"><li data-rule="len" data-t="pwr_len">10 caractères minimum</li><li data-rule="case" data-t="pwr_case">Une minuscule et une majuscule</li><li data-rule="digit" data-t="pwr_digit">Un chiffre</li><li data-rule="symbol" data-t="pwr_symbol">Un symbole (! @ # $ % …)</li></ul>
           </div>
           <p class="hint" id="codeHelp" data-t="code_help"></p>
           <button type="submit" id="verifyBtn" class="btn btn-primary btn-block" data-t="code_verify_signup" style="margin-top:8px">Confirmer mon compte</button>
@@ -125,7 +125,7 @@
               <input id="spNew" class="input" type="password" autocomplete="new-password" />
               <button type="button" id="spToggle" class="pw-toggle" data-t="pw_show">Afficher</button>
             </div>
-            <div class="hint" data-t="pw_hint">10 caractères minimum.</div>
+            <ul class="pw-rules"><li data-rule="len" data-t="pwr_len">10 caractères minimum</li><li data-rule="case" data-t="pwr_case">Une minuscule et une majuscule</li><li data-rule="digit" data-t="pwr_digit">Un chiffre</li><li data-rule="symbol" data-t="pwr_symbol">Un symbole (! @ # $ % …)</li></ul>
           </div>
           <div class="field" id="spCodeField" hidden>
             <label class="label" for="spCode" data-t="code_label">Code reçu par email</label>
@@ -218,6 +218,6 @@
 <script src="assets/vendor/supabase.js"></script>
 <script src="assets/google-signin.js?v=20261109"></script>
 <script src="assets/turnstile.js?v=20261109"></script>
-<script src="assets/account.js?v=20261109m"></script>
+<script src="assets/account.js?v=20261109n"></script>
 </body>
 </html>
