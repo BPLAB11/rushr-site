@@ -1324,10 +1324,26 @@ async function verifyCode(){
     console.error('enterApp failed:',ex); err.textContent=t('err_load');
   }finally{ setBusy(btn,false); }
 }
+/* Après une inscription Google / Microsoft : le nom du compte renseigne « Profil et préférences » s'il est vide.
+   Jamais d'écrasement d'un nom déjà saisi. */
+async function autoFillName(){
+  try{
+    var p=S.account&&S.account.profile;
+    if(!S.account||(p&&String(p.full_name||'').trim())) return;
+    var u=(await SB.auth.getUser()).data.user; if(!u) return;
+    var m=u.user_metadata||{};
+    var n=String(m.full_name||m.name||((m.given_name||m.first_name)?((m.given_name||m.first_name)+' '+(m.family_name||m.last_name||'')):'')||'').replace(/\s+/g,' ').trim().slice(0,120);
+    if(!n||n.indexOf('@')>=0) return;
+    var r=await SB.from('profiles').update({full_name:n,updated_at:new Date().toISOString()}).eq('id',S.account.user.id);
+    if(r.error) throw r.error;
+    S.account.profile=Object.assign({},S.account.profile||{},{full_name:n});
+  }catch(ex){ console.error('autoFillName failed:',ex); }
+}
 async function enterApp(){
   S.account=null; S.tickets=null; S.draft=null; S.revealed={};
   showApp();                      // coquille + squelettes immédiatement
   await fetchAccount();
+  await autoFillName();
   var saved=null; try{saved=localStorage.getItem('bpl_lang');}catch(e){}
   var pl=S.account.profile&&S.account.profile.language;
   if(!saved&&(pl==='fr'||pl==='en')&&pl!==S.lang) setLang(pl);
