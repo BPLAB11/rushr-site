@@ -1430,8 +1430,23 @@ SB.auth.onAuthStateChange(function(ev){
   document.documentElement.lang=S.lang;
   if(/Mac|iPhone|iPad/.test(navigator.platform||'')) $('#kbdHint').textContent='⌘ K';
   hydrateIcons(document); applyStatic();
+  // Lien « choisir un nouveau mot de passe » envoyé par le support (BP CENTER) : ?mode=reset&email=…&code=…
+  // Ouvre directement l'étape « code + nouveau mot de passe », code prérempli. Rien n'est consommé avant la validation.
+  var rq=null;
+  try{
+    var rqs=new URLSearchParams(location.search);
+    if(rqs.get('mode')==='reset'&&EMAIL_RE.test(rqs.get('email')||'')&&/^\d{6,8}$/.test(rqs.get('code')||'')) rq={email:rqs.get('email').trim().toLowerCase(),code:rqs.get('code')};
+    if(rqs.get('mode')==='reset'){ try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+  }catch(e){}
   var session=null; try{ session=(await SB.auth.getSession()).data.session; }catch(e){}
-  if(session){
+  if(rq){
+    if(session){ try{ await SB.auth.signOut({scope:'local'}); }catch(e){} session=null; }
+    setMode('login');
+    await startCodeStep(rq.email,'recovery',false);
+    $('#codeInput').value=rq.code;
+    BPLCaptcha.mount($('#captchaBox'));
+    $('#newPwInput').focus();
+  } else if(session){
     try{ await afterLogin(); }
     catch(ex){ console.error('enterApp failed:',ex); showAuth('email'); $('#emailErr').textContent=t('err_session'); }
   }else{
@@ -1553,4 +1568,32 @@ document.addEventListener('click',function(e){
 (function(){
   var v=$('#view'); if(v&&window.MutationObserver) new MutationObserver(magAttach).observe(v,{childList:true,subtree:true});
   magAttach();
+})();
+
+/* ===================== Bouton « Afficher / Masquer » sur tous les champs de mot de passe =====================
+   Les champs déjà équipés (connexion, création du mot de passe) gardent leur bouton. Les autres — nouveau mot de
+   passe après « Mot de passe oublié ? », fenêtre « Changer mon mot de passe » — reçoivent le même bouton
+   automatiquement, y compris quand une fenêtre est créée plus tard. */
+(function(){
+  function equip(inp){
+    if(inp.getAttribute('data-pwt')||(inp.parentNode&&inp.parentNode.classList&&inp.parentNode.classList.contains('pw-wrap')&&inp.parentNode.querySelector('.pw-toggle'))) return;
+    inp.setAttribute('data-pwt','1');
+    var hadFocus=(document.activeElement===inp), wrap=inp.parentNode;
+    if(!(wrap.classList&&wrap.classList.contains('pw-wrap'))){
+      wrap=document.createElement('div'); wrap.className='pw-wrap';
+      inp.parentNode.insertBefore(wrap,inp); wrap.appendChild(inp);
+    }
+    var b=document.createElement('button'); b.type='button'; b.className='pw-toggle'; b.setAttribute('data-t','pw_show'); b.textContent=t('pw_show');
+    b.setAttribute('aria-pressed','false'); b.tabIndex=0;
+    b.addEventListener('click',function(){
+      var show=(inp.type==='password'); inp.type=show?'text':'password';
+      b.setAttribute('data-t',show?'pw_hide':'pw_show'); b.textContent=t(show?'pw_hide':'pw_show'); b.setAttribute('aria-pressed',show?'true':'false');
+      inp.focus();
+    });
+    wrap.appendChild(b);
+    if(hadFocus) inp.focus();
+  }
+  function scan(root){ (root||document).querySelectorAll('input[type="password"]').forEach(equip); }
+  scan();
+  if(window.MutationObserver) new MutationObserver(function(){ scan(); }).observe(document.body,{childList:true,subtree:true});
 })();
