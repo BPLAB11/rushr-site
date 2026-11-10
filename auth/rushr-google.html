@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>RushR - Google</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #9a9a9e;
+      font: 13px/1.4 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      gap: 10px;
+      overflow: hidden;
+    }
+    #g { display: flex; justify-content: center; min-height: 44px; color-scheme: light; }
+    #msg { min-height: 18px; text-align: center; padding: 0 12px; }
+    #msg.err { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <div id="g"></div>
+  <div id="msg"></div>
+
+  <script>
+    // Connexion Google pour l'application RushR : Google Identity Services sur thebackpacklab.com.
+    // Google affiche donc le nom du site (et non l'adresse technique du projet Supabase).
+    // Le jeton Google est renvoye a l'app, qui l'echange aupres de Supabase (grant_type=id_token).
+    // Le client ID est public (identique a assets/google-signin.js) ; le secret reste dans Supabase.
+    //
+    // Messages envoyes a l'app (JSON) :
+    //   { "type": "google_ok",    "id_token": "...", "nonce": "<nonce brut>" }
+    //   { "type": "google_error", "message": "..." }
+    // Parametre optionnel : ?lang=fr | ?lang=en (sinon langue du navigateur).
+    // L'app peut rappeler window.resetGoogle() pour obtenir un nouveau nonce apres chaque tentative.
+    var GOOGLE_CLIENT_ID = '1037325996510-hceqnqfnpfr9imat4gt3spheo4fqpbvo.apps.googleusercontent.com';
+
+    var lang = (new URLSearchParams(location.search).get('lang') || navigator.language || 'en').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en';
+    document.documentElement.lang = lang;
+    var TXT = {
+      fr: { loading: 'Chargement de Google…', fail: 'Impossible de charger la connexion Google.', login: 'Connexion Google impossible.' },
+      en: { loading: 'Loading Google…', fail: 'Could not load Google sign-in.', login: 'Google sign-in failed.' }
+    }[lang];
+
+    function rushrEmitToApp(obj) {
+      var payload = JSON.stringify(obj);
+      try {
+        if (typeof invokeCSharpAction === 'function') { invokeCSharpAction(payload); return; }
+      } catch (e) { }
+      try {
+        if (window.chrome && window.chrome.webview && window.chrome.webview.postMessage) {
+          window.chrome.webview.postMessage(payload); return;
+        }
+      } catch (e) { }
+      try {
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.webmessage) {
+          window.webkit.messageHandlers.webmessage.postMessage(payload); return;
+        }
+      } catch (e) { }
+    }
+
+    function setMsg(text, isErr) {
+      var m = document.getElementById('msg');
+      m.textContent = text || '';
+      m.className = isErr ? 'err' : '';
+    }
+
+    function randomHex() {
+      var a = new Uint8Array(16);
+      (window.crypto || window.msCrypto).getRandomValues(a);
+      return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+    }
+    function sha256hex(s) {
+      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function (buf) {
+        return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+      });
+    }
+
+    var loaded = false;
+    var rawNonce = null;
+
+    // (Re)initialise Google avec un nonce neuf : Google recoit le hash, l'app recoit le nonce brut.
+    function setup() {
+      rawNonce = randomHex();
+      return sha256hex(rawNonce).then(function (hash) {
+        var raw = rawNonce;
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          nonce: hash,
+          callback: function (resp) {
+            if (!resp || !resp.credential) { rushrEmitToApp({ type: 'google_error', message: 'no_credential' }); return; }
+            rushrEmitToApp({ type: 'google_ok', id_token: resp.credential, nonce: raw });
+          }
+        });
+        var holder = document.getElementById('g');
+        holder.innerHTML = '';
+        google.accounts.id.renderButton(holder, {
+          type: 'standard', theme: 'filled_black', size: 'large', text: 'continue_with',
+          shape: 'rectangular', logo_alignment: 'left', width: 280, locale: lang
+        });
+        setMsg('');
+      });
+    }
+
+    window.resetGoogle = function () {
+      if (loaded) setup().catch(function () { });
+    };
+
+    function init() {
+      if (!window.crypto || !crypto.subtle || !window.TextEncoder) {
+        setMsg(TXT.fail, true); rushrEmitToApp({ type: 'google_error', message: 'unsupported' }); return;
+      }
+      setMsg(TXT.loading);
+      var failTimer = setTimeout(function () {
+        if (!loaded) { setMsg(TXT.fail, true); rushrEmitToApp({ type: 'google_error', message: 'script_timeout' }); }
+      }, 10000);
+      var s = document.createElement('script');
+      s.src = 'https://accounts.google.com/gsi/client';
+      s.async = true; s.defer = true;
+      s.onload = function () {
+        loaded = true; clearTimeout(failTimer);
+        setup().catch(function (e) {
+          setMsg(TXT.login, true);
+          rushrEmitToApp({ type: 'google_error', message: String((e && e.message) || e) });
+        });
+      };
+      s.onerror = function () {
+        clearTimeout(failTimer);
+        setMsg(TXT.fail, true);
+        rushrEmitToApp({ type: 'google_error', message: 'script_error' });
+      };
+      document.head.appendChild(s);
+    }
+    init();
+  </script>
+</body>
+</html>
