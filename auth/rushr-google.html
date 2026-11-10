@@ -9,8 +9,8 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: #000;
-      color: #9a9a9e;
+      background: #000 url('/assets/rushr-google-bg.webp') center / cover no-repeat;
+      color: #c9c9cf;
       font: 13px/1.4 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100%;
     }
@@ -24,7 +24,7 @@
       overflow: hidden;
     }
     #g { display: flex; justify-content: center; min-height: 44px; color-scheme: light; }
-    #msg { min-height: 18px; text-align: center; padding: 0 12px; }
+    #msg { min-height: 18px; text-align: center; padding: 0 12px; text-shadow: 0 1px 6px #000; }
     #msg.err { color: #ff6b6b; }
   </style>
 </head>
@@ -104,9 +104,12 @@
         });
         var holder = document.getElementById('g');
         holder.innerHTML = '';
+        // Le bouton tient dans le cercle de l'image : diametre ~37 % de la largeur affichee du fond (cover).
+        var imgW = Math.max(window.innerWidth, window.innerHeight * 1086 / 1448);
+        var btnW = Math.max(200, Math.min(280, Math.round(imgW * 0.37 * 0.86)));
         google.accounts.id.renderButton(holder, {
           type: 'standard', theme: 'filled_black', size: 'large', text: 'continue_with',
-          shape: 'rectangular', logo_alignment: 'left', width: 280, locale: lang
+          shape: 'rectangular', logo_alignment: 'left', width: btnW, locale: lang
         });
         setMsg('');
       });
