@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Mot de passe oublié — BACKPACK LAB</title>
+  <link rel="icon" type="image/png" href="/assets/mark.png" />
+  <style>
+    :root { --bg:#0b0b0b; --card:rgba(14,14,16,.86); --line:rgba(255,255,255,.10); --fg:#f4f4f5; --muted:#9a9a9e; --accent:#35dc8e; --accent-fg:#06180f; --danger:#ff6b6b; }
+    * { box-sizing: border-box; }
+    html, body { margin:0; min-height:100%; }
+    body {
+      background:#000 center / cover no-repeat; color:var(--fg);
+      font:15px/1.5 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px 16px;
+    }
+    .card { width:100%; max-width:400px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 22px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:1px; font-size:13px; margin-bottom:18px; }
+    .brand img { width:28px; height:28px; border-radius:7px; }
+    .brand .app { margin-left:auto; color:var(--muted); font-weight:600; letter-spacing:.5px; }
+    h1 { font-size:21px; line-height:1.25; margin:0 0 6px; }
+    p.lead { margin:0 0 16px; color:var(--muted); font-size:14px; }
+    label { display:block; font-size:13px; font-weight:600; margin:14px 0 6px; }
+    input { width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--line); background:#141417; color:var(--fg); font:inherit; outline:none; }
+    input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(53,220,142,.18); }
+    input.invalid { border-color:var(--danger); }
+    input.otp { letter-spacing:8px; text-align:center; font-size:20px; font-weight:700; }
+    .pw-wrap { position:relative; }
+    .pw-wrap input { padding-right:84px; }
+    .pw-toggle { position:absolute; right:6px; top:50%; transform:translateY(-50%); background:transparent; border:0; color:var(--muted); font:inherit; font-size:12px; font-weight:600; padding:6px 8px; cursor:pointer; border-radius:6px; }
+    .pw-toggle:hover { color:var(--fg); }
+    .rules { list-style:none; margin:10px 0 0; padding:0; display:grid; gap:3px; font-size:12px; color:var(--muted); }
+    .rules li::before { content:"○"; display:inline-block; width:16px; color:var(--muted); }
+    .rules li.ok { color:var(--accent); }
+    .rules li.ok::before { content:"✓"; color:var(--accent); }
+    button.primary { width:100%; margin-top:18px; padding:12px; border:0; border-radius:10px; background:var(--accent); color:var(--accent-fg); font:inherit; font-weight:700; cursor:pointer; }
+    button.primary:disabled { opacity:.55; cursor:default; }
+    .row { display:flex; justify-content:space-between; gap:8px; margin-top:12px; }
+    button.link { background:transparent; border:0; color:var(--muted); font:inherit; font-size:13px; cursor:pointer; padding:4px 0; }
+    button.link:hover:not(:disabled) { color:var(--fg); }
+    button.link:disabled { opacity:.6; cursor:default; }
+    .err { min-height:18px; margin-top:8px; font-size:13px; color:var(--danger); }
+    .ok-note { font-size:13px; color:var(--accent); margin-top:8px; min-height:18px; }
+    .done { text-align:center; padding:6px 0 2px; }
+    .done .check { width:54px; height:54px; border-radius:50%; background:rgba(53,220,142,.14); color:var(--accent); display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 14px; }
+    a.btn-link { display:inline-block; margin-top:14px; color:var(--accent); text-decoration:none; font-weight:600; }
+    [hidden] { display:none !important; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand"><img src="/assets/bp-mark.png" alt="" /><span>BACKPACK&nbsp;LAB</span><span class="app" id="appName"></span></div>
+
+    <!-- Étape 1 : e-mail -->
+    <form id="s-email" novalidate>
+      <h1 data-t="t_forgot">Mot de passe oublié</h1>
+      <p class="lead" data-t="lead_forgot">Entre l'adresse de ton compte : nous t'envoyons un code pour choisir un nouveau mot de passe.</p>
+      <label for="email" data-t="email">Adresse e-mail</label>
+      <input id="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" />
+      <div id="captchaBox" style="display:flex;justify-content:center;margin-top:10px"></div>
+      <div class="err" id="emailErr" role="alert"></div>
+      <button class="primary" id="sendBtn" type="submit" data-t="send_code">Recevoir un code</button>
+    </form>
+
+    <!-- Étape 2 : code + nouveau mot de passe -->
+    <form id="s-code" novalidate hidden>
+      <h1 data-t="t_new">Nouveau mot de passe</h1>
+      <p class="lead"><span data-t="lead_code">Code envoyé à</span> <b id="sentTo"></b>.</p>
+      <label for="code" data-t="code">Code reçu par e-mail</label>
+      <input id="code" class="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" />
+      <label for="pw" data-t="new_pw">Nouveau mot de passe</label>
+      <div class="pw-wrap">
+        <input id="pw" type="password" autocomplete="new-password" />
+        <button type="button" class="pw-toggle" id="pwToggle" data-t="show">Afficher</button>
+      </div>
+      <ul class="rules" id="rules">
+        <li data-rule="len" data-t="r_len">10 caractères minimum</li>
+        <li data-rule="case" data-t="r_case">Une minuscule et une majuscule</li>
+        <li data-rule="digit" data-t="r_digit">Un chiffre</li>
+        <li data-rule="symbol" data-t="r_symbol">Un symbole (! @ # $ % …)</li>
+      </ul>
+      <div class="err" id="codeErr" role="alert"></div>
+      <div class="ok-note" id="codeNote"></div>
+      <button class="primary" id="saveBtn" type="submit" data-t="change">Changer le mot de passe</button>
+      <div class="row">
+        <button type="button" class="link" id="resendBtn" data-t="resend">Renvoyer le code</button>
+        <button type="button" class="link" id="backBtn" data-t="change_email">← Changer d'adresse</button>
+      </div>
+    </form>
+
+    <!-- Étape 3 : terminé -->
+    <section id="s-done" class="done" hidden>
+      <div class="check" aria-hidden="true">✓</div>
+      <h1 data-t="t_done">Mot de passe changé</h1>
+      <p class="lead" id="doneText"></p>
+      <a class="btn-link" id="doneLink" href="/account" hidden data-t="go_account">Aller à mon compte</a>
+    </section>
+  </main>
+
+  <script src="/assets/vendor/supabase.js"></script>
+  <script src="/assets/turnstile.js?v=20261109"></script>
+  <script>
+  (function(){
+    /* Page « mot de passe oublié » commune à tous les logiciels (et au site).
+       /auth/forgot[?app=<logiciel>][&lang=fr|en][&email=<adresse>]
+       - Aucun nom de logiciel dans l'adresse : le paramètre app choisit seulement l'habillage (nom, fond).
+       - L'étape en cours est gardée dans l'onglet (sessionStorage) : un rafraîchissement ne fait rien perdre.
+       - A la fin, un message { "type": "password_reset_ok" } est envoyé à l'application qui héberge la page
+         (WebView), comme sur les autres pages /auth. */
+    var SB=window.supabase.createClient("https://vztqykihtnkscwcodkyf.supabase.co","sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l");
+    var APPS={ rushr:{ name:'RushR', bg:'/assets/rushr-google-bg.webp' } };   // un logiciel de plus = une ligne ici
+    var KEY='bpl_forgot', TTL=30*60*1000;
+    var EMAIL_RE=/^[^@\s]+@[^@\s]+\.[^@\s]+$/, SYMBOL=/[!@#$%^&*()_+\-=\[\]{};':"\\|<>?,.\/`~]/;
+    function $(s){ return document.querySelector(s); }
+
+    var qs=new URLSearchParams(location.search);
+    var app=APPS[(qs.get('app')||'').toLowerCase()]||null;
+    var lang=((qs.get('lang')||navigator.language||'en').toLowerCase().indexOf('fr')===0)?'fr':'en';
+    var T={
+      fr:{t_forgot:'Mot de passe oublié',lead_forgot:"Entre l'adresse de ton compte : nous t'envoyons un code pour choisir un nouveau mot de passe.",email:'Adresse e-mail',send_code:'Recevoir un code',
+        t_new:'Nouveau mot de passe',lead_code:'Code envoyé à',code:'Code reçu par e-mail',new_pw:'Nouveau mot de passe',show:'Afficher',hide:'Masquer',
+        r_len:'10 caractères minimum',r_case:'Une minuscule et une majuscule',r_digit:'Un chiffre',r_symbol:'Un symbole (! @ # $ % …)',
+        change:'Changer le mot de passe',resend:'Renvoyer le code',resend_in:'Renvoyer dans {s} s',change_email:"← Changer d'adresse",
+        t_done:'Mot de passe changé',done_app:'Tu peux retourner dans {app} et te connecter avec ton nouveau mot de passe.',done_site:'Tu peux maintenant te connecter avec ton nouveau mot de passe.',go_account:'Aller à mon compte',
+        e_email:'Entre une adresse e-mail valide.',e_send:"Impossible d'envoyer le code, réessaie.",e_code:'Code invalide ou expiré.',e_code_empty:'Entre le code reçu par e-mail.',
+        e_rules:'Le mot de passe ne respecte pas encore toutes les règles.',e_chars:'Le mot de passe doit contenir une minuscule, une majuscule, un chiffre et un symbole.',
+        e_pwned:'Ce mot de passe est trop courant ou a fuité : choisis-en un autre.',e_short:'Le mot de passe doit contenir au moins 10 caractères.',e_same:'Choisis un mot de passe différent de l’ancien.',e_weak:'Mot de passe refusé : choisis-en un plus solide.',
+        sent:'Code envoyé : vérifie ta boîte mail (et les spams).',e_generic:'Une erreur est survenue, réessaie.'},
+      en:{t_forgot:'Forgot password',lead_forgot:"Enter your account's email: we'll send you a code to choose a new password.",email:'Email address',send_code:'Get a code',
+        t_new:'New password',lead_code:'Code sent to',code:'Code from the email',new_pw:'New password',show:'Show',hide:'Hide',
+        r_len:'At least 10 characters',r_case:'A lowercase and an uppercase letter',r_digit:'A digit',r_symbol:'A symbol (! @ # $ % …)',
+        change:'Change password',resend:'Resend code',resend_in:'Resend in {s}s',change_email:'← Change email',
+        t_done:'Password changed',done_app:'You can go back to {app} and sign in with your new password.',done_site:'You can now sign in with your new password.',go_account:'Go to my account',
+        e_email:'Enter a valid email address.',e_send:'Could not send the code, please retry.',e_code:'Invalid or expired code.',e_code_empty:'Enter the code you received by email.',
+        e_rules:'The password does not meet all the rules yet.',e_chars:'The password must contain a lowercase letter, an uppercase letter, a digit and a symbol.',
+        e_pwned:'This password is too common or has leaked: choose another one.',e_short:'The password must be at least 10 characters long.',e_same:'Choose a password different from the old one.',e_weak:'Password rejected: choose a stronger one.',
+        sent:'Code sent: check your inbox (and spam).',e_generic:'Something went wrong, please retry.'}
+    }[lang];
+    function t(k,v){ var s=T[k]||k; if(v) for(var x in v) s=s.replace('{'+x+'}',v[x]); return s; }
+    document.documentElement.lang=lang;
+    [].forEach.call(document.querySelectorAll('[data-t]'),function(el){ el.textContent=t(el.getAttribute('data-t')); });
+    document.title=t('t_forgot')+' — BACKPACK LAB';
+    if(app){ $('#appName').textContent=app.name; if(app.bg) document.body.style.backgroundImage="url('"+app.bg+"')"; }
+
+    /* ---- message vers l'application hôte (WebView) ---- */
+    function emitToApp(obj){
+      var p=JSON.stringify(obj);
+      try{ if(typeof invokeCSharpAction==='function'){ invokeCSharpAction(p); return; } }catch(e){}
+      try{ if(window.chrome&&window.chrome.webview&&window.chrome.webview.postMessage){ window.chrome.webview.postMessage(p); return; } }catch(e){}
+      try{ if(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.webmessage){ window.webkit.messageHandlers.webmessage.postMessage(p); return; } }catch(e){}
+    }
+
+    /* ---- étape conservée entre deux chargements ---- */
+    function save(email){ try{ sessionStorage.setItem(KEY,JSON.stringify({email:email,t:Date.now()})); }catch(e){} }
+    function load(){ try{ var o=JSON.parse(sessionStorage.getItem(KEY)||'null'); if(o&&EMAIL_RE.test(o.email)&&Date.now()-o.t<TTL) return o; }catch(e){} return null; }
+    function clear(){ try{ sessionStorage.removeItem(KEY); }catch(e){} }
+
+    var state={email:'',resendTimer:null};
+    function show(step){
+      $('#s-email').hidden=(step!=='email'); $('#s-code').hidden=(step!=='code'); $('#s-done').hidden=(step!=='done');
+      var f=step==='email'?$('#email'):step==='code'?$('#code'):null; if(f) setTimeout(function(){ f.focus(); },40);
+    }
+    function rules(p){ p=String(p||''); var r={len:p.length>=10,case:/[a-z]/.test(p)&&/[A-Z]/.test(p),digit:/[0-9]/.test(p),symbol:SYMBOL.test(p)}; r.ok=r.len&&r.case&&r.digit&&r.symbol; return r; }
+    function pwErr(ex){
+      var m=String((ex&&ex.message)||''), rs=(ex&&(ex.reasons||(ex.weak_password&&ex.weak_password.reasons)))||[];
+      if(rs.indexOf('characters')>=0||/at least one character of each|abcdefghijklmnopqrstuvwxyz/i.test(m)) return t('e_chars');
+      if(rs.indexOf('pwned')>=0||/pwned|leaked|compromised|known to be/i.test(m)) return t('e_pwned');
+      if(rs.indexOf('length')>=0||/at least \d+ characters|too short/i.test(m)) return t('e_short');
+      if(/different from the old|same as the old|same password/i.test(m)) return t('e_same');
+      return t('e_weak');
+    }
+    function busy(btn,on){ btn.disabled=on; }
+    function startResend(){
+      var btn=$('#resendBtn'), until=Date.now()+30000; clearInterval(state.resendTimer);
+      function tick(){ var left=Math.ceil((until-Date.now())/1000);
+        if(left<=0){ clearInterval(state.resendTimer); btn.disabled=false; btn.textContent=t('resend'); }
+        else { btn.disabled=true; btn.textContent=t('resend_in',{s:left}); } }
+      tick(); state.resendTimer=setInterval(tick,500);
+    }
+    function toCodeStep(email,noTimer){
+      state.email=email; save(email); $('#sentTo').textContent=email; $('#code').value=''; $('#pw').value=''; $('#codeErr').textContent='';
+      updateRules(); show('code'); if(!noTimer) startResend();
+    }
+    function updateRules(){ var r=rules($('#pw').value); [].forEach.call($('#rules').querySelectorAll('li'),function(li){ li.classList.toggle('ok',!!r[li.getAttribute('data-rule')]); }); }
+
+    $('#s-email').addEventListener('submit',async function(e){
+      e.preventDefault();
+      var email=$('#email').value.trim().toLowerCase(), err=$('#emailErr'), btn=$('#sendBtn');
+      err.textContent=''; $('#email').classList.remove('invalid');
+      if(!EMAIL_RE.test(email)){ err.textContent=t('e_email'); $('#email').classList.add('invalid'); return; }
+      busy(btn,true);
+      try{
+        var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.resetPasswordForEmail(email,{captchaToken:ct}); });
+        if(r&&r.error) throw r.error;
+        toCodeStep(email);
+      }catch(ex){ console.error('reset failed:',ex); err.textContent=t('e_send'); }
+      finally{ busy(btn,false); }
+    });
+
+    $('#s-code').addEventListener('submit',async function(e){
+      e.preventDefault();
+      var code=$('#code').value.trim(), np=$('#pw').value, err=$('#codeErr'), btn=$('#saveBtn');
+      err.textContent=''; $('#code').classList.remove('invalid'); $('#pw').classList.remove('invalid');
+      if(!code){ err.textContent=t('e_code_empty'); $('#code').classList.add('invalid'); return; }
+      if(!rules(np).ok){ err.textContent=t('e_rules'); $('#pw').classList.add('invalid'); return; }
+      busy(btn,true);
+      try{
+        var v=await SB.auth.verifyOtp({email:state.email,token:code,type:'recovery'});
+        if(v.error){ console.error('verifyOtp failed:',v.error); err.textContent=t('e_code'); $('#code').classList.add('invalid'); busy(btn,false); return; }
+        var u=await SB.auth.updateUser({password:np});
+        if(u.error){ console.error('updateUser failed:',u.error); err.textContent=pwErr(u.error); $('#pw').classList.add('invalid'); busy(btn,false); return; }
+        try{ await SB.auth.signOut({scope:'local'}); }catch(x){}      // cette page ne garde aucune session
+        clear(); clearInterval(state.resendTimer);
+        $('#doneText').textContent=app?t('done_app',{app:app.name}):t('done_site');
+        $('#doneLink').hidden=!!app;
+        show('done');
+        emitToApp({type:'password_reset_ok'});
+      }catch(ex){ console.error('reset flow failed:',ex); err.textContent=t('e_generic'); busy(btn,false); }
+    });
+
+    $('#resendBtn').addEventListener('click',async function(){
+      var note=$('#codeNote'); note.textContent=''; $('#codeErr').textContent='';
+      try{
+        var r=await BPLCaptcha.withToken(function(ct){ return SB.auth.resetPasswordForEmail(state.email,{captchaToken:ct}); });
+        if(r&&r.error) throw r.error;
+        note.textContent=t('sent');
+      }catch(ex){ console.error('resend failed:',ex); $('#codeErr').textContent=t('e_send'); }
+      startResend();
+    });
+    $('#backBtn').addEventListener('click',function(){ clear(); clearInterval(state.resendTimer); $('#email').value=state.email||''; show('email'); });
+    $('#pw').addEventListener('input',updateRules);
+    $('#pwToggle').addEventListener('click',function(){
+      var i=$('#pw'), shown=(i.type==='password'); i.type=shown?'text':'password'; $('#pwToggle').textContent=t(shown?'hide':'show'); i.focus();
+    });
+
+    /* ---- démarrage ---- */
+    BPLCaptcha.mount($('#captchaBox'));
+    var qe=(qs.get('email')||'').trim().toLowerCase(), saved=load();
+    if(saved){ toCodeStep(saved.email,true); startResend(); }
+    else { if(EMAIL_RE.test(qe)) $('#email').value=qe; show('email'); }
+    try{ var rest=new URLSearchParams(location.search); rest.delete('email'); var rq=rest.toString(); history.replaceState(null,'',location.pathname+(rq?'?'+rq:'')); }catch(e){}   // l'adresse e-mail ne reste pas dans la barre d'adresse
+  })();
+  </script>
+</body>
+</html>
