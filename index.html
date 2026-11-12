@@ -110,20 +110,7 @@
     .featured .rb-cta{gap:10px}
     .featured .rb-cta .btn{font-size:14px;padding:10px 18px;border-radius:10px}
   }
-  .flag-points{margin-top:26px}
 
-  /* SHOWREEL VFX */
-  .reel-wrap{position:relative;max-width:1040px;margin:46px auto 0}
-  .reel-wrap::before{content:"";position:absolute;inset:6% 4% -8%;background:radial-gradient(closest-side,rgba(53,220,142,.16),rgba(47,140,255,.10) 62%,transparent);filter:blur(44px);pointer-events:none}
-  .reel{position:relative;aspect-ratio:1920/804;border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:#08080a;box-shadow:0 30px 80px rgba(0,0,0,.55)}
-  .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s ease}
-  .reel.ok video{opacity:1}
-  .reel-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;background:linear-gradient(rgba(8,8,10,.35),rgba(8,8,10,.35)),#0d0d10 url(assets/showreel-poster.jpg) center/cover no-repeat;transition:opacity .5s ease}
-  .reel.ok .reel-ph{opacity:0;pointer-events:none}
-  .reel-ph b,.reel-ph small{display:none}
-  .reel-ph .play{width:58px;height:58px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);position:relative;margin-bottom:6px}
-  .reel-ph .play::after{content:"";position:absolute;left:23px;top:18px;border-left:15px solid rgba(255,255,255,.6);border-top:10px solid transparent;border-bottom:10px solid transparent}
-  .vfx-chips{justify-content:center;margin-top:26px}
   .chips{display:flex;flex-wrap:wrap;gap:8px}
   .chips span{border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:12.5px;color:var(--muted)}
 
@@ -150,8 +137,6 @@
 
   /* HERO extras */
   .sub b{color:var(--text)}
-  .hero-points{display:flex;gap:10px 24px;justify-content:center;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:13.5px}
-  .hero-points span::before{content:"✓";color:var(--accent);font-weight:800;margin-right:7px}
 
   /* TRUST */
   .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -167,6 +152,12 @@
   .contact-card .mail{display:inline-block;margin-top:6px;font-size:22px;font-weight:800;color:var(--accent2)}
   .contact-card .mail:hover{color:var(--accent)}
   @media(max-width:600px){.contact-card .mail{font-size:clamp(15px,5vw,22px);overflow-wrap:anywhere}}
+  /* Contact et Soutenir côte à côte ; empilés sur petit écran, et Contact seul reste centré. */
+  .duo{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
+  .duo-col{flex:1 1 380px;max-width:560px;display:flex;flex-direction:column;padding:0 16px}
+  .duo-col .h2{font-size:clamp(22px,3vw,30px)}
+  .duo-cta{margin-top:auto;padding-top:30px;display:flex;justify-content:center}
+  .duo .contact-card{max-width:none;margin:0;background:none;border:0;padding:0}
 
   /* FOOTER */
   footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
@@ -245,7 +236,6 @@
       <div class="nav-links">
         <a href="software" data-fr="Software" data-en="Software">Software</a>
         <a href="rushr"><span data-fr="Rushr" data-en="Rushr">Rushr</span><span class="new" data-fr="Nouveau" data-en="New">Nouveau</span></a>
-        <a href="#vfx" data-fr="VFX" data-en="VFX">VFX</a>
         <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
         <a href="#contact" data-fr="Contact" data-en="Contact">Contact</a>
         <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
@@ -260,7 +250,6 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="software" data-fr="Software" data-en="Software">Software</a>
     <a href="rushr"><span data-fr="Rushr" data-en="Rushr">Rushr</span><span class="new" data-fr="Nouveau" data-en="New">Nouveau</span></a>
-    <a href="#vfx" data-fr="VFX" data-en="VFX">VFX</a>
     <a href="packs" data-fr="Packs" data-en="Packs">Packs</a>
     <a href="#contact" data-fr="Contact" data-en="Contact">Contact</a>
     <a href="account" data-fr="Mon compte" data-en="My account">Mon compte</a>
@@ -272,11 +261,6 @@
   <div class="wrap hero">
     <h1 data-fr="Le labo<br>des créateurs vidéo." data-en="The lab<br>for video creators.">Le labo<br>des créateurs vidéo.</h1>
     <p class="sub" data-fr="<b>Backpack Lab</b> crée des applications desktop et réalise des effets visuels (VFX, incrustation 3D) pour les créateurs vidéo. <b>Rushr</b> ouvre le bal, d'autres outils suivent." data-en="<b>Backpack Lab</b> builds desktop apps and creates visual effects (VFX, 3D compositing) for video creators. <b>Rushr</b> leads the way, more tools are on the way.">Backpack Lab crée des applications desktop et réalise des effets visuels (VFX, incrustation 3D) pour les créateurs vidéo.</p>
-    <div class="hero-points">
-      <span data-fr="Applications desktop" data-en="Desktop apps">Applications desktop</span>
-      <span data-fr="VFX &amp; incrustation 3D" data-en="VFX &amp; 3D compositing">VFX &amp; incrustation 3D</span>
-      <span data-fr="Faits par des monteurs" data-en="Built by editors">Faits par des monteurs</span>
-    </div>
   </div>
 </header>
 
@@ -305,43 +289,13 @@
         </div>
       </div>
     </div>
-    <div class="hero-points flag-points">
-      <span data-fr="Licence offerte pendant la beta" data-en="License offered during the beta">Licence offerte pendant la beta</span>
-      <span data-fr="Windows &amp; macOS (Apple Silicon)" data-en="Windows &amp; macOS (Apple Silicon)">Windows &amp; macOS (Apple Silicon)</span>
-      <span data-fr="Fonctionne hors ligne" data-en="Works offline">Fonctionne hors ligne</span>
-    </div>
-  </div>
-</section>
-
-<!-- VFX / SHOWREEL -->
-<section id="vfx" class="reveal" style="background:#0E0E11">
-  <div class="wrap">
-    <div class="eyebrow" data-fr="Studio VFX" data-en="VFX studio">Studio VFX</div>
-    <div class="h2" data-fr="Effets visuels et incrustation 3D" data-en="Visual effects and 3D compositing">Effets visuels et incrustation 3D</div>
-    <p class="lead" data-fr="En plus des logiciels, Backpack Lab réalise des effets visuels pour vos vidéos : incrustations 3D, VFX sur mesure, intégrés proprement dans vos plans." data-en="Besides software, Backpack Lab creates visual effects for your videos: 3D compositing and custom VFX, cleanly integrated into your shots.">En plus des logiciels, Backpack Lab réalise des effets visuels pour vos vidéos.</p>
-    <div class="reel-wrap">
-      <div class="reel" id="reel">
-        <video id="reelVideo" muted loop playsinline preload="none" poster="assets/showreel-poster.jpg"aria-label="Showreel Backpack Lab : extraits d'incrustations 3D et d'effets visuels déjà réalisés">
-          <source data-src="assets/showreel.mp4" type="video/mp4" />
-        </video>
-        <div class="reel-ph" aria-hidden="true"><span class="play"></span><b data-fr="Showreel" data-en="Showreel">Showreel</b><small data-fr="Extraits d'incrustations 3D et d'effets réalisés" data-en="Highlights of 3D compositing and effects we've made">Extraits d'incrustations 3D et d'effets réalisés</small></div>
-      </div>
-    </div>
-    <div class="chips vfx-chips">
-      <span data-fr="Incrustation 3D" data-en="3D compositing">Incrustation 3D</span>
-      <span data-fr="Effets visuels (VFX)" data-en="Visual effects (VFX)">Effets visuels (VFX)</span>
-      <span data-fr="Intégration dans vos plans" data-en="Integration into your shots">Intégration dans vos plans</span>
-    </div>
-    <div class="cta" style="margin-top:28px">
-      <a href="#contact" class="btn btn-primary" data-fr="Parler de votre projet" data-en="Talk about your project">Parler de votre projet</a>
-    </div>
   </div>
 </section>
 
 <!-- GAMME -->
 <section id="software-preview" class="reveal">
   <div class="wrap">
-    <div class="eyebrow" data-fr="La suite" data-en="What's next">La suite</div>
+    <div class="eyebrow" data-fr="Backpack Lab" data-en="Backpack Lab">Backpack Lab</div>
     <div class="h2" data-fr="D'autres logiciels arrivent déjà" data-en="More software is already on the way">D'autres logiciels arrivent déjà</div>
     <p class="lead" data-fr="Backpack Lab développe en continu de nouveaux outils pour les créateurs. Voici un aperçu de ce qui se prépare." data-en="Backpack Lab keeps building new tools for creators. Here's a glimpse of what's in the works.">Backpack Lab développe en continu de nouveaux outils pour les créateurs.</p>
     <div class="lineup">
@@ -394,30 +348,32 @@
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- CONTACT + SOUTENIR, côte à côte (la carte Soutenir reste cachée tant que le lien n'est pas renseigné dans assets/support-coin.js) -->
 <section id="contact" class="contact reveal">
   <div class="wrap">
-    <div class="eyebrow" data-fr="Contact" data-en="Contact">Contact</div>
-    <div class="h2" data-fr="Parlons de votre projet" data-en="Let's talk about your project">Parlons de votre projet</div>
-    <p class="lead" data-fr="Une question sur nos logiciels ou un projet VFX ? Écrivez-nous." data-en="Questions about our software or a VFX project? Drop us a line.">Une question sur nos logiciels ou un projet VFX ? Écrivez-nous.</p>
-    <div class="contact-card">
-      <div data-fr="Envoyez-nous un email :" data-en="Send us an email:" style="color:var(--muted);font-size:14px">Envoyez-nous un email :</div>
-      <a class="mail" href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
-    </div>
-  </div>
-</section>
-
-<!-- SOUTENIR : caché tant que le lien n'est pas renseigné dans assets/support-coin.js -->
-<section id="support" class="reveal" data-support hidden style="background:#0E0E11">
-  <div class="wrap" style="text-align:center">
-    <div class="eyebrow" data-fr="Soutenir" data-en="Support">Soutenir</div>
-    <div class="h2" data-fr="Aidez BACKPACK LAB à continuer" data-en="Help BACKPACK LAB keep going">Aidez BACKPACK LAB à continuer</div>
-    <p class="lead" data-fr="Nos outils restent gratuits pendant la beta. Si BACKPACK LAB vous fait gagner du temps, un don aide à financer la suite. Un petit coup de pouce, jamais une obligation." data-en="Our tools stay free during the beta. If BACKPACK LAB saves you time, a donation helps fund what comes next. A small boost, never an obligation.">Nos outils restent gratuits pendant la beta. Si BACKPACK LAB vous fait gagner du temps, un don aide à financer la suite. Un petit coup de pouce, jamais une obligation.</p>
-    <div class="support-cta">
-      <button type="button" class="coin-btn" data-support-btn>
+    <div class="duo">
+      <div class="duo-col">
+        <div class="eyebrow" data-fr="Contact" data-en="Contact">Contact</div>
+        <div class="h2" data-fr="Parlons de votre projet" data-en="Let's talk about your project">Parlons de votre projet</div>
+        <p class="lead" data-fr="Une question sur nos logiciels ? Écrivez-nous." data-en="Questions about our software? Drop us a line.">Une question sur nos logiciels ? Écrivez-nous.</p>
+        <div class="duo-cta">
+          <div class="contact-card">
+            <div data-fr="Envoyez-nous un email :" data-en="Send us an email:" style="color:var(--muted);font-size:14px">Envoyez-nous un email :</div>
+            <a class="mail" href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="duo-col" id="support" data-support hidden>
+        <div class="eyebrow" data-fr="Soutenir" data-en="Support">Soutenir</div>
+        <div class="h2" data-fr="Aidez BACKPACK LAB à continuer" data-en="Help BACKPACK LAB keep going">Aidez BACKPACK LAB à continuer</div>
+        <p class="lead" data-fr="Nos outils restent gratuits pendant la beta. Si BACKPACK LAB vous fait gagner du temps, un don aide à financer la suite. Un petit coup de pouce, jamais une obligation." data-en="Our tools stay free during the beta. If BACKPACK LAB saves you time, a donation helps fund what comes next. A small boost, never an obligation.">Nos outils restent gratuits pendant la beta. Si BACKPACK LAB vous fait gagner du temps, un don aide à financer la suite. Un petit coup de pouce, jamais une obligation.</p>
+        <div class="duo-cta">
+          <button type="button" class="coin-btn" data-support-btn>
         <span class="coin-wrap" aria-hidden="true"><span class="coin"><span class="coin-face coin-front"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M4 9h12v4.5A4.5 4.5 0 0 1 11.5 18h-3A4.5 4.5 0 0 1 4 13.5V9z"/><path d="M16 10h1.2a2.4 2.4 0 0 1 0 4.8H15.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3.2c-1 1 1 1.9 0 3.1M12 3.2c-1 1 1 1.9 0 3.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="coin-face coin-back"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15.6 2.9 9.6C2.6 6.6 4.7 4.5 7.3 4.5c1.8 0 3.5 1 4.7 2.7 1.2-1.7 2.9-2.7 4.7-2.7 2.6 0 4.7 2.1 4.4 5.1-.5 6-9.1 11-9.1 11z"/></svg></span></span></span>
         <span data-fr="Faire un don" data-en="Make a donation">Faire un don</span>
       </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -541,27 +497,6 @@
     try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
     var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr' : 'en');
     setLang(lang);
-  })();
-
-  // Showreel VFX : charge la vidéo à l'approche, lecture en boucle seulement quand elle est visible
-  (function(){
-    var box=document.getElementById('reel'), v=document.getElementById('reelVideo');
-    if(!box||!v) return;
-    var loaded=false, still=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var sources=v.querySelectorAll('source');
-    function load(){
-      if(loaded) return; loaded=true;
-      sources.forEach(function(s){ s.src=s.getAttribute('data-src'); });
-      v.load();
-      if(still) v.controls=true;
-    }
-    v.addEventListener('loadeddata',function(){ box.classList.add('ok'); });
-    new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(e.isIntersecting){ load(); if(!still){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } }
-        else if(loaded){ v.pause(); }
-      });
-    },{rootMargin:'200px 0px',threshold:.1}).observe(box);
   })();
 
   // Scroll reveal observer
