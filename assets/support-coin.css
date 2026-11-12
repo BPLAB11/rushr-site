@@ -2,7 +2,7 @@
    Balisage : voir assets/support-coin.js. */
 
 .coin-btn{
-  --coin-a:#FFB36B; --coin-b:#FF6A00;
+  --coin-a:var(--accent2,#FFB36B); --coin-b:var(--accent,#FF6A00);
   display:inline-flex; align-items:center; gap:14px;
   padding:10px 24px 10px 12px;
   border-radius:999px;
@@ -17,7 +17,7 @@
 .coin-btn:hover{
   border-color:var(--accent,#FF6A00);
   transform:translateY(-1px);
-  box-shadow:0 8px 28px rgba(255,106,0,.18);
+  box-shadow:0 8px 28px color-mix(in srgb, var(--accent,#FF6A00) 20%, transparent);
 }
 .coin-btn:focus-visible{outline:2px solid var(--accent,#FF6A00); outline-offset:3px}
 .coin-btn[aria-busy="true"]{cursor:progress}
@@ -34,9 +34,9 @@
 .coin-face{
   position:absolute; inset:0; border-radius:50%;
   display:grid; place-items:center;
-  font-size:19px; line-height:1; color:#150A03;
+  font-size:19px; line-height:1; color:var(--on-accent,#150A03);
   background:radial-gradient(circle at 32% 28%, var(--coin-a), var(--coin-b) 70%);
-  box-shadow:inset 0 0 0 3px rgba(255,255,255,.28), inset 0 0 0 5px rgba(150,60,0,.28), 0 3px 10px rgba(255,106,0,.35);
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.28), inset 0 0 0 5px rgba(150,60,0,.28), 0 3px 10px color-mix(in srgb, var(--accent,#FF6A00) 38%, transparent);
   -webkit-backface-visibility:hidden; backface-visibility:hidden;
 }
 .coin-back{transform:rotateY(180deg)}

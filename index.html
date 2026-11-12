@@ -21,6 +21,7 @@
 <meta name="description" data-fr="Backpack Lab crée des logiciels desktop et réalise des VFX et incrustations 3D pour les créateurs vidéo. Rushr, l'outil de dérushage, est en beta ; SoundBox, SONIQ et RENAME arrivent." data-en="Backpack Lab builds desktop software and creates VFX and 3D compositing for video creators. Rushr, the dérushage tool, is in beta; SoundBox, SONIQ and RENAME are coming." content="Backpack Lab crée des logiciels desktop et réalise des VFX et incrustations 3D pour les créateurs vidéo. Rushr, l'outil de dérushage, est en beta ; SoundBox, SONIQ et RENAME arrivent." />
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://thebackpacklab.com/#org", "name": "BACKPACK LAB", "url": "https://thebackpacklab.com/", "logo": "https://thebackpacklab.com/assets/bp-favicon-512.png", "email": "contact@thebackpacklab.com"}, {"@type": "WebSite", "@id": "https://thebackpacklab.com/#site", "url": "https://thebackpacklab.com/", "name": "BACKPACK LAB", "inLanguage": ["fr", "en"], "publisher": {"@id": "https://thebackpacklab.com/#org"}}]}</script>
 <link href="assets/fonts/inter.css" rel="stylesheet" />
+<link href="assets/support-coin.css" rel="stylesheet" />
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -406,6 +407,21 @@
   </div>
 </section>
 
+<!-- SOUTENIR : caché tant que le lien n'est pas renseigné dans assets/support-coin.js -->
+<section id="support" class="reveal" data-support hidden style="background:#0E0E11">
+  <div class="wrap" style="text-align:center">
+    <div class="eyebrow" data-fr="Soutenir" data-en="Support">Soutenir</div>
+    <div class="h2" data-fr="Aidez BACKPACK LAB à continuer" data-en="Help BACKPACK LAB keep going">Aidez BACKPACK LAB à continuer</div>
+    <p class="lead" data-fr="Nos outils restent gratuits pendant la beta. Si BACKPACK LAB vous fait gagner du temps, un don aide à financer la suite. Un petit coup de pouce, jamais une obligation." data-en="Our tools stay free during the beta. If BACKPACK LAB saves you time, a donation helps fund what comes next. A small boost, never an obligation.">Nos outils restent gratuits pendant la beta. Si BACKPACK LAB vous fait gagner du temps, un don aide à financer la suite. Un petit coup de pouce, jamais une obligation.</p>
+    <div class="support-cta">
+      <button type="button" class="coin-btn" data-support-btn>
+        <span class="coin-wrap" aria-hidden="true"><span class="coin"><span class="coin-face coin-front"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M4 9h12v4.5A4.5 4.5 0 0 1 11.5 18h-3A4.5 4.5 0 0 1 4 13.5V9z"/><path d="M16 10h1.2a2.4 2.4 0 0 1 0 4.8H15.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3.2c-1 1 1 1.9 0 3.1M12 3.2c-1 1 1 1.9 0 3.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="coin-face coin-back"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15.6 2.9 9.6C2.6 6.6 4.7 4.5 7.3 4.5c1.8 0 3.5 1 4.7 2.7 1.2-1.7 2.9-2.7 4.7-2.7 2.6 0 4.7 2.1 4.4 5.1-.5 6-9.1 11-9.1 11z"/></svg></span></span></span>
+        <span data-fr="Faire un don" data-en="Make a donation">Faire un don</span>
+      </button>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap foot-in">
     <div class="foot-brand"><img class="mark" src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</div>
@@ -420,6 +436,7 @@
 </footer>
 
 <script src="assets/vendor/supabase.js"></script>
+<script src="assets/support-coin.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
