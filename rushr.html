@@ -20,6 +20,7 @@
 <meta name="description" data-fr="Rushr : logiciel de dérushage pour créateurs. Importez, prévisualisez, taguez au clavier, rangez en un clic. Beta sur préinscription Windows & macOS (Apple Silicon)." data-en="Rushr: rushes sorting software for creators. Import, preview, tag from the keyboard, file in one click. Beta by pre-registration for Windows & macOS (Apple Silicon)." content="Rushr : logiciel de dérushage pour créateurs. Importez, prévisualisez, taguez au clavier, rangez en un clic. Beta sur préinscription Windows & macOS (Apple Silicon)." />
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Rushr", "applicationCategory": "MultimediaApplication", "operatingSystem": "Windows, macOS", "description": "Logiciel de dérushage pour créateurs vidéo : import, prévisualisation, tag au clavier, structure de projet en un clic.", "url": "https://thebackpacklab.com/rushr", "image": "https://thebackpacklab.com/assets/og-rushr.png", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "availability": "https://schema.org/LimitedAvailability", "description": "Licence offerte aux préinscrits pendant la beta. Tarification communiquée avant la fin de la beta."}, "publisher": {"@type": "Organization", "name": "BACKPACK LAB", "url": "https://thebackpacklab.com/"}}</script>
 <link href="assets/fonts/inter.css" rel="stylesheet" />
+<link href="assets/support-coin.css" rel="stylesheet" />
 <style>
   :root{
     --bg:#0B0B0B; --surface:#141417; --surface2:#1A1A1E; --line:rgba(255,255,255,.07);
@@ -446,6 +447,20 @@
   </div>
 </section>
 
+<section id="support" class="reveal" data-support hidden>
+  <div class="wrap" style="text-align:center">
+    <div class="eyebrow" data-fr="Soutenir" data-en="Support">Soutenir</div>
+    <div class="h2" data-fr="Rushr reste gratuit pendant la beta" data-en="Rushr stays free during the beta">Rushr reste gratuit pendant la beta</div>
+    <p class="lead" data-fr="Si l'outil vous fait gagner du temps, un café aide à financer la suite. Un petit coup de pouce, jamais une obligation." data-en="If the tool saves you time, a coffee helps fund what comes next. A small boost, never an obligation.">Si l'outil vous fait gagner du temps, un café aide à financer la suite. Un petit coup de pouce, jamais une obligation.</p>
+    <div class="support-cta">
+      <button type="button" class="coin-btn" data-support-btn>
+        <span class="coin-wrap" aria-hidden="true"><span class="coin"><span class="coin-face coin-front"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M4 9h12v4.5A4.5 4.5 0 0 1 11.5 18h-3A4.5 4.5 0 0 1 4 13.5V9z"/><path d="M16 10h1.2a2.4 2.4 0 0 1 0 4.8H15.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3.2c-1 1 1 1.9 0 3.1M12 3.2c-1 1 1 1.9 0 3.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="coin-face coin-back"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15.6 2.9 9.6C2.6 6.6 4.7 4.5 7.3 4.5c1.8 0 3.5 1 4.7 2.7 1.2-1.7 2.9-2.7 4.7-2.7 2.6 0 4.7 2.1 4.4 5.1-.5 6-9.1 11-9.1 11z"/></svg></span></span></span>
+        <span data-fr="Soutenir Rushr" data-en="Support Rushr">Soutenir Rushr</span>
+      </button>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap foot-in">
     <img class="foot-logo" src="assets/logo.png" alt="RUSHR" />
@@ -460,6 +475,7 @@
 </footer>
 
 <script src="assets/vendor/supabase.js"></script>
+<script src="assets/support-coin.js"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";

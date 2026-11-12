@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="assets/rushr-apple-touch-icon.png" />
 <link rel="canonical" href="https://thebackpacklab.com/download" />
 <link href="assets/fonts/inter.css" rel="stylesheet" />
+<link href="assets/support-coin.css" rel="stylesheet" />
 <style>
   :root{
     --bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);
@@ -217,9 +218,12 @@
         <p class="lead" style="margin:0" data-fr="Le téléchargement a démarré. Tes retours façonnent directement l'outil : dis-nous ce qui marche, ce qui coince et ce qui manque." data-en="Your download has started. Your feedback directly shapes the tool: tell us what works, what breaks and what's missing.">Le téléchargement a démarré. Tes retours façonnent directement l'outil : dis-nous ce qui marche, ce qui coince et ce qui manque.</p>
         <div class="thanks-btns">
           <a class="btn btn-ghost" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener noreferrer" data-fr="Donner mon avis sur Discord" data-en="Give feedback on Discord">Donner mon avis sur Discord</a>
-          <a id="coffeeBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer" hidden data-fr="☕ Offrir un café" data-en="☕ Buy me a coffee">☕ Offrir un café</a>
+          <button type="button" class="coin-btn" data-support-btn data-support hidden>
+        <span class="coin-wrap" aria-hidden="true"><span class="coin"><span class="coin-face coin-front"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M4 9h12v4.5A4.5 4.5 0 0 1 11.5 18h-3A4.5 4.5 0 0 1 4 13.5V9z"/><path d="M16 10h1.2a2.4 2.4 0 0 1 0 4.8H15.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3.2c-1 1 1 1.9 0 3.1M12 3.2c-1 1 1 1.9 0 3.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="coin-face coin-back"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15.6 2.9 9.6C2.6 6.6 4.7 4.5 7.3 4.5c1.8 0 3.5 1 4.7 2.7 1.2-1.7 2.9-2.7 4.7-2.7 2.6 0 4.7 2.1 4.4 5.1-.5 6-9.1 11-9.1 11z"/></svg></span></span></span>
+        <span data-fr="Soutenir Rushr" data-en="Support Rushr">Soutenir Rushr</span>
+      </button>
         </div>
-        <p class="coffee-note" id="coffeeNote" hidden data-fr="Rushr reste gratuit pendant la beta. Un café, c'est un petit coup de pouce, jamais une obligation." data-en="Rushr stays free during the beta. A coffee is a small boost, never an obligation.">Rushr reste gratuit pendant la beta. Un café, c'est un petit coup de pouce, jamais une obligation.</p>
+        <p class="coffee-note" data-support hidden data-fr="Rushr reste gratuit pendant la beta. Un café, c'est un petit coup de pouce, jamais une obligation." data-en="Rushr stays free during the beta. A coffee is a small boost, never an obligation.">Rushr reste gratuit pendant la beta. Un café, c'est un petit coup de pouce, jamais une obligation.</p>
       </div>
     </div>
   </div>
@@ -230,14 +234,14 @@
 <footer>© 2026 BACKPACK LAB · <a href="legal" style="text-decoration:underline" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a> · <a href="privacy" style="text-decoration:underline" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a></footer>
 
 <script src="assets/vendor/supabase.js"></script>
+<script src="assets/support-coin.js"></script>
 <script src="assets/google-signin.js?v=20261109"></script>
 <script>
   var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
   var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
   var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Lien « offrir un café » (Buy Me a Coffee, Ko-fi, PayPal.me...). Vide = le bouton reste caché.
-  var COFFEE_URL='';
+  // Le lien de soutien (« offrir un café ») se règle dans assets/support-coin.js : vide = le bouton reste caché.
 
   var S={email:'',license:null,versions:[],platform:'windows',keyShown:false,url:''};
   function $(id){return document.getElementById(id);}
@@ -335,7 +339,6 @@
     $('verLine').innerHTML=r?((FR()?'Version ':'Version ')+'<b>'+String(r.latest_version).replace(/[<>&]/g,'')+'</b> · beta'):'';
     $('whoLine').textContent=(FR()?'Connecté en tant que ':'Signed in as ')+S.email+'.';
     renderKey();
-    if(COFFEE_URL && safeUrl(COFFEE_URL)){ $('coffeeBtn').href=COFFEE_URL; $('coffeeBtn').hidden=false; $('coffeeNote').hidden=false; }
   }
   function renderKey(){
     var k=(S.license&&S.license.license_key)||'';
