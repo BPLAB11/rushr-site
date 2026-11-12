@@ -6,6 +6,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Mot de passe oublié — BACKPACK LAB</title>
   <link rel="icon" type="image/png" href="/assets/mark.png" />
+  <link rel="stylesheet" href="/assets/code-slots.css?v=20261112a" />
   <style>
     :root { --bg:#0b0b0b; --card:rgba(14,14,16,.86); --line:rgba(255,255,255,.10); --fg:#f4f4f5; --muted:#9a9a9e; --accent:#35dc8e; --accent-fg:#06180f; --danger:#ff6b6b; }
     * { box-sizing: border-box; }
@@ -68,7 +69,7 @@
       <h1 data-t="t_new">Nouveau mot de passe</h1>
       <p class="lead"><span data-t="lead_code">Code envoyé à</span> <b id="sentTo"></b>.</p>
       <label for="code" data-t="code">Code reçu par e-mail</label>
-      <input id="code" class="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" />
+      <input id="code" class="otp" data-code-slots data-slots="6" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
       <label for="pw" data-t="new_pw">Nouveau mot de passe</label>
       <div class="pw-wrap">
         <input id="pw" type="password" autocomplete="new-password" />
@@ -100,6 +101,7 @@
 
   <script src="/assets/vendor/supabase.js"></script>
   <script src="/assets/turnstile.js?v=20261109"></script>
+  <script src="/assets/code-slots.js?v=20261112a"></script>
   <script>
   (function(){
     /* Page « mot de passe oublié » commune à tous les logiciels (et au site).
