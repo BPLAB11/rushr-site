@@ -1,0 +1,23 @@
+# Fichiers du dépôt qui ne sont pas des pages du site : non publiés sur Cloudflare.
+.git
+.vs
+.claude
+node_modules
+islands
+package.json
+package-lock.json
+vite.config.js
+components.json
+jsconfig.json
+wrangler.jsonc
+.assetsignore
+vercel.json
+sql
+supabase
+emails
+backend
+mugs
+promo
+*.md
+*.bat
+serve-local.py

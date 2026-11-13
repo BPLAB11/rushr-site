@@ -1,0 +1,11 @@
+{
+  // Déploiement Cloudflare (Workers + fichiers statiques) : le site est publié tel quel depuis la racine.
+  // _headers et _redirects (à la racine) sont pris en compte. Ce qui ne doit pas être publié est listé dans .assetsignore.
+  "name": "rushr-site",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": ".",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
