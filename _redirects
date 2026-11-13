@@ -1,0 +1,2 @@
+# Redirections (équivalent de "redirects" dans vercel.json)
+/beta  /account  301

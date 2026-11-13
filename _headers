@@ -1,0 +1,20 @@
+# En-têtes HTTP pour Cloudflare Pages (équivalent de "headers" dans vercel.json).
+# Les URLs sans .html (cleanUrls) et l'absence de slash final sont le comportement par défaut de Pages.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://cdnjs.cloudflare.com https://accounts.google.com/gsi/client https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data: blob: https:; media-src 'self' blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.clarity.ms https://c.bing.com https://accounts.google.com/gsi/; frame-src 'self' https://accounts.google.com/gsi/ https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+/auth/*
+  X-Robots-Tag: noindex, nofollow
+
+# Images, vidéos, scripts tiers : cache d'un jour, rafraîchi en arrière-plan.
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Polices (noms de fichiers stables) : cache d'un mois.
+/assets/fonts/*
+  Cache-Control: public, max-age=2592000
