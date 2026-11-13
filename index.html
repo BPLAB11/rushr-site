@@ -21,6 +21,7 @@
 <meta name="description" data-fr="Backpack Lab crée des logiciels desktop et réalise des VFX et incrustations 3D pour les créateurs vidéo. Rushr, l'outil de dérushage, est en beta ; SoundBox, SONIQ et RENAME arrivent." data-en="Backpack Lab builds desktop software and creates VFX and 3D compositing for video creators. Rushr, the dérushage tool, is in beta; SoundBox, SONIQ and RENAME are coming." content="Backpack Lab crée des logiciels desktop et réalise des VFX et incrustations 3D pour les créateurs vidéo. Rushr, l'outil de dérushage, est en beta ; SoundBox, SONIQ et RENAME arrivent." />
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://thebackpacklab.com/#org", "name": "BACKPACK LAB", "url": "https://thebackpacklab.com/", "logo": "https://thebackpacklab.com/assets/bp-favicon-512.png", "email": "contact@thebackpacklab.com"}, {"@type": "WebSite", "@id": "https://thebackpacklab.com/#site", "url": "https://thebackpacklab.com/", "name": "BACKPACK LAB", "inLanguage": ["fr", "en"], "publisher": {"@id": "https://thebackpacklab.com/#org"}}]}</script>
 <link href="assets/fonts/inter.css" rel="stylesheet" />
+<link href="assets/islands/islands.css" rel="stylesheet" />
 <link href="assets/support-coin.css" rel="stylesheet" />
 <style>
   :root{
@@ -61,13 +62,21 @@
   .nav-right .btn{padding:5px 16px;font-size:13px}
 
   /* HERO */
-  header{padding:88px 0 40px;position:relative}
-  .hero-glow{position:absolute;top:-120px;left:0;right:0;margin:0 auto;width:820px;max-width:100%;height:460px;background:radial-gradient(closest-side,rgba(53,220,142,.18),transparent);filter:blur(20px);z-index:0;pointer-events:none;animation:glowBreathing 4s ease-in-out infinite}
-  @keyframes glowBreathing{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-  .hero{position:relative;z-index:1;text-align:center;align-items:center}
+  header{padding:88px 0 40px;position:relative;min-height:clamp(340px,52vh,540px);display:flex;align-items:center}
+  header>.wrap{width:100%}
+  /* Fond LetterGlitch (îlot React, islands/) : voile sombre au centre pour garder le texte lisible, fondu vers la page en bas */
+  .glitch-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.95}
+  .glitch-veil{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 62% at 50% 50%,rgba(11,11,11,.9) 0%,rgba(11,11,11,.55) 55%,rgba(11,11,11,0) 100%),linear-gradient(to bottom,rgba(11,11,11,0) 70%,var(--bg) 100%)}
+  .hero{position:relative;z-index:1;text-align:center;align-items:center;pointer-events:none}
+  .hero a,.hero button{pointer-events:auto}
   .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:12.5px;color:var(--muted);margin-bottom:22px}
   .pill .d{width:7px;height:7px;border-radius:50%;background:var(--accent)}
   h1{font-size:clamp(36px,6.4vw,64px);line-height:1.04;font-weight:800;letter-spacing:-1.5px;color:#fff}
+  /* Titre : phrase fixe, puis le mot qui défile (assets/rotating-text.js) */
+  /* Une seule ligne : la phrase et le mot qui défile, la taille suit la largeur de l'écran pour que ça tienne toujours */
+  .rot-h1{font-size:clamp(15px,6.4vw,64px);white-space:nowrap;display:flex;justify-content:center;align-items:baseline;gap:.28em}
+  .rot-h1 .text-rotate{flex-wrap:nowrap}
+  .rt-split{overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
   .sub{color:var(--muted);font-size:clamp(15px,2.2vw,19px);max-width:660px;margin:22px auto 0}
   .cta{display:flex;gap:12px;justify-content:center;margin-top:32px;flex-wrap:wrap}
   .cta .btn{padding:13px 24px;font-size:15px}
@@ -257,9 +266,12 @@
 </nav>
 
 <header>
-  <div class="hero-glow"></div>
+  <div class="glitch-canvas" data-island="glitch" aria-hidden="true"></div>
+  <div class="glitch-veil"></div>
   <div class="wrap hero">
-    <h1 data-fr="Le labo<br>des créateurs vidéo." data-en="The lab<br>for video creators.">Le labo<br>des créateurs vidéo.</h1>
+    <h1 class="rot-h1" data-island="hero-title" data-prefix-fr="On construit des outils" data-prefix-en="We build tools that are" data-words-fr="rapides,simples,utiles,gratuits,locaux,durables" data-words-en="fast,simple,useful,free,local,lasting">
+      <span class="rot-prefix" data-fr="On construit des outils" data-en="We build tools that are">On construit des outils</span> <span data-fr="rapides" data-en="fast">rapides</span>
+    </h1>
     <p class="sub" data-fr="<b>Backpack Lab</b> crée des applications desktop et réalise des effets visuels (VFX, incrustation 3D) pour les créateurs vidéo. <b>Rushr</b> ouvre le bal, d'autres outils suivent." data-en="<b>Backpack Lab</b> builds desktop apps and creates visual effects (VFX, 3D compositing) for video creators. <b>Rushr</b> leads the way, more tools are on the way.">Backpack Lab crée des applications desktop et réalise des effets visuels (VFX, incrustation 3D) pour les créateurs vidéo.</p>
   </div>
 </header>
@@ -532,5 +544,6 @@
     });
   })();
 </script>
+<script type="module" src="assets/islands/islands.js"></script>
 </body>
 </html>

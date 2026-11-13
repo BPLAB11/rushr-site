@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "baseUrl": ".", "paths": { "@/*": ["./islands/*"] } },
+  "include": ["islands"]
+}
