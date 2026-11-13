@@ -21,6 +21,7 @@
 <meta name="description" data-fr="Backpack Lab crée des logiciels desktop pour les créateurs vidéo. Rushr, l'outil de dérushage, est en beta ; SoundBox, SONIQ et RENAME arrivent." data-en="Backpack Lab builds desktop software for video creators. Rushr, the dérushage tool, is in beta; SoundBox, SONIQ and RENAME are coming." content="Backpack Lab crée des logiciels desktop pour les créateurs vidéo. Rushr, l'outil de dérushage, est en beta ; SoundBox, SONIQ et RENAME arrivent." />
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://thebackpacklab.com/#org", "name": "BACKPACK LAB", "url": "https://thebackpacklab.com/", "logo": "https://thebackpacklab.com/assets/bp-favicon-512.png", "email": "contact@thebackpacklab.com"}, {"@type": "WebSite", "@id": "https://thebackpacklab.com/#site", "url": "https://thebackpacklab.com/", "name": "BACKPACK LAB", "inLanguage": ["fr", "en"], "publisher": {"@id": "https://thebackpacklab.com/#org"}}]}</script>
 <link href="assets/fonts/inter.css" rel="stylesheet" />
+<link rel="preload" as="image" href="assets/hero/hero-poster.jpg" fetchpriority="high" />
 <link href="assets/islands/islands.css" rel="stylesheet" />
 <link href="assets/support-coin.css" rel="stylesheet" />
 <style>
@@ -62,9 +63,11 @@
   .nav-right .btn{padding:5px 16px;font-size:13px}
 
   /* HERO */
-  header{padding:88px 0 40px;position:relative;min-height:clamp(340px,52vh,540px);display:flex;align-items:center}
+  header{padding:88px 0 40px;position:relative;overflow:hidden;min-height:clamp(380px,60vh,620px);display:flex;align-items:center}
   header>.wrap{width:100%}
   /* Fond LetterGlitch (îlot React, islands/) : voile sombre au centre pour garder le texte lisible, fondu vers la page en bas */
+  /* Vidéo du hero : muette, en boucle (assets/hero/). Le voile ci-dessous garde le titre lisible. */
+  .hero-video{position:absolute;inset:0;width:100%;height:100%;z-index:0;object-fit:cover;object-position:50% 56%;background:#0B0B0B}
   .glitch-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.95}
   .glitch-veil{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 62% at 50% 50%,rgba(11,11,11,.9) 0%,rgba(11,11,11,.55) 55%,rgba(11,11,11,0) 100%),linear-gradient(to bottom,rgba(11,11,11,0) 70%,var(--bg) 100%)}
   .hero{position:relative;z-index:1;text-align:center;align-items:center;pointer-events:none}
@@ -78,6 +81,19 @@
   .rot-h1 .text-rotate{flex-wrap:nowrap;color:var(--accent)}
   .rt-split{overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
   .sub{color:var(--muted);font-size:clamp(15px,2.2vw,19px);max-width:660px;margin:22px auto 0}
+  /* Titre du hero sur deux lignes, partout : « On construit » / « des outils <mot qui défile> » */
+  header .hero .rot-h1{display:block;white-space:normal;font-size:clamp(28px,9vw,44px);text-align:center}
+  header .hero .rot-h1 .rot-prefix{white-space:pre-line}
+  header .hero .rot-h1 .text-rotate{display:inline-flex;vertical-align:baseline;white-space:nowrap;margin-left:.28em}
+  /* Grand écran : les textes du hero passent à droite, sur la partie sombre de la vidéo (le décor lumineux reste à gauche) */
+  @media(min-width:900px){
+    header .glitch-veil{background:linear-gradient(90deg,rgba(11,11,11,0) 0%,rgba(11,11,11,0) 38%,rgba(11,11,11,.72) 62%,rgba(11,11,11,.88) 100%),linear-gradient(to bottom,rgba(11,11,11,0) 70%,var(--bg) 100%)}
+    header .wrap.hero{display:flex;flex-direction:column;align-items:flex-end}
+    header .hero>*{width:min(600px,50%)}
+    header .hero .rot-h1{font-size:clamp(32px,4vw,56px);text-align:left}
+    header .hero .sub{margin:20px 0 0;max-width:none;text-align:left}
+    header .hero .cta{justify-content:flex-start}
+  }
   .cta{display:flex;gap:12px;justify-content:center;margin-top:32px;flex-wrap:wrap}
   .cta .btn{padding:13px 24px;font-size:15px}
 
@@ -266,11 +282,13 @@
 </nav>
 
 <header>
-  <div class="glitch-canvas" data-island="glitch" aria-hidden="true"></div>
+  <video class="hero-video" id="heroVideo" muted loop playsinline preload="none" poster="assets/hero/hero-poster.jpg" aria-hidden="true" tabindex="-1"
+         data-webm="assets/hero/hero.webm" data-mp4="assets/hero/hero.mp4" data-mp4-sm="assets/hero/hero-720.mp4"></video>
   <div class="glitch-veil"></div>
   <div class="wrap hero">
-    <h1 class="rot-h1" data-island="hero-title" data-prefix-fr="On construit des outils" data-prefix-en="We build tools that are" data-words-fr="rapides,simples,utiles,gratuits,locaux,durables" data-words-en="fast,simple,useful,free,local,lasting">
-      <span class="rot-prefix" data-fr="On construit des outils" data-en="We build tools that are">On construit des outils</span> <span data-fr="rapides" data-en="fast">rapides</span>
+    <h1 class="rot-h1" data-island="hero-title" data-prefix-fr="On construit&#10;des outils" data-prefix-en="We build tools&#10;that are" data-words-fr="rapides,simples,utiles,gratuits,locaux,durables" data-words-en="fast,simple,useful,free,local,lasting">
+      <span class="rot-prefix" data-fr="On construit&#10;des outils" data-en="We build tools&#10;that are">On construit
+des outils</span> <span data-fr="rapides" data-en="fast">rapides</span>
     </h1>
     <p class="sub" data-fr="&lt;b&gt;Backpack Lab&lt;/b&gt; crée des applications desktop pour les créateurs vidéo : des outils simples, rapides et locaux, pensés pour vous faire gagner du temps." data-en="&lt;b&gt;Backpack Lab&lt;/b&gt; builds desktop apps for video creators: simple, fast, local tools made to save you time."><b>Backpack Lab</b> crée des applications desktop pour les créateurs vidéo : des outils simples, rapides et locaux, pensés pour vous faire gagner du temps.</p>
   </div>
@@ -543,6 +561,23 @@
       });
     });
   })();
+</script>
+<script>
+/* Vidéo du hero : on ne la charge que si elle est bienvenue. Pas de lecture avec « réduire les animations » ni en mode
+   économie de données (l'image d'attente reste) ; version 720p sur petit écran ; mise en pause hors de l'écran. */
+(function(){
+  var v=document.getElementById('heroVideo'); if(!v) return;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+  if(reduce||(c&&(c.saveData||/(^|-)2g$/.test(c.effectiveType||'')))) return;
+  var small=window.matchMedia&&matchMedia('(max-width:700px)').matches;
+  var src=small?v.dataset.mp4Sm:((v.canPlayType&&v.canPlayType('video/webm; codecs="vp9"'))?v.dataset.webm:v.dataset.mp4);
+  v.src=src; v.preload='auto';
+  var p=v.play(); if(p&&p.catch) p.catch(function(){});
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(e){ if(e[0].isIntersecting){ var q=v.play(); if(q&&q.catch) q.catch(function(){}); } else v.pause(); }).observe(v);
+  }
+})();
 </script>
 <script type="module" src="assets/islands/islands.js"></script>
 </body>
