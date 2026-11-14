@@ -363,7 +363,7 @@
         <div class="field" style="margin-top:12px"><label>URL de téléchargement</label><input id="vUrl" class="in" placeholder="https://…"></div>
         <div class="field"><label>Notes de version</label><textarea id="vChangelog" class="in" rows="3" placeholder="Ce qui a changé…" style="resize:vertical"></textarea></div>
         <div class="toggle-row"><div><div class="t">Mise à jour obligatoire</div><div class="s">L'app pourra bloquer l'usage tant qu'elle n'est pas installée</div></div>
-          <span class="switch"><input type="checkbox" id="vMandatory"><span class="tr"></span></span></div>
+          <label class="switch"><input type="checkbox" id="vMandatory"><span class="tr"></span></label></div>
         <button class="btn btn-primary" style="margin-top:14px" onclick="publishVersion()">Publier</button>
       </div>
 
@@ -678,9 +678,9 @@
     // settings
     h+='<div class="card"><h3>Réglages</h3>'+
       '<div class="toggle-row"><div><div class="t">Autoriser le téléchargement</div><div class="s">Le client peut télécharger le fichier original</div></div>'+
-        '<span class="switch"><input type="checkbox" id="setDl" '+(p.allow_download?'checked':'')+' onchange="saveSettings()"><span class="tr"></span></span></div>'+
+        '<label class="switch"><input type="checkbox" id="setDl" '+(p.allow_download?'checked':'')+' onchange="saveSettings()"><span class="tr"></span></label></div>'+
       '<div class="toggle-row"><div><div class="t">Désactiver le lien</div><div class="s">Coupe l\'accès client immédiatement</div></div>'+
-        '<span class="switch"><input type="checkbox" id="setOff" '+(p.is_disabled?'checked':'')+' onchange="saveSettings()"><span class="tr"></span></span></div>'+
+        '<label class="switch"><input type="checkbox" id="setOff" '+(p.is_disabled?'checked':'')+' onchange="saveSettings()"><span class="tr"></span></label></div>'+
       '<div class="frow" style="margin-top:14px">'+
         '<div class="fg" style="flex:1"><label>Expiration du lien (optionnel)</label><input type="date" id="setExp" class="in" value="'+(p.expires_at?p.expires_at.substring(0,10):'')+'" onchange="saveSettings()"></div>'+
       '</div>'+
@@ -774,7 +774,7 @@
       '<div class="field"><label>Nom du projet *</label><input id="npName" class="in" placeholder="Ex : Pub Nike — montage 30s"></div>'+
       '<div class="field"><label>Nom du client</label><input id="npClient" class="in" placeholder="Ex : Studio Machin"></div>'+
       '<div class="field"><label>Mot de passe (optionnel)</label><input id="npPwd" class="in" placeholder="Laisser vide pour un accès libre par lien"></div>'+
-      '<div class="toggle-row"><div><div class="t">Autoriser le téléchargement</div></div><span class="switch"><input type="checkbox" id="npDl"><span class="tr"></span></span></div>'+
+      '<div class="toggle-row"><div><div class="t">Autoriser le téléchargement</div></div><label class="switch"><input type="checkbox" id="npDl"><span class="tr"></span></label></div>'+
       '<button class="btn btn-primary" style="margin-top:14px" onclick="createProject()">Créer le projet</button></div>';
   }
   async function createProject(){
