@@ -629,8 +629,9 @@ function downloadCard(lics){
   var v=S.versions; if(!lics.length||!v||!v.length) return '';
   var p=detectPlatform(), cur=v.filter(function(x){return x.platform===p;})[0]||v[0], other=v.filter(function(x){return x.platform!==cur.platform;})[0];
   var os=function(x){return t('platform_'+(x==='mac'?'mac':'windows'));};
-  var url=safeUrl(cur.download_url);
-  var otherUrl=other&&safeUrl(other.download_url);
+  // Download buttons use the site URL set in the admin; the update URL (used by the app) is the fallback.
+  var url=safeUrl(cur.site_download_url||cur.download_url);
+  var otherUrl=other&&safeUrl(other.site_download_url||other.download_url);
   return '<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dl_title'))+'</div><div class="card-description">v'+esc(cur.latest_version)+' · '+esc(t('dl_beta'))+'</div></div><span class="ico-box rushr">'+icon('download')+'</span></div><div class="card-content">'
     +(url?'<a class="btn btn-primary btn-block" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(cur)+'>'+icon('download')+'<span>'+esc(t('dl_for',{os:os(cur.platform)}))+'</span></a>':'')
     +(otherUrl?'<a class="hint link" style="display:inline-block;margin-top:10px" href="'+esc(otherUrl)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(other)+'>'+esc(t('dl_other',{os:os(other.platform)}))+'</a>':'')
@@ -836,7 +837,8 @@ async function refreshAccount(silent){
 }
 async function loadVersions(){
   try{
-    var r=await SB.from('app_versions').select('platform,latest_version,download_url,changelog,mandatory');
+    // Newest first, so each platform's first row is its latest version.
+    var r=await SB.from('app_versions').select('platform,latest_version,download_url,site_download_url,changelog,mandatory').order('created_at',{ascending:false});
     if(!r.error&&r.data) { S.versions=r.data; if(S.account&&S.route==='overview') renderView(false); }
   }catch(e){}
 }

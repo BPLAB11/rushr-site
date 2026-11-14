@@ -360,7 +360,8 @@
           </div>
           <div class="fg" style="flex:1"><label>Version</label><input id="vVersion" class="in" placeholder="Ex : 1.0.11-beta" style="width:100%"></div>
         </div>
-        <div class="field" style="margin-top:12px"><label>URL de téléchargement</label><input id="vUrl" class="in" placeholder="https://…"></div>
+        <div class="field" style="margin-top:12px"><label>URL de mise à jour (utilisée par l'app)</label><input id="vUrl" class="in" placeholder="https://…"></div>
+        <div class="field"><label>URL du bouton de téléchargement (site)</label><input id="vSiteUrl" class="in" placeholder="https://… — vide : le site utilise l'URL de mise à jour"></div>
         <div class="field"><label>Notes de version</label><textarea id="vChangelog" class="in" rows="3" placeholder="Ce qui a changé…" style="resize:vertical"></textarea></div>
         <div class="toggle-row"><div><div class="t">Mise à jour obligatoire</div><div class="s">L'app pourra bloquer l'usage tant qu'elle n'est pas installée</div></div>
           <label class="switch"><input type="checkbox" id="vMandatory"><span class="tr"></span></label></div>
@@ -801,7 +802,7 @@
     document.getElementById('vEmptyMsg').style.display=VERSIONS.length?'none':'block';
     tb.innerHTML=VERSIONS.map(function(v){
       return '<tr><td>'+platformLabel(v.platform)+'</td>'+
-        '<td class="mono">'+esc(v.latest_version)+(v.download_url?' · <a href="'+esc(v.download_url)+'" target="_blank" style="color:var(--accent2)">lien</a>':'')+'</td>'+
+        '<td class="mono">'+esc(v.latest_version)+(v.download_url?' · <a href="'+esc(v.download_url)+'" target="_blank" style="color:var(--accent2)">maj</a>':'')+(v.site_download_url?' · <a href="'+esc(v.site_download_url)+'" target="_blank" style="color:var(--accent2)">site</a>':'')+'</td>'+
         '<td>'+(v.mandatory?'<span class="badge b-pending">Oui</span>':'—')+'</td>'+
         '<td>'+fmt(v.created_at)+'</td>'+
         '<td><div class="row-actions"><button class="icon-btn danger" onclick="deleteVersion(\''+v.id+'\')">Suppr.</button></div></td></tr>';
@@ -811,13 +812,14 @@
     var platform=document.getElementById('vPlatform').value;
     var version=document.getElementById('vVersion').value.trim();
     var url=document.getElementById('vUrl').value.trim();
+    var siteUrl=document.getElementById('vSiteUrl').value.trim();
     var changelog=document.getElementById('vChangelog').value.trim();
     var mandatory=document.getElementById('vMandatory').checked;
     if(!version){ toast('La version est requise','err'); return; }
     try{
-      await rpc('admin_upsert_version',{p_platform:platform,p_version:version,p_url:url||null,p_changelog:changelog||null,p_mandatory:mandatory});
+      await rpc('admin_upsert_version',{p_platform:platform,p_version:version,p_url:url||null,p_changelog:changelog||null,p_mandatory:mandatory,p_site_url:siteUrl||null});
       toast('Version publiée ✓','ok');
-      document.getElementById('vVersion').value=''; document.getElementById('vUrl').value=''; document.getElementById('vChangelog').value=''; document.getElementById('vMandatory').checked=false;
+      document.getElementById('vVersion').value=''; document.getElementById('vUrl').value=''; document.getElementById('vSiteUrl').value=''; document.getElementById('vChangelog').value=''; document.getElementById('vMandatory').checked=false;
       loadVersions();
     }catch(e){ toast('Erreur : '+e.message,'err'); }
   }
