@@ -838,7 +838,12 @@ async function refreshAccount(silent){
 async function loadVersions(){
   try{
     // Newest first, so each platform's first row is its latest version.
-    var r=await SB.from('app_versions').select('platform,latest_version,download_url,site_download_url,changelog,mandatory').order('created_at',{ascending:false});
+    var r=await SB.from('app_versions').select('platform,latest_version,download_url,changelog,mandatory').order('created_at',{ascending:false});
+    // Button links set in the admin ("Boutons de téléchargement du site"), merged per platform.
+    try{
+      var sd=await SB.from('site_downloads').select('platform,url');
+      if(!sd.error&&sd.data&&r.data) sd.data.forEach(function(x){ r.data.forEach(function(v){ if(v.platform===x.platform&&x.url) v.site_download_url=x.url; }); });
+    }catch(e){}
     if(!r.error&&r.data) { S.versions=r.data; if(S.account&&S.route==='overview') renderView(false); }
   }catch(e){}
 }

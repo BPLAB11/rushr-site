@@ -304,9 +304,15 @@
     if(!S.license){ show('s-nolic'); return; }
     try{
       // Newest first, so row() picks the latest version of each platform.
-      var v=await SB.from('app_versions').select('platform,latest_version,download_url,site_download_url').order('created_at',{ascending:false});
+      var v=await SB.from('app_versions').select('platform,latest_version,download_url').order('created_at',{ascending:false});
       S.versions=(!v.error&&v.data)?v.data:[];
     }catch(e){ S.versions=[]; }
+    // Button links set in the admin ("Boutons de téléchargement du site"), per platform.
+    S.siteUrls={};
+    try{
+      var sd=await SB.from('site_downloads').select('platform,url');
+      if(!sd.error&&sd.data) sd.data.forEach(function(x){ if(x.url) S.siteUrls[x.platform]=x.url; });
+    }catch(e){}
     var hasAny=S.versions.some(function(x){return safeUrl(siteUrlOf(x));});
     if(!hasAny){ show('s-soon'); return; }
     var cur=urlFor(S.platform); if(!cur){ S.platform=(S.platform==='mac')?'windows':'mac'; }
@@ -327,7 +333,7 @@
 
   function row(p){ return S.versions.filter(function(x){return x.platform===p;})[0]; }
   // Download buttons use the site URL set in the admin; the update URL (used by the app) is the fallback.
-  function siteUrlOf(r){ return (r&&(r.site_download_url||r.download_url))||''; }
+  function siteUrlOf(r){ return r?((S.siteUrls&&S.siteUrls[r.platform])||r.download_url||''):''; }
   function urlFor(p){ var r=row(p); return r?safeUrl(siteUrlOf(r)):''; }
   function pick(p){ if(!urlFor(p)) return; S.platform=p; renderReady(); }
 
