@@ -1470,13 +1470,11 @@ $('#backToLogin').addEventListener('click',function(){ setMode('login'); });
 $('#pwToggle').addEventListener('click',togglePw);
 $('#userBtn').addEventListener('click',function(){
   var name=displayName(), mail=S.account?S.account.user.email:'';
+  // Language is chosen with the FR / EN switch in the top bar (and in Profile): not repeated here.
   var html='<div class="menu-label"><b>'+esc(name)+'</b>'+esc(mail)+'</div><div class="menu-sep"></div>'
-    +'<div class="menu-label" style="padding-bottom:2px">'+esc(t('menu_lang'))+'</div>'
-    +'<button type="button" class="menu-item" role="menuitem" data-pick="fr"><span data-icon="globe"></span>Français'+(S.lang==='fr'?'<span class="check" data-icon="check"></span>':'')+'</button>'
-    +'<button type="button" class="menu-item" role="menuitem" data-pick="en"><span data-icon="globe"></span>English'+(S.lang==='en'?'<span class="check" data-icon="check"></span>':'')+'</button>'
-    +'<div class="menu-sep"></div><button type="button" class="menu-item danger" role="menuitem" data-pick="out"><span data-icon="logout"></span>'+esc(t('menu_signout'))+'</button>';
+    +'<button type="button" class="menu-item danger" role="menuitem" data-pick="out"><span data-icon="logout"></span>'+esc(t('menu_signout'))+'</button>';
   if(S.menu&&S.menu.anchor===this){ closeMenu(); return; }
-  openMenu(this,html,function(v){ if(v==='out') signOut(); else setLang(v); });
+  openMenu(this,html,function(v){ if(v==='out') signOut(); });
 });
 SB.auth.onAuthStateChange(function(ev){
   if(ev==='SIGNED_OUT'&&S.account){ S.account=null; showAuth('email'); }
