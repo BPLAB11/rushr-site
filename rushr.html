@@ -76,10 +76,10 @@
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   h1.morph-h1{background:none;-webkit-text-fill-color:currentColor}
   /* The threshold filter (gooey blend between words) makes every pixel fully opaque or fully
-     transparent, which killed the letters' anti-aliasing: jagged edges, even on a still word.
-     It now only applies while two words blend (.is-morphing), with a softer threshold. */
+     transparent, which kills the letters' anti-aliasing. It is only set while two words blend,
+     and the script fades its strength in and out (see the morph script), so the jagged edges
+     never switch on or off abruptly and a still word stays smooth. */
   .morph{display:grid;justify-items:center;min-height:1.2em}
-  .morph.is-morphing{filter:url(#morph-threshold) blur(.4px)}
   .morph span{grid-area:1/1;white-space:nowrap;
     background:linear-gradient(135deg,#fff 0%,var(--accent2) 50%,var(--accent) 100%);
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
@@ -641,10 +641,24 @@
     var cur = 0, t = 0, morphing = false, last = performance.now();
     var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
+    // Strength of the gooey threshold over a transition: 0 at both ends (identity matrix, the
+    // filter changes nothing), full in the middle, eased in and out over EDGE of the transition.
     var box = document.getElementById('morph');
+    var matrix = document.querySelector('#morph-threshold feColorMatrix');
+    var EDGE = 0.25, SLOPE = 22, OFFSET = -9;
+    function gooey(f){
+      var s = f < EDGE ? f / EDGE : (f > 1 - EDGE ? (1 - f) / EDGE : 1);
+      s = Math.max(0, Math.min(1, s));
+      s = s * s * (3 - 2 * s);   // smoothstep
+      if(!box || !matrix) return;
+      if(s <= 0){ box.style.filter = 'none'; return; }
+      matrix.setAttribute('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 '
+        + (1 + (SLOPE - 1) * s).toFixed(2) + ' ' + (OFFSET * s).toFixed(2));
+      box.style.filter = 'url(#morph-threshold) blur(' + (0.4 * s).toFixed(2) + 'px)';
+    }
     function render(){
       var w = words();
-      if(box) box.classList.toggle('is-morphing', morphing);
+      gooey(morphing ? Math.min(t / MORPH, 1) : 0);
       if(!morphing){
         show(a, at(w, cur), 1);
         show(b, at(w, cur + 1), 0);
