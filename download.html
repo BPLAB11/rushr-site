@@ -78,9 +78,6 @@
   .steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:rgba(255,106,0,.14);border:1px solid rgba(255,106,0,.45);color:var(--accent2);font-weight:800;font-size:13px;display:grid;place-items:center}
   .steps b{color:#fff}
   .sep{height:1px;background:var(--line);margin:24px 0}
-  .key-box{display:flex;gap:10px;align-items:center;background:#0E0E11;border:1px solid rgba(255,106,0,.5);border-radius:10px;padding:10px 12px;margin-top:10px}
-  .key-box code{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:700;letter-spacing:.5px;color:var(--accent2);word-break:break-all}
-  .key-box .btn{padding:7px 12px;font-size:12.5px}
   .who{color:var(--muted2);font-size:12.5px;margin-top:18px}
 
   .soon{display:flex;gap:16px;align-items:center}
@@ -184,10 +181,7 @@
     <ol class="steps">
       <li><div><b data-fr="Télécharge" data-en="Download">Télécharge</b> <span data-fr="le fichier avec le bouton ci-dessus." data-en="the file with the button above.">le fichier avec le bouton ci-dessus.</span></div></li>
       <li><div><b data-fr="Installe" data-en="Install">Installe</b> <span data-fr="Rushr : ouvre le fichier téléchargé et suis l'installation." data-en="Rushr: open the downloaded file and follow the installer.">Rushr : ouvre le fichier téléchargé et suis l'installation.</span></div></li>
-      <li><div><b data-fr="Active" data-en="Activate">Active</b> <span data-fr="l'app : saisis ton e-mail et colle ta clé de licence." data-en="the app: enter your email and paste your license key.">l'app : saisis ton e-mail et colle ta clé de licence.</span>
-        <div class="key-box"><code id="keyText">••••</code>
-          <button class="btn btn-ghost" id="eyeBtn" onclick="toggleKey()" data-fr="Afficher" data-en="Show">Afficher</button>
-          <button class="btn btn-ghost" id="copyBtn" onclick="copyKey()" data-fr="Copier" data-en="Copy">Copier</button></div></div></li>
+      <li><div><b data-fr="Connecte-toi" data-en="Sign in">Connecte-toi</b> <span data-fr="dans Rushr avec ce compte Backpack Lab : e-mail et mot de passe, Google ou Microsoft. Ta licence s'active toute seule." data-en="to Rushr with this Backpack Lab account: email and password, Google or Microsoft. Your license activates by itself.">dans Rushr avec ce compte Backpack Lab : e-mail et mot de passe, Google ou Microsoft. Ta licence s'active toute seule.</span></div></li>
     </ol>
     <p class="who"><span id="whoLine"></span> <button class="link" onclick="signOut()" data-fr="Se déconnecter" data-en="Sign out">Se déconnecter</button></p>
   </div>
@@ -243,7 +237,7 @@
 
   // Le lien de soutien (« offrir un café ») se règle dans assets/support-coin.js : vide = le bouton reste caché.
 
-  var S={email:'',license:null,versions:[],platform:'windows',keyShown:false,url:''};
+  var S={email:'',license:null,versions:[],platform:'windows',url:''};
   function $(id){return document.getElementById(id);}
   function FR(){return (document.documentElement.lang||'fr')==='fr';}
   function safeUrl(u){return /^https:\/\/[^\s"'<>]+$/.test(String(u||''))?u:'';}
@@ -347,22 +341,6 @@
     $('dlBtn').href=url||'#';
     $('verLine').innerHTML=r?((FR()?'Version ':'Version ')+'<b>'+String(r.latest_version).replace(/[<>&]/g,'')+'</b> · beta'):'';
     $('whoLine').textContent=(FR()?'Connecté en tant que ':'Signed in as ')+S.email+'.';
-    renderKey();
-  }
-  function renderKey(){
-    var k=(S.license&&S.license.license_key)||'';
-    var p=String(k).split('-');
-    var masked=p.length>=3?p.map(function(s,i){return (i===0||i===p.length-1)?s:'••••';}).join('-'):(k.length>8?k.slice(0,4)+'••••'+k.slice(-4):k);
-    $('keyText').textContent=S.keyShown?k:masked;
-    $('eyeBtn').textContent=S.keyShown?(FR()?'Masquer':'Hide'):(FR()?'Afficher':'Show');
-  }
-  function toggleKey(){ S.keyShown=!S.keyShown; renderKey(); }
-  function copyKey(){
-    var k=(S.license&&S.license.license_key)||''; var btn=$('copyBtn');
-    navigator.clipboard.writeText(k).then(function(){
-      btn.textContent=FR()?'✓ Copié':'✓ Copied';
-      setTimeout(function(){ btn.textContent=FR()?'Copier':'Copy'; },1800);
-    });
   }
 
   /* ---------- download click: start the file, then celebrate ---------- */
