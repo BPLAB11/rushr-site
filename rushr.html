@@ -165,6 +165,11 @@
   .testimonial:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(255,106,0,.12);border-color:rgba(255,106,0,.35)}
   .testimonial.tilt-3d{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(20px);overflow:visible}
   .testimonial.tilt-3d:hover{box-shadow:0 30px 60px rgba(255,106,0,.2)}
+  /* Tilt cards: render flat. With preserve-3d, the card's background and its text sat on the
+     same plane while tilting and fought over it (pieces of text/border flickering out). The
+     hovered card is also raised above its neighbors so its glow and tilted corners aren't cut. */
+  .tilt-3d{position:relative;transform-style:flat;backface-visibility:hidden}
+  .tilt-3d:hover{z-index:2}
   .testimonial-quote{font-size:15px;line-height:1.6;color:#D6D6D8;flex:1;margin-bottom:18px;font-style:italic}
   .testimonial-author{display:flex;align-items:center;gap:12px}
   .testimonial-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;color:#150A03;font-size:16px}
