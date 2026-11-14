@@ -33,6 +33,7 @@
   .btn-primary{background:var(--accent);color:var(--on-accent)}.btn-primary:hover{background:var(--accent2)}
   .btn-ghost{background:transparent;border-color:var(--line2);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
   .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .btn-primary[disabled],.btn-primary[disabled]:hover{background:var(--surface2);color:var(--muted);opacity:1}
   .logout-btn{background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
   .logout-btn:hover{border-color:var(--danger);color:var(--danger)}
 
@@ -352,9 +353,9 @@
       <div class="card">
         <h3>Boutons de téléchargement du site</h3>
         <p class="empty-mini" style="margin:0 0 12px">Lien des boutons « Télécharger » du site (page de téléchargement et espace compte). Indépendant des mises à jour de l'app. Vide : le site utilise l'URL de mise à jour de la dernière version.</p>
-        <div class="field"><label>Windows</label><input id="sdWin" class="in" placeholder="https://…"></div>
-        <div class="field"><label>macOS</label><input id="sdMac" class="in" placeholder="https://…"></div>
-        <button class="btn btn-primary" style="margin-top:6px" onclick="saveSiteDownloads()">Enregistrer</button>
+        <div class="field"><label>Windows</label><input id="sdWin" class="in" placeholder="https://…" oninput="syncSiteDownloadsButton()"></div>
+        <div class="field"><label>macOS</label><input id="sdMac" class="in" placeholder="https://…" oninput="syncSiteDownloadsButton()"></div>
+        <button id="sdSave" class="btn btn-primary" style="margin-top:6px" onclick="saveSiteDownloads()" disabled>Enregistrer</button>
       </div>
 
       <div class="card">
@@ -805,20 +806,30 @@
     loadSiteDownloads();
   }
   // Site download buttons (table site_downloads), separate from the app's update URL.
+  // Last saved values: the "Enregistrer" button is greyed out until a field differs from them.
+  var SD_SAVED={windows:'',mac:''};
+  function syncSiteDownloadsButton(){
+    var changed=document.getElementById('sdWin').value.trim()!==SD_SAVED.windows
+             || document.getElementById('sdMac').value.trim()!==SD_SAVED.mac;
+    document.getElementById('sdSave').disabled=!changed;
+  }
   async function loadSiteDownloads(){
     var r=await SB.from('site_downloads').select('platform,url');
     if(r.error){ toast('Erreur : '+r.error.message,'err'); return; }
     var byP={}; (r.data||[]).forEach(function(x){ byP[x.platform]=x.url||''; });
-    document.getElementById('sdWin').value=byP.windows||'';
-    document.getElementById('sdMac').value=byP.mac||'';
+    SD_SAVED={windows:byP.windows||'',mac:byP.mac||''};
+    document.getElementById('sdWin').value=SD_SAVED.windows;
+    document.getElementById('sdMac').value=SD_SAVED.mac;
+    syncSiteDownloadsButton();
   }
   async function saveSiteDownloads(){
+    var btn=document.getElementById('sdSave'); btn.disabled=true;
     try{
       await rpc('admin_set_site_download',{p_platform:'windows',p_url:document.getElementById('sdWin').value.trim()||null});
       await rpc('admin_set_site_download',{p_platform:'mac',p_url:document.getElementById('sdMac').value.trim()||null});
       toast('Liens de téléchargement enregistrés ✓','ok');
-      loadSiteDownloads();
-    }catch(e){ toast('Erreur : '+e.message,'err'); }
+      await loadSiteDownloads();
+    }catch(e){ toast('Erreur : '+e.message,'err'); syncSiteDownloadsButton(); }
   }
   function platformLabel(p){ return p==='mac'?'macOS':(p==='windows'?'Windows':esc(p)); }
   function renderVersionsTable(){
