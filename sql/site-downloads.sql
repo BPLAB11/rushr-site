@@ -17,6 +17,8 @@ create policy "site_downloads readable by all" on public.site_downloads
   for select using (true);
 
 grant select on public.site_downloads to anon, authenticated;
+-- Read-only from the API: writes only go through admin_set_site_download.
+revoke insert, update, delete, truncate on public.site_downloads from anon, authenticated;
 
 create or replace function public.admin_set_site_download(p_platform text, p_url text)
 returns public.site_downloads
