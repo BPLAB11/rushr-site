@@ -1,9 +1,11 @@
 # Fichiers du dépôt qui ne sont pas des pages du site : non publiés sur Cloudflare.
+# Les dossiers sont ancrés à la racine (« / » devant) : sans ça, « islands » ou « mugs »
+# excluaient aussi assets/islands (l'animation du hero) et assets/mugs (bannière boutique).
 .git
 .vs
 .claude
 node_modules
-islands
+/islands
 package.json
 package-lock.json
 vite.config.js
@@ -12,12 +14,12 @@ jsconfig.json
 wrangler.jsonc
 .assetsignore
 vercel.json
-sql
-supabase
-emails
-backend
-mugs
-promo
+/sql
+/supabase
+/emails
+/backend
+/mugs
+/promo
 *.md
 *.bat
 serve-local.py
