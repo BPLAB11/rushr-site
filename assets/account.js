@@ -184,6 +184,7 @@ var ICONS={
  plus:'<path d="M12 5v14M5 12h14"/>',
  x:'<path d="M18 6 6 18M6 6l12 12"/>',
  trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/>',
+ database:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
  chevron:'<path d="m9 18 6-6-6-6"/>',
  chevrons:'<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>',
  panel:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
@@ -776,7 +777,7 @@ function renderProfile(){
   var plat=b&&b.platform==='MAC'?'macOS':'Windows';
   var accCard='<div class="card"><div class="card-header"><div class="card-title">'+esc(t('ac_title'))+'</div></div><div class="card-content"><div class="info-rows"><div><span>'+esc(t('ac_created'))+'</span><span>'+esc(fmtDate(a.user.created_at))+'</span></div>'+(b?'<div><span>'+esc(t('ac_beta'))+'</span><span>'+esc(fmtDate(b.created_at))+' · '+plat+'</span></div>':'')+'</div></div></div>';
   var mailto='mailto:contact@thebackpacklab.com?subject='+encodeURIComponent(t('dp_subject'));
-  var dpCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dp_title'))+'</div><div class="card-description">'+esc(t('dp_d'))+'</div></div>'+icon('shield')+'</div><div class="card-content row" style="flex-wrap:wrap"><a class="btn btn-outline btn-sm" href="'+mailto+'">'+icon('mail')+'<span>'+esc(t('dp_rights'))+'</span></a><a class="btn btn-ghost btn-sm" href="privacy">'+esc(t('dp_policy'))+'</a></div></div>';
+  var dpCard='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dp_title'))+'</div><div class="card-description">'+esc(t('dp_d'))+'</div></div>'+icon('database')+'</div><div class="card-content row" style="flex-wrap:wrap"><a class="btn btn-outline btn-sm" href="'+mailto+'">'+icon('mail')+'<span>'+esc(t('dp_rights'))+'</span></a><a class="btn btn-ghost btn-sm" href="privacy">'+esc(t('dp_policy'))+'</a></div></div>';
   var delCard=(S.sec&&S.sec.supported&&S.sec.can_delete)
     ?'<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('del_card_t'))+'</div><div class="card-description">'+esc(t('del_card_d'))+'</div></div>'+icon('alert')+'</div><div class="card-content del-zone"><button type="button" class="btn btn-destructive btn-sm" data-action="delete-account">'+esc(t('del_btn'))+'</button></div></div>'
     :'';
