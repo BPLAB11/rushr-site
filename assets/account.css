@@ -283,6 +283,9 @@ svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .ticket summary svg.chev{transition:transform .2s var(--ease)}
 .ticket[open] summary svg.chev{transform:rotate(90deg)}
 .ticket .t-body{padding:0 20px 16px 20px;white-space:pre-wrap;word-break:break-word;color:#d4d4d8;font-size:13.5px}
+.ticket .t-actions{display:flex;justify-content:flex-end;padding:0 14px 12px}
+.ticket .t-del{color:var(--muted-foreground)}
+.ticket .t-del:hover{color:#fca5a5;background:var(--destructive-soft)}
 
 .setting{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .setting p{color:var(--muted-foreground);font-size:13px;margin-top:3px;max-width:52ch}

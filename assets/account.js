@@ -81,6 +81,7 @@ pf_lang:'Langue',pf_dirty:'Modifications non enregistrées',pf_clean:'Tout est �
  dp_title:'Données personnelles',dp_d:"Tu peux demander l'accès à tes données, leur rectification ou leur suppression à tout moment.",dp_rights:'Exercer mes droits',dp_policy:'Politique de confidentialité',dp_subject:'Exercice de mes droits (RGPD)',
  sp_form_t:'Nouveau message',sp_form_d:'Réponse par email, généralement sous 48 h.',sp_subject:'Sujet',sp_subject_ph:'Sujet (optionnel)',sp_message:'Message',sp_message_ph:'Décris ton problème ou ta question…',sp_send:'Envoyer',sp_ok:'Message envoyé',sp_ok_d:'On te répond par email.',sp_err:"Impossible d'envoyer le message, réessaie.",sp_err_empty:'Écris ton message.',sp_chars:'{n} / 5000',
  sp_hist_t:'Historique',sp_hist_d:'Tes derniers messages.',sp_hist_empty:'Aucun message envoyé pour le moment.',sp_no_subject:'(sans sujet)',sp_open:'Ouvert',sp_answered:'Répondu',sp_closed:'Clos',
+ sp_del:'Supprimer',sp_del_title:'Supprimer ce ticket ?',sp_del_open:"Notre équipe n'a pas encore traité ce ticket. Si tu le supprimes, il disparaît de ton historique et tu ne pourras plus suivre son avancement ici.",sp_del_answered:"Ce ticket est en cours de traitement par notre équipe. Si tu le supprimes, il disparaît de ton historique et tu ne pourras plus suivre son avancement ici. Les réponses déjà envoyées restent dans ta boîte e-mail.",sp_del_confirm:'Supprimer le ticket',sp_del_ok:'Ticket supprimé',sp_del_err:'Impossible de supprimer ce ticket. Réessaie.',
  sp_nolic_t:'Support réservé aux détenteurs d\'une licence',sp_nolic_d:'Le support intégré est réservé aux comptes qui ont une licence. Pour toute question, écris-nous à contact@thebackpacklab.com.',sp_mail:"Écrire à l'équipe",
  cmd_ph:'Rechercher une page ou une action…',cmd_nav:'Navigation',cmd_actions:'Actions',cmd_empty:'Aucun résultat.',cmd_hint_nav:'naviguer',cmd_hint_run:'valider',cmd_hint_esc:'fermer',cmd_lang:'Passer en anglais',cmd_copy:'Copier la clé {p}',
  just_now:"à l'instant",never:'—',err_generic:'Une erreur est survenue, réessaie.',menu:'Menu',
@@ -153,6 +154,7 @@ pf_lang:'Language',pf_dirty:'Unsaved changes',pf_clean:'Everything is up to date
  dp_title:'Personal data',dp_d:'You can ask for access to your data, its correction or its deletion at any time.',dp_rights:'Exercise my rights',dp_policy:'Privacy policy',dp_subject:'Exercising my rights (GDPR)',
  sp_form_t:'New message',sp_form_d:'We reply by email, usually within 48 h.',sp_subject:'Subject',sp_subject_ph:'Subject (optional)',sp_message:'Message',sp_message_ph:'Describe your problem or question…',sp_send:'Send',sp_ok:'Message sent',sp_ok_d:"We'll reply by email.",sp_err:'Could not send the message, please retry.',sp_err_empty:'Write your message.',sp_chars:'{n} / 5000',
  sp_hist_t:'History',sp_hist_d:'Your latest messages.',sp_hist_empty:'No messages sent yet.',sp_no_subject:'(no subject)',sp_open:'Open',sp_answered:'Answered',sp_closed:'Closed',
+ sp_del:'Delete',sp_del_title:'Delete this ticket?',sp_del_open:"Our team hasn't handled this ticket yet. If you delete it, it disappears from your history and you won't be able to follow its progress here.",sp_del_answered:"Our team is working on this ticket. If you delete it, it disappears from your history and you won't be able to follow its progress here. Replies already sent stay in your inbox.",sp_del_confirm:'Delete ticket',sp_del_ok:'Ticket deleted',sp_del_err:"Couldn't delete this ticket. Please try again.",
  sp_nolic_t:'Support is reserved for license holders',sp_nolic_d:'In-app support is reserved for accounts that have a license. For any question, write to us at contact@thebackpacklab.com.',sp_mail:'Email the team',
  cmd_ph:'Search for a page or an action…',cmd_nav:'Navigation',cmd_actions:'Actions',cmd_empty:'No results.',cmd_hint_nav:'navigate',cmd_hint_run:'select',cmd_hint_esc:'close',cmd_lang:'Switch to French',cmd_copy:'Copy {p} key',
  just_now:'just now',never:'—',err_generic:'Something went wrong, please try again.',menu:'Menu',
@@ -181,6 +183,7 @@ var ICONS={
  eyeoff:'<path d="M9.9 4.2A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-2.2 3.2M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="m2 2 20 20"/>',
  plus:'<path d="M12 5v14M5 12h14"/>',
  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/>',
  chevron:'<path d="m9 18 6-6-6-6"/>',
  chevrons:'<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>',
  panel:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
@@ -477,6 +480,36 @@ function addKeyDialog(){
   });
   return d;
 }
+/* Suppression d'un ticket par son auteur (politique RLS support_tickets_delete_own).
+   Ouvert ou Répondu : alerte avant, puisque l'équipe ne l'a pas encore clos.
+   Clos : suppression directe, sans alerte. */
+async function removeTicket(id){
+  var r=await SB.from('support_tickets').delete().eq('id',id).select('id');
+  if(r.error||!r.data||!r.data.length) throw (r.error||new Error('not deleted'));
+  S.tickets=(S.tickets||[]).filter(function(x){return x.id!==id;});
+  renderView(false);
+  toast('success',t('sp_del_ok'));
+}
+function deleteTicket(id,btn){
+  var tk=(S.tickets||[]).filter(function(x){return x.id===id;})[0]; if(!tk) return;
+  var st=String(tk.status||'OPEN').toUpperCase();
+  if(st==='CLOSED'){
+    if(btn) setBusy(btn,true);
+    removeTicket(id).catch(function(ex){ console.error('ticket delete failed:',ex); if(btn) setBusy(btn,false); toast('error',t('sp_del_err')); });
+    return;
+  }
+  openDialog({
+    title:t('sp_del_title'),desc:t(st==='ANSWERED'?'sp_del_answered':'sp_del_open'),focus:'.dialog-foot .btn-outline',
+    actions:[
+      {label:t('cancel'),cls:'btn-outline',value:false},
+      {label:t('sp_del_confirm'),cls:'btn-destructive',onClick:async function(api,b){
+        api.busy(true,b);
+        try{ await removeTicket(id); api.busy(false,b); api.close(true); }
+        catch(ex){ console.error('ticket delete failed:',ex); api.busy(false,b); api.close(false); toast('error',t('sp_del_err')); }
+      }}
+    ]
+  });
+}
 function freeDeviceDialog(id){
   openDialog({
     title:t('free_title'),desc:t('free_d'),focus:'.dialog-foot .btn-outline',
@@ -767,7 +800,9 @@ function renderSupport(){
   else hist=S.tickets.map(function(tk){
     var m={OPEN:['badge-warning','sp_open'],ANSWERED:['badge-success','sp_answered'],CLOSED:['badge-secondary','sp_closed']}[String(tk.status||'OPEN').toUpperCase()]||['badge-secondary','sp_open'];
     var subj=(tk.subject&&tk.subject!=='(sans sujet)')?tk.subject:t('sp_no_subject');
-    return '<details class="ticket"><summary>'+icon('chevron','chev')+'<div class="t-main"><div class="lr-title" style="font-weight:500">'+esc(subj)+'</div><div class="t-sub">'+esc(fmtDate(tk.created_at))+'</div></div><span class="badge '+m[0]+'">'+esc(t(m[1]))+'</span></summary><div class="t-body">'+esc(tk.message)+'</div></details>';
+    return '<details class="ticket"><summary>'+icon('chevron','chev')+'<div class="t-main"><div class="lr-title" style="font-weight:500">'+esc(subj)+'</div><div class="t-sub">'+esc(fmtDate(tk.created_at))+'</div></div><span class="badge '+m[0]+'">'+esc(t(m[1]))+'</span></summary><div class="t-body">'+esc(tk.message)+'</div>'
+      +(tk.id?'<div class="t-actions"><button type="button" class="btn btn-ghost btn-sm t-del" data-action="delete-ticket" data-id="'+esc(tk.id)+'">'+icon('trash')+'<span>'+esc(t('sp_del'))+'</span></button></div>':'')
+      +'</details>';
   }).join('');
   var histCard='<div class="card card-flush"><div class="card-header" style="padding-bottom:14px"><div><div class="card-title">'+esc(t('sp_hist_t'))+'</div><div class="card-description">'+esc(t('sp_hist_d'))+'</div></div></div><div style="border-top:1px solid var(--border)">'+hist+'</div></div>';
   return pageHead(t('nav_support'),t('page_support_d'))+'<div class="grid-eq">'+form+histCard+'</div>';
@@ -849,7 +884,7 @@ async function loadVersions(){
 }
 async function loadTickets(){
   try{
-    var r=await SB.from('support_tickets').select('subject,message,status,created_at').order('created_at',{ascending:false}).limit(20);
+    var r=await SB.from('support_tickets').select('id,subject,message,status,created_at').order('created_at',{ascending:false}).limit(20);
     S.tickets=(r.error||!r.data)?[]:r.data;
   }catch(e){S.tickets=[];}
   if(S.account&&S.route==='support') renderView(false);
@@ -1381,6 +1416,7 @@ document.addEventListener('click',function(e){
     case 'copy-key': copyKey(id,el.classList.contains('btn-secondary')?el:null); break;
     case 'toggle-key': S.revealed[id]=!S.revealed[id]; renderView(false); { var nb=$('[data-action="toggle-key"][data-id="'+id+'"]'); if(nb) nb.focus(); } break;
     case 'free-device': freeDeviceDialog(id); break;
+    case 'delete-ticket': deleteTicket(id,el); break;
     case 'consent-yes': setConsent(true); break;
     case 'consent-no': setConsent(false); break;
     case 'consent-later': try{sessionStorage.setItem('bpl_consent_later','1');}catch(x){} renderView(false); break;
