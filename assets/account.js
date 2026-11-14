@@ -790,7 +790,7 @@ function renderSupport(){
     return pageHead(t('nav_support'),t('page_support_d'))
       +'<div class="alert warning">'+icon('alert')+'<div><div class="alert-title">'+esc(t('sp_nolic_t'))+'</div><div class="alert-desc">'+esc(t('sp_nolic_d'))+'</div><div class="alert-actions"><a class="btn btn-outline btn-sm" href="mailto:contact@thebackpacklab.com">'+icon('mail')+'<span>'+esc(t('sp_mail'))+'</span></a></div></div></div>';
   }
-  var form='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('sp_form_t'))+'</div><div class="card-description">'+esc(t('sp_form_d'))+'</div></div>'+icon('send')+'</div><form id="ticketForm" novalidate><div class="card-content">'
+  var form='<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('sp_form_t'))+'</div><div class="card-description">'+esc(t('sp_form_d'))+'</div></div></div><form id="ticketForm" novalidate><div class="card-content">'
     +'<div class="field"><label class="label" for="tSubject">'+esc(t('sp_subject'))+'</label><input id="tSubject" name="subject" class="input" type="text" maxlength="150" placeholder="'+esc(t('sp_subject_ph'))+'"/></div>'
     +'<div class="field"><label class="label" for="tMessage">'+esc(t('sp_message'))+'</label><textarea id="tMessage" name="message" class="textarea" maxlength="5000" placeholder="'+esc(t('sp_message_ph'))+'"></textarea><div class="row-between"><div class="field-error" role="alert"></div><span class="hint" id="tCount">'+esc(t('sp_chars',{n:0}))+'</span></div></div>'
     +'</div><div class="card-footer"><span></span><button type="submit" class="btn btn-primary">'+icon('send')+'<span>'+esc(t('sp_send'))+'</span></button></div></form></div>';
