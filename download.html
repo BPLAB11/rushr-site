@@ -89,7 +89,12 @@
   @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
   .thanks-row{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
   .thanks-txt{flex:1;min-width:240px}
-  .thanks-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .thanks-btns{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+  /* Discord button: same pill as "Soutenir Rushr" (.coin-btn, assets/support-coin.css), with a
+     round Discord badge where the coin is, so the two read as one pair. */
+  .disc-btn{text-decoration:none}
+  .disc-btn:hover{border-color:#5865F2;box-shadow:0 8px 28px rgba(88,101,242,.25)}
+  .disc-badge{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#5865F2;color:#fff;box-shadow:inset 0 0 0 3px rgba(255,255,255,.2),0 3px 10px rgba(88,101,242,.38)}
   .cup{width:120px;height:120px;flex:none;margin:0 auto}
   .cup .steam{stroke:var(--accent2);stroke-width:3;stroke-linecap:round;fill:none;opacity:0;animation:steam 2.4s ease-in-out infinite}
   .cup .steam:nth-child(2){animation-delay:.5s}.cup .steam:nth-child(3){animation-delay:1s}
@@ -211,7 +216,10 @@
         <h2 data-fr="C'est parti, merci d'essayer Rushr !" data-en="You're on your way, thanks for trying Rushr!">C'est parti, merci d'essayer Rushr !</h2>
         <p class="lead" style="margin:0" data-fr="Le téléchargement a démarré. Tes retours façonnent directement l'outil : dis-nous ce qui marche, ce qui coince et ce qui manque." data-en="Your download has started. Your feedback directly shapes the tool: tell us what works, what breaks and what's missing.">Le téléchargement a démarré. Tes retours façonnent directement l'outil : dis-nous ce qui marche, ce qui coince et ce qui manque.</p>
         <div class="thanks-btns">
-          <a class="btn btn-ghost" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener noreferrer" data-fr="Donner mon avis sur Discord" data-en="Give feedback on Discord">Donner mon avis sur Discord</a>
+          <a class="coin-btn disc-btn" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener noreferrer" title="Discord">
+            <span class="disc-badge" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.45.87-.61 1.25a18.27 18.27 0 0 0-5.49 0 12.64 12.64 0 0 0-.62-1.25.08.08 0 0 0-.08-.04 19.74 19.74 0 0 0-4.89 1.52.07.07 0 0 0-.03.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.23-1.99a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.89.08.08 0 0 1-.01-.13c.13-.09.25-.19.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08.01c.12.1.24.2.37.29a.08.08 0 0 1-.01.13c-.6.35-1.22.65-1.87.89a.08.08 0 0 0-.04.11c.36.7.77 1.36 1.22 1.99a.08.08 0 0 0 .08.03 19.84 19.84 0 0 0 6-3.03.08.08 0 0 0 .03-.06c.5-5.18-.84-9.67-3.55-13.66a.06.06 0 0 0-.03-.03ZM8.02 15.33c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.09-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42Z"/></svg></span>
+            <span data-fr="Donner mon avis" data-en="Give feedback">Donner mon avis</span>
+          </a>
           <button type="button" class="coin-btn" data-support-btn data-support hidden>
         <span class="coin-wrap" aria-hidden="true"><span class="coin"><span class="coin-face coin-front"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M4 9h12v4.5A4.5 4.5 0 0 1 11.5 18h-3A4.5 4.5 0 0 1 4 13.5V9z"/><path d="M16 10h1.2a2.4 2.4 0 0 1 0 4.8H15.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3.2c-1 1 1 1.9 0 3.1M12 3.2c-1 1 1 1.9 0 3.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="coin-face coin-back"><svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor" aria-hidden="true"><path d="M12 20.6S3.4 15.6 2.9 9.6C2.6 6.6 4.7 4.5 7.3 4.5c1.8 0 3.5 1 4.7 2.7 1.2-1.7 2.9-2.7 4.7-2.7 2.6 0 4.7 2.1 4.4 5.1-.5 6-9.1 11-9.1 11z"/></svg></span></span></span>
         <span data-fr="Soutenir Rushr" data-en="Support Rushr">Soutenir Rushr</span>
