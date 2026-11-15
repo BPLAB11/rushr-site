@@ -141,6 +141,38 @@
   .step h4{font-size:15px;font-weight:700;margin-bottom:6px}
   .step p{color:var(--muted);font-size:13.5px}
 
+  /* HERO : capture animée au scroll (assets/rushr-story.js) */
+  .mock{position:relative}
+  .mock.gs{transition:none}
+  .mock-shine{position:absolute;inset:0;pointer-events:none;z-index:2;transform:translateX(-110%);background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.10) 47%,rgba(255,138,61,.16) 50%,rgba(255,255,255,.10) 53%,transparent 62%)}
+
+  /* LE FLUX : histoire au scroll. Sans JS : liste des étapes, scène masquée. */
+  .story{padding:88px 0}
+  .story.story-js{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:56px 0}
+  .story.story-js .story-in{width:100%}
+  .story-grid{display:grid;grid-template-columns:1fr;gap:44px;margin-top:40px;align-items:center}
+  .story-js .story-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)}
+  .story-steps{list-style:none;position:relative;padding-left:24px;display:flex;flex-direction:column;gap:22px}
+  .story-step{display:flex;gap:14px;transition:opacity .35s ease,transform .35s ease}
+  .story-js .story-step{opacity:.32}
+  .story-js .story-step.on{opacity:1;transform:translateX(4px)}
+  .story-step .n{flex:none;font-size:13px;font-weight:700;color:#150A03;background:var(--accent);width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .story-step h4{font-size:17px;font-weight:700;margin-bottom:4px}
+  .story-step p{color:var(--muted);font-size:14px}
+  .story-bar{display:none}
+  .story-js .story-bar{display:block;position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--line2);border-radius:2px;overflow:hidden}
+  .story-bar i{display:block;width:100%;height:100%;background:var(--accent);transform-origin:top;transform:scaleY(0)}
+  .story-stage{display:none}
+  .story-js .story-stage{display:block}
+  @media(max-width:860px){
+    .story{padding:64px 0 40px}
+    .story-js .story-grid{grid-template-columns:1fr;gap:22px;margin-top:24px}
+    .story-js .story-steps{order:2;padding-left:0;min-height:96px}
+    .story-js .story-step{display:none}
+    .story-js .story-step.on{display:flex;transform:none}
+    .story-js .story-bar{display:none}
+  }
+
   /* PRICING */
   .pricing{margin-top:46px}
   .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -319,6 +351,7 @@
       <div class="mock-inner">
         <img src="assets/rushr-app-shot.png" alt="Interface de Rushr : dossiers de prises importés, aperçu du clip et tags clavier"  style="display:block;width:100%;height:auto" />
       </div>
+      <div class="mock-shine"></div>
     </div>
   </div>
 </header>
@@ -364,15 +397,24 @@
   </div>
 </section>
 
-<section id="how" class="reveal" style="background:#0E0E11">
-  <div class="wrap">
-    <div class="eyebrow" data-fr="Le flux" data-en="The workflow">Le flux</div>
-    <div class="h2" data-fr="Du chaos au montage, en 4 étapes" data-en="From chaos to timeline, in 4 steps">Du chaos au montage, en 4 étapes</div>
-    <div class="steps">
-      <div class="step tilt-3d"><div class="n">1</div><h4 data-fr="Créez la structure" data-en="Create the structure">Créez la structure</h4><p data-fr="Choisissez un preset, ajustez l'arborescence, lancez la création du projet." data-en="Pick a preset, tweak the tree, create the project.">Choisissez un preset et créez le projet.</p></div>
-      <div class="step tilt-3d"><div class="n">2</div><h4 data-fr="Importez les rushes" data-en="Import the rushes">Importez les rushes</h4><p data-fr="Glissez vos dossiers de prises : vignettes et métadonnées générées automatiquement." data-en="Drop your source folders: thumbnails and metadata are generated automatically.">Glissez vos dossiers : vignettes auto.</p></div>
-      <div class="step tilt-3d"><div class="n">3</div><h4 data-fr="Triez & taguez" data-en="Sort & tag">Triez & taguez</h4><p data-fr="Prévisualisez, taguez au clavier, rejetez les mauvaises prises en un instant." data-en="Preview, tag from the keyboard, reject bad takes in an instant.">Prévisualisez et taguez au clavier.</p></div>
-      <div class="step tilt-3d"><div class="n">4</div><h4 data-fr="Préparez le montage" data-en="Prepare for editing">Préparez le montage</h4><p data-fr="« Prepare » range chaque prise dans le bon dossier, prêt pour votre logiciel de montage." data-en="“Prepare” files each take into the right folder, ready for your editing software.">« Prepare » range tout au bon endroit.</p></div>
+<!-- LE FLUX : histoire racontée au scroll (assets/rushr-story.js). Sans JS, les 4 étapes restent lisibles en liste. -->
+<section id="how" style="background:#0E0E11">
+  <div class="story" id="story">
+    <div class="wrap story-in">
+      <div class="story-head">
+        <div class="eyebrow" data-fr="Le flux" data-en="The workflow">Le flux</div>
+        <div class="h2" data-fr="Du chaos au montage, en 4 étapes" data-en="From chaos to timeline, in 4 steps">Du chaos au montage, en 4 étapes</div>
+      </div>
+      <div class="story-grid">
+        <ol class="story-steps">
+          <li class="story-step"><span class="n">1</span><div><h4 data-fr="Créez la structure" data-en="Create the structure">Créez la structure</h4><p data-fr="Choisissez un preset, ajustez l'arborescence, lancez la création du projet." data-en="Pick a preset, tweak the tree, create the project.">Choisissez un preset, ajustez l'arborescence, lancez la création du projet.</p></div></li>
+          <li class="story-step"><span class="n">2</span><div><h4 data-fr="Importez les rushes" data-en="Import the rushes">Importez les rushes</h4><p data-fr="Glissez vos dossiers de prises : vignettes et métadonnées générées automatiquement." data-en="Drop your source folders: thumbnails and metadata are generated automatically.">Glissez vos dossiers de prises : vignettes et métadonnées générées automatiquement.</p></div></li>
+          <li class="story-step"><span class="n">3</span><div><h4 data-fr="Triez &amp; taguez" data-en="Sort &amp; tag">Triez &amp; taguez</h4><p data-fr="Prévisualisez, taguez au clavier, rejetez les mauvaises prises en un instant." data-en="Preview, tag from the keyboard, reject bad takes in an instant.">Prévisualisez, taguez au clavier, rejetez les mauvaises prises en un instant.</p></div></li>
+          <li class="story-step"><span class="n">4</span><div><h4 data-fr="Préparez le montage" data-en="Prepare for editing">Préparez le montage</h4><p data-fr="« Prepare » range chaque prise dans le bon dossier, prêt pour votre logiciel de montage." data-en="“Prepare” files each take into the right folder, ready for your editing software.">« Prepare » range chaque prise dans le bon dossier, prêt pour votre logiciel de montage.</p></div></li>
+          <li class="story-bar" aria-hidden="true"><i></i></li>
+        </ol>
+        <div class="story-stage" id="storyStage" aria-hidden="true"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -483,6 +525,10 @@
   </div>
 </footer>
 
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<link rel="stylesheet" href="assets/rushr-story.css" />
+<script src="assets/rushr-story.js" defer></script>
 <script src="assets/vendor/supabase.js"></script>
 <script src="assets/support-coin.js"></script>
 <script>
