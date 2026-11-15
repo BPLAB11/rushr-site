@@ -24,10 +24,12 @@
       { rotateX: 24, scale: 0.9, y: 30, transformPerspective: 1400, transformOrigin: '50% 0%' },
       { rotateX: 0, scale: 1, y: 0, ease: 'none',
         scrollTrigger: { start: 0, end: '+=520', scrub: 0.6 } });
+    // Le reflet n'est pas lié à la position du scroll (il s'arrêtait au milieu si on s'arrêtait de scroller) :
+    // il traverse toute la capture d'un coup dès qu'on commence à scroller, et se réarme en revenant en haut.
     var shine = mock.querySelector('.mock-shine');
     if (shine) {
-      gsap.fromTo(shine, { xPercent: -110 }, { xPercent: 110, ease: 'none',
-        scrollTrigger: { start: 0, end: '+=520', scrub: 0.6 } });
+      var sweep = gsap.fromTo(shine, { xPercent: -110 }, { xPercent: 110, duration: 1.3, ease: 'power2.inOut', paused: true });
+      ScrollTrigger.create({ start: 40, onEnter: function () { sweep.restart(); }, onLeaveBack: function () { sweep.pause(0); } });
     }
   }
 
