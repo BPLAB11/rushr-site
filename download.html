@@ -303,6 +303,12 @@
         :'Confirm your sign-in with the code sent by email: <a href="account?next=download">finish the verification on My account</a>, then come back here.';
       return;
     }
+    // Inscrit à la beta mais pas encore de licence : on la récupère tout seul (une fois), sans le bouton.
+    // En cas d'échec (adresse pas encore confirmée…), le panneau « Réclamer ma licence » explique pourquoi.
+    if(!S.license && a.beta_signup && !S.autoClaimed){
+      S.autoClaimed=true;
+      try{ var c=await SB.rpc('claim_my_beta_key'); if(!c.error) return loadAccount(); }catch(e){}
+    }
     if(!S.license){ show('s-nolic'); return; }
     try{
       // Newest first, so row() picks the latest version of each platform.

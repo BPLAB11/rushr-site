@@ -517,7 +517,7 @@
         <button type="submit" class="btn btn-primary" id="bfSubmit" style="justify-content:center;padding:13px" data-fr="Rejoindre la beta" data-en="Join the beta">Rejoindre la beta</button>
         <p class="beta-msg" id="bfMsg"></p>
       </form>
-      <p class="beta-note" data-fr="Vous recevez un email de bienvenue avec l'invitation à notre Discord. Vos données (nom, email, système) servent à vous donner accès à la beta : voir la &lt;a href=&quot;privacy&quot;&gt;politique de confidentialité&lt;/a&gt;." data-en="You'll get a welcome email with the invitation to our Discord. Your data (name, email, system) is used to give you access to the beta: see our &lt;a href=&quot;privacy&quot;&gt;privacy policy&lt;/a&gt;.">Vous recevez un email de bienvenue avec l'invitation à notre Discord. Vos données (nom, email, système) servent à vous donner accès à la beta : voir la <a href="privacy">politique de confidentialité</a>.</p>
+      <p class="beta-note" data-fr="Vous recevez aussitôt un e-mail avec votre licence et le lien pour créer votre compte et télécharger Rushr. Vos données (nom, email, système) servent à vous donner accès à la beta : voir la &lt;a href=&quot;privacy&quot;&gt;politique de confidentialité&lt;/a&gt;." data-en="You'll get an email right away with your license and the link to create your account and download Rushr. Your data (name, email, system) is used to give you access to the beta: see our &lt;a href=&quot;privacy&quot;&gt;privacy policy&lt;/a&gt;.">Vous recevez aussitôt un e-mail avec votre licence et le lien pour créer votre compte et télécharger Rushr. Vos données (nom, email, système) servent à vous donner accès à la beta : voir la <a href="privacy">politique de confidentialité</a>.</p>
     </div>
   </div>
 </section>
@@ -664,8 +664,8 @@
     var platform=(document.querySelector('input[name="bfPlatform"]:checked')||{}).value;
     var lang=document.documentElement.lang==='en'?'en':'fr';
     var L={
-      fr:{sending:'Inscription…',ok:'Merci ! Tu es inscrit à la beta ✓',err:'Une erreur est survenue, réessaie.'},
-      en:{sending:'Signing up…',ok:'Thanks! You\'re on the beta list ✓',err:'Something went wrong, please try again.'}
+      fr:{sending:'Inscription…',ok:'Merci ! Tu es inscrit ✓ Regarde ta boîte mail : ta licence et le lien de téléchargement t\'attendent.',err:'Une erreur est survenue, réessaie.'},
+      en:{sending:'Signing up…',ok:'Thanks! You\'re in ✓ Check your inbox: your license and download link are waiting.',err:'Something went wrong, please try again.'}
     }[lang];
     btn.disabled=true; msg.className='beta-msg'; msg.textContent=L.sending;
     try{
