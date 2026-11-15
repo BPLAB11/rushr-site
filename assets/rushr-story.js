@@ -28,7 +28,9 @@
     // il traverse toute la capture d'un coup dès qu'on commence à scroller, et se réarme en revenant en haut.
     var shine = mock.querySelector('.mock-shine');
     if (shine) {
-      var sweep = gsap.fromTo(shine, { xPercent: -110 }, { xPercent: 110, duration: 1.3, ease: 'power2.inOut', paused: true });
+      // x: 0 obligatoire : GSAP lit le translateX(-110%) du CSS comme un décalage en pixels et l'ajoutait
+      // à xPercent, si bien que le reflet finissait au milieu de la capture.
+      var sweep = gsap.fromTo(shine, { x: 0, xPercent: -110 }, { x: 0, xPercent: 110, duration: 1.3, ease: 'power2.inOut', paused: true });
       ScrollTrigger.create({ start: 40, onEnter: function () { sweep.restart(); }, onLeaveBack: function () { sweep.pause(0); } });
     }
   }
