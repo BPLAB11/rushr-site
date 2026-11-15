@@ -3,7 +3,21 @@
    Couleurs, rayons et tailles reprennent App.axaml : AppBackground #000, PanelCardFill #0E0E10,
    PanelStroke #242428, OrangeAccentGradient, cartes de rush 155 x 166, etc. */
 
-@media(min-width:861px){.story-js .story-grid{grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr)}}
+/* Ordinateur : la scène prend toute la largeur, les 4 étapes passent dessous en frise horizontale.
+   La scène est limitée par la hauteur d'écran pour que titre + scène + frise tiennent dans la section épinglée. */
+@media(min-width:861px){
+  .story.story-js{padding:32px 0}
+  .story-js .story-grid{grid-template-columns:1fr;gap:18px;margin-top:22px}
+  .story-js .story-stage{width:min(100%, calc((100vh - 280px) * 1440 / 860));margin:0 auto}
+  .story-js .story-steps{order:2;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;padding:16px 0 0;
+    width:min(100%, calc((100vh - 280px) * 1440 / 860));margin:0 auto}
+  .story-js .story-step{gap:10px}
+  .story-js .story-step.on{transform:none}
+  .story-js .story-step h4{font-size:15px;margin-bottom:2px}
+  .story-js .story-step p{font-size:13px;line-height:1.45}
+  .story-js .story-bar{left:0;right:0;top:0;bottom:auto;width:auto;height:3px}
+  .story-js .story-bar i{transform-origin:left;transform:scaleX(0)}
+}
 
 .story-js .story-stage{position:relative;aspect-ratio:1440/860;border-radius:16px;overflow:hidden;
   border:1px solid rgba(255,255,255,.08);background:#000;

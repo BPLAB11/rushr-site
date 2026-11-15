@@ -358,7 +358,8 @@
     // étape active et barre de progression
     var idx = Math.min(3, Math.floor(t));
     steps.forEach(function (s, i) { s.classList.toggle('on', i === idx); });
-    if (bar) bar.style.transform = 'scaleY(' + (t / 4) + ')';
+    // frise horizontale sur ordinateur (barre au-dessus des étapes)
+    if (bar) bar.style.transform = 'scaleX(' + (t / 4) + ')';
   }
 
   var steps = Array.prototype.slice.call(story.querySelectorAll('.story-step'));
