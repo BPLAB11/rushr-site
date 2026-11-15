@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dérushage vidéo : comment trier ses rushs rapidement (méthode complète) — BACKPACK LAB</title>
+<meta name="description" content="Dérushage vidéo : la méthode pas à pas pour trier ses rushs vite et bien, du déchargement des cartes à l'import dans DaVinci Resolve ou Premiere Pro." />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/rushr-favicon-32.png" />
+<link rel="icon" type="image/x-icon" href="assets/rushr-favicon.ico" />
+<link rel="canonical" href="https://thebackpacklab.com/derushage" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Dérushage vidéo : comment trier ses rushs rapidement" />
+<meta property="og:description" content="La méthode pas à pas pour trier ses rushs vite et bien, du déchargement des cartes à l'import dans votre logiciel de montage." />
+<meta property="og:url" content="https://thebackpacklab.com/derushage" />
+<meta property="og:image" content="https://thebackpacklab.com/assets/og-rushr.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Dérushage vidéo : comment trier ses rushs rapidement (méthode complète)","description":"La méthode pas à pas pour trier ses rushs vidéo vite et bien, du déchargement des cartes à l'import dans DaVinci Resolve ou Premiere Pro.","inLanguage":"fr","datePublished":"2026-11-15","dateModified":"2026-11-15","image":"https://thebackpacklab.com/assets/og-rushr.png","mainEntityOfPage":"https://thebackpacklab.com/derushage","author":{"@type":"Organization","name":"BACKPACK LAB","url":"https://thebackpacklab.com/"},"publisher":{"@type":"Organization","name":"BACKPACK LAB","url":"https://thebackpacklab.com/","logo":{"@type":"ImageObject","url":"https://thebackpacklab.com/assets/bp-favicon-512.png"}}}</script>
+<link href="assets/fonts/inter.css" rel="stylesheet" />
+<style>
+  :root{--bg:#0B0B0B;--surface:#141417;--surface2:#1A1A1E;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);
+    --accent:#35DC8E;--accent2:#5FE8A8;--rushr:#FF6A00;--text:#fff;--muted:#9A9A9E;--muted2:#6E6E73;--on-accent:#04150C}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+  a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+  a:hover{color:var(--accent)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px;width:100%}
+  nav.top{position:sticky;top:0;z-index:40;background:rgba(11,11,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.5px;font-size:20px;color:var(--text);text-decoration:none}
+  .brand img{width:42px;height:42px;border-radius:6px;display:block}
+  .nav-cta{font-size:13px;font-weight:700;text-decoration:none;color:var(--on-accent);background:var(--accent);border-radius:8px;padding:8px 14px;white-space:nowrap}
+  .nav-cta:hover{color:var(--on-accent);background:var(--accent2)}
+  @media(max-width:600px){.brand{font-size:17px;gap:10px}.brand img{width:36px;height:36px}}
+  @media(max-width:380px){.brand{font-size:15px;gap:8px}.brand img{width:32px;height:32px}.nav-cta{padding:7px 10px;font-size:12px}}
+  main{flex:1;padding:34px 0 56px}
+  .crumbs{color:var(--muted2);font-size:13px;margin-bottom:18px}
+  .crumbs a{color:var(--muted);text-decoration:none}
+  .crumbs a:hover{color:var(--accent2)}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--rushr);margin-bottom:10px}
+  h1{font-size:clamp(28px,5.2vw,42px);font-weight:800;letter-spacing:-.9px;line-height:1.15}
+  .meta{color:var(--muted2);font-size:13px;margin:10px 0 22px}
+  .lead{font-size:17px;color:#E6E6E8;margin:0 0 18px}
+  h2{font-size:clamp(20px,3.4vw,24px);font-weight:800;margin:44px 0 12px;letter-spacing:-.3px;line-height:1.3}
+  h3{font-size:16.5px;font-weight:700;margin:24px 0 8px;color:#fff}
+  p{color:#D6D6DA;font-size:15.5px;margin:0 0 14px}
+  ul,ol{margin:0 0 16px 22px;color:#D6D6DA;font-size:15.5px}
+  li{margin:0 0 7px}
+  b,strong{color:#fff}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#E6E6E8}
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:0 0 10px}
+  .toc b{display:block;font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+  .toc ol{margin:0 0 0 20px;font-size:14.5px}
+  .toc li{margin:0 0 4px}
+  .toc a{color:#D6D6DA;text-decoration:none}
+  .toc a:hover{color:var(--accent2)}
+  .tree{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:0 0 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;line-height:1.75;color:#E6E6E8;white-space:pre;overflow-x:auto}
+  .tip{border-left:3px solid var(--accent);background:var(--surface);border-radius:0 12px 12px 0;padding:14px 18px;margin:0 0 16px}
+  .tip p{margin:0;font-size:14.5px}
+  .tw{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+  table{width:100%;border-collapse:collapse;min-width:520px}
+  th,td{text-align:left;padding:11px 16px;font-size:14px;border-bottom:1px solid var(--line);vertical-align:top;color:#D6D6DA}
+  th{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--accent);font-weight:700}
+  tr:last-child td{border-bottom:0}
+  .cta{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,106,0,.14),rgba(255,106,0,.03));border:1px solid rgba(255,106,0,.35);border-radius:16px;padding:24px;margin:30px 0}
+  .cta h2{margin:0 0 8px;font-size:22px}
+  .cta p{margin:0 0 16px}
+  .cta img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line2);margin:0 0 18px}
+  .btn{display:inline-block;font-weight:700;font-size:14.5px;text-decoration:none;border-radius:10px;padding:12px 18px}
+  .btn-r{background:var(--rushr);color:#fff}
+  .btn-r:hover{color:#fff;filter:brightness(1.08)}
+  .faq dt{font-weight:700;color:#fff;font-size:15.5px;margin:18px 0 6px}
+  .faq dd{color:#D6D6DA;font-size:15.5px;margin:0 0 6px}
+  footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted2);font-size:12.5px;text-align:center}
+  footer a{color:var(--muted);text-decoration:none;margin:0 9px}
+  footer a:hover{color:var(--text)}
+</style>
+<script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
+<script src="assets/consent.js" defer></script>
+</head>
+<body>
+<nav class="top"><div class="wrap nav-in">
+  <a class="brand" href="/"><img src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
+  <a class="nav-cta" href="rushr">Découvrir Rushr</a>
+</div></nav>
+
+<main><article class="wrap">
+<div class="crumbs"><a href="/">Accueil</a> › <a href="rushr">Rushr</a> › Guide du dérushage</div>
+<span class="eyebrow">Guide</span>
+<h1>Dérushage vidéo : comment trier ses rushs rapidement</h1>
+<p class="meta">Par BACKPACK LAB · Publié le 15 novembre 2026 · 8 min de lecture</p>
+
+<p class="lead">Une journée de tournage, c'est souvent des centaines de fichiers aux noms illisibles, répartis sur plusieurs cartes. Avant de monter, il faut les trier : c'est le <strong>dérushage</strong>. Bien fait, il vous fait gagner des heures au montage. Mal fait (ou pas fait), il vous les fait perdre. Voici une méthode simple, en six étapes, pour trier ses rushs vidéo vite et bien.</p>
+
+<nav class="toc" aria-label="Sommaire">
+  <b>Sommaire</b>
+  <ol>
+    <li><a href="#definition">C'est quoi un rush et le dérushage ?</a></li>
+    <li><a href="#pourquoi">Pourquoi dérusher avant de monter</a></li>
+    <li><a href="#methode">La méthode en 6 étapes</a></li>
+    <li><a href="#logiciels">Dérusher dans DaVinci Resolve ou Premiere Pro</a></li>
+    <li><a href="#rushr">Dérusher plus vite avec Rushr</a></li>
+    <li><a href="#erreurs">Les erreurs à éviter</a></li>
+    <li><a href="#faq">Questions fréquentes</a></li>
+  </ol>
+</nav>
+
+<h2 id="definition">C'est quoi un rush et le dérushage ?</h2>
+<p>Un <strong>rush</strong> est un fichier brut sorti de la caméra, du drone ou du micro, avant tout montage. Le mot vient de l'anglais <em>rushes</em> ; en français, on écrit aussi bien « rushes » que « rushs ».</p>
+<p>Le <strong>dérushage</strong>, c'est l'étape qui consiste à visionner tous ces rushs, à repérer ce qui est utilisable, à écarter ce qui ne l'est pas, puis à ranger le tout pour que le montage démarre sur une base propre. On dit aussi « dérusher » ou, plus familièrement, « faire le derush ».</p>
+
+<h2 id="pourquoi">Pourquoi dérusher avant de monter</h2>
+<ul>
+  <li><strong>Vous montez plus vite.</strong> Quand chaque plan est déjà classé (interview, plans d'illustration, drone, son…), vous ne cherchez plus : vous choisissez.</li>
+  <li><strong>Vous ne ratez pas la bonne prise.</strong> Le visionnage complet fait remonter les pépites qu'on oublie quand on fouille au hasard dans la timeline.</li>
+  <li><strong>Votre projet reste lisible.</strong> Des semaines plus tard, ou pour un autre monteur, une arborescence claire évite de tout redécouvrir.</li>
+  <li><strong>Vous allégez votre logiciel.</strong> Importer uniquement les bons rushs rend le projet plus léger et plus réactif.</li>
+</ul>
+
+<h2 id="methode">La méthode en 6 étapes</h2>
+
+<h3>1. Décharger et sauvegarder les cartes</h3>
+<p>Avant toute chose, copiez le contenu complet de chaque carte sur votre disque de travail, <strong>sans rien supprimer ni renommer</strong>. Gardez la structure d'origine des dossiers de la caméra : certains formats (par exemple ceux des caméras professionnelles) en ont besoin pour être relus correctement.</p>
+<p>Faites ensuite une seconde copie sur un autre disque. Tant que vos rushs n'existent qu'à un seul endroit, ils ne sont pas en sécurité. Ne formatez vos cartes qu'une fois les deux copies vérifiées.</p>
+
+<h3>2. Créer l'arborescence du projet</h3>
+<p>Préparez une structure de dossiers avant de trier. Le plus simple est de la garder identique d'un projet à l'autre, pour savoir toujours où chercher. Par exemple :</p>
+<div class="tree">MON_PROJET/
+├── RUSHES/
+│   ├── INTERVIEWS/
+│   ├── PLANS_ILLUSTRATION/
+│   ├── DRONE/
+│   └── SON/
+├── REJECTS/
+├── MUSIQUE/
+├── GRAPHISMES/
+└── PROJECT_FILES/</div>
+<p>Adaptez les catégories à votre type de tournage : un clip, un mariage ou une pub n'ont pas les mêmes besoins. L'important est d'avoir peu de catégories, claires, et de toujours mettre les plans écartés dans un dossier à part plutôt que de les supprimer.</p>
+
+<h3>3. Visionner chaque rush</h3>
+<p>Passez chaque fichier en revue, sans chercher à monter. Pour aller vite :</p>
+<ul>
+  <li>visionnez en accéléré (x1,5 ou x2) les plans longs ;</li>
+  <li>servez-vous des raccourcis de lecture <code>J</code> <code>K</code> <code>L</code>, présents dans la plupart des logiciels ;</li>
+  <li>regardez les vignettes pour repérer d'un coup d'œil les plans ratés (flous, caméra au sol, déclenchements accidentels).</li>
+</ul>
+
+<h3>4. Classer chaque plan dans une catégorie</h3>
+<p>Au fur et à mesure du visionnage, attribuez une catégorie à chaque rush. C'est là que la vitesse se joue : si vous devez faire un glisser-déposer pour chaque fichier, le tri devient vite interminable. L'idéal est de pouvoir classer <strong>au clavier</strong>, d'une seule touche, pour enchaîner sans lâcher la lecture.</p>
+
+<h3>5. Écarter les rejets, sans les supprimer</h3>
+<p>Un plan raté aujourd'hui peut sauver un montage demain : un raccord, un son d'ambiance, une transition. Rangez les rejets dans un dossier <code>REJECTS</code> plutôt que de les effacer. Vous ne les verrez plus au montage, mais ils restent là en cas de besoin.</p>
+
+<h3>6. Importer dans votre logiciel de montage</h3>
+<p>Une fois le tri terminé, importez votre dossier <code>RUSHES</code> dans votre logiciel. Si vos dossiers sont bien faits, chaque catégorie devient naturellement un chutier (<em>bin</em>), et votre montage démarre sur une base propre.</p>
+
+<div class="tip"><p><strong>Astuce :</strong> notez au fil du visionnage les meilleurs moments (une phrase forte en interview, un plan drone réussi) avec un marqueur ou une couleur. Au montage, vous saurez immédiatement par où commencer.</p></div>
+
+<h2 id="logiciels">Dérusher dans DaVinci Resolve ou Premiere Pro</h2>
+<p>Les logiciels de montage proposent tous des outils pour dérusher : chutiers, couleurs de clips, marqueurs, notes et métadonnées. Ils fonctionnent, mais ont deux limites :</p>
+<ul>
+  <li>le tri reste <strong>enfermé dans le projet</strong> : vos fichiers, eux, ne bougent pas sur le disque ;</li>
+  <li>ils sont pensés pour monter, pas pour trier vite : classer des centaines de clips un par un y demande beaucoup de clics.</li>
+</ul>
+<div class="tw"><table>
+  <thead><tr><th>Méthode</th><th>Avantages</th><th>Limites</th></tr></thead>
+  <tbody>
+    <tr><td>Explorateur de fichiers</td><td>Gratuit, les fichiers sont vraiment rangés</td><td>Pas de lecture fluide, glisser-déposer un par un</td></tr>
+    <tr><td>Chutiers dans DaVinci Resolve / Premiere Pro</td><td>Intégré au montage, marqueurs et métadonnées</td><td>Tri limité au projet, beaucoup de clics, logiciel lourd à ouvrir pour trier</td></tr>
+    <tr><td>Outil de dérushage dédié</td><td>Tri au clavier, aperçu intégré, fichiers rangés sur le disque</td><td>Un outil de plus à installer</td></tr>
+  </tbody>
+</table></div>
+
+<section class="cta" id="rushr">
+  <img src="assets/rushr-app-shot.webp" alt="Interface de Rushr : rushs importés, aperçu du clip et tags au clavier" width="2400" height="1633" loading="lazy" />
+  <h2>Dérusher plus vite avec Rushr</h2>
+  <p><strong>Rushr</strong> est un logiciel de dérushage pensé pour faire exactement la méthode ci-dessus, en beaucoup moins de temps :</p>
+  <ul>
+    <li>vous créez l'arborescence de votre projet en un clic, à partir de modèles réutilisables ;</li>
+    <li>vous importez vos dossiers de rushs et les visionnez dans le lecteur intégré ;</li>
+    <li>vous taguez chaque prise d'une touche (1 à 9), et <code>Suppr</code> l'envoie dans les rejets ;</li>
+    <li>un clic sur « Préparer » range tous vos rushs dans les bons dossiers, en copie (vos originaux restent intacts) ;</li>
+    <li>l'export XML recrée vos chutiers dans DaVinci Resolve ou Premiere Pro.</li>
+  </ul>
+  <p>Rushr fonctionne hors ligne sur Windows et macOS, et il est gratuit pendant la beta.</p>
+  <a class="btn btn-r" href="rushr#beta">Rejoindre la beta de Rushr</a>
+</section>
+
+<h2 id="erreurs">Les erreurs à éviter</h2>
+<ul>
+  <li><strong>Monter directement depuis la carte.</strong> Si la carte est formatée ou perdue, le projet est perdu avec elle.</li>
+  <li><strong>Supprimer les plans ratés trop tôt.</strong> Rangez-les à part, vous ferez le ménage à la fin du projet.</li>
+  <li><strong>Multiplier les catégories.</strong> Au-delà d'une dizaine, vous passez plus de temps à choisir le dossier qu'à regarder les images.</li>
+  <li><strong>Changer d'arborescence à chaque projet.</strong> Une structure fixe, c'est des réflexes, et des réflexes, c'est du temps gagné.</li>
+  <li><strong>Remettre le dérushage à plus tard.</strong> Plus les rushs s'accumulent, plus la tâche décourage. Dérushez le jour même ou le lendemain du tournage, quand vous vous souvenez encore de ce que vous avez filmé.</li>
+</ul>
+
+<h2 id="faq">Questions fréquentes</h2>
+<dl class="faq">
+  <dt>Combien de temps prend un dérushage ?</dt>
+  <dd>Tout dépend de la quantité de rushs et de votre méthode. Le visionnage reste l'étape la plus longue : l'accéléré et le tri au clavier sont les deux leviers qui réduisent le plus ce temps.</dd>
+  <dt>Faut-il écrire « rushs » ou « rushes » ?</dt>
+  <dd>Les deux se rencontrent. « Rushes » reprend le pluriel anglais, « rushs » est la forme francisée. Dans le métier, on emploie l'une ou l'autre indifféremment.</dd>
+  <dt>Faut-il renommer ses rushs ?</dt>
+  <dd>Ce n'est pas obligatoire. Gardez de préférence les noms d'origine, surtout pour les formats professionnels : un bon rangement par dossier suffit souvent à s'y retrouver.</dd>
+  <dt>Peut-on dérusher directement dans DaVinci Resolve ?</dt>
+  <dd>Oui, avec les chutiers, les couleurs de clips et les marqueurs. En revanche, le tri reste dans le projet et vos fichiers ne sont pas rangés sur le disque. Un outil comme Rushr range les fichiers, puis recrée les chutiers dans Resolve grâce à l'export XML.</dd>
+</dl>
+
+<p style="margin-top:28px">Vous voulez tester cette méthode sur votre prochain tournage ? <a href="rushr">Découvrez Rushr</a> et inscrivez-vous à la beta gratuite.</p>
+</article></main>
+
+<footer>
+  <a href="rushr">Rushr</a>
+  <a href="legal">Mentions légales</a>
+  <a href="privacy">Confidentialité</a>
+  <a href="#" onclick="window.BPLConsent&&window.BPLConsent.open();return false">Gérer mes cookies</a>
+  <div style="margin-top:8px">© 2026 BACKPACK LAB</div>
+</footer>
+</body>
+</html>
