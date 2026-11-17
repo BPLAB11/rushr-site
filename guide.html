@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Guide de démarrage Rushr : de l'installation au bouton Préparer — BACKPACK LAB</title>
-<meta name="description" content="Le mode d'emploi complet de Rushr : installation sur Windows et Mac, connexion, structure de projet, import des rushes, tri au clavier, Préparer, export DaVinci Resolve et Premiere Pro." />
+<title data-en="Rushr getting started guide: from install to the Prepare button — BACKPACK LAB">Guide de démarrage Rushr : de l'installation au bouton Préparer — BACKPACK LAB</title>
+<meta name="description" data-en-content="The complete Rushr manual: install on Windows and Mac, sign in, project structure, importing rushes, keyboard sorting, Prepare, DaVinci Resolve and Premiere Pro export." content="Le mode d'emploi complet de Rushr : installation sur Windows et Mac, connexion, structure de projet, import des rushes, tri au clavier, Préparer, export DaVinci Resolve et Premiere Pro." />
 <link rel="icon" type="image/png" sizes="32x32" href="assets/rushr-favicon-32.png" />
 <link rel="icon" type="image/x-icon" href="assets/rushr-favicon.ico" />
 <link rel="canonical" href="https://thebackpacklab.com/guide" />
@@ -85,6 +85,10 @@
   footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted2);font-size:12.5px;text-align:center}
   footer a{color:var(--muted);text-decoration:none;margin:0 9px}
   footer a:hover{color:var(--text)}
+  .lang{display:flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:5px 9px;cursor:pointer;font-family:inherit}
+  .lang button.on{background:var(--rushr);color:#150A03}
+  .nav-r{display:flex;align-items:center;gap:10px}
 </style>
 <script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
 <script src="assets/consent.js" defer></script>
@@ -92,78 +96,92 @@
 <body>
 <nav class="top"><div class="wrap nav-in">
   <a class="brand" href="/"><img src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
-  <a class="nav-cta" href="download">Télécharger Rushr</a>
+  <div class="nav-r">
+    <div class="lang" role="group" aria-label="Langue / Language">
+      <button type="button" id="lfr" class="on" onclick="setLang('fr')">FR</button>
+      <button type="button" id="len" onclick="setLang('en')">EN</button>
+    </div>
+    <a class="nav-cta" href="download" data-en="Download Rushr">Télécharger Rushr</a>
+  </div>
 </div></nav>
 
 <main><article class="wrap">
-<div class="crumbs"><a href="/">Accueil</a> › <a href="rushr">Rushr</a> › Guide de démarrage</div>
-<span class="eyebrow">Guide · Rushr beta</span>
-<h1>Démarrer avec Rushr, de l'installation au bouton Préparer</h1>
-<p class="meta">Par BACKPACK LAB · 15 novembre 2026 · 7 min de lecture</p>
+<div class="crumbs" data-en="<a href='/'>Home</a> › <a href='rushr'>Rushr</a> › Getting started guide"><a href="/">Accueil</a> › <a href="rushr">Rushr</a> › Guide de démarrage</div>
+<span class="eyebrow" data-en="Guide · Rushr beta">Guide · Rushr beta</span>
+<h1 data-en="Getting started with Rushr, from install to the Prepare button">Démarrer avec Rushr, de l'installation au bouton Préparer</h1>
+<p class="meta" data-en="By BACKPACK LAB · November 15, 2026 · 7 min read">Par BACKPACK LAB · 15 novembre 2026 · 7 min de lecture</p>
 
-<p class="lead">Rushr transforme une carte pleine de fichiers en un projet rangé, prêt à monter. Ce guide déroule tout le parcours : installer l'app, te connecter, créer la structure du projet, importer tes rushes, les trier au clavier, puis tout ranger d'un clic avec <strong>Préparer</strong>.</p>
+<p class="lead" data-en="Rushr turns a card full of files into a tidy project, ready to edit. This guide walks you through the whole process: install the app, sign in, create the project structure, import your rushes, sort them from the keyboard, then file everything in one click with <strong>Prepare</strong>.">Rushr transforme une carte pleine de fichiers en un projet rangé, prêt à monter. Ce guide déroule tout le parcours : installer l'app, te connecter, créer la structure du projet, importer tes rushes, les trier au clavier, puis tout ranger d'un clic avec <strong>Préparer</strong>.</p>
 
 <nav class="toc" aria-label="Sommaire">
-  <b>Sommaire</b>
+  <b data-en="Contents">Sommaire</b>
   <ol>
-    <li><a href="#installer">Installer Rushr</a></li>
-    <li><a href="#connexion">Te connecter</a></li>
-    <li><a href="#structure">Créer la structure du projet</a></li>
-    <li><a href="#import">Importer tes rushes</a></li>
-    <li><a href="#tri">Trier et taguer au clavier</a></li>
-    <li><a href="#preparer">Préparer : tout ranger d'un clic</a></li>
-    <li><a href="#enregistrer">Enregistrer et rouvrir le projet</a></li>
-    <li><a href="#raccourcis">Tous les raccourcis clavier</a></li>
-    <li><a href="#aide">Besoin d'aide ?</a></li>
+    <li><a href="#installer" data-en="Install Rushr">Installer Rushr</a></li>
+    <li><a href="#connexion" data-en="Sign in">Te connecter</a></li>
+    <li><a href="#structure" data-en="Create the project structure">Créer la structure du projet</a></li>
+    <li><a href="#import" data-en="Import your rushes">Importer tes rushes</a></li>
+    <li><a href="#tri" data-en="Sort and tag from the keyboard">Trier et taguer au clavier</a></li>
+    <li><a href="#preparer" data-en="Prepare: file everything in one click">Préparer : tout ranger d'un clic</a></li>
+    <li><a href="#enregistrer" data-en="Save and reopen the project">Enregistrer et rouvrir le projet</a></li>
+    <li><a href="#raccourcis" data-en="All keyboard shortcuts">Tous les raccourcis clavier</a></li>
+    <li><a href="#aide" data-en="Need help?">Besoin d'aide ?</a></li>
   </ol>
 </nav>
 
 <!-- 1 -->
-<h2 id="installer"><span class="n">1</span>Installer Rushr</h2>
-<p>Inscris-toi à la beta sur la <a href="rushr#beta">page Rushr</a> : tu reçois aussitôt un e-mail avec ta licence. Ensuite, sur la <a href="download">page de téléchargement</a>, crée ton compte Backpack Lab <strong>avec la même adresse que ton inscription</strong> : ta licence s'y ajoute toute seule et la page te propose la bonne version.</p>
-<p>Tout est inclus dans l'installeur, y compris le lecteur vidéo : tu n'as rien d'autre à installer.</p>
+<h2 id="installer" data-en="<span class='n'>1</span>Install Rushr"><span class="n">1</span>Installer Rushr</h2>
+<p data-en="Sign up for the beta on the <a href='rushr#beta'>Rushr page</a>: you'll instantly get an email with your license. Then, on the <a href='download'>download page</a>, create your Backpack Lab account <strong>with the same email address you signed up with</strong>: your license is added automatically and the page offers you the right version.">Inscris-toi à la beta sur la <a href="rushr#beta">page Rushr</a> : tu reçois aussitôt un e-mail avec ta licence. Ensuite, sur la <a href="download">page de téléchargement</a>, crée ton compte Backpack Lab <strong>avec la même adresse que ton inscription</strong> : ta licence s'y ajoute toute seule et la page te propose la bonne version.</p>
+<p data-en="Everything is included in the installer, video player too: there's nothing else to install.">Tout est inclus dans l'installeur, y compris le lecteur vidéo : tu n'as rien d'autre à installer.</p>
 <div class="os">
   <div>
-    <h3>Windows 10 et 11 (64 bits)</h3>
+    <h3 data-en="Windows 10 and 11 (64-bit)">Windows 10 et 11 (64 bits)</h3>
     <ol>
-      <li>Lance <code>Rushr_win_beta_….exe</code>.</li>
-      <li>Si Windows affiche « Windows a protégé votre ordinateur », clique sur <strong>Informations complémentaires</strong> puis <strong>Exécuter quand même</strong>. L'app n'est pas encore signée numériquement pendant la beta.</li>
-      <li>Rushr s'installe et s'ouvre tout seul.</li>
+      <li data-en="Run <code>Rushr_win_beta_….exe</code>.">Lance <code>Rushr_win_beta_….exe</code>.</li>
+      <li data-en="If Windows shows “Windows protected your PC”, click <strong>More info</strong> then <strong>Run anyway</strong>. The app isn't digitally signed yet during the beta.">Si Windows affiche « Windows a protégé votre ordinateur », clique sur <strong>Informations complémentaires</strong> puis <strong>Exécuter quand même</strong>. L'app n'est pas encore signée numériquement pendant la beta.</li>
+      <li data-en="Rushr installs and opens on its own.">Rushr s'installe et s'ouvre tout seul.</li>
     </ol>
   </div>
   <div>
-    <h3>macOS 12 ou plus récent</h3>
+    <h3 data-en="macOS 12 or later">macOS 12 ou plus récent</h3>
     <ol>
-      <li>Rushr pour Mac fonctionne sur les Mac <strong>Apple Silicon</strong> (M1 ou plus récent).</li>
-      <li>Ouvre <code>Rushr_osx_beta_….pkg</code> et suis l'installeur.</li>
-      <li>Si macOS indique qu'il ne peut pas vérifier l'app : <strong>Réglages Système › Confidentialité et sécurité</strong>, puis <strong>Ouvrir quand même</strong>.</li>
+      <li data-en="Rushr for Mac runs on <strong>Apple Silicon</strong> Macs (M1 or later).">Rushr pour Mac fonctionne sur les Mac <strong>Apple Silicon</strong> (M1 ou plus récent).</li>
+      <li data-en="Open <code>Rushr_osx_beta_….pkg</code> and follow the installer.">Ouvre <code>Rushr_osx_beta_….pkg</code> et suis l'installeur.</li>
+      <li data-en="If macOS says it can't verify the app: <strong>System Settings › Privacy &amp; Security</strong>, then <strong>Open Anyway</strong>.">Si macOS indique qu'il ne peut pas vérifier l'app : <strong>Réglages Système › Confidentialité et sécurité</strong>, puis <strong>Ouvrir quand même</strong>.</li>
     </ol>
   </div>
 </div>
 
 <!-- 2 -->
-<h2 id="connexion"><span class="n">2</span>Te connecter</h2>
-<p>Au premier lancement, Rushr te demande de te connecter avec ton compte Backpack Lab : <strong>e-mail et mot de passe</strong>, <strong>Google</strong> ou <strong>Microsoft</strong>. Utilise le même compte que sur le site : ta licence s'active toute seule, il n'y a aucune clé à saisir.</p>
+<h2 id="connexion" data-en="<span class='n'>2</span>Sign in"><span class="n">2</span>Te connecter</h2>
+<p data-en="On first launch, Rushr asks you to sign in with your Backpack Lab account: <strong>email and password</strong>, <strong>Google</strong> or <strong>Microsoft</strong>. Use the same account as on the website: your license activates automatically, there's no key to type in.">Au premier lancement, Rushr te demande de te connecter avec ton compte Backpack Lab : <strong>e-mail et mot de passe</strong>, <strong>Google</strong> ou <strong>Microsoft</strong>. Utilise le même compte que sur le site : ta licence s'active toute seule, il n'y a aucune clé à saisir.</p>
 <ul>
-  <li>Si la double authentification est activée sur ton compte, Rushr te demande le <strong>code reçu par e-mail</strong>.</li>
-  <li>Ta licence est liée à <strong>un appareil</strong>. Pour changer d'ordinateur, connecte-toi sur le nouveau : Rushr te demande de confirmer avec un code par e-mail, puis propose de libérer l'ancien. Tu retrouves tes appareils dans <a href="account">Mon compte</a>.</li>
-  <li>Ensuite, Rushr fonctionne <strong>hors ligne</strong>. Il lui faut juste internet de temps en temps pour renouveler la licence (jusqu'à 30 jours sans connexion).</li>
+  <li data-en="If two-factor authentication is enabled on your account, Rushr asks for the <strong>code sent by email</strong>.">Si la double authentification est activée sur ton compte, Rushr te demande le <strong>code reçu par e-mail</strong>.</li>
+  <li data-en="Your license is tied to <strong>one device</strong>. To switch computers, sign in on the new one: Rushr asks you to confirm with an email code, then offers to release the old one. You'll find your devices under <a href='account'>My account</a>.">Ta licence est liée à <strong>un appareil</strong>. Pour changer d'ordinateur, connecte-toi sur le nouveau : Rushr te demande de confirmer avec un code par e-mail, puis propose de libérer l'ancien. Tu retrouves tes appareils dans <a href="account">Mon compte</a>.</li>
+  <li data-en="After that, Rushr works <strong>offline</strong>. It just needs internet now and then to renew the license (up to 30 days without a connection).">Ensuite, Rushr fonctionne <strong>hors ligne</strong>. Il lui faut juste internet de temps en temps pour renouveler la licence (jusqu'à 30 jours sans connexion).</li>
 </ul>
 
 <!-- 3 -->
-<h2 id="structure"><span class="n">3</span>Créer la structure du projet</h2>
-<p>Tout part d'une arborescence de dossiers propre, créée avant de toucher au moindre fichier. Depuis le <strong>Tableau de bord</strong> :</p>
+<h2 id="structure" data-en="<span class='n'>3</span>Create the project structure"><span class="n">3</span>Créer la structure du projet</h2>
+<p data-en="It all starts with a clean folder tree, created before you touch a single file. From the <strong>Dashboard</strong>:">Tout part d'une arborescence de dossiers propre, créée avant de toucher au moindre fichier. Depuis le <strong>Tableau de bord</strong> :</p>
 <ul>
-  <li>choisis un <strong>préréglage rapide</strong> (Event, Wedding, Music video, Documentary, FPV, Social content), ou</li>
-  <li>clique sur <strong>＋ Nouveau projet</strong> pour ouvrir l'écran <strong>Création du projet</strong>.</li>
+  <li data-en="pick a <strong>quick preset</strong> (Event, Wedding, Music video, Documentary, FPV, Social content), or">choisis un <strong>préréglage rapide</strong> (Event, Wedding, Music video, Documentary, FPV, Social content), ou</li>
+  <li data-en="click <strong>＋ New project</strong> to open the <strong>Project setup</strong> screen.">clique sur <strong>＋ Nouveau projet</strong> pour ouvrir l'écran <strong>Création du projet</strong>.</li>
 </ul>
 <figure>
-  <img src="assets/rushr-dashboard-shot.webp" alt="Tableau de bord de Rushr : nouveau projet, projets récents et préréglages rapides" loading="lazy" />
-  <figcaption>Le Tableau de bord : nouveau projet, projets récents et préréglages rapides.</figcaption>
+  <img src="assets/rushr-dashboard-shot.webp" alt="Tableau de bord de Rushr : nouveau projet, projets récents et préréglages rapides" data-en-alt="Rushr Dashboard: new project, recent projects and quick presets" loading="lazy" />
+  <figcaption data-en="The Dashboard: new project, recent projects and quick presets.">Le Tableau de bord : nouveau projet, projets récents et préréglages rapides.</figcaption>
 </figure>
-<p>Dans <strong>Création du projet</strong>, renseigne le <strong>nom du projet</strong>, le <strong>client</strong>, le <strong>préréglage</strong> et la <strong>destination</strong> (le disque ou dossier où créer le projet). À droite, l'aperçu montre l'arborescence que tu peux modifier : <strong>＋ Dossier</strong> pour ajouter, <strong>Supprimer</strong> pour retirer, <kbd>F2</kbd> pour renommer.</p>
-<p>Deux dossiers comptent particulièrement :</p>
-<div class="tree">CLIP_NOVA/
+<p data-en="In <strong>Project setup</strong>, fill in the <strong>project name</strong>, the <strong>client</strong>, the <strong>preset</strong> and the <strong>destination</strong> (the drive or folder where the project is created). On the right, the preview shows the folder tree, which you can edit: <strong>＋ Folder</strong> to add, <strong>Delete</strong> to remove, <kbd>F2</kbd> to rename.">Dans <strong>Création du projet</strong>, renseigne le <strong>nom du projet</strong>, le <strong>client</strong>, le <strong>préréglage</strong> et la <strong>destination</strong> (le disque ou dossier où créer le projet). À droite, l'aperçu montre l'arborescence que tu peux modifier : <strong>＋ Dossier</strong> pour ajouter, <strong>Supprimer</strong> pour retirer, <kbd>F2</kbd> pour renommer.</p>
+<p data-en="Two folders matter most:">Deux dossiers comptent particulièrement :</p>
+<div class="tree" data-en="CLIP_NOVA/
+├── RUSHES/
+│   ├── PERFORMANCE/     ← each subfolder of RUSHES
+│   ├── BROLL/              becomes a sorting category
+│   └── DRONE/
+├── REJECTS/             ← rejected takes
+├── AUDIO/
+├── EXPORT/
+└── PROJECT_FILES/">CLIP_NOVA/
 ├── RUSHES/
 │   ├── PERFORMANCE/     ← chaque sous-dossier de RUSHES
 │   ├── BROLL/              devient une catégorie de tri
@@ -172,105 +190,137 @@
 ├── AUDIO/
 ├── EXPORT/
 └── PROJECT_FILES/</div>
-<p>Clique sur <strong>Créer le projet</strong>, puis sur <strong>Continuer vers le gestionnaire de rushes →</strong>.</p>
-<div class="tip"><p><strong>Astuce :</strong> une structure que tu réutilises souvent ? <strong>Enregistrer le modèle</strong> la garde comme préréglage personnel, et <strong>Gérer les préréglages</strong> permet de la modifier ou de la supprimer.</p></div>
+<p data-en="Click <strong>Create project</strong>, then <strong>Continue to the rush manager →</strong>.">Clique sur <strong>Créer le projet</strong>, puis sur <strong>Continuer vers le gestionnaire de rushes →</strong>.</p>
+<div class="tip"><p data-en="<strong>Tip:</strong> a structure you reuse often? <strong>Save template</strong> keeps it as a personal preset, and <strong>Manage presets</strong> lets you edit or delete it."><strong>Astuce :</strong> une structure que tu réutilises souvent ? <strong>Enregistrer le modèle</strong> la garde comme préréglage personnel, et <strong>Gérer les préréglages</strong> permet de la modifier ou de la supprimer.</p></div>
 <figure>
-  <img src="assets/rushr-structure-shot.webp" alt="Écran Création du projet de Rushr avec l'aperçu de l'arborescence" loading="lazy" />
-  <figcaption>Création du projet : les informations à gauche, l'arborescence à droite.</figcaption>
+  <img src="assets/rushr-structure-shot.webp" alt="Écran Création du projet de Rushr avec l'aperçu de l'arborescence" data-en-alt="Rushr Project setup screen with the folder tree preview" loading="lazy" />
+  <figcaption data-en="Project setup: details on the left, folder tree on the right.">Création du projet : les informations à gauche, l'arborescence à droite.</figcaption>
 </figure>
 
 <!-- 4 -->
-<h2 id="import"><span class="n">4</span>Importer tes rushes</h2>
-<p>Dans le <strong>Gestionnaire de rushes</strong>, clique sur <strong>Importer un dossier</strong> (ou <kbd>Ctrl</kbd> + <kbd>I</kbd>) et choisis le dossier de ta carte ou de ton disque. Tu peux en importer plusieurs : chaque sous-dossier garde sa propre section (par exemple <code>CAM_A · 10 clips</code>), pour ne jamais mélanger les sources.</p>
-<p>Rushr génère les vignettes et lit les infos de chaque fichier (résolution, durée, codec, images par seconde). Formats pris en charge : MP4, MOV, MXF, AVI, MKV, MTS et M2TS.</p>
+<h2 id="import" data-en="<span class='n'>4</span>Import your rushes"><span class="n">4</span>Importer tes rushes</h2>
+<p data-en="In the <strong>Rush manager</strong>, click <strong>Import folder</strong> (or <kbd>Ctrl</kbd> + <kbd>I</kbd>) and choose the folder from your card or drive. You can import several: each subfolder keeps its own section (for example <code>CAM_A · 10 clips</code>), so sources never get mixed up.">Dans le <strong>Gestionnaire de rushes</strong>, clique sur <strong>Importer un dossier</strong> (ou <kbd>Ctrl</kbd> + <kbd>I</kbd>) et choisis le dossier de ta carte ou de ton disque. Tu peux en importer plusieurs : chaque sous-dossier garde sa propre section (par exemple <code>CAM_A · 10 clips</code>), pour ne jamais mélanger les sources.</p>
+<p data-en="Rushr generates thumbnails and reads each file's info (resolution, duration, codec, frame rate). Supported formats: MP4, MOV, MXF, AVI, MKV, MTS and M2TS.">Rushr génère les vignettes et lit les infos de chaque fichier (résolution, durée, codec, images par seconde). Formats pris en charge : MP4, MOV, MXF, AVI, MKV, MTS et M2TS.</p>
 <ul>
-  <li><strong>Vue grille ou vue liste</strong> avec les boutons en haut à gauche.</li>
-  <li><strong>Filtre</strong> pour n'afficher qu'une catégorie, et <strong>recherche</strong> par nom de fichier.</li>
-  <li>Le pied de liste compte en direct les rushes <strong>importés</strong>, <strong>étiquetés</strong>, <strong>rejetés</strong> et <strong>restants</strong>.</li>
+  <li data-en="<strong>Grid or list view</strong> with the buttons at the top left."><strong>Vue grille ou vue liste</strong> avec les boutons en haut à gauche.</li>
+  <li data-en="<strong>Filter</strong> to show only one category, and <strong>search</strong> by file name."><strong>Filtre</strong> pour n'afficher qu'une catégorie, et <strong>recherche</strong> par nom de fichier.</li>
+  <li data-en="The list footer counts <strong>imported</strong>, <strong>tagged</strong>, <strong>rejected</strong> and <strong>remaining</strong> rushes live.">Le pied de liste compte en direct les rushes <strong>importés</strong>, <strong>étiquetés</strong>, <strong>rejetés</strong> et <strong>restants</strong>.</li>
 </ul>
-<div class="tip"><p>Rushr ne modifie jamais tes fichiers à l'import : il les lit là où ils sont. Rien n'est envoyé en ligne.</p></div>
+<div class="tip"><p data-en="Rushr never modifies your files on import: it reads them where they are. Nothing is sent online.">Rushr ne modifie jamais tes fichiers à l'import : il les lit là où ils sont. Rien n'est envoyé en ligne.</p></div>
 
 <!-- 5 -->
-<h2 id="tri"><span class="n">5</span>Trier et taguer au clavier</h2>
-<p>Clique sur un clip : il s'affiche dans l'<strong>Aperçu</strong> à droite. <kbd>Espace</kbd> lance ou met en pause la lecture, <kbd>←</kbd> et <kbd>→</kbd> passent au clip précédent ou suivant. Puis donne-lui une catégorie :</p>
+<h2 id="tri" data-en="<span class='n'>5</span>Sort and tag from the keyboard"><span class="n">5</span>Trier et taguer au clavier</h2>
+<p data-en="Click a clip: it shows in the <strong>Preview</strong> on the right. <kbd>Space</kbd> plays or pauses, <kbd>←</kbd> and <kbd>→</kbd> go to the previous or next clip. Then give it a category:">Clique sur un clip : il s'affiche dans l'<strong>Aperçu</strong> à droite. <kbd>Espace</kbd> lance ou met en pause la lecture, <kbd>←</kbd> et <kbd>→</kbd> passent au clip précédent ou suivant. Puis donne-lui une catégorie :</p>
 <ul>
-  <li>Les <strong>catégories</strong> sont les sous-dossiers de <code>RUSHES</code>. Chacune reçoit une touche de <kbd>1</kbd> à <kbd>9</kbd>, dans l'ordre des pastilles du panneau <strong>Catégories</strong>.</li>
-  <li><kbd>1</kbd>…<kbd>9</kbd> : tague le ou les clips sélectionnés avec la catégorie correspondante.</li>
-  <li><kbd>Suppr</kbd> : marque la prise en <strong>REJECT</strong> (elle ira dans <code>REJECTS</code>).</li>
-  <li><kbd>Échap</kbd> : retire le tag.</li>
-  <li>Tu peux aussi cliquer directement sur une pastille de catégorie.</li>
+  <li data-en="<strong>Categories</strong> are the subfolders of <code>RUSHES</code>. Each one gets a key from <kbd>1</kbd> to <kbd>9</kbd>, in the order of the dots in the <strong>Categories</strong> panel.">Les <strong>catégories</strong> sont les sous-dossiers de <code>RUSHES</code>. Chacune reçoit une touche de <kbd>1</kbd> à <kbd>9</kbd>, dans l'ordre des pastilles du panneau <strong>Catégories</strong>.</li>
+  <li data-en="<kbd>1</kbd>…<kbd>9</kbd>: tags the selected clip(s) with the matching category."><kbd>1</kbd>…<kbd>9</kbd> : tague le ou les clips sélectionnés avec la catégorie correspondante.</li>
+  <li data-en="<kbd>Delete</kbd>: marks the take as <strong>REJECT</strong> (it will go to <code>REJECTS</code>)."><kbd>Suppr</kbd> : marque la prise en <strong>REJECT</strong> (elle ira dans <code>REJECTS</code>).</li>
+  <li data-en="<kbd>Esc</kbd>: removes the tag."><kbd>Échap</kbd> : retire le tag.</li>
+  <li data-en="You can also click a category dot directly.">Tu peux aussi cliquer directement sur une pastille de catégorie.</li>
 </ul>
-<p>Pour aller plus vite, tague plusieurs clips d'un coup : <kbd>Ctrl</kbd> + clic ou <kbd>Maj</kbd> + clic pour ajouter à la sélection, <kbd>Ctrl</kbd> + <kbd>A</kbd> pour tout sélectionner, même sur plusieurs sections.</p>
-<h3>Ajouter ou modifier des catégories</h3>
-<p>Tape un nom dans <strong>Nouvelle catégorie…</strong> puis <strong>Ajouter</strong> : Rushr crée le dossier correspondant dans <code>RUSHES</code>. L'icône d'engrenage ouvre <strong>Gérer les catégories</strong> pour les renommer, changer leur couleur ou les retirer. Si une catégorie contient des sous-dossiers, survole sa pastille pour taguer directement dans l'un d'eux.</p>
+<p data-en="To go faster, tag several clips at once: <kbd>Ctrl</kbd> + click or <kbd>Shift</kbd> + click to add to the selection, <kbd>Ctrl</kbd> + <kbd>A</kbd> to select everything, even across several sections.">Pour aller plus vite, tague plusieurs clips d'un coup : <kbd>Ctrl</kbd> + clic ou <kbd>Maj</kbd> + clic pour ajouter à la sélection, <kbd>Ctrl</kbd> + <kbd>A</kbd> pour tout sélectionner, même sur plusieurs sections.</p>
+<h3 data-en="Add or edit categories">Ajouter ou modifier des catégories</h3>
+<p data-en="Type a name in <strong>New category…</strong> then <strong>Add</strong>: Rushr creates the matching folder in <code>RUSHES</code>. The gear icon opens <strong>Manage categories</strong> to rename them, change their color or remove them. If a category contains subfolders, hover its dot to tag straight into one of them.">Tape un nom dans <strong>Nouvelle catégorie…</strong> puis <strong>Ajouter</strong> : Rushr crée le dossier correspondant dans <code>RUSHES</code>. L'icône d'engrenage ouvre <strong>Gérer les catégories</strong> pour les renommer, changer leur couleur ou les retirer. Si une catégorie contient des sous-dossiers, survole sa pastille pour taguer directement dans l'un d'eux.</p>
 <figure>
-  <img src="assets/rushr-app-shot.webp" alt="Gestionnaire de rushes de Rushr : clips tagués par catégorie, aperçu et catégories" loading="lazy" />
-  <figcaption>Le Gestionnaire de rushes : les clips tagués, l'aperçu et les catégories.</figcaption>
+  <img src="assets/rushr-app-shot.webp" alt="Gestionnaire de rushes de Rushr : clips tagués par catégorie, aperçu et catégories" data-en-alt="Rushr Rush manager: clips tagged by category, preview and categories" loading="lazy" />
+  <figcaption data-en="The Rush manager: tagged clips, preview and categories.">Le Gestionnaire de rushes : les clips tagués, l'aperçu et les catégories.</figcaption>
 </figure>
 
 <!-- 6 -->
-<h2 id="preparer"><span class="n">6</span>Préparer : tout ranger d'un clic</h2>
-<p>Quand le tri est fait, clique sur <strong>Préparer</strong> (ou <kbd>Ctrl</kbd> + <kbd>Entrée</kbd>). Rushr range chaque prise taguée dans le dossier de sa catégorie sous <code>RUSHES</code>, et les rejets dans <code>REJECTS</code>.</p>
+<h2 id="preparer" data-en="<span class='n'>6</span>Prepare: file everything in one click"><span class="n">6</span>Préparer : tout ranger d'un clic</h2>
+<p data-en="Once sorting is done, click <strong>Prepare</strong> (or <kbd>Ctrl</kbd> + <kbd>Enter</kbd>). Rushr files each tagged take into its category folder under <code>RUSHES</code>, and rejects into <code>REJECTS</code>.">Quand le tri est fait, clique sur <strong>Préparer</strong> (ou <kbd>Ctrl</kbd> + <kbd>Entrée</kbd>). Rushr range chaque prise taguée dans le dossier de sa catégorie sous <code>RUSHES</code>, et les rejets dans <code>REJECTS</code>.</p>
 <ul>
-  <li><strong>Avant de commencer</strong>, il vérifie qu'il y a assez de place sur le disque de destination.</li>
-  <li><strong>Pendant le transfert</strong>, la barre de statut affiche l'avancement et le débit en direct.</li>
-  <li><strong>Chaque fichier est vérifié</strong> par rapport à l'original avant d'être compté comme fait. Chaque passage ajoute un relevé de vérification (ASC MHL) et un rapport PDF par catégorie dans un dossier <code>ascmhl</code> à la racine de <code>RUSHES</code>.</li>
-  <li><strong>Tu as mal tagué ?</strong> Change le tag et relance Préparer : le fichier est déplacé vers son nouveau dossier, sans doublon.</li>
+  <li data-en="<strong>Before starting</strong>, it checks there's enough space on the destination drive."><strong>Avant de commencer</strong>, il vérifie qu'il y a assez de place sur le disque de destination.</li>
+  <li data-en="<strong>During the transfer</strong>, the status bar shows progress and speed live."><strong>Pendant le transfert</strong>, la barre de statut affiche l'avancement et le débit en direct.</li>
+  <li data-en="<strong>Every file is verified</strong> against the original before it counts as done. Each run adds a verification record (ASC MHL) and a PDF report per category in an <code>ascmhl</code> folder at the root of <code>RUSHES</code>."><strong>Chaque fichier est vérifié</strong> par rapport à l'original avant d'être compté comme fait. Chaque passage ajoute un relevé de vérification (ASC MHL) et un rapport PDF par catégorie dans un dossier <code>ascmhl</code> à la racine de <code>RUSHES</code>.</li>
+  <li data-en="<strong>Tagged something wrong?</strong> Change the tag and run Prepare again: the file is moved to its new folder, with no duplicate."><strong>Tu as mal tagué ?</strong> Change le tag et relance Préparer : le fichier est déplacé vers son nouveau dossier, sans doublon.</li>
 </ul>
-<h3>Copie ou déplacement</h3>
-<p>Par défaut, Rushr travaille en mode <strong>Copie</strong> : tes originaux restent intacts sur la carte ou le disque source. Le mode <strong>Déplacement</strong> transfère les fichiers au lieu de les dupliquer ; l'original n'est supprimé qu'une fois la copie vérifiée. Le mode actif s'affiche en haut à droite du gestionnaire (« Mode : Copie ») et se change dans <strong>Paramètres › Gestion des fichiers › Mode de transfert</strong>.</p>
-<h3>Envoyer vers ton logiciel de montage</h3>
-<p>Les dossiers rangés s'importent dans Premiere Pro, DaVinci Resolve, Final Cut Pro ou n'importe quel logiciel. Coche en plus <strong>Exporter XML</strong> à côté de Préparer pour que Rushr crée un fichier qui reconstruit tes chutiers à l'identique :</p>
+<h3 data-en="Copy or move">Copie ou déplacement</h3>
+<p data-en="By default, Rushr works in <strong>Copy</strong> mode: your originals stay untouched on the source card or drive. <strong>Move</strong> mode transfers the files instead of duplicating them; the original is only deleted once the copy is verified. The active mode shows at the top right of the manager (“Mode: Copy”) and can be changed in <strong>Settings › File management › Transfer mode</strong>.">Par défaut, Rushr travaille en mode <strong>Copie</strong> : tes originaux restent intacts sur la carte ou le disque source. Le mode <strong>Déplacement</strong> transfère les fichiers au lieu de les dupliquer ; l'original n'est supprimé qu'une fois la copie vérifiée. Le mode actif s'affiche en haut à droite du gestionnaire (« Mode : Copie ») et se change dans <strong>Paramètres › Gestion des fichiers › Mode de transfert</strong>.</p>
+<h3 data-en="Send to your editing software">Envoyer vers ton logiciel de montage</h3>
+<p data-en="The filed folders import into Premiere Pro, DaVinci Resolve, Final Cut Pro or any other software. Also tick <strong>Export XML</strong> next to Prepare so Rushr creates a file that rebuilds your bins exactly:">Les dossiers rangés s'importent dans Premiere Pro, DaVinci Resolve, Final Cut Pro ou n'importe quel logiciel. Coche en plus <strong>Exporter XML</strong> à côté de Préparer pour que Rushr crée un fichier qui reconstruit tes chutiers à l'identique :</p>
 <ul>
-  <li><strong>DaVinci Resolve</strong> : <em>Fichier › Importer</em> le fichier <code>.xml</code>. Dans <strong>Paramètres › Gestion des fichiers</strong>, tu peux aussi choisir un script Resolve, ou <strong>Envoyer vers Resolve</strong> pour importer les chutiers directement dans le projet ouvert (Python 3 64 bits requis).</li>
-  <li><strong>Premiere Pro</strong> : <em>Fichier › Importer</em> le même fichier <code>.xml</code>.</li>
+  <li data-en="<strong>DaVinci Resolve</strong>: <em>File › Import</em> the <code>.xml</code> file. In <strong>Settings › File management</strong>, you can also choose a Resolve script, or <strong>Send to Resolve</strong> to import the bins straight into the open project (64-bit Python 3 required)."><strong>DaVinci Resolve</strong> : <em>Fichier › Importer</em> le fichier <code>.xml</code>. Dans <strong>Paramètres › Gestion des fichiers</strong>, tu peux aussi choisir un script Resolve, ou <strong>Envoyer vers Resolve</strong> pour importer les chutiers directement dans le projet ouvert (Python 3 64 bits requis).</li>
+  <li data-en="<strong>Premiere Pro</strong>: <em>File › Import</em> the same <code>.xml</code> file."><strong>Premiere Pro</strong> : <em>Fichier › Importer</em> le même fichier <code>.xml</code>.</li>
 </ul>
 
 <!-- 7 -->
-<h2 id="enregistrer"><span class="n">7</span>Enregistrer et rouvrir le projet</h2>
-<p><kbd>Ctrl</kbd> + <kbd>S</kbd> enregistre le projet dans un fichier <code>.rshr</code> : structure, catégories, tags et liste des rushes. Rushr enregistre aussi automatiquement toutes les 5 minutes par défaut (réglable dans les Paramètres).</p>
-<p>Pour reprendre ton travail, double-clique sur le fichier <code>.rshr</code>, ouvre-le depuis <strong>Ouvrir un projet</strong>, ou clique dessus dans les <strong>Projets récents</strong> du Tableau de bord : tu retrouves tout exactement là où tu l'avais laissé.</p>
-<div class="tip"><p><strong>Mises à jour :</strong> Rushr vérifie les nouvelles versions à chaque démarrage. Un clic suffit pour télécharger, installer et redémarrer. Certaines mises à jour importantes peuvent être obligatoires.</p></div>
+<h2 id="enregistrer" data-en="<span class='n'>7</span>Save and reopen the project"><span class="n">7</span>Enregistrer et rouvrir le projet</h2>
+<p data-en="<kbd>Ctrl</kbd> + <kbd>S</kbd> saves the project to a <code>.rshr</code> file: structure, categories, tags and rush list. Rushr also autosaves every 5 minutes by default (adjustable in Settings)."><kbd>Ctrl</kbd> + <kbd>S</kbd> enregistre le projet dans un fichier <code>.rshr</code> : structure, catégories, tags et liste des rushes. Rushr enregistre aussi automatiquement toutes les 5 minutes par défaut (réglable dans les Paramètres).</p>
+<p data-en="To pick up where you left off, double-click the <code>.rshr</code> file, open it from <strong>Open project</strong>, or click it in <strong>Recent projects</strong> on the Dashboard: everything is exactly as you left it.">Pour reprendre ton travail, double-clique sur le fichier <code>.rshr</code>, ouvre-le depuis <strong>Ouvrir un projet</strong>, ou clique dessus dans les <strong>Projets récents</strong> du Tableau de bord : tu retrouves tout exactement là où tu l'avais laissé.</p>
+<div class="tip"><p data-en="<strong>Updates:</strong> Rushr checks for new versions at every launch. One click downloads, installs and restarts. Some important updates may be mandatory."><strong>Mises à jour :</strong> Rushr vérifie les nouvelles versions à chaque démarrage. Un clic suffit pour télécharger, installer et redémarrer. Certaines mises à jour importantes peuvent être obligatoires.</p></div>
 
 <!-- Raccourcis -->
-<h2 id="raccourcis">Tous les raccourcis clavier</h2>
+<h2 id="raccourcis" data-en="All keyboard shortcuts">Tous les raccourcis clavier</h2>
 <div class="tw"><table>
-  <thead><tr><th>Raccourci</th><th>Action</th></tr></thead>
+  <thead><tr><th data-en="Shortcut">Raccourci</th><th data-en="Action">Action</th></tr></thead>
   <tbody>
-    <tr><td><kbd>1</kbd> … <kbd>9</kbd></td><td>Taguer la sélection avec la catégorie 1 à 9</td></tr>
-    <tr><td><kbd>Suppr</kbd></td><td>Marquer le clip en REJECT</td></tr>
-    <tr><td><kbd>Échap</kbd></td><td>Retirer le tag de la sélection</td></tr>
-    <tr><td><kbd>Espace</kbd></td><td>Lecture / pause de l'aperçu</td></tr>
-    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Clip précédent / suivant</td></tr>
-    <tr><td><kbd>Ctrl</kbd> / <kbd>Maj</kbd> + clic</td><td>Ajouter des clips à la sélection</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>Tout sélectionner</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>I</kbd></td><td>Importer un dossier</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>Entrée</kbd></td><td>Préparer les rushes tagués</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>Enregistrer le projet</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>S</kbd></td><td>Enregistrer sous</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd> / <kbd>Ctrl</kbd> + <kbd>O</kbd></td><td>Nouveau projet / ouvrir un projet</td></tr>
-    <tr><td><kbd>Ctrl</kbd> + <kbd>Suppr</kbd></td><td>Vider la liste des rushes</td></tr>
-    <tr><td><kbd>F2</kbd></td><td>Renommer un dossier (Création du projet)</td></tr>
+    <tr><td><kbd>1</kbd> … <kbd>9</kbd></td><td data-en="Tag the selection with category 1 to 9">Taguer la sélection avec la catégorie 1 à 9</td></tr>
+    <tr><td data-en="<kbd>Delete</kbd>"><kbd>Suppr</kbd></td><td data-en="Mark the clip as REJECT">Marquer le clip en REJECT</td></tr>
+    <tr><td data-en="<kbd>Esc</kbd>"><kbd>Échap</kbd></td><td data-en="Remove the tag from the selection">Retirer le tag de la sélection</td></tr>
+    <tr><td data-en="<kbd>Space</kbd>"><kbd>Espace</kbd></td><td data-en="Play / pause the preview">Lecture / pause de l'aperçu</td></tr>
+    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td data-en="Previous / next clip">Clip précédent / suivant</td></tr>
+    <tr><td data-en="<kbd>Ctrl</kbd> / <kbd>Shift</kbd> + click"><kbd>Ctrl</kbd> / <kbd>Maj</kbd> + clic</td><td data-en="Add clips to the selection">Ajouter des clips à la sélection</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td data-en="Select all">Tout sélectionner</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>I</kbd></td><td data-en="Import a folder">Importer un dossier</td></tr>
+    <tr><td data-en="<kbd>Ctrl</kbd> + <kbd>Enter</kbd>"><kbd>Ctrl</kbd> + <kbd>Entrée</kbd></td><td data-en="Prepare the tagged rushes">Préparer les rushes tagués</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td data-en="Save the project">Enregistrer le projet</td></tr>
+    <tr><td data-en="<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>"><kbd>Ctrl</kbd> + <kbd>Maj</kbd> + <kbd>S</kbd></td><td data-en="Save as">Enregistrer sous</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd> / <kbd>Ctrl</kbd> + <kbd>O</kbd></td><td data-en="New project / open a project">Nouveau projet / ouvrir un projet</td></tr>
+    <tr><td data-en="<kbd>Ctrl</kbd> + <kbd>Delete</kbd>"><kbd>Ctrl</kbd> + <kbd>Suppr</kbd></td><td data-en="Clear the rush list">Vider la liste des rushes</td></tr>
+    <tr><td><kbd>F2</kbd></td><td data-en="Rename a folder (Project setup)">Renommer un dossier (Création du projet)</td></tr>
   </tbody>
 </table></div>
-<p>Sur Mac, les raccourcis utilisent aussi la touche <kbd>control</kbd> (pas <kbd>⌘</kbd>), et <kbd>Suppr</kbd> correspond à <kbd>fn</kbd> + <kbd>⌫</kbd>. Tous les raccourcis sont aussi listés dans l'app, dans <strong>Paramètres › Aide</strong>.</p>
+<p data-en="On Mac, shortcuts also use the <kbd>control</kbd> key (not <kbd>⌘</kbd>), and <kbd>Delete</kbd> is <kbd>fn</kbd> + <kbd>⌫</kbd>. All shortcuts are also listed in the app, under <strong>Settings › Help</strong>.">Sur Mac, les raccourcis utilisent aussi la touche <kbd>control</kbd> (pas <kbd>⌘</kbd>), et <kbd>Suppr</kbd> correspond à <kbd>fn</kbd> + <kbd>⌫</kbd>. Tous les raccourcis sont aussi listés dans l'app, dans <strong>Paramètres › Aide</strong>.</p>
 
 <!-- Aide -->
 <section class="cta" id="aide">
-  <h2>Besoin d'aide ?</h2>
-  <p>Un bug, une question ou une idée ? Le bouton <strong>Feedback</strong> dans Rushr envoie ton message avec une capture d'écran. La communauté et l'équipe répondent aussi sur le Discord, et la <a href="support">page Support</a> rassemble la FAQ.</p>
-  <a class="btn btn-r" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener">Rejoindre le Discord</a>
-  <a class="btn btn-g" href="download">Télécharger Rushr</a>
+  <h2 data-en="Need help?">Besoin d'aide ?</h2>
+  <p data-en="A bug, a question or an idea? The <strong>Feedback</strong> button in Rushr sends your message with a screenshot. The community and the team also answer on Discord, and the <a href='support'>Support page</a> gathers the FAQ.">Un bug, une question ou une idée ? Le bouton <strong>Feedback</strong> dans Rushr envoie ton message avec une capture d'écran. La communauté et l'équipe répondent aussi sur le Discord, et la <a href="support">page Support</a> rassemble la FAQ.</p>
+  <a class="btn btn-r" href="https://discord.gg/wtb3YUxuNN" target="_blank" rel="noopener" data-en="Join the Discord">Rejoindre le Discord</a>
+  <a class="btn btn-g" href="download" data-en="Download Rushr">Télécharger Rushr</a>
 </section>
 </article></main>
 
 <footer>
   <a href="rushr">Rushr</a>
   <a href="support">Support</a>
-  <a href="legal">Mentions légales</a>
-  <a href="privacy">Confidentialité</a>
-  <a href="#" onclick="window.BPLConsent&&window.BPLConsent.open();return false">Gérer mes cookies</a>
+  <a href="legal" data-en="Legal notice">Mentions légales</a>
+  <a href="privacy" data-en="Privacy">Confidentialité</a>
+  <a href="#" onclick="window.BPLConsent&&window.BPLConsent.open();return false" data-en="Manage cookies">Gérer mes cookies</a>
   <div style="margin-top:8px">© 2026 BACKPACK LAB</div>
 </footer>
+<script>
+  // FR/EN switch, same storage key as the rest of the site (bpl_lang).
+  // French is the markup; English lives in data-en / data-en-alt / data-en-content.
+  function setLang(lang){
+    lang = lang === 'en' ? 'en' : 'fr';
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      if(el._fr === undefined) el._fr = el.innerHTML;
+      el.innerHTML = lang === 'en' ? el.getAttribute('data-en') : el._fr;
+    });
+    document.querySelectorAll('[data-en-alt]').forEach(function(el){
+      if(el._frAlt === undefined) el._frAlt = el.getAttribute('alt');
+      el.setAttribute('alt', lang === 'en' ? el.getAttribute('data-en-alt') : el._frAlt);
+    });
+    document.querySelectorAll('meta[data-en-content]').forEach(function(el){
+      if(el._frContent === undefined) el._frContent = el.getAttribute('content');
+      el.setAttribute('content', lang === 'en' ? el.getAttribute('data-en-content') : el._frContent);
+    });
+    var toc = document.querySelector('nav.toc');
+    if(toc) toc.setAttribute('aria-label', lang === 'en' ? 'Contents' : 'Sommaire');
+    document.getElementById('lfr').classList.toggle('on', lang === 'fr');
+    document.getElementById('len').classList.toggle('on', lang === 'en');
+    try{ localStorage.setItem('bpl_lang', lang); }catch(e){}
+  }
+  (function(){
+    var q = null, saved = null;
+    try{ q = new URLSearchParams(location.search).get('lang'); }catch(e){}
+    try{ saved = localStorage.getItem('bpl_lang'); }catch(e){}
+    var lang = q || saved || ((navigator.language||'en').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en');
+    setLang(lang);
+  })();
+</script>
 </body>
 </html>
