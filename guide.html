@@ -33,6 +33,9 @@
   .nav-cta:hover{color:#fff;filter:brightness(1.08)}
   @media(max-width:600px){.brand{font-size:17px;gap:10px}.brand img{width:36px;height:36px}}
   @media(max-width:380px){.brand{font-size:15px;gap:8px}.brand img{width:32px;height:32px}.nav-cta{padding:7px 10px;font-size:12px}}
+  @media(max-width:420px){.brand-txt{display:none}}
+  /* Mobile: keep brand, language switch and CTA on one line without overflowing */
+  @media(max-width:480px){.nav-in{gap:8px}.brand{white-space:nowrap}.nav-r{gap:6px;flex-shrink:0}.lang button{padding:5px 7px}.nav-cta{padding:7px 10px;font-size:12px}}
   main{flex:1;padding:34px 0 56px}
   .crumbs{color:var(--muted2);font-size:13px;margin-bottom:18px}
   .crumbs a{color:var(--muted);text-decoration:none}
@@ -95,7 +98,7 @@
 </head>
 <body>
 <nav class="top"><div class="wrap nav-in">
-  <a class="brand" href="/"><img src="assets/bp-mark.png" alt="" />BACKPACK&nbsp;LAB</a>
+  <a class="brand" href="/"><img src="assets/bp-mark.png" alt="" /><span class="brand-txt">BACKPACK&nbsp;LAB</span></a>
   <div class="nav-r">
     <div class="lang" role="group" aria-label="Langue / Language">
       <button type="button" id="lfr" class="on" onclick="setLang('fr')">FR</button>

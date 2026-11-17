@@ -28,6 +28,14 @@
   .nav-links a.on{color:var(--text);background:var(--surface2);border-color:var(--line2)}
   @media(max-width:700px){.nav-links{margin-left:10px}.nav-links a{padding:5px 8px;font-size:12px}#whoami{display:none}.brand .tag{display:none}}
   .nav-right{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+  /* Mobile: brand + logout on the first row, section links on their own row */
+  @media(max-width:700px){
+    .nav-in{flex-wrap:wrap;height:auto;padding-top:10px;padding-bottom:10px;row-gap:10px}
+    .nav-links{order:3;width:100%;margin:0;overflow-x:auto;scrollbar-width:none}
+    .nav-links::-webkit-scrollbar{display:none}
+    .nav-links a{white-space:nowrap;padding:6px 12px;font-size:13px}
+    .brand{white-space:nowrap}
+  }
   main{flex:1;width:100%;padding:24px 0 60px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;font-weight:600;font-size:13px;padding:9px 15px;cursor:pointer;border:1px solid transparent;font-family:inherit;transition:.15s}
   .btn-primary{background:var(--accent);color:var(--on-accent)}.btn-primary:hover{background:var(--accent2)}
@@ -111,6 +119,11 @@
   .mtabs{display:flex;gap:8px;margin-bottom:18px}
   .mtabs button{background:var(--surface);border:1px solid var(--line2);color:var(--muted);font-size:13px;font-weight:600;padding:9px 16px;border-radius:9px;cursor:pointer;font-family:inherit}
   .mtabs button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+  /* Mobile: tabs wrap instead of running off the screen */
+  @media(max-width:700px){
+    .mtabs{flex-wrap:wrap;gap:6px}
+    .mtabs button{flex:1 1 auto;padding:8px 12px;font-size:12.5px;white-space:nowrap}
+  }
 
   /* beta signups view */
   .stats{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
