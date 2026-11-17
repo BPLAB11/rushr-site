@@ -430,6 +430,8 @@
     document.getElementById('logoutBtn').style.display='inline-flex';
     var admin=false; try{ admin=await rpc('is_admin'); }catch(e){}
     if(!admin){ show('g-denied'); return; }
+    // Ce navigateur est celui d'un admin : ses visites du site ne comptent plus dans les statistiques.
+    try{ localStorage.setItem('bpl_no_track','1'); }catch(e){}
     show('app'); loadProjects();
   }
 
@@ -589,7 +591,7 @@
     document.getElementById('aStats').innerHTML=
       '<div class="stat"><div class="n">'+data.total_views+'</div><div class="l">Vues totales</div></div>'+
       '<div class="stat"><div class="n">'+data.unique_visitors+'</div><div class="l">Visiteurs uniques</div></div>'+
-      '<div class="stat"><div class="n">'+fmtDuration(data.avg_duration_ms)+'</div><div class="l">Durée moyenne</div></div>'+
+      '<div class="stat"><div class="n">'+fmtDuration(data.median_duration_ms)+'</div><div class="l">Durée médiane / page<br><span style="opacity:.7">moyenne : '+fmtDuration(data.avg_duration_ms)+'</span></div></div>'+
       '<div class="stat"><div class="n">'+(data.unique_visitors?(data.total_views/data.unique_visitors).toFixed(1):'0')+'</div><div class="l">Pages / visite</div></div>';
 
     var daily=data.daily||[];
