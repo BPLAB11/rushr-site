@@ -359,8 +359,8 @@ function Partners({ sources }) {
         </SectionTitle>
         <CardDescription>Les visites et inscriptions apportées par les liens de tes partenaires.</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <div>
+      <CardContent className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <div className="min-w-0">
           {partners.length ? (
             <Table>
               <TableHeader>
@@ -379,7 +379,7 @@ function Partners({ sources }) {
                       <TableCell className="font-medium">{p.name}</TableCell>
                       <TableCell className="text-right tabular-nums">{nf.format(p.visitors)}</TableCell>
                       <TableCell className={cn('text-right tabular-nums', p.signups ? 'font-semibold text-primary' : 'text-muted-foreground')}>{p.signups}</TableCell>
-                      <TableCell className="text-right"><CopyButton text={'https://' + link} label="Lien" /></TableCell>
+                      <TableCell className="text-right"><CopyButton text={'https://' + link} label="Copier" /></TableCell>
                     </TableRow>
                   );
                 })}
@@ -391,7 +391,7 @@ function Partners({ sources }) {
             </p>
           )}
         </div>
-        <div className="rounded-lg border bg-muted/40 p-4">
+        <div className="min-w-0 rounded-lg border bg-muted/40 p-4">
           <div className="flex items-center gap-2 text-sm font-medium"><Link2 className="size-4 text-primary" />Créer un lien partenaire</div>
           <p className="mt-1 text-xs text-muted-foreground">Tape le nom du partenaire, puis copie le lien à lui envoyer. Rien d'autre à configurer.</p>
           <input
@@ -400,8 +400,8 @@ function Partners({ sources }) {
             placeholder="ex. Cineloc"
             className="mt-3 h-9 w-full rounded-md border border-input bg-background px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
           />
-          <div className="mt-3 flex items-center gap-2">
-            <code className="min-w-0 flex-1 truncate rounded-md bg-background px-3 py-2 text-[13px] text-primary">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <code className="min-w-0 flex-1 basis-56 break-all rounded-md bg-background px-3 py-2 text-[13px] text-primary">
               {SITE}/p/{slug || 'nom'}
             </code>
             <CopyButton text={`https://${SITE}/p/${slug}`} />
@@ -418,8 +418,8 @@ function Pages({ data }) {
   const total = rows.reduce((a, r) => a + r.count, 0);
   return (
     <Card>
-      <CardHeader className="flex-row items-start justify-between gap-3 space-y-0">
-        <div className="flex flex-col gap-1.5">
+      <CardHeader className="flex-row flex-wrap items-start justify-between gap-3 space-y-0">
+        <div className="flex min-w-48 flex-1 flex-col gap-1.5">
           <SectionTitle
             icon={Eye}
             hint={tab === 'top'
@@ -646,19 +646,19 @@ export default function AnalyticsDashboard() {
 
             <DailyChart daily={data.daily} days={days} />
 
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <Sources sources={sources} />
               <Funnel data={data} />
             </div>
 
             <Partners sources={sources} />
 
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <Pages data={data} />
               <Actions data={data} />
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <Audience data={data} />
             </div>
 

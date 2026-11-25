@@ -20,5 +20,5 @@ export function TableHead({ className, ...props }) {
   return <th className={cn('h-9 px-2 text-left align-middle text-xs font-medium text-muted-foreground', className)} {...props} />;
 }
 export function TableCell({ className, ...props }) {
-  return <td className={cn('p-2 align-middle', className)} {...props} />;
+  return <td className={cn('p-2 align-middle whitespace-nowrap', className)} {...props} />;
 }
