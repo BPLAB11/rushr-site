@@ -203,6 +203,8 @@
   }
 </style>
 <script>(function(){var p=location.pathname;if(/\.html$|\/index$/.test(p)){p=p.replace(/\/index(\.html)?$/,'/').replace(/\.html$/,'');try{history.replaceState(null,'',(p||'/')+location.search+location.hash);}catch(e){}}})();</script>
+<link rel="stylesheet" href="assets/admin/analytics.css" />
+<script type="module" src="assets/admin/analytics.js"></script>
 </head>
 <body>
 <nav><div class="wrap nav-in">
@@ -275,69 +277,7 @@
     </div>
 
     <div id="view-analytics" style="display:none">
-      <div class="card live-card">
-        <div class="live-dot"></div>
-        <div><div class="live-n" id="aLiveCount">—</div><div class="l">visiteur(s) actif(s) maintenant</div></div>
-        <div class="live-paths" id="aLivePaths"></div>
-      </div>
-
-      <div class="toolbar">
-        <div class="range-tabs" id="rangeTabs">
-          <button data-days="7" onclick="setRange(7)">7 jours</button>
-          <button data-days="30" class="on" onclick="setRange(30)">30 jours</button>
-          <button data-days="90" onclick="setRange(90)">90 jours</button>
-        </div>
-        <button class="btn btn-ghost" onclick="loadAnalytics()">Rafraîchir</button>
-      </div>
-
-      <div class="stats" id="aStats"></div>
-
-      <div class="card">
-        <h3>Funnel Rushr → Beta</h3>
-        <div id="aFunnel"></div>
-      </div>
-
-      <div class="card">
-        <h3>Campagnes &amp; sources <span style="font-weight:400;font-size:12px;color:var(--muted2)">— visiteurs et inscrits par origine (ajoute ?utm_source=reddit&amp;utm_campaign=lancement à tes liens)</span></h3>
-        <div id="aCampaign"></div>
-      </div>
-
-      <div class="card">
-        <h3>Clics <span style="font-weight:400;font-size:12px;color:var(--muted2)">— boutons beta, Discord, téléchargements</span></h3>
-        <div id="aClicks" class="a-list"></div>
-      </div>
-
-      <div class="card">
-        <h3>Visites par jour</h3>
-        <div class="bars" id="aDaily"></div>
-      </div>
-
-      <div class="a-grid">
-        <div class="card">
-          <h3>Pays</h3>
-          <div id="aCountry" class="a-list"></div>
-        </div>
-        <div class="card">
-          <h3>Pages les plus vues</h3>
-          <div id="aPath" class="a-list"></div>
-        </div>
-        <div class="card">
-          <h3>Pages de sortie</h3>
-          <div id="aExit" class="a-list"></div>
-        </div>
-        <div class="card">
-          <h3>Appareils</h3>
-          <div id="aDevice" class="a-list"></div>
-        </div>
-        <div class="card">
-          <h3>Navigateurs</h3>
-          <div id="aBrowser" class="a-list"></div>
-        </div>
-        <div class="card" style="grid-column:1/-1">
-          <h3>Référents</h3>
-          <div id="aReferrer" class="a-list"></div>
-        </div>
-      </div>
+      <div id="analytics-root"></div>
     </div>
 
     <div id="view-downloads" style="display:none">
@@ -411,7 +351,6 @@
   var SB=window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   var ME=null, PROJECTS=[], selId=null, mode='in';
   var SIGNUPS=[], signupsLoaded=false, curView='reviews';
-  var analyticsLoaded=false, rangeDays=30, liveInterval=null;
   var VERSIONS=[], versionsLoaded=false;
   var DL_STATS=[], DL_PLATFORMS=[], DL_USERS=[], DL_FILTER='';
 
@@ -420,6 +359,7 @@
   function show(id){['g-load','g-login','g-denied','app'].forEach(function(x){document.getElementById(x).style.display=(x===id)?'block':'none';});}
   function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast show '+(t||'');setTimeout(function(){e.className='toast '+(t||'');},2200);}
   async function rpc(n,a){var r=await SB.rpc(n,a||{});if(r.error)throw r.error;return r.data;}
+  window.BPL_ADMIN={rpc:rpc};
   function reviewLink(token){ return location.origin + '/review?p=' + token; }
 
   function setMode(m){mode=m;document.getElementById('tabIn').classList.toggle('on',m==='in');document.getElementById('tabUp').classList.toggle('on',m==='up');document.getElementById('authBtn').textContent=(m==='up')?'Créer mon compte':'Se connecter';document.getElementById('authMsg').textContent='';}
@@ -463,14 +403,7 @@
     if(v==='beta' && !signupsLoaded) loadSignups();
     if(v==='versions' && !versionsLoaded) loadVersions();
     if(v==='downloads') loadDownloads();
-    if(v==='analytics'){
-      if(!analyticsLoaded) loadAnalytics();
-      loadLiveNow();
-      if(liveInterval) clearInterval(liveInterval);
-      liveInterval = setInterval(loadLiveNow, 15000);
-    } else if(liveInterval){
-      clearInterval(liveInterval); liveInterval=null;
-    }
+    document.dispatchEvent(new CustomEvent('bpl:view',{detail:v}));
   }
 
   /* ---------- Téléchargements par logiciel (total + utilisateurs uniques) ---------- */
@@ -532,15 +465,6 @@
     document.body.appendChild(a); a.click(); a.remove();
   }
 
-  async function loadLiveNow(){
-    try{
-      var d = await rpc('analytics_active_now');
-      document.getElementById('aLiveCount').textContent = d.count;
-      var paths = d.by_path||[];
-      document.getElementById('aLivePaths').innerHTML = paths.map(function(p){ return '<span>'+esc(p.path)+' · '+p.count+'</span>'; }).join('');
-    }catch(e){ /* silent: non-critical background refresh */ }
-  }
-
   async function loadSignups(){
     try{ SIGNUPS=await rpc('beta_signup_admin_list'); signupsLoaded=true; }catch(e){ toast('Erreur : '+e.message,'err'); SIGNUPS=[]; }
     renderStats(); renderSignupTable();
@@ -583,78 +507,6 @@
     var url=URL.createObjectURL(blob);
     var a=document.createElement('a'); a.href=url; a.download='rushr-beta-signups.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }
-
-  var COUNTRY_NAMES={FR:'France',US:'États-Unis',GB:'Royaume-Uni',CA:'Canada',BE:'Belgique',CH:'Suisse',DE:'Allemagne',ES:'Espagne',IT:'Italie',NL:'Pays-Bas',PT:'Portugal',MA:'Maroc',DZ:'Algérie',TN:'Tunisie',SN:'Sénégal',CI:'Côte d\'Ivoire',AU:'Australie',BR:'Brésil',IN:'Inde',JP:'Japon','??':'Inconnu'};
-  function countryLabel(cc){ if(!cc||cc==='??') return '🏳️ Inconnu'; var flag=cc.replace(/./g,function(c){return String.fromCodePoint(127397+c.charCodeAt());}); return flag+' '+(COUNTRY_NAMES[cc]||cc); }
-  function fmtDuration(ms){ if(!ms||ms<=0) return '—'; var s=Math.round(ms/1000); var m=Math.floor(s/60); s=s%60; return m>0?(m+'m '+s+'s'):(s+'s'); }
-  function fmtDay(d){ try{ return new Date(d).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}); }catch(e){ return d; } }
-
-  function setRange(days){
-    rangeDays=days;
-    document.querySelectorAll('#rangeTabs button').forEach(function(b){ b.classList.toggle('on', +b.getAttribute('data-days')===days); });
-    loadAnalytics();
-  }
-
-  async function loadAnalytics(){
-    var data;
-    try{ data=await rpc('analytics_admin_summary',{p_days:rangeDays}); analyticsLoaded=true; }
-    catch(e){ toast('Erreur : '+e.message,'err'); return; }
-
-    document.getElementById('aStats').innerHTML=
-      '<div class="stat"><div class="n">'+data.total_views+'</div><div class="l">Vues totales</div></div>'+
-      '<div class="stat"><div class="n">'+data.unique_visitors+'</div><div class="l">Visiteurs uniques</div></div>'+
-      '<div class="stat"><div class="n">'+fmtDuration(data.median_duration_ms)+'</div><div class="l">Durée médiane / page<br><span style="opacity:.7">moyenne : '+fmtDuration(data.avg_duration_ms)+'</span></div></div>'+
-      '<div class="stat"><div class="n">'+(data.unique_visitors?(data.total_views/data.unique_visitors).toFixed(1):'0')+'</div><div class="l">Pages / visite</div></div>';
-
-    var daily=data.daily||[];
-    var max=Math.max.apply(null,daily.map(function(d){return d.count;}).concat([1]));
-    document.getElementById('aDaily').innerHTML = daily.length ? daily.map(function(d){
-      var h=Math.max(4,Math.round((d.count/max)*100));
-      return '<div class="b" style="height:'+h+'%" data-tip="'+fmtDay(d.day)+' · '+d.count+'"></div>';
-    }).join('') : '<div class="empty-mini">Pas encore de données sur cette période.</div>';
-
-    function renderList(elId, rows, labelFn){
-      var el=document.getElementById(elId);
-      if(!rows.length){ el.innerHTML='<div class="empty-mini">Pas de données.</div>'; return; }
-      var max=Math.max.apply(null,rows.map(function(r){return r.count;}));
-      el.innerHTML=rows.map(function(r){
-        var pct=Math.max(4,Math.round((r.count/max)*100));
-        return '<div class="a-row"><span class="lbl">'+labelFn(r)+'</span><span class="bar"><i style="width:'+pct+'%"></i></span><span class="n">'+r.count+'</span></div>';
-      }).join('');
-    }
-    renderList('aCountry', data.by_country||[], function(r){ return countryLabel(r.country); });
-    renderList('aPath', data.by_path||[], function(r){ return esc(r.path); });
-    renderList('aExit', data.by_exit||[], function(r){ return esc(r.path); });
-    renderList('aDevice', data.by_device||[], function(r){ return esc(r.device); });
-    renderList('aBrowser', data.by_browser||[], function(r){ return esc(r.browser); });
-    renderList('aReferrer', data.by_referrer||[], function(r){ return esc(r.ref); });
-    renderList('aClicks', data.clicks||[], function(r){
-      return esc(r.event)+(r.label?' <span style="color:var(--muted2)">· '+esc(r.label)+'</span>':'');
-    });
-
-    var camps=data.by_campaign||[], campEl=document.getElementById('aCampaign');
-    campEl.innerHTML = camps.length
-      ? '<table style="width:100%;font-size:13px;border-collapse:collapse">'+
-          '<tr style="text-align:left;color:var(--muted2);font-size:11.5px"><th style="padding:4px 6px">Source</th><th>Medium</th><th>Campagne</th><th style="text-align:right">Visiteurs</th><th style="text-align:right">Inscrits</th><th style="text-align:right">Conv.</th></tr>'+
-          camps.map(function(c){
-            var conv=c.visitors?((c.signups/c.visitors)*100).toFixed(1)+'%':'-';
-            return '<tr style="border-top:1px solid var(--surface2)"><td style="padding:6px">'+esc(c.source)+'</td><td>'+esc(c.medium||'-')+'</td><td>'+esc(c.campaign||'-')+'</td>'+
-                   '<td style="text-align:right">'+c.visitors+'</td><td style="text-align:right">'+c.signups+'</td><td style="text-align:right">'+conv+'</td></tr>';
-          }).join('')+'</table>'
-      : '<div class="empty-mini">Pas encore de données.</div>';
-    if(data.bots_filtered) campEl.insertAdjacentHTML('beforeend','<p style="font-size:11.5px;color:var(--muted2);margin-top:10px">'+data.bots_filtered+' vues de robots ignorées sur la période.</p>');
-
-    var f = data.funnel || {rushr_visitors:0, beta_signups:0, beta_signups_from_rushr:0};
-    var rate = f.rushr_visitors ? ((f.beta_signups_from_rushr / f.rushr_visitors) * 100).toFixed(1) : '0.0';
-    document.getElementById('aFunnel').innerHTML =
-      '<div class="funnel-row">'+
-        '<div class="funnel-step"><div class="n">'+f.rushr_visitors+'</div><div class="l">Visiteurs Rushr</div></div>'+
-        '<div class="funnel-arrow">→</div>'+
-        '<div class="funnel-step"><div class="n">'+f.beta_signups_from_rushr+'</div><div class="l">Inscrits (venant de Rushr)</div></div>'+
-        '<div class="funnel-rate"><div class="n">'+rate+'%</div><div class="l">Taux de conversion</div></div>'+
-      '</div>'+
-      (f.beta_signups>f.beta_signups_from_rushr ? '<p style="font-size:11.5px;color:var(--muted2);margin-top:10px">'+f.beta_signups+' inscriptions au total sur la période, dont '+f.beta_signups_from_rushr+' rattachées à une visite de rushr.html.</p>' : '');
   }
 
   async function loadProjects(){

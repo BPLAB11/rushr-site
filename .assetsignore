@@ -9,6 +9,7 @@ node_modules
 package.json
 package-lock.json
 vite.config.js
+vite.admin.config.js
 components.json
 jsconfig.json
 wrangler.jsonc

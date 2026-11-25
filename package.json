@@ -5,15 +5,25 @@
   "description": "Site BACKPACK LAB : pages HTML + îlots React (islands/) compilés dans assets/islands/",
   "scripts": {
     "build:islands": "vite build",
-    "watch:islands": "vite build --watch"
+    "watch:islands": "vite build --watch",
+    "build:admin": "vite build --config vite.admin.config.js"
   },
   "dependencies": {
+    "@radix-ui/react-tabs": "^1.2.1",
+    "@radix-ui/react-tooltip": "^1.4.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.80.0",
     "motion": "^12.43.0",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "recharts": "^3.11.1",
+    "tailwind-merge": "^3.7.1"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
     "@vitejs/plugin-react": "^6.3.0",
+    "tailwindcss": "^4.3.5",
     "vite": "^8.3.8"
   }
 }
