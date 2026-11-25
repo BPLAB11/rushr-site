@@ -299,6 +299,9 @@
   .foot-links a{color:var(--muted)}
   .foot-links a:hover{color:var(--text)}
   /* SoundBox */
+  .hero-logo-img{display:block;height:clamp(30px,5vw,54px);width:auto;max-width:100%;margin:0 auto 28px;filter:drop-shadow(0 0 30px rgba(176,43,255,.35))}
+  .brand-logo-img{display:block;height:18px;width:auto}
+  .foot-logo-img{display:block;height:14px;width:auto}
   .wordmark{font-weight:900;letter-spacing:1px;font-size:20px;color:#fff}
   .wordmark b{color:var(--accent)}
   .wordmark.sm{font-size:15px}
@@ -317,7 +320,7 @@
 
 <nav>
   <div class="wrap nav-in">
-    <a class="brand" href="/"><span class="wordmark">SOUND<b>BOX</b></span></a>
+    <a class="brand" href="/"><img class="brand-logo-img" src="assets/soundbox-logo.webp" width="602" height="54" alt="SOUNDBOX" /></a>
     <div class="nav-right">
       <div class="nav-links">
         <a href="/" data-fr="← Backpack Lab" data-en="← Backpack Lab">← Backpack Lab</a>
@@ -346,7 +349,7 @@
   <div class="hero-glow"></div>
   <div class="wrap hero">
     <div>
-      <div class="hero-word" aria-hidden="true">SOUND<b>BOX</b></div>
+      <img class="hero-logo-img" src="assets/soundbox-logo.webp" width="602" height="54" alt="SOUNDBOX" />
       <span class="pill"><span class="d"></span><span data-fr="Prochainement · Windows &amp; macOS" data-en="Coming soon · Windows &amp; macOS">Prochainement · Windows &amp; macOS</span></span>
       <svg aria-hidden="true" width="0" height="0" style="position:absolute"><defs><filter id="morph-threshold"><feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/></filter></defs></svg>
       <h1 class="morph-h1"><span class="sr-only" data-fr="SoundBox, le soundboard des vidéastes : trouvez le bon son en quelques secondes." data-en="SoundBox, the soundboard for video creators: find the right sound in seconds.">SoundBox, le soundboard des vidéastes : trouvez le bon son en quelques secondes.</span><span class="morph" id="morph" aria-hidden="true"><span id="morph-a">Bibliothèque</span><span id="morph-b"></span></span></h1>
@@ -463,7 +466,7 @@
 
 <footer>
   <div class="wrap foot-in">
-    <span class="wordmark sm">SOUND<b>BOX</b></span>
+    <img class="foot-logo-img" src="assets/soundbox-logo.webp" width="602" height="54" alt="SOUNDBOX" loading="lazy" />
     <div data-fr="© 2026 BACKPACK LAB · SOUNDBOX — Soundboard pour vidéastes. Tous droits réservés." data-en="© 2026 BACKPACK LAB · SOUNDBOX — Soundboard for video creators. All rights reserved.">© 2026 BACKPACK LAB · SOUNDBOX</div>
     <a href="mailto:contact@thebackpacklab.com">contact@thebackpacklab.com</a>
     <div class="foot-links">
