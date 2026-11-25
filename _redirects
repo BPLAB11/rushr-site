@@ -1,2 +1,4 @@
 # Redirections (équivalent de "redirects" dans vercel.json)
 /beta  /account  301
+# Liens partenaires : /p/cineloc -> accueil, visite comptée pour la source "cineloc" (admin > Campagnes & sources)
+/p/:partner  /?utm_source=:partner&utm_medium=partenaire  302
