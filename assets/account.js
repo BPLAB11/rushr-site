@@ -668,7 +668,7 @@ function downloadCard(lics){
   // Download buttons use the site URL set in the admin; the update URL (used by the app) is the fallback.
   var url=safeUrl(cur.site_download_url||cur.download_url);
   var otherUrl=other&&safeUrl(other.site_download_url||other.download_url);
-  return '<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dl_title'))+'</div><div class="card-description">v'+esc(cur.latest_version)+' · '+esc(t('dl_beta'))+'</div></div><span class="ico-box rushr">'+icon('download')+'</span></div><div class="card-content">'
+  return '<div class="card"><div class="card-header"><div><div class="card-title">'+esc(t('dl_title'))+'</div><div class="card-description">v'+esc(cur.latest_version)+' · '+esc(t('dl_beta'))+'</div></div><span class="prod-logo"><img src="assets/rushr-logo-96.png" alt="" width="40" height="28"></span></div><div class="card-content">'
     +(url?'<a class="btn btn-outline btn-dl rushr btn-block" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(cur)+'>'+pfIcon(cur.platform)+'<span>'+esc(t('dl_for',{os:os(cur.platform)}))+'</span></a>':'')
     +(otherUrl?'<a class="hint link" style="display:inline-block;margin-top:10px" href="'+esc(otherUrl)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(other)+'>'+esc(t('dl_other',{os:os(other.platform)}))+'</a>':'')
     +(cur.changelog?'<details class="notes"><summary>'+icon('chevron','chev')+'<span>'+esc(t('dl_notes'))+'</span></summary><pre>'+esc(cur.changelog)+'</pre></details>':'')
