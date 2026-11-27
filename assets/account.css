@@ -400,3 +400,5 @@ span[data-icon]{display:inline-flex;align-items:center;justify-content:center;fl
 /* Boutons de téléchargement (Windows / Mac) : neutres, mis en avant seulement au survol. */
 .btn-dl:hover,.btn-dl:focus-visible{background:var(--primary);color:var(--primary-foreground);border-color:transparent}
 .btn-dl.rushr:hover,.btn-dl.rushr:focus-visible{background:var(--rushr);color:var(--rushr-foreground)}
+/* Logo du logiciel (Mes produits) à la place de l'icône. */
+.prod-logo{width:40px;height:36px;display:flex;align-items:center;justify-content:center;flex:none}.prod-logo img{width:40px;height:auto;display:block}

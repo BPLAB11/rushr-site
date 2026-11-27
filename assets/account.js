@@ -744,7 +744,7 @@ function productCard(l){
   }).join('');
   var ver=plats.length?per[plats[0]].latest_version:null;
   return '<article class="card lic-card'+(rushr?' rushr':'')+'" style="margin-bottom:14px"><div class="card-content">'
-    +'<div class="lic-top"><div class="lic-prod"><span class="ico-box '+(rushr?'rushr':'green')+'">'+icon('download')+'</span><div><h3>'+esc(prod)+'</h3>'
+    +'<div class="lic-top"><div class="lic-prod">'+(rushr?'<span class="prod-logo"><img src="assets/rushr-logo-96.png" alt="" width="40" height="28"></span>':'<span class="ico-box green">'+icon('download')+'</span>')+'<div><h3>'+esc(prod)+'</h3>'
     +(pr?'<div class="card-description" style="margin-top:1px">'+esc(pr[S.lang])+'</div>':'')+'</div></div>'
     +(ver?'<span class="badge badge-secondary">v'+esc(ver)+'</span>':'')+'</div>'
     +(btns?'<div class="row" style="margin-top:14px;flex-wrap:wrap;gap:8px">'+btns+'</div>'
