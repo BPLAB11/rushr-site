@@ -867,6 +867,8 @@ function applyStatic(){
 /* ===================== Données ===================== */
 async function fetchAccount(){
   var r=await SB.rpc('get_my_account'); if(r.error) throw r.error; S.account=r.data;
+  // Le prénom affiché à la place de « Mon compte » dans le menu des autres pages (assets/nav-account.js).
+  try{ localStorage.setItem('bpl_nav_name', JSON.stringify({uid:S.account.user.id, name:displayName()})); }catch(e){}
 }
 async function refreshAccount(silent){
   await fetchAccount(); updateChrome(); renderView(false);
@@ -1396,6 +1398,7 @@ async function enterApp(){
 }
 async function signOut(){
   try{ await SB.auth.signOut(); }catch(e){}
+  try{ localStorage.removeItem('bpl_nav_name'); }catch(e){}
   S.account=null; S.tickets=null; S.draft=null; S.revealed={};
   closeSheet(); while(closeTopOverlay()){}
   $('#emailInput').value=''; $('#pwInput').value=''; $('#codeInput').value=''; $('#newPwInput').value='';
