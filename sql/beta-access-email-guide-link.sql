@@ -11,8 +11,8 @@ declare
 begin
   if position('thebackpacklab.com/guide' in d) > 0 then return; end if;
   if position(fr_mark in d) = 0 or position(en_mark in d) = 0 then raise exception 'MARKERS_NOT_FOUND'; end if;
-  d := replace(d, fr_mark, fr_mark || format(btn, 'Lire le guide de démarrage →'));
-  d := replace(d, en_mark, en_mark || format(btn, 'Read the getting-started guide (French) →'));
+  d := replace(d, fr_mark, fr_mark || format(btn, 'Lire le guide de démarrage'));
+  d := replace(d, en_mark, en_mark || format(btn, 'Read the getting-started guide (French)'));
   execute d;
 end
 $do$;

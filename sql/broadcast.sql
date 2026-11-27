@@ -65,7 +65,7 @@ begin
     if length(v_label) > 40 then raise exception 'INVALID_CTA'; end if;
     v_cta := '<tr><td style="padding:6px 32px 8px 32px;font-family:Arial,Helvetica,sans-serif;">'
           || '<a href="' || replace(v_url,'&','&amp;') || '" style="display:block;text-align:center;background:#35DC8E;color:#04150C;text-decoration:none;font-weight:700;font-size:15px;padding:14px 20px;border-radius:10px;">'
-          || replace(replace(replace(replace(v_label,'&','&amp;'),'<','&lt;'),'>','&gt;'),'"','&quot;') || ' →</a></td></tr>';
+          || replace(replace(replace(replace(v_label,'&','&amp;'),'<','&lt;'),'>','&gt;'),'"','&quot;') || '</a></td></tr>';
   end if;
 
   v_tpl := $tpl$<!DOCTYPE html>

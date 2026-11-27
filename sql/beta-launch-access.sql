@@ -114,7 +114,7 @@ begin
       <p style="margin:0 0 12px 0;font-size:15px;line-height:1.65;color:#D6D6DA;">Une fois connecté, la page te propose directement la version pour {{os}}.</p>
     </td></tr>
     <tr><td style="padding:0 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
-      <a href="https://thebackpacklab.com/download" style="display:block;text-align:center;background:#FF6A00;color:#0B0B0B;text-decoration:none;font-weight:700;font-size:15px;padding:14px 20px;border-radius:10px;">Créer mon compte et télécharger RUSHR →</a>
+      <a href="https://thebackpacklab.com/download" style="display:block;text-align:center;background:#FF6A00;color:#0B0B0B;text-decoration:none;font-weight:700;font-size:15px;padding:14px 20px;border-radius:10px;">Créer mon compte et télécharger RUSHR</a>
       <div style="font-size:12px;line-height:1.6;color:#9A9A9E;padding-top:8px;">{{note_fr}}</div>
     </td></tr>
     <tr><td style="padding:18px 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
@@ -122,7 +122,7 @@ begin
       <p style="margin:0 0 6px 0;font-size:15px;line-height:1.65;color:#D6D6DA;">Ouvre RUSHR et connecte-toi avec le même compte : avec Google, ou avec ton e-mail et ton mot de passe. Aucune clé à saisir. Tes retours façonnent directement l'outil.</p>
     </td></tr>
     <tr><td style="padding:16px 32px 8px 32px;font-family:Arial,Helvetica,sans-serif;">
-      <a href="https://discord.gg/wtb3YUxuNN" style="display:block;text-align:center;background:transparent;color:#FFFFFF;text-decoration:none;font-weight:700;font-size:15px;padding:13px 20px;border-radius:10px;border:1px solid #3a3a41;">Besoin d'aide ? Rejoindre le Discord →</a>
+      <a href="https://discord.gg/wtb3YUxuNN" style="display:block;text-align:center;background:transparent;color:#FFFFFF;text-decoration:none;font-weight:700;font-size:15px;padding:13px 20px;border-radius:10px;border:1px solid #3a3a41;">Besoin d'aide ? Rejoindre le Discord</a>
     </td></tr>
 
     <tr><td style="padding:22px 32px 6px 32px;"><div style="height:1px;background:#26262b;line-height:1px;font-size:1px;">&nbsp;</div></td></tr>
@@ -139,7 +139,7 @@ begin
       <p style="margin:0 0 12px 0;font-size:15px;line-height:1.65;color:#D6D6DA;">Once you're signed in, the page offers the {{os}} version right away.</p>
     </td></tr>
     <tr><td style="padding:0 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
-      <a href="https://thebackpacklab.com/download" style="display:block;text-align:center;background:#FF6A00;color:#0B0B0B;text-decoration:none;font-weight:700;font-size:15px;padding:14px 20px;border-radius:10px;">Create my account and download RUSHR →</a>
+      <a href="https://thebackpacklab.com/download" style="display:block;text-align:center;background:#FF6A00;color:#0B0B0B;text-decoration:none;font-weight:700;font-size:15px;padding:14px 20px;border-radius:10px;">Create my account and download RUSHR</a>
       <div style="font-size:12px;line-height:1.6;color:#9A9A9E;padding-top:8px;">{{note_en}}</div>
     </td></tr>
     <tr><td style="padding:18px 32px 0 32px;font-family:Arial,Helvetica,sans-serif;">
@@ -147,7 +147,7 @@ begin
       <p style="margin:0 0 6px 0;font-size:15px;line-height:1.65;color:#D6D6DA;">Open RUSHR and sign in with the same account: with Google, or with your email and password. No key to type. Your feedback directly shapes the tool.</p>
     </td></tr>
     <tr><td style="padding:16px 32px 8px 32px;font-family:Arial,Helvetica,sans-serif;">
-      <a href="https://discord.gg/wtb3YUxuNN" style="display:block;text-align:center;background:transparent;color:#FFFFFF;text-decoration:none;font-weight:700;font-size:15px;padding:13px 20px;border-radius:10px;border:1px solid #3a3a41;">Need help? Join the Discord →</a>
+      <a href="https://discord.gg/wtb3YUxuNN" style="display:block;text-align:center;background:transparent;color:#FFFFFF;text-decoration:none;font-weight:700;font-size:15px;padding:13px 20px;border-radius:10px;border:1px solid #3a3a41;">Need help? Join the Discord</a>
     </td></tr>
 
     <tr><td style="padding:24px 32px 32px 32px;font-family:Arial,Helvetica,sans-serif;">
