@@ -5,7 +5,7 @@ var SUPABASE_URL="https://vztqykihtnkscwcodkyf.supabase.co";
 var SUPABASE_KEY="sb_publishable_z37RvcwDHOhoyS7GQIxn8Q_ZOifPQ4l";
 var SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-var ROUTES=['overview','licenses','devices','purchases','profile','support'];
+var ROUTES=['overview','licenses','devices','products','purchases','profile','support'];
 var S={account:null,tickets:null,versions:null,route:'overview',pendingEmail:'',revealed:{},draft:null,resendAt:0,resendTimer:null,lang:'fr',busy:{}};
 var PRODUCTS={
   RUSHR:{fr:'Outil de dérushage pour les créateurs',en:'Dérushage tool for creators'},
@@ -35,7 +35,7 @@ fr:{
  legal:'Mentions légales',privacy:'Confidentialité',
  side_1_t:'Tes licences au même endroit',side_1_d:'Copie ta clé, vois son statut et son logiciel.',side_2_t:"Change d'ordinateur sans stress",side_2_d:'Libère un appareil quand tu en changes.',side_3_t:'Une vraie personne te répond',side_3_d:'Écris au support directement depuis ton compte.',side_quote:'Des logiciels pensés pour les créateurs vidéo.',
  workspace:'Espace compte',grp_platform:'Plateforme',grp_account:'Compte',
- nav_overview:"Vue d'ensemble",nav_licenses:'Mes licences',nav_devices:'Mes appareils',nav_purchases:'Achats et factures',nav_download:'Télécharger Rushr',nav_profile:'Profil et préférences',nav_support:'Support',
+ nav_overview:"Vue d'ensemble",nav_licenses:'Mes licences',nav_devices:'Mes appareils',nav_purchases:'Achats et factures',nav_download:'Télécharger Rushr',nav_products:'Mes produits',page_products_d:'Tes logiciels et tes packs, à retélécharger quand tu veux.',prod_soft:'Logiciels',prod_packs:'Packs',prod_none_t:'Aucun logiciel pour le moment',prod_none_d:'Les logiciels liés à ton compte apparaîtront ici, avec leur téléchargement.',prod_discover:'Découvrir Rushr',prod_packs_t:'Aucun pack pour le moment',prod_packs_d:'Les packs que tu achètes apparaîtront ici, à retélécharger quand tu veux.',prod_see_packs:'Voir les packs',prod_no_build:'Le téléchargement de ce logiciel n’est pas encore disponible.',nav_profile:'Profil et préférences',nav_support:'Support',
  search:'Rechercher…',menu_lang:'Langue',menu_signout:'Se déconnecter',
  hello:'Bonjour, {name}',overview_sub:'Voici un aperçu de ton compte BACKPACK LAB.',add_key:'Ajouter une clé',
  st_licenses:'Licences',st_active:'{n} active(s)',st_devices:'Appareils',st_slots:'emplacements utilisés',st_last:'Dernière activité',st_last_none:'Aucun appareil activé',st_version:'Dernière version',st_version_sub:'RUSHR · bêta',st_member:'Membre depuis',st_member_sub:'Compte créé',
@@ -108,7 +108,7 @@ en:{
  legal:'Legal notice',privacy:'Privacy',
  side_1_t:'Your licenses in one place',side_1_d:'Copy your key, see its status and software.',side_2_t:'Switch computers without stress',side_2_d:'Free up a device when you change machines.',side_3_t:'A real person answers',side_3_d:'Write to support right from your account.',side_quote:'Software built for video creators.',
  workspace:'Account',grp_platform:'Platform',grp_account:'Account',
- nav_overview:'Overview',nav_licenses:'My licenses',nav_devices:'My devices',nav_purchases:'Purchases & invoices',nav_download:'Download Rushr',nav_profile:'Profile & preferences',nav_support:'Support',
+ nav_overview:'Overview',nav_licenses:'My licenses',nav_devices:'My devices',nav_purchases:'Purchases & invoices',nav_download:'Download Rushr',nav_products:'My products',page_products_d:'Your software and packs, ready to download again whenever you want.',prod_soft:'Software',prod_packs:'Packs',prod_none_t:'No software yet',prod_none_d:'Software linked to your account will show up here, with its download.',prod_discover:'Discover Rushr',prod_packs_t:'No pack yet',prod_packs_d:'The packs you buy will show up here, ready to download again.',prod_see_packs:'See the packs',prod_no_build:'This software is not available for download yet.',nav_profile:'Profile & preferences',nav_support:'Support',
  search:'Search…',menu_lang:'Language',menu_signout:'Sign out',
  hello:'Hello, {name}',overview_sub:'Here is an overview of your BACKPACK LAB account.',add_key:'Add a key',
  st_licenses:'Licenses',st_active:'{n} active',st_devices:'Devices',st_slots:'slots used',st_last:'Last activity',st_last_none:'No device activated',st_version:'Latest version',st_version_sub:'RUSHR · beta',st_member:'Member since',st_member_sub:'Account created',
@@ -716,6 +716,40 @@ function renderDevices(){
   }).join('');
 }
 
+/* ---- Mes produits : logiciels (avec leur téléchargement) et packs achetés ---- */
+function renderProducts(){
+  var seen={}, soft=(S.account.licenses||[]).filter(function(l){
+    if(String(l.status||'').toUpperCase()!=='ACTIVE') return false;
+    var p=String(l.product||'RUSHR').toUpperCase(); if(seen[p]) return false; seen[p]=1; return true;
+  });
+  var softHtml=soft.length?soft.map(productCard).join('')
+    :'<div class="card">'+emptyState('key',t('prod_none_t'),t('prod_none_d'),'<div class="row" style="margin-top:12px"><a class="btn btn-outline" href="rushr">'+esc(t('prod_discover'))+'</a></div>')+'</div>';
+  // Aucun pack n'est encore vendu : la section est prête, elle listera les packs achetés quand la vente ouvrira.
+  var packsHtml='<div class="card">'+emptyState('bag',t('prod_packs_t'),t('prod_packs_d'),'<div class="row" style="margin-top:12px"><a class="btn btn-outline" href="packs">'+esc(t('prod_see_packs'))+'</a></div>')+'</div>';
+  return pageHead(t('nav_products'),t('page_products_d'))
+    +'<div class="card-title" style="margin:4px 0 10px">'+esc(t('prod_soft'))+'</div>'+softHtml
+    +'<div class="card-title" style="margin:26px 0 10px">'+esc(t('prod_packs'))+'</div>'+packsHtml;
+}
+function productCard(l){
+  var prod=String(l.product||'RUSHR').toUpperCase(), rushr=isRushr(prod), pr=PRODUCTS[prod];
+  var os=function(x){return t('platform_'+(x==='mac'?'mac':'windows'));};
+  // app_versions ne contient pour l'instant que Rushr : les autres logiciels n'ont pas encore de téléchargement.
+  var per={}; (rushr&&S.versions||[]).forEach(function(x){ if(!per[x.platform]) per[x.platform]=x; });
+  var p=detectPlatform(), plats=Object.keys(per).sort(function(a,b){return (b===p)-(a===p);});
+  var btns=plats.map(function(pl,i){
+    var x=per[pl], url=safeUrl(x.site_download_url||x.download_url); if(!url) return '';
+    return '<a class="btn '+(i===0?'btn-primary':'btn-outline')+'" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" '+dlAttrs(x)+'>'+icon('download')+'<span>'+esc(t('dl_for',{os:os(pl)}))+'</span></a>';
+  }).join('');
+  var ver=plats.length?per[plats[0]].latest_version:null;
+  return '<article class="card lic-card'+(rushr?' rushr':'')+'" style="margin-bottom:14px"><div class="card-content">'
+    +'<div class="lic-top"><div class="lic-prod"><span class="ico-box '+(rushr?'rushr':'green')+'">'+icon('download')+'</span><div><h3>'+esc(prod)+'</h3>'
+    +(pr?'<div class="card-description" style="margin-top:1px">'+esc(pr[S.lang])+'</div>':'')+'</div></div>'
+    +(ver?'<span class="badge badge-secondary">v'+esc(ver)+'</span>':'')+'</div>'
+    +(btns?'<div class="row" style="margin-top:14px;flex-wrap:wrap;gap:8px">'+btns+'</div>'
+      :(S.versions?'<p class="hint" style="margin-top:12px">'+esc(t('prod_no_build'))+'</p>':''))
+    +'</div></article>';
+}
+
 /* ---- Achats ---- */
 function renderPurchases(){
   return pageHead(t('nav_purchases'),t('page_purchases_d'))
@@ -817,7 +851,7 @@ function renderView(animate){
   var v=$('#view'); if(!v||$('#app').hidden) return;
   var html;
   if(!S.account) html=skeletonView();
-  else html=({overview:renderOverview,licenses:renderLicenses,devices:renderDevices,purchases:renderPurchases,profile:renderProfile,support:renderSupport}[S.route]||renderOverview)();
+  else html=({overview:renderOverview,licenses:renderLicenses,devices:renderDevices,products:renderProducts,purchases:renderPurchases,profile:renderProfile,support:renderSupport}[S.route]||renderOverview)();
   // conserve la position et le focus du champ en cours de saisie pendant un re-rendu silencieux
   var keep=null,ae=document.activeElement;
   if(animate===false&&ae&&v.contains(ae)&&ae.id){ keep={id:ae.id,s:ae.selectionStart,e:ae.selectionEnd}; }
@@ -882,7 +916,7 @@ async function loadVersions(){
       var sd=await SB.from('site_downloads').select('platform,url');
       if(!sd.error&&sd.data&&r.data) sd.data.forEach(function(x){ r.data.forEach(function(v){ if(v.platform===x.platform&&x.url) v.site_download_url=x.url; }); });
     }catch(e){}
-    if(!r.error&&r.data) { S.versions=r.data; if(S.account&&S.route==='overview') renderView(false); }
+    if(!r.error&&r.data) { S.versions=r.data; if(S.account&&(S.route==='overview'||S.route==='products')) renderView(false); }
   }catch(e){}
 }
 async function loadTickets(){
