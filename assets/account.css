@@ -393,3 +393,10 @@ details.notes pre{white-space:pre-wrap;font:inherit;font-size:12.5px;color:#d4d4
 @media (prefers-reduced-motion:reduce){.flash{animation:none;outline:2px solid var(--primary)}}
 
 span[data-icon]{display:inline-flex;align-items:center;justify-content:center;flex:none}
+/* Logo du système sur les boutons de téléchargement : masque, donc il prend la couleur du texte du bouton. */
+.pf-ico{display:inline-block;width:15px;height:15px;flex:none;background:currentColor;-webkit-mask:var(--pf) center/contain no-repeat;mask:var(--pf) center/contain no-repeat}
+.pf-ico.windows{--pf:url(platform-windows.png)}
+.pf-ico.mac{--pf:url(platform-apple.png)}
+/* Boutons de téléchargement (Windows / Mac) : neutres, mis en avant seulement au survol. */
+.btn-dl:hover,.btn-dl:focus-visible{background:var(--primary);color:var(--primary-foreground);border-color:transparent}
+.btn-dl.rushr:hover,.btn-dl.rushr:focus-visible{background:var(--rushr);color:var(--rushr-foreground)}
